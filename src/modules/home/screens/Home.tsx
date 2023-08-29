@@ -2,7 +2,9 @@ import { View, Button } from 'react-native';
 import { removeAuthData} from '../../../context/authStore';
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import { HomeContainer } from '../styles/Home.style';
-import { removeToken } from '../../../context/tokenStore';
+import { getToken, removeToken } from '../../../context/tokenStore';
+import { useEffect, useState } from 'react';
+import userReducer from '../../../store/reducers/userReducer';
 
 
 const removetokens = async () => {
@@ -29,9 +31,9 @@ export const dadosPessoais = (navigate: NavigationProp<ParamListBase>['navigate'
 
 }
 
-export const gestaUser = (navigate: NavigationProp<ParamListBase>['navigate']) =>{
+export const User= (navigate: NavigationProp<ParamListBase>['navigate']) =>{
  
-  navigate('GestaUser');
+  navigate('User');
   
 
 }
@@ -44,7 +46,20 @@ export const gestaLocalidades = (navigate: NavigationProp<ParamListBase>['naviga
 }
 
 
+
 const Home = () =>{
+  const [disabled, setDisabled] = useState<boolean>(true)
+ 
+  useEffect (()=>{
+    if(getToken()!==null){
+      setDisabled(false)
+    }else{
+      setDisabled(true)
+    }
+
+  },[]);
+
+
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
     
   
@@ -58,7 +73,7 @@ const Home = () =>{
     };
       
     const handlegestUser =() => {
-      gestaUser(navigation.navigate);
+      User(navigation.navigate);
     };
 
     const handleLocalidades =() => {
@@ -77,11 +92,12 @@ const Home = () =>{
               onPress={handleAlterarDados}
             />
             <Button
+              disabled={disabled}
               title="Gerenciar Usuários"
               onPress={handlegestUser}
             />
             <Button
-              title="Gerenciar Usuários"
+              title="Gerenciar Localidades"
               onPress={handleLocalidades}
             />
           

@@ -4,13 +4,15 @@ import { useEditUser } from "../hooks/uselnputLocalidade";
 import { municipiosEnum } from "../../../enums/municipios.enum";
 import { useDeferredValue } from "react";
 import { Picker } from "@react-native-picker/picker";
+import Input from "../../../shared/components/input/input";
+import { theme } from "../../../shared/themes/theme";
 
 const Localidade = () =>{
 
-    const {novaLocalidade, handleOnChangeInput, handleMunicipioChange, editUser} = useEditUser();
+    const {novaLocalidade, handleOnChangeInput, handleMunicipioChange, editLocalidade} = useEditUser();
 
     const handleEnviar = async () => {
-      await editUser();
+      await editLocalidade();
       
   };
 
@@ -19,18 +21,16 @@ const Localidade = () =>{
 
     return(
         <EditUserContainer>
-              <TextInput 
+              <Input 
               value={novaLocalidade.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
-              underlineColorAndroid={'black'} 
-              placeholderTextColor={'black'} 
               placeholder="senha Atual"/>
 
         <Picker
           selectedValue={novaLocalidade.municipio}
           onValueChange={(value) => handleMunicipioChange(value)}
         >
-          <Picker.Item label="Selecione um município" value="" />
+          <Picker.Item label="Selecione um município" color="blue" value="" />
           {minicipioOptions.map(municipio => (
             <Picker.Item key={municipio} label={municipio} value={municipio} />
           ))}

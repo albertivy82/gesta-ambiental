@@ -19,7 +19,7 @@ export const useEditUser = () =>{
 
     
     
-        const editUser = async () => {
+        const editLocalidade = async () => {
            
             const localidade = await connectionAPIPost('http://192.168.100.28:8080/localidade', novaLocalidade);
             
@@ -31,7 +31,7 @@ export const useEditUser = () =>{
             event: NativeSyntheticEvent<TextInputChangeEventData>,
             name: string
           ) => {
-            event.persist(); // Manter o evento sintético
+            //event.persist(); // Manter o evento sintético
             setNovaLocalidade((currentLocalidade) => ({
               ...currentLocalidade,
               [name]: event.nativeEvent.text,
@@ -49,6 +49,6 @@ export const useEditUser = () =>{
     novaLocalidade,
     handleOnChangeInput,
     handleMunicipioChange,
-    editUser,
+    editLocalidade,
     }
 };
