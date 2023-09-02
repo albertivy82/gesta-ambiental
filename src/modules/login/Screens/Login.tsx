@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Button } from 'react-native';
 import { ContainerLogin, ImagelogoLogin } from '../styles/login.style';
 import { useRequest } from '../../../context/Auth';
-import { useStoreJWTUserReducer } from '../../../store/reducers/userReducer/storeUserReducer';
+import { useStoreJWTUserReducer } from '../../../store/reducers/tokenReducer/storeUserReducer';
 
 
 

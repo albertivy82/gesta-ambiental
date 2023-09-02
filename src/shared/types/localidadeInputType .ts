@@ -1,6 +1,6 @@
 import { municipiosEnum } from "../../enums/municipios.enum";
 
-export interface localidadeType{
+export interface localidadeInputType{
     nome: string;
     municipio: municipiosEnum | "" | null;
 

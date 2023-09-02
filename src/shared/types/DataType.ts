@@ -1,4 +1,4 @@
-export interface UserType {
+export interface DataType {
     access_token: string;
     refresh_token: string;
     scope: string;

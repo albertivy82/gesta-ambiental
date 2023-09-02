@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserType } from '../shared/types/userType'
+import { DataType } from '../shared/types/DataType'
 import { storeToken } from './tokenStore';
 import { storeRefreshToken } from './refreshTokenStore';
 
 
-export const storeAuthData = async (data: UserType) => {
+export const storeAuthData = async (data: DataType) => {
     try {
       await AsyncStorage.setItem('authData', JSON.stringify(data));
       await storeToken(data.access_token);
@@ -16,7 +16,7 @@ export const storeAuthData = async (data: UserType) => {
 
  
  
- export const getAuthData = async (): Promise<UserType | null> => {
+ export const getAuthData = async (): Promise<DataType | null> => {
     try {
       const data = await AsyncStorage.getItem('authData');
       

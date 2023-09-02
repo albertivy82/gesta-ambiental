@@ -4,13 +4,13 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { connectionAPIPost} from "../../../shared/functions/connection/connectionAPI";
 import { getUserId } from "../../../context/userStore";
 import { getToken } from "../../../context/tokenStore";
-import { localidadeType } from "../../../shared/types/localidadeType ";
+import { localidadeInputType } from "../../../shared/types/localidadeInputType ";
 import { municipiosEnum } from "../../../enums/municipios.enum";
 
 export const useEditUser = () =>{
 
        
-    const [novaLocalidade, setNovaLocalidade] = useState<localidadeType>(
+    const [novaLocalidade, setNovaLocalidade] = useState<localidadeInputType>(
         {
             nome:'',
             municipio: null,

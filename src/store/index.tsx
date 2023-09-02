@@ -1,9 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit'
-import userReducer from './reducers/userReducer'
+import tokenReducer from './reducers/tokenReducer'
+import localidadeReducer from './reducers/localidadeReducer'
 
 export const store = configureStore({
     reducer:{
-        userReducer,
+        tokenReducer,
+       // userReducer,
+       localidadeReducer,
     },
 });
 

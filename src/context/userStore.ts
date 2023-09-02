@@ -23,6 +23,7 @@ const token = await getToken();
       
       storeUserName(usuarioAtual.nome);
       storeUserId(usuarioAtual.id);
+      //salvar o rupo
 
   } else {
     console.log('Token de autenticação não encontrado.');
