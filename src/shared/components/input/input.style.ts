@@ -10,7 +10,7 @@ export const ContainerInput = styled.TextInput<ContainerInputProps>`
   width: 100%;
   height: 40px;
   padding: 8px 16px;
-  background-color: ${theme.colors.grayTheme.gray80};
+  background-color: #bacff1;
   color: ${theme.colors.mainTheme.black};
   border-bottom-width: 4px;
 

@@ -1,4 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { TouchableOpacity, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from "./modules/login";
 import Home from "./modules/home";
@@ -11,13 +12,23 @@ import { Icon } from "./shared/components/icon/Icon";
 import { theme } from "./shared/themes/theme";
 import admUsers from "./modules/admUsers/screens/AdmUsers";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
+import Text from "./shared/components/text/Text";
+import LogoutButton from "./context/authUtils";
+import { useUserReducer } from "./store/reducers/userReducer/useUserReducer";
+import { getToken } from "./context/tokenStore";
+import { getUser } from "./context/userStore";
+import { UserBody } from "./shared/types/userBody";
+import { useEffect, useState } from 'react';
+import { textTypes } from "./shared/components/text/textTypes";
 
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = ()=>{
 
+
+const TabNavigation = ()=>{
+   
 
     return(
         <Tab.Navigator
@@ -44,7 +55,7 @@ const TabNavigation = ()=>{
       })}
       >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Config." component={EditUser} options={{title:'Alterar Senha'}}/>
+      <Tab.Screen name="Config." component={EditUser} options={{title:'Senha'}}/>
       <Tab.Screen name="Usuários" component={admUsers} options={{title:'Usuários'}}/>
       </Tab.Navigator>
     );
@@ -53,12 +64,45 @@ const TabNavigation = ()=>{
 
 
 const Navigation =() =>{
+
+    const [userData, setUserData] = useState<UserBody | null>(null);
+
+        useEffect(() => {
+            const fetchUserData = async () => {
+                const currentUser = await getUser();
+                      if (currentUser) {
+                        const userDataParsed: UserBody = JSON.parse(currentUser);
+                        setUserData(userDataParsed);
+                      }
+            };
+    
+        fetchUserData();
+      }, []);
+
     return(
         <NavigationContainer>
         <Stack.Navigator>
          <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false}}/>
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false}}/>
-          <Stack.Screen name="Home" component={TabNavigation} options={{headerShown:false}} />
+          <Stack.Screen name="Home" component={TabNavigation} 
+              options={{
+                title: '',
+                headerTransparent: true, // Deixa o cabeçalho transparente
+                headerRight: () => (
+                <LogoutButton />
+                                 
+                ),
+                headerTitle:() => (
+                  
+                   <Text margin="30px 100px 0px 100px"
+                   type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.blueTheme.blue}>
+                    USUÁRIO:{userData?.nome}
+                    </Text>
+                
+                                   
+                  ),
+              }} 
+          />
           <Stack.Screen name="EditUser" component={EditUser} options={{title: 'Dados cadastrais'}} />
           <Stack.Screen name="Users" component={admUsers} options={{title: 'Gerenciar Usuários'}} />
           <Stack.Screen name="User" component={User} options={{title: 'Gerenciar Usuários'}} />

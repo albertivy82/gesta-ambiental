@@ -3,11 +3,13 @@ import { getToken } from './tokenStore';
 import { UserBody } from '../shared/types/userBody';
 import { connectionAPIGet } from '../shared/functions/connection/connectionAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useUserReducer } from '../store/reducers/userReducer/useUserReducer';
 
 
 
 export const userData = async ()=>{
-const token = await getToken();
+
+  const token = await getToken();
 
 
     if (token) {
@@ -21,9 +23,8 @@ const token = await getToken();
 
       console.log('consulta', usuarioAtual)
       
-      storeUserName(usuarioAtual.nome);
-      storeUserId(usuarioAtual.id);
-      //salvar o rupo
+      storeUser(usuarioAtual);
+    
 
   } else {
     console.log('Token de autenticação não encontrado.');
@@ -33,55 +34,30 @@ const token = await getToken();
 }
 
 
-
-const storeUserName = async (nome: string) => {
+const storeUser = async (user: UserBody) => {
   try {
-    await AsyncStorage.setItem('usuarioNome', nome);
-    
-        
+    await AsyncStorage.setItem('user', JSON.stringify(user));
   } catch (error) {
-    console.log('Error storing users Name:', error);
-  }
-};
-
-const storeUserId = async (id: Number) => {
-  try {
-
-
-    await AsyncStorage.setItem('usuarioId', id.toString());
-    console.log('o id est´nulo por que?', id);
-        
-  } catch (error) {
-    console.log('Error storing users id:', error);
+    console.log('Error storing user:', error);
   }
 };
 
 
 
-export const getUserName = async () => {
+export const getUser = async () => {
 try {
-const nome = await AsyncStorage.getItem('usuarioNome');
-return nome;
+const user = await AsyncStorage.getItem('user');
+return user;
 } catch (error) {
-console.log('Error getting Nome:', error);
+console.log('Error getting User:', error);
 return null;
 }
 };
 
-export const getUserId = async () => {
-  try {
-  const id = await AsyncStorage.getItem('usuarioId');
-  return id;
-  } catch (error) {
-  console.log('Error getting Id:', error);
-  return null;
-  }
-  };
 
-export const removeNaeAndId = async () => {
+export const removeUser = async () => {
 try {
-await AsyncStorage.removeItem('usuarioNome');
-await AsyncStorage.removeItem('usuarioId');
+await AsyncStorage.removeItem('user');
 } catch (error) {
 console.log('Error removing informações do usuário:', error);
 }

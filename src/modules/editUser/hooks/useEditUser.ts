@@ -1,28 +1,46 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { senhasType } from "../../../shared/types/senhasType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
-import { getUserId } from "../../../context/userStore";
-import { getToken } from "../../../context/tokenStore";
+import { getUser } from "../../../context/userStore";
+
+export const DEFAULT_EDIT_PASSWORD = {
+    senhaAtual:'',
+    novaSenha:'',
+};
+
+
 
 export const useEditUser = () =>{
 
-       
-    const [senhaNova, setSenhaNova] = useState<senhasType>(
-        {
-            senhaAtual:'',
-            novaSenha:'',
-        }
-    );
 
-    
+    const [disabled, setDisabled] = useState<boolean>(true);
+     const [senhaNova, setSenhaNova] = useState<senhasType>(DEFAULT_EDIT_PASSWORD);
+
+     useEffect(()=>{
+
+        if(
+
+            senhaNova.senhaAtual !== '' &&
+            senhaNova.novaSenha !== ''
+        ) {
+            setDisabled(false)
+        }else{
+            setDisabled(true)
+        }
+
+    }, [senhaNova]);
     
         const editUser = async () => {
            
-            const id = await getUserId();
-            console.log(id, senhaNova);
-            const resultBack = await connectionAPIPut(`http://192.168.100.28:8080/usuario/alterar-senha/${id}`, senhaNova);
+            const userString = await getUser();
             
+            if (userString) {
+                const user = JSON.parse(userString);
+                const id = user.id;
+
+           const resultBack = await connectionAPIPut(`http://192.168.100.28:8080/usuario/alterar-senha/${id}`, senhaNova);
+            }
         };
     
     
@@ -41,5 +59,6 @@ export const useEditUser = () =>{
         senhaNova,
         handleOnChangeInput,
         editUser,
+        disabled,
     }
 };

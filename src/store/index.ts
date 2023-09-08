@@ -1,11 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit'
 import tokenReducer from './reducers/tokenReducer'
 import localidadeReducer from './reducers/localidadeReducer'
+import userReducer from './reducers/userReducer';
+
 
 export const store = configureStore({
     reducer:{
         tokenReducer,
-       // userReducer,
+        userReducer,
        localidadeReducer,
     },
 });
