@@ -35,11 +35,11 @@ const EditUser = () =>{
                    onChange={(event)=> handleOnChangeInput(event, 'novaSenha')}
                    margin="0px 0px 16px 0px"
                    placeholder="Digite a nova senha"
-                   title="Senha Atual:"
+                   title="Nova Senha:"
                   ref={senhaNovaInput}
               />
 
-              <Button title="enviar" onPress={handleEnviar} />
+              <Button title="enviar" disabled={disabled} onPress={handleEnviar} />
         </EditUserContainer>
   );
 

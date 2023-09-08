@@ -4,9 +4,9 @@ export interface LocalidadeType {
 	nome: string;
 	municipio: string;
 	esfera: string;
-	//posto: string;
-	//residencia: string;
-	//escola: string;
-	//coordenadas: string;
+	posto: string;
+	residencia: string;
+	escola: string;
+	coordenadas: string;
 
 }

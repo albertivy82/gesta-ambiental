@@ -66,7 +66,7 @@ const User= () =>{
                   value={novoUsuario.senha} 
                   onChange={(event)=> handleOnChangeInput(event, 'senha')}
                   margin="0px 0px 16px 0px"
-                  placeholder="senhainforme uma senha"
+                  placeholder="Cadastre uma senha para o usuário"
                   title="Senha:"
                   ref={senhaInput}/>
 

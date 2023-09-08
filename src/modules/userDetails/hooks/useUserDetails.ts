@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { UserBody } from "../../../shared/types/userBody";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { current } from "@reduxjs/toolkit";
 import { UserInput } from "../../../shared/types/userInput";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { validateCpf } from "../../../shared/functions/cpf";
+import { isertMaskInCpf, validateCpf } from "../../../shared/functions/cpf";
+import { insertMaskInMatricula } from "../../../shared/functions/matricula";
 import { removeSpecialCharacters } from "../../../shared/functions/characters";
-
+/*
 export const DEFAULT_CREATE_USER = {
     nome: '',
     matricula: '',
@@ -65,4 +68,4 @@ export const useInputUsers = ()=>{
 
 
 };
-
+*/

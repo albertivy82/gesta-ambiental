@@ -4,16 +4,14 @@ import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/
 import { HomeContainer } from '../styles/Home.style';
 import { removeToken } from '../../../context/tokenStore';
 import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { connectionAPIGet } from '../../../shared/functions/connection/connectionAPI';
 import Text from '../../../shared/components/text/Text';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { useUserReducer } from '../../../store/reducers/userReducer/useUserReducer';
 import { getUser } from '../../../context/userStore';
-import { UserBody } from '../../../shared/types/userBody';
+
 
 
 const removetokens = async () => {
@@ -50,21 +48,21 @@ const Home = () =>{
       <TouchableOpacity onPress={() => handleGoTolocalidade(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               <Text
-                type={textTypes.TITLE_REGULAR}
+                type={textTypes.BUTTON_REGULAR}
                 color={theme.colors.blueTheme.blue}
               >
                 Nome: {item.nome}
-               </Text>
+              </Text>
               <Text
-                type={textTypes.TITLE_REGULAR}
+                type={textTypes.BUTTON_REGULAR}
                 color={theme.colors.blueTheme.blue}
               >
                
-                Município {item.municipio}
+                Município: {item.municipio}
                
               </Text>
               <Text
-                type={textTypes.TITLE_REGULAR}
+                type={textTypes.BUTTON_REGULAR}
                 color={theme.colors.blueTheme.blue}
               >
                Iniciativa: {item.esfera}

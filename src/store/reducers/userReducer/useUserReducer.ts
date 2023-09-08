@@ -9,7 +9,7 @@ export const useUserReducer = ()=>{
     const {user} = useAppSelector((state)=>state.userReducer);
     
     const dispatch = useDispatch();
-    const setUser = (currentuser: UserBody) =>{
+    const setUser = (currentuser: UserBody[]) =>{
         dispatch(setUserAcion(currentuser))
     };
     

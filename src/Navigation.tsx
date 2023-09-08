@@ -20,6 +20,7 @@ import { getUser } from "./context/userStore";
 import { UserBody } from "./shared/types/userBody";
 import { useEffect, useState } from 'react';
 import { textTypes } from "./shared/components/text/textTypes";
+import UserDetails from "./modules/userDetails";
 
 
 const Stack = createNativeStackNavigator();
@@ -108,6 +109,7 @@ const Navigation =() =>{
           <Stack.Screen name="User" component={User} options={{title: 'Gerenciar Usuários'}} />
           <Stack.Screen name="Localidade" component={Localidade} options={{title: 'Gerenciar Localidades'}} />
           <Stack.Screen name="Localidade_Detalhada" component={InfLocalidade} options={{title: 'Localidade'}} />
+          <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

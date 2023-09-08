@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { UserBody } from '../../../shared/types/userBody';
 
 interface userStore{
-  user?: UserBody;
+  user?: UserBody[];
 }
 
 
 const initialState: userStore = {
-    user:undefined,
+    user:[],
 };
 
 
@@ -16,7 +16,7 @@ export const userSlice = createSlice(
     name: 'userReducer',
     initialState,
     reducers: {
-        setUserAcion: (state, action: PayloadAction<UserBody>) => {
+        setUserAcion: (state, action: PayloadAction<UserBody[]>) => {
           state.user = action.payload
         },
     },
