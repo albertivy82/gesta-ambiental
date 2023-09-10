@@ -8,7 +8,9 @@ export const mainTheme = {
   };
   
   export const blueTheme = {
-    blue: '#00008B',
+    blue1: '#00008B',
+    blue2: '#267DFF',
+    blue3: '#bacff1',
   };
   
   export const redTheme = {

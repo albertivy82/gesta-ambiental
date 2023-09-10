@@ -1,12 +1,26 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, TextInput } from "react-native";
 import { GetaUserContainer } from "../styles/Users.style";
 import { useInputUsers } from "../hooks/useInputUsers";
 import Input from "../../../shared/components/input/input";
+import { UserBody } from '../../../shared/types/userBody';
+import { RouteProp, useRoute } from '@react-navigation/native';
+
+
+export interface userParam{
+      user: UserBody;
+}
+
+
 
 const User= () =>{
+const {params} = useRoute<RouteProp<Record<string, userParam>>>();
+const user = params ? params.user : null;
 
-      const {sendUser, novoUsuario, handleOnChangeInput, disabled} = useInputUsers();
+console.log(user);
+
+const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<UserBody>();
+const {sendUser, novoUsuario, handleOnChangeInput, disabled, UpdateUser} = useInputUsers();
 
       const nomeInput = useRef<TextInput>(null);
       const matriculaInput = useRef<TextInput>(null);
@@ -14,8 +28,30 @@ const User= () =>{
       const cpfInput = useRef<TextInput>(null);
       const senhaInput = useRef<TextInput>(null);
 
+
+      useEffect(() => {
+            if (user) {
+              setDadosUsuarioEditado(user);
+            }
+          }, [user]);
+          
+          useEffect(() => {
+            if (dadosUsuarioEditado) {
+              nomeInput.current?.setNativeProps({ text: dadosUsuarioEditado.nome });
+              matriculaInput.current?.setNativeProps({ text: dadosUsuarioEditado.matricula });
+              emailInput.current?.setNativeProps({ text: dadosUsuarioEditado.email });
+              cpfInput.current?.setNativeProps({ text: dadosUsuarioEditado.cpf });
+            }
+          }, [dadosUsuarioEditado]);
+      
+       
       const enviar = async ()=>{
-            await sendUser();
+            if(user){
+                  await UpdateUser(user.id);
+            }else{ 
+                  await sendUser();
+            }
+           
       }
       
 
@@ -62,14 +98,7 @@ const User= () =>{
                   onSubmitEditing={()=>senhaInput.current?.focus()}
                   ref={cpfInput}/>
                   
-                  <Input 
-                  value={novoUsuario.senha} 
-                  onChange={(event)=> handleOnChangeInput(event, 'senha')}
-                  margin="0px 0px 16px 0px"
-                  placeholder="Cadastre uma senha para o usuário"
-                  title="Senha:"
-                  ref={senhaInput}/>
-
+                  
                   <Button title="enviar" disabled={disabled} onPress={enviar}/>
             </GetaUserContainer>
       );
@@ -78,6 +107,3 @@ const User= () =>{
 
 export default User;
 
-//interessnate criar um arqui para url como ela faz: ver aula57
-//userBody é o meu retorno
-//const resultBack = await connectionAPIGet<UserBody>('http://192.168.100.28:8080/usuario')

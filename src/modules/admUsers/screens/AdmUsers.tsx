@@ -72,7 +72,8 @@ const AdmUsers = ()=>{
     const handleUserDetail =(user: UserBody) => {
         GoToUserDetail(navigation.navigate, user);
     };
-   
+
+       
     
       return(
 

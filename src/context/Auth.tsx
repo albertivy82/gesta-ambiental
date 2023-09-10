@@ -1,9 +1,11 @@
-import qs from 'qs';
+
 import axios from 'axios';
-import { Linking } from 'react-native';
-import pkceChallenge from 'react-native-pkce-challenge';
+import { View, Button } from 'react-native';
+import qs from 'qs';
 import { storeAuthData } from './authStore';
 import { useNavigation, NavigationProp, ParamListBase } from '@react-navigation/native';
+import { WebView, WebViewMessageEvent, WebViewNavigation } from 'react-native-webview';
+import { useState } from 'react';
 
 const authServer = axios.create({
   baseURL: 'http://192.168.100.28:8080'
@@ -18,14 +20,11 @@ export interface OAuthAuthorizationTokenResponse {
   [key: string]: string | number;
 }
 
-const generatePkceChallenge = () => {
-  const challenge = pkceChallenge();
-  return challenge;
-};
+
 
 export const useRequest = () => {
   const { reset } = useNavigation<NavigationProp<ParamListBase>>();
-
+  
   const handleUrlRedirect = async (code: any, codeVerifier: string) => {
     const data = {
       grant_type: 'authorization_code',
@@ -37,6 +36,7 @@ export const useRequest = () => {
 
     const encodedData = qs.stringify(data);
     try {
+      console.log(encodedData)
       const response = await authServer.post<OAuthAuthorizationTokenResponse>(
         '/oauth2/token',
         encodedData,
@@ -64,48 +64,11 @@ export const useRequest = () => {
     }
   };
 
-  const handleAuthorization = async () => {
-    const challenge = generatePkceChallenge();
-    const codeChallenge = challenge.codeChallenge;
-    const codeVerifier = challenge.codeVerifier;
-
-    const config = qs.stringify({
-      response_type: 'code',
-      client_id: 'gestambiental',
-      state: 'abdef',
-      redirect_uri: 'gestambiental://oauthcallback',
-      scope: 'READ WRITE',
-      code_challenge: codeChallenge,
-      code_challenge_method: 'S256',
-    });
-
-    const authorizationUrl = `http://192.168.100.28:8080/oauth2/authorize?${config}`;
-
-    try {
-      const url = await new Promise<string>((resolve, reject) => {
-        const handleUrlRedirect = (event: { url: string }) => {
-          resolve(event.url);
-        };
-
-        Linking.addEventListener('url', handleUrlRedirect);
-
-        Linking.openURL(authorizationUrl).catch((error) => {
-          reject(error);
-        });
-      });
-
-      const parsedUrl = qs.parse(url.replace(/^[^\?]+\??/, ''));
-      const code = parsedUrl.code;
-
-      await handleUrlRedirect(code, codeVerifier);
-    } catch (error) {
-      console.error('Error during login:', error);
-    }
-  };
-
+        
   return {
-    handleAuthorization, // Expose the function
+    handleUrlRedirect
   };
+ };
 
-  
-};
+
+    

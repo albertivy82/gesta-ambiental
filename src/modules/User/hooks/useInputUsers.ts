@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { UserInput } from "../../../shared/types/userInput";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { validateCpf } from "../../../shared/functions/cpf";
 import { removeSpecialCharacters } from "../../../shared/functions/characters";
 
@@ -25,8 +25,7 @@ export const useInputUsers = ()=>{
             novoUsuario.nome !== '' &&
             novoUsuario.matricula !== '' &&
             novoUsuario.email !== '' &&
-            validateCpf(novoUsuario.cpf) &&
-            novoUsuario.senha !== ''
+            validateCpf(novoUsuario.cpf)
 
         ) {
             setDisabled(false)
@@ -40,6 +39,12 @@ export const useInputUsers = ()=>{
         novoUsuario.cpf = removeSpecialCharacters(novoUsuario.cpf);
         
         const usuario = await connectionAPIPost('http://192.168.100.28:8080/usuario', novoUsuario);
+    }
+
+    const UpdateUser = async (id:string)=>{
+        novoUsuario.cpf = removeSpecialCharacters(novoUsuario.cpf);
+        
+        const usuario = await connectionAPIPut(`http://192.168.100.28:8080/usuario/${id}`, novoUsuario);
         console.log(usuario);
     }
 
@@ -61,6 +66,7 @@ export const useInputUsers = ()=>{
         novoUsuario,
         sendUser,
         disabled,
+        UpdateUser,
     }
 
 
