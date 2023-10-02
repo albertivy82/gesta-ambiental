@@ -10,7 +10,7 @@ export const DEFAULT_CREATE_USER = {
     matricula: '',
     email: '',
     cpf: '',
-    senha: '',
+  
 };
 
 export const useInputUsers = ()=>{

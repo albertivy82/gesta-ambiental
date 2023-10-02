@@ -16,7 +16,7 @@ export const ContainerInput = styled.TextInput<ContainerInputProps>`
 
 
   border-color: ${(props) =>
-    props.isError ? theme.colors.redTheme.red : theme.colors.blueTheme.blue};
+    props.isError ? theme.colors.redTheme.red : theme.colors.blueTheme.blue1};
 `;
 
 

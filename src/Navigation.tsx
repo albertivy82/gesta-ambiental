@@ -21,6 +21,7 @@ import { UserBody } from "./shared/types/userBody";
 import { useEffect, useState } from 'react';
 import { textTypes } from "./shared/components/text/textTypes";
 import UserDetails from "./modules/userDetails";
+import ProfileUser from "./modules/profileUser";
 
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +52,7 @@ const TabNavigation = ()=>{
 
             return <Icon size={20} name={iconName} color={color}/>;
       },
-      tabBarActiveTintColor: theme.colors.blueTheme.blue,
+      tabBarActiveTintColor: theme.colors.blueTheme.blue1,
       tabBarInactiveTintColor: theme.colors.grayTheme.gray100,
       })}
       >
@@ -96,7 +97,7 @@ const Navigation =() =>{
                 headerTitle:() => (
                   
                    <Text margin="30px 100px 0px 100px"
-                   type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.blueTheme.blue}>
+                   type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.blueTheme.blue1}>
                     USUÁRIO:{userData?.nome}
                     </Text>
                 
@@ -110,6 +111,7 @@ const Navigation =() =>{
           <Stack.Screen name="Localidade" component={Localidade} options={{title: 'Gerenciar Localidades'}} />
           <Stack.Screen name="Localidade_Detalhada" component={InfLocalidade} options={{title: 'Localidade'}} />
           <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
+          <Stack.Screen name="ProfileUser" component={ProfileUser} options={{title: 'Editar Perfil'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

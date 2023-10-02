@@ -32,13 +32,13 @@ const AdmUsers = ()=>{
              <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
                   <Text
                     type={textTypes.BUTTON_REGULAR}
-                    color={theme.colors.blueTheme.blue}
+                    color={theme.colors.blueTheme.blue1}
                   >
                     Nome: {item.nome}
                    </Text>
                   <Text
                     type={textTypes.BUTTON_REGULAR}
-                    color={theme.colors.blueTheme.blue}
+                    color={theme.colors.blueTheme.blue1}
                   >
                   matrícula: {item.matricula}
                   </Text>
@@ -53,6 +53,7 @@ const AdmUsers = ()=>{
           try {
             const usersData = await connectionAPIGet('http://192.168.100.28:8080/usuario');
             if (typeof usersData === 'object' && usersData !== null) {
+              console.log(usersData)
               setUser(usersData as UserBody[]); 
             } else {
               console.error('Dados de usuários inválidos:', usersData);
@@ -78,10 +79,10 @@ const AdmUsers = ()=>{
       return(
 
        <AdmUsersContainer>
-          <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue, marginBottom: 10 }}>
+          <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
             <Text 
             type={textTypes.PARAGRAPH_BOLD} 
-            color={theme.colors.blueTheme.blue}
+            color={theme.colors.blueTheme.blue1}
             margin="0px 0px 0px 60px">
                 LISTA DE USUÁRIOS DO SISTEMA
             </Text>

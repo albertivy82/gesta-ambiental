@@ -32,7 +32,7 @@ const Input = forwardRef<TextInput, InputProps>(
       const handleOnChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
         if (onChange) {
             event.persist();
-            let text= event.nativeEvent.text;;
+            let text= event.nativeEvent.text;
             switch (type) {
                 case 'cpf':
                    text = isertMaskInCpf(text); 
@@ -60,7 +60,7 @@ const Input = forwardRef<TextInput, InputProps>(
           {title && (
             <Text
               margin="0px 0px 4px 8px"
-              color={theme.colors.blueTheme.blue}
+              color={theme.colors.blueTheme.blue1}
               type={textTypes.BUTTON_REGULAR}
             >
               {title}

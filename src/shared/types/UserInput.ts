@@ -6,5 +6,5 @@ export interface UserInput {
     matricula: string;
     email: string;
     cpf: string;
-    senha: string;
+
 }

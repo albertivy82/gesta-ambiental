@@ -95,7 +95,6 @@ const {sendUser, novoUsuario, handleOnChangeInput, disabled, UpdateUser} = useIn
                   placeholder="Digite apenas números"
                   title="CPF:"
                   keyboardType='number-pad'
-                  onSubmitEditing={()=>senhaInput.current?.focus()}
                   ref={cpfInput}/>
                   
                   

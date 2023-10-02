@@ -49,13 +49,13 @@ const Home = () =>{
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue}
+                color={theme.colors.blueTheme.blue1}
               >
                 Nome: {item.nome}
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue}
+                color={theme.colors.blueTheme.blue1}
               >
                
                 Município: {item.municipio}
@@ -63,7 +63,7 @@ const Home = () =>{
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue}
+                color={theme.colors.blueTheme.blue1}
               >
                Iniciativa: {item.esfera}
               </Text>
@@ -103,10 +103,10 @@ const Home = () =>{
         
 
         <HomeContainer>
-           <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue, marginBottom: 10 }}>
+           <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
           <Text 
           type={textTypes.TITLE_BOLD} 
-          color={theme.colors.blueTheme.blue}
+          color={theme.colors.blueTheme.blue1}
           margin="0px 0px 0px 20px">
             LISTA DE LOCALIDADES
             </Text>
