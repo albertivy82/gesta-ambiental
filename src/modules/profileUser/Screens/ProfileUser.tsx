@@ -10,7 +10,7 @@ const ProfileUser = ()=>{
   const [isChecked2, setIsChecked2] = useState(false);
   const [isChecked3, setIsChecked3] = useState(false);
   const [isChecked4, setIsChecked4] = useState(false);
-  const [isChecked5, setIsChecked5] = useState(false);
+ 
 
   const handleCheckboxChange = (checkboxNumber:number, newValue:boolean) => {
     
@@ -21,23 +21,22 @@ const ProfileUser = ()=>{
             setIsChecked2(false);
             setIsChecked3(false);
             setIsChecked4(false);
-            setIsChecked5(false);
           }
           break;
         case 2:
         setIsChecked2(newValue);
           if(newValue){
             setIsChecked1(false);
+            setIsChecked3(false);
             setIsChecked4(false);
-            setIsChecked5(false);
           }
           break
         case 3:
         setIsChecked3(newValue);
           if(newValue){
             setIsChecked1(false);
+            setIsChecked2(false);
             setIsChecked4(false);
-            setIsChecked5(false);
           }
           break
         case 4:
@@ -46,19 +45,9 @@ const ProfileUser = ()=>{
             setIsChecked1(false);
             setIsChecked2(false);
             setIsChecked3(false);
-            setIsChecked5(false);
           }
           break
-        case 5:
-        setIsChecked5(newValue);
-          if(newValue){
-            setIsChecked1(false);
-            setIsChecked2(false);
-            setIsChecked3(false);
-            setIsChecked4(false);
-          }
-        break;
-        default:
+       default:
         break;
     }
   };  
@@ -89,7 +78,7 @@ const ProfileUser = ()=>{
           </OptionContainer>
 
           <OptionContainer>
-              <Text>GESTOR SOCIAL</Text>
+              <Text>ANALISTA AMBIENTAL</Text>
             <CheckBox
             disabled={false}
             value={isChecked3}
@@ -98,7 +87,7 @@ const ProfileUser = ()=>{
           </OptionContainer>
 
           <OptionContainer>
-              <Text>ANALISTA AMBIENTAL</Text>
+              <Text>ANALISTA SOCIAL</Text>
             <CheckBox
             disabled={false}
             value={isChecked4}
@@ -106,18 +95,7 @@ const ProfileUser = ()=>{
           />
           </OptionContainer>
 
-          <OptionContainer>
-              <Text>ANALISTA SOCIAL</Text>
-            <CheckBox
-            disabled={false}
-            value={isChecked5}
-            onValueChange={(newValue) => handleCheckboxChange(5, newValue)}
-          />
-          </OptionContainer>
-    
-  
-
-    </ProfileUsersContainer>
+      </ProfileUsersContainer>
   );
 };
 
