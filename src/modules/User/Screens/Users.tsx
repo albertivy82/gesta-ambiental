@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, TextInput } from "react-native";
+import { Button, TextInput, View } from "react-native";
 import { GetaUserContainer } from "../styles/Users.style";
 import { useInputUsers } from "../hooks/useInputUsers";
 import Input from "../../../shared/components/input/input";
 import { UserBody } from '../../../shared/types/userBody';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { theme } from '../../../shared/themes/theme';
+import { grupoEnum } from '../../../enums/grupo.enum';
+import { Picker } from '@react-native-picker/picker';
+import Text from '../../../shared/components/text/Text';
+
 
 
 export interface userParam{
@@ -16,17 +21,20 @@ export interface userParam{
 const User= () =>{
 const {params} = useRoute<RouteProp<Record<string, userParam>>>();
 const user = params ? params.user : null;
-
-console.log(user);
-
 const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<UserBody>();
-const {sendUser, novoUsuario, handleOnChangeInput, disabled, UpdateUser} = useInputUsers();
+const {sendUser, 
+      novoUsuario, 
+      handleOnChangeInput, 
+      disabled, 
+      UpdateUser, 
+      handleGrupoChange,
+     } = useInputUsers();
 
       const nomeInput = useRef<TextInput>(null);
       const matriculaInput = useRef<TextInput>(null);
       const emailInput = useRef<TextInput>(null);
       const cpfInput = useRef<TextInput>(null);
-      const senhaInput = useRef<TextInput>(null);
+      
 
 
       useEffect(() => {
@@ -35,7 +43,7 @@ const {sendUser, novoUsuario, handleOnChangeInput, disabled, UpdateUser} = useIn
             }
           }, [user]);
           
-          useEffect(() => {
+      useEffect(() => {
             if (dadosUsuarioEditado) {
               nomeInput.current?.setNativeProps({ text: dadosUsuarioEditado.nome });
               matriculaInput.current?.setNativeProps({ text: dadosUsuarioEditado.matricula });
@@ -54,7 +62,7 @@ const {sendUser, novoUsuario, handleOnChangeInput, disabled, UpdateUser} = useIn
            
       }
       
-
+      const grupoOptions = Object.values(grupoEnum);
       return(
             <GetaUserContainer>
                   <Input 
@@ -96,6 +104,18 @@ const {sendUser, novoUsuario, handleOnChangeInput, disabled, UpdateUser} = useIn
                   title="CPF:"
                   keyboardType='number-pad'
                   ref={cpfInput}/>
+
+                  <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.blueTheme.blue1 }}>
+                              <Picker
+                              selectedValue={novoUsuario.grupo}
+                              onValueChange={(value) => handleGrupoChange(value)}>
+                                    <Picker.Item label="Selecione um Perfil" color="blue" value="" />
+                                          {grupoOptions.map(grupo => (
+                                          <Picker.Item key={grupo} label={grupo} value={grupo} />
+                                          ))}
+                              </Picker>
+                  </View> 
+
                   
                   
                   <Button title="enviar" disabled={disabled} onPress={enviar}/>

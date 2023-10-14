@@ -3,19 +3,21 @@ import { removeAuthData} from '../../../context/authStore';
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import { HomeContainer } from '../styles/Home.style';
 import { removeToken } from '../../../context/tokenStore';
-import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
-import { useEffect } from 'react';
-import { connectionAPIGet } from '../../../shared/functions/connection/connectionAPI';
 import Text from '../../../shared/components/text/Text';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { getUser } from '../../../context/userStore';
+import { useLocalidades } from '../hook/useLocalidades';
+import { useEffect } from 'react';
+import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
+import { getLocalidades } from '../../../realm/services/localidadeServices';
+
 
 
 
 const removetokens = async () => {
-  
+
   await removeAuthData();
   await removeToken();
  
@@ -23,26 +25,28 @@ const removetokens = async () => {
 };
 
 export const gestaLocalidades = (navigate: NavigationProp<ParamListBase>['navigate']) =>{
- 
-  navigate('Localidade');
-  
-
+    navigate('Localidade');
 }
 
 export const detalhaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidade:LocalidadeType) =>{
- 
-  navigate('Localidade_Detalhada', {localidade});
-  
-
+   navigate('Localidade_Detalhada', {localidade});
 }
 
 
 
 const Home = () =>{
-  const {localidade, setLocalidade} = useLocalidadeRducer();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const currentUser = getUser();
-
+  const {localidade, setLocalidade} = useLocalidadeRducer();
+  const { isPresent} = useLocalidades();
+ 
+  useEffect(() => {
+    if (isPresent) {
+      const localidadesFromDB = getLocalidades(); 
+      setLocalidade(localidadesFromDB);
+    }
+  }, [isPresent]);
+  
   const renderItem = ({ item }: { item: LocalidadeType }) => {
     return (
       <TouchableOpacity onPress={() => handleGoTolocalidade(item)}>
@@ -73,21 +77,7 @@ const Home = () =>{
   };
  
 
-  useEffect(() => {
-    const fetchLocalidade = async () => {
-      try {
-        const localidadeData = await connectionAPIGet('http://192.168.100.28:8080/localidade');
-        if (typeof localidadeData === 'object' && localidadeData !== null) {
-          setLocalidade(localidadeData as LocalidadeType[]); // Faz o casting explícito para LocalidadeType
-        } else {
-          console.error('Dados de localidade inválidos:', localidadeData);
-        }
-      } catch (error) {
-        console.error('Erro ao obter dados de localidade:', error);
-      }
-    };
-    fetchLocalidade();
-  }, []);
+  
   
  
   

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, Button, Text, TouchableOpacity, ImageBackground, StyleSheet } from 'react-native';
-import { ContainerLogin, ImagelogoLogin } from '../styles/login.style';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRequest } from '../../../context/Auth';
 import pkceChallenge from 'react-native-pkce-challenge';
 import qs from 'qs';
-import {WebView, WebViewMessageEvent, WebViewNavigation } from 'react-native-webview';
+import {WebView, WebViewNavigation } from 'react-native-webview';
 import { Icon } from '../../../shared/components/icon/Icon';
 import { theme } from '../../../shared/themes/theme';
+import { ContainerSplash, ImagelogoSplash } from '../../splash/styles/splash.style';
 
 const generatePkceChallenge = () => {
   const challenge = pkceChallenge();
@@ -76,15 +76,14 @@ console.log(webViewVisible);
         />
       ) : (
         <View style={styles.container}>
-        <ImageBackground
-          source={require('../../../assets/images/1.png')} // Substitua pelo caminho da sua imagem
-          style={styles.imageBackground}
-        >
+         <ContainerSplash>
+              <ImagelogoSplash resizeMode="contain" source={require('../../../assets/images/logo_2.png')} />
+           
           <TouchableOpacity style={styles.button} onPress={() => setWebViewVisible(true)}>
-            <Icon name='enter' size={200} color='yellow'/>
-            <Text style={styles.buttonText}>Iniciar Autenticação</Text>
+            <Icon name='enter' size={70} color={theme.colors.blueTheme.blue1}/>
+            <Text style={styles.buttonText}>Faxer Login</Text>
           </TouchableOpacity>
-        </ImageBackground>
+          </ContainerSplash>
       </View>
       )}
     </>
@@ -98,22 +97,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  imageBackground: {
-    width: '95%',
-    height: '90%',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
+  
   button: {
-  backgroundColor: theme.colors.blueTheme.blue2, // Cor de fundo azul
-  padding: 15,
-  borderRadius: 10,
-  marginTop: 270, 
+  padding: 2,
+  marginTop: 10, 
+  alignItems:'center',
+  end:'auto'
   },
   buttonText: {
-    color: 'yellow',
+    color: theme.colors.blueTheme.blue1,
     fontWeight: 'bold',
-    fontSize: 25,
+    fontSize: 15,
   },
 });
 

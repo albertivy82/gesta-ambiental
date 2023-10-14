@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react';
 import { textTypes } from "./shared/components/text/textTypes";
 import UserDetails from "./modules/userDetails";
 import ProfileUser from "./modules/profileUser";
+import Coordenadas from "./modules/coordenadas";
 
 
 const Stack = createNativeStackNavigator();
@@ -39,7 +40,7 @@ const TabNavigation = ()=>{
         let iconName: string
             
             switch (route.name) {
-              case 'Home': 
+              case 'HomeTab': 
               iconName = 'home';
               break;
               case 'Usuários': 
@@ -56,7 +57,7 @@ const TabNavigation = ()=>{
       tabBarInactiveTintColor: theme.colors.grayTheme.gray100,
       })}
       >
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="HomeTab" component={Home} />
       <Tab.Screen name="Config." component={EditUser} options={{title:'Senha'}}/>
       <Tab.Screen name="Usuários" component={admUsers} options={{title:'Usuários'}}/>
       </Tab.Navigator>
@@ -112,6 +113,7 @@ const Navigation =() =>{
           <Stack.Screen name="Localidade_Detalhada" component={InfLocalidade} options={{title: 'Localidade'}} />
           <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
           <Stack.Screen name="ProfileUser" component={ProfileUser} options={{title: 'Editar Perfil'}} />
+          <Stack.Screen name="Coordenadas" component={Coordenadas} options={{title: 'Coordenadas'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

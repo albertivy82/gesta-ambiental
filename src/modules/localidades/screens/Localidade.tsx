@@ -2,7 +2,6 @@ import { View, TextInput, Button } from "react-native";
 import { EditUserContainer } from "../styles/Localidade.style";
 import { useEditUser } from "../hooks/uselnputLocalidade";
 import { municipiosEnum } from "../../../enums/municipios.enum";
-import { useDeferredValue } from "react";
 import { Picker } from "@react-native-picker/picker";
 import Input from "../../../shared/components/input/input";
 import { theme } from "../../../shared/themes/theme";
@@ -30,7 +29,7 @@ const Localidade = () =>{
               margin="0px 0px 16px 0px"
               title="Localidade:"/>
         
-        <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.blueTheme.blue }}>
+        <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.blueTheme.blue1 }}>
             <Picker
               selectedValue={novaLocalidade.municipio}
               onValueChange={(value) => handleMunicipioChange(value)}>
@@ -41,7 +40,7 @@ const Localidade = () =>{
               </Picker>
           </View> 
 
-          <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.blueTheme.blue}}>
+          <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.blueTheme.blue1}}>
             <Picker
               selectedValue={novaLocalidade.esfera}
               onValueChange={(value) => handleEsferaChange(value)}

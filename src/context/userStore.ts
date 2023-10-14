@@ -3,7 +3,7 @@ import { getToken } from './tokenStore';
 import { UserBody } from '../shared/types/userBody';
 import { connectionAPIGet } from '../shared/functions/connection/connectionAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUserReducer } from '../store/reducers/userReducer/useUserReducer';
+
 
 
 

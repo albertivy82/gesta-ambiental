@@ -8,14 +8,29 @@ import { Button, View, TouchableOpacity, ScrollView } from 'react-native';
 import { LocalidadeContainer } from '../styles/Localidade.style';
 import { Icon } from '../../../shared/components/icon/Icon';
 import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
+import { coordenadasBody } from '../../../shared/types/coordenadaBody';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
 }
 
-const DeleteUser = async (id: string) => {
+
+const DeleteUser = async (id: number) => {
   await connectionAPIDelete(`http://192.168.100.28:8080/localidade/${id}`);
 };
+
+
+//BLOCO COORDENADAS
+export const novasCoorenadas = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) =>{
+    
+    navigate('Coordenadas', {localidadeId});
+}
+
+export const editarCoordenadas = (navigate: NavigationProp<ParamListBase>['navigate'], coordenadas: null) =>{
+  
+  navigate('Coordenadas', {coordenadas});
+}
+
 
 const InfLocalidade = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -28,6 +43,16 @@ const InfLocalidade = () => {
     DeleteUser(localidade.id);
   };
 
+  //BLOCO COORDENADAS
+  const handleCoordenadasInserir =  (localidadeId: number) =>{
+    novasCoorenadas(navigation.navigate, localidadeId);
+  }
+  const handleCoordenadasEditar =  (coordenadas: null) =>{
+    editarCoordenadas(navigation.navigate, null);
+  }
+
+
+
   const renderField = (label: string, value: string[] | null) => {
     return (
       <View style={{ marginBottom: 10 }}>
@@ -37,6 +62,20 @@ const InfLocalidade = () => {
       </View>
     );
   };
+
+  const renderCoordenada= (label: string, value: string[] | null) => {
+    return (
+      <View style={{ marginBottom: 10 }}>
+        <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+          {label}: {value && value.length > 0 ? value.join(', ') : 'Informação não cadastrada'}
+        </Text>
+      </View>
+    );
+  };
+
+
+
+
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -52,9 +91,26 @@ const InfLocalidade = () => {
       </View>
 
       
+      <TouchableOpacity onPress={() => handleCoordenadasEditar(null)}>
+          <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+              {renderCoordenada('Coordenadas', null)}
+          </View>
+      </TouchableOpacity>
+     
+      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+      <TouchableOpacity onPress={() => handleCoordenadasInserir(localidade.id)}>
+          <Icon name="plus" size={10} color="blue">
+              <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> 
+                  adicionar
+              </Text>
+          </Icon>
+      </TouchableOpacity>
+      </View> 
+
+
       <TouchableOpacity>
       <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Coordenadas', localidade.coordenadas)}
+      {renderField('Residencias', null)}
       </View>
       </TouchableOpacity>
       <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
@@ -69,22 +125,7 @@ const InfLocalidade = () => {
 
       <TouchableOpacity>
       <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Residencias', localidade.residencia)}
-      </View>
-      </TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      <TouchableOpacity>
-      <Icon name="plus" size={10} color="blue">
-      <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> adicionar
-      </Text>
-      </Icon>
-      </TouchableOpacity>
-      </View> 
-
-
-      <TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Postos', localidade.posto)}
+      {renderField('Postos', null)}
       </View>
       </TouchableOpacity>
       <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
@@ -98,7 +139,7 @@ const InfLocalidade = () => {
 
       <TouchableOpacity>
       <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Escolas', localidade.escola)}
+      {renderField('Escolas', null)}
       </View>
       </TouchableOpacity>
       <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>

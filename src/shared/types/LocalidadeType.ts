@@ -1,12 +1,10 @@
+import { coordenadasBody } from "./coordenadaBody";
+
 export interface LocalidadeType {
 
-    id: string;
+    id: number;
 	nome: string;
 	municipio: string;
 	esfera: string;
-	posto: string[];
-	residencia: string[];
-	escola: string[];
-	coordenadas: string[];
-
+	
 }

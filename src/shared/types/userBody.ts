@@ -5,5 +5,7 @@ export interface UserBody {
     matricula: string;
     email: string;
     cpf: string;
-    grupo: string[];
+    grupo: {
+        nome: string;
+    }
 }

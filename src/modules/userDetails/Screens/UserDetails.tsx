@@ -47,10 +47,7 @@ const UserDetails = ()=>{
         DeleteUser(user.id);
     };
 
-    const handleProfile =() => {
-        GoToProfileUser(navigation.navigate, user);
-    };
-
+  
     const renderField = (label: string, value: string | null)=>{
         return (
         <View style={{ marginBottom: 10 }}>
@@ -60,22 +57,7 @@ const UserDetails = ()=>{
         </View>)
     }
 
-    const renderGrupos = (grupos: String[]) =>{
-        if (grupos && grupos.length >0){
-            return(
-                <View style={{marginBottom: 10}}>
-                        {grupos.map((grupo, index) =>(
-                            <Text key={index} type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
-                                Perfil: {grupo}
-                            </Text>
-                        ))}
-                </View>
-            );    
-        }else{
-            return null;
-        }
-    }
-
+    
       return(
 
        <UserContainer>
@@ -84,7 +66,8 @@ const UserDetails = ()=>{
            {renderField('Matrícula', user.matricula)}
            {renderField('CPF', user.cpf)}
            {renderField('E-mail', user.email)}
-           {renderGrupos(user.grupo)}
+           {renderField('Perfil', user.grupo.nome)}          
+          
            
            
            <Button
@@ -97,10 +80,6 @@ const UserDetails = ()=>{
              onPress={handleDeleteUser}
             />
 
-            <Button
-             title="Editar Perfil"
-             onPress={handleProfile}
-            />
         </UserContainer>
     );
 
