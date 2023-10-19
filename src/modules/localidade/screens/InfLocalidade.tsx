@@ -9,69 +9,110 @@ import { LocalidadeContainer } from '../styles/Localidade.style';
 import { Icon } from '../../../shared/components/icon/Icon';
 import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
 import { coordenadasBody } from '../../../shared/types/coordenadaBody';
+import { useCoordenadas } from '../hooks/useCoordenadas';
+import { useEffect, useState } from 'react';
+import { getCoordenadas } from '../../../realm/services/coordenadaService';
+import useDeleteLocalidade from '../hooks/useDeleteLocalidade';
+import { useImoveis } from '../hooks/useImoveis';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
 }
 
 
-const DeleteUser = async (id: number) => {
-  await connectionAPIDelete(`http://192.168.100.28:8080/localidade/${id}`);
-};
-
-
 //BLOCO COORDENADAS
 export const novasCoorenadas = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) =>{
-    
-    navigate('Coordenadas', {localidadeId});
+   navigate('Coordenadas', {localidadeId});
 }
 
 export const editarCoordenadas = (navigate: NavigationProp<ParamListBase>['navigate'], coordenadas: null) =>{
-  
   navigate('Coordenadas', {coordenadas});
+}
+
+//BLOCO IMOVEL
+export const imoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('Imovel', {localidadeId})
 }
 
 
 const InfLocalidade = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
-  const { localidade } = params;
 
-  console.log(localidade);
-
-  const handleDeleteLocalidade = () => {
-    DeleteUser(localidade.id);
-  };
-
-  //BLOCO COORDENADAS
-  const handleCoordenadasInserir =  (localidadeId: number) =>{
-    novasCoorenadas(navigation.navigate, localidadeId);
-  }
-  const handleCoordenadasEditar =  (coordenadas: null) =>{
-    editarCoordenadas(navigation.navigate, null);
-  }
+      const navigation = useNavigation<NavigationProp<ParamListBase>>();
+      const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
+      const { localidade } = params;
+      const {localidades} = useCoordenadas(localidade.id);
+      const {contagemImoveis, fetchImoveis} = useImoveis(localidade.id);
+      const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>();
+      const [ ContagemImoveis, setContagemImoveis] = useState<String>()
+      const { deleteLocalidade } = useDeleteLocalidade(localidade.id);
 
 
+      //inicializando listagens...
+            useEffect(()=>{
+                if(localidades){
+                  const getCoordenadasRealm = getCoordenadas(localidade.id);
+                  setCorrdenadasRealm(getCoordenadasRealm);
+                }
+            }, [localidades]);
 
-  const renderField = (label: string, value: string[] | null) => {
-    return (
-      <View style={{ marginBottom: 10 }}>
-        <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
-          {label}: {value && value.length > 0 ? value.join(', ') : 'Informação não cadastrada'}
-        </Text>
-      </View>
-    );
-  };
+            
+                   
+     
+     
+     
+      const handleDeleteLocalidade = () => {
+        deleteLocalidade();
+      };
 
-  const renderCoordenada= (label: string, value: string[] | null) => {
-    return (
-      <View style={{ marginBottom: 10 }}>
-        <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
-          {label}: {value && value.length > 0 ? value.join(', ') : 'Informação não cadastrada'}
-        </Text>
-      </View>
-    );
-  };
+      //BLOCO COORDENADAS
+      const handleCoordenadasInserir =  (localidadeId: number) =>{
+        novasCoorenadas(navigation.navigate, localidadeId);
+      }
+      const handleCoordenadasEditar =  (coordenadas: null) =>{
+        editarCoordenadas(navigation.navigate, null);
+      }
+      
+      //BLOCO IMOVEL
+      const  handleGerenciaImoveis =  (localidadeId: number) =>{
+        imoveisDaLocalidade(navigation.navigate, localidadeId);
+      }
+      
+
+        const renderField = (label: string, value: string[] | null) => {
+          return (
+            <View style={{ marginBottom: 10 }}>
+              <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+                {label}: {value && value.length > 0 ? value.join(', ') : 'Informação não cadastrada'}
+              </Text>
+            </View>
+          );
+        };
+
+        const renderCoordenada = (label: string, values: coordenadasBody[] | null) => {
+          return (
+              <View style={{ marginBottom: 10 }}>
+                  <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+                      {label}:
+              </Text>
+            <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+                       {values && values.length > 0 ? values.map(coord => `${coord.latitude}, ${coord.longitude}\n`).join('') : 'Informação não cadastrada'}
+            </Text>
+              </View>
+          );
+      };
+
+      const renderImovel = (label: string, values: number) => {
+        return (
+            <View style={{ marginBottom: 10 }}>
+                <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+                    {label}:
+            </Text>
+          <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+                     {values && values > 0 ? values : 'Informação não cadastrada'}
+          </Text>
+            </View>
+        );
+    };
 
 
 
@@ -93,7 +134,7 @@ const InfLocalidade = () => {
       
       <TouchableOpacity onPress={() => handleCoordenadasEditar(null)}>
           <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-              {renderCoordenada('Coordenadas', null)}
+             {renderCoordenada('Coordenadas', coordenadasRealm as coordenadasBody[] )}
           </View>
       </TouchableOpacity>
      
@@ -150,6 +191,13 @@ const InfLocalidade = () => {
       </Icon>
       </TouchableOpacity>
       </View> 
+
+      <TouchableOpacity onPress={() => handleGerenciaImoveis(localidade.id)}>
+          <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+             {renderImovel('Imoveis Cadastrados: ', contagemImoveis)}
+          </View>
+      </TouchableOpacity>
+       
       
     </LocalidadeContainer>
     </ScrollView>

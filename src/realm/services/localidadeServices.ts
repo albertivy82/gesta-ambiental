@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { LocalidadeType } from '../../shared/types/LocalidadeType';
-import { initializeRealm, realmInstance } from './databaseService';
+import { realmInstance } from './databaseService';
 
 
 

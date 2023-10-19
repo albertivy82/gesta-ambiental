@@ -1,5 +1,4 @@
 import { Button, FlatList, TouchableOpacity, View } from 'react-native';
-import { removeAuthData} from '../../../context/authStore';
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import { HomeContainer } from '../styles/Home.style';
 import { removeToken } from '../../../context/tokenStore';
@@ -11,29 +10,25 @@ import { useLocalidades } from '../hook/useLocalidades';
 import { useEffect } from 'react';
 import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
 import { getLocalidades } from '../../../realm/services/localidadeServices';
+import { imovelBody } from '../../../shared/types/imovelBody';
 
 
 
 
-  const removetokens = async () => {
-      await removeAuthData();
-      await removeToken();
-  };
 
-export const gestaLocalidades = (navigate: NavigationProp<ParamListBase>['navigate']) =>{
+export const inserirImovel = (navigate: NavigationProp<ParamListBase>['navigate']) =>{
     navigate('Localidade');
 }
 
-export const detalhaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidade:LocalidadeType) =>{
+export const gerirImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidade:LocalidadeType) =>{
    navigate('Localidade_Detalhada', {localidade});
 }
 
 
 
-const Home = () =>{
+const Imovel = () =>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const {localidade, setLocalidade} = useLocalidadeRducer();
-  const { isPresent} = useLocalidades();
+  const {isPresent} = useLocalidades();
  
   useEffect(() => {
     if (isPresent) {
@@ -42,7 +37,7 @@ const Home = () =>{
     }
   }, [isPresent]);
   
-  const renderItem = ({ item }: { item: LocalidadeType }) => {
+  const renderItem = ({ item }: { item: imovelBody }) => {
     return (
       <TouchableOpacity onPress={() => handleGoTolocalidade(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
@@ -110,4 +105,4 @@ const Home = () =>{
         </HomeContainer>
       );
 }
-export default Home;
+export default Imovel;

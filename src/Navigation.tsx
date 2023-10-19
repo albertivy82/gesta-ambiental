@@ -23,6 +23,7 @@ import { textTypes } from "./shared/components/text/textTypes";
 import UserDetails from "./modules/userDetails";
 import ProfileUser from "./modules/profileUser";
 import Coordenadas from "./modules/coordenadas";
+import Imovel from "./modules/imoveis/screens/Imovel";
 
 
 const Stack = createNativeStackNavigator();
@@ -114,6 +115,7 @@ const Navigation =() =>{
           <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
           <Stack.Screen name="ProfileUser" component={ProfileUser} options={{title: 'Editar Perfil'}} />
           <Stack.Screen name="Coordenadas" component={Coordenadas} options={{title: 'Coordenadas'}} />
+          <Stack.Screen name="Imovel" component={Imovel} options={{title: 'Imóveis'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

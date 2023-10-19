@@ -17,13 +17,8 @@ export const useLocalidades = () =>{
       try {
         const response = await connectionAPIGet('http://192.168.100.28:8080/localidade');
         const data = response as LocalidadeType[];
-        console.log('1')
-        console.log(data)
-
         if (data && Array.isArray(data) && data.length > 0) {
-          console.log('2')
-          console.log(data)
-                await salvarLocalidades(data); 
+                 await salvarLocalidades(data); 
                 setIsPresent(true);
         } else {
           console.error('Dados de localidade inválidos:');

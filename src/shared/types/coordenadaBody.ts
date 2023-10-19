@@ -1,9 +1,9 @@
 export interface coordenadasBody{
 
-    id: string;
+    id: number;
     latitude: string;
     longitude: string;
-    localidade:{
-        id:string;
+    localidade: {
+        id:number;
     }
 }

@@ -1,5 +1,3 @@
-import { coordenadasBody } from "./coordenadaBody";
-
 export interface LocalidadeType {
 
     id: number;
