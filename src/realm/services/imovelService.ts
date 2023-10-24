@@ -4,7 +4,7 @@ import { realmInstance } from "./databaseService"
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
     return new Promise<void>((resolve, reject)=>{
-
+           
         try{
             realmInstance.write(()=>{
 
@@ -34,12 +34,14 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
 };
 
-export const getImoveis = (localidadeId:number): imovelBody[]=>{
+export const getImoveis = (localidade:number): imovelBody[]=>{
 
-    const query = `localidade==${localidadeId}`;
-
+   
+    const query = `localidade == ${localidade}`;
+   
+  
     const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
-
+    
     const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm));
 
     return imoveisLimpos as imovelBody[];

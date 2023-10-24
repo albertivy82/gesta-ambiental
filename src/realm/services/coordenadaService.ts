@@ -5,7 +5,7 @@ import { coordenadasBody } from '../../shared/types/coordenadaBody';
 
 
 export const salvarCoordenadas = (coordenadas: coordenadasBody[]) => {
-   
+    
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
@@ -15,6 +15,8 @@ export const salvarCoordenadas = (coordenadas: coordenadasBody[]) => {
                         ...coordenada,
                         localidade: coordenada.localidade.id
                     };
+
+                    console.log(corrigidoCoordenada)
                     realmInstance.create('Coordenada', corrigidoCoordenada, true);
                     
                 });
@@ -32,7 +34,7 @@ export const getCoordenadas = (localidade:number): coordenadasBody[]=>{
 
     const query = `localidade == ${localidade}`;
     const coordenadas = realmInstance.objects<coordenadasBody>('Coordenada').filtered(query).slice(); 
-   
+   console.log(coordenadas)
    const cleanCoordenadas = JSON.parse(JSON.stringify(coordenadas));
    
     return cleanCoordenadas as coordenadasBody[];

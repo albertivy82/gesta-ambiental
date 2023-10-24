@@ -1,65 +1,171 @@
-import { Button, FlatList, TouchableOpacity, View } from 'react-native';
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
-import { HomeContainer } from '../styles/Home.style';
-import { removeToken } from '../../../context/tokenStore';
-import Text from '../../../shared/components/text/Text';
-import { LocalidadeType } from '../../../shared/types/LocalidadeType';
+import { useEffect, useState } from 'react';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { TouchableOpacity, View, FlatList} from 'react-native';
+import { imovelBody } from '../../../shared/types/imovelBody';
+import { getImoveis } from '../../../realm/services/imovelService';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { useLocalidades } from '../hook/useLocalidades';
-import { useEffect } from 'react';
-import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
-import { getLocalidades } from '../../../realm/services/localidadeServices';
-import { imovelBody } from '../../../shared/types/imovelBody';
+import Text from '../../../shared/components/text/Text';
+import { ImovelContainer } from '../styles/Imovel.style';
 
-
-
-
-
-export const inserirImovel = (navigate: NavigationProp<ParamListBase>['navigate']) =>{
-    navigate('Localidade');
-}
-
-export const gerirImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidade:LocalidadeType) =>{
-   navigate('Localidade_Detalhada', {localidade});
-}
-
-
-
-const Imovel = () =>{
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const {isPresent} = useLocalidades();
- 
-  useEffect(() => {
-    if (isPresent) {
-      const localidadesFromDB = getLocalidades(); 
-      setLocalidade(localidadesFromDB);
-    }
-  }, [isPresent]);
+export const handleGoToImovel = () => {
   
-  const renderItem = ({ item }: { item: imovelBody }) => {
+};
+
+export interface ImoveisParam {
+  localidadeId: number;
+}
+
+
+
+
+const Imoveis = () => {
+  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
+  const { localidadeId } = route.params;
+
+
+const [imovel, setImovel] = useState<imovelBody[]>()
+
+  useEffect(()=>{
+      if(localidadeId){
+        const imovelRealm = getImoveis(localidadeId);
+        setImovel(imovelRealm);
+      }
+  }, [localidadeId])
+
+
+  //renderizar listagem de imóveis
+  const renderItem = ({ item }: { item: imovelBody}) => {
     return (
-      <TouchableOpacity onPress={() => handleGoTolocalidade(item)}>
+      <TouchableOpacity onPress={() => handleGoToImovel()}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               <Text
                 type={textTypes.BUTTON_REGULAR}
                 color={theme.colors.blueTheme.blue1}
               >
-                Nome: {item.nome}
+                Rua: {item.rua}
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
                 color={theme.colors.blueTheme.blue1}
               >
                
-                Município: {item.municipio}
+                Número: {item.numero}
                
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
                 color={theme.colors.blueTheme.blue1}
               >
-               Iniciativa: {item.esfera}
+               Bairro: {item.bairro}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Referencial: {item.referencial}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Latitude: {item.latitude}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               longitude: {item.longitude}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Situação Fundiária: {item.situacaoFundiaria}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Documentação do Imóvel: {item.documentacaoImovel}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Data de chegada no local: {item.dataChegada}
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Pretende se mudar do local: {item.pretendeMudar }
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Motivo para querer mudar-se: {item.motivoVontadeMudanca }
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Sobre a relação que possui com a localidade: {item.relacaoArea }
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Sobre a relação com a vizinhança: {item.relacaoVizinhos }
+              </Text>
+
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Material principal dos limites do Imóvel: {item.limites }
+              </Text>
+
+              
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Principal meio de transporte utilizado: {item.transporte }
+              </Text>
+
+              
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Existem linhas de barco no Local: {item.linhasDeBarco }
+              </Text>
+
+              
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Tratamento do solo no imóvel: {item.tipoSolo }
+              </Text>
+              
+              <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={theme.colors.blueTheme.blue1}
+              >
+               Estrutura de esporte e lazer na área: {item.esporteLazer }
               </Text>
         </View>
       </TouchableOpacity>
@@ -67,42 +173,29 @@ const Imovel = () =>{
   };
  
 
-  
-  
- 
-  
-       const handleLocalidades =() => {
-          gestaLocalidades(navigation.navigate);
-      };
-      
-      const handleGoTolocalidade =  (localidade: LocalidadeType) =>{
-          detalhaLocalidade(navigation.navigate, localidade);
-      }
-    
-    return (
-        
 
-        <HomeContainer>
-           <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
-          <Text 
-          type={textTypes.TITLE_BOLD} 
-          color={theme.colors.blueTheme.blue1}
-          margin="0px 0px 0px 20px">
-            LISTA DE LOCALIDADES
-            </Text>
+
+  return (
+    <ImovelContainer>
+            <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
+              <Text 
+                  type={textTypes.TITLE_BOLD} 
+                  color={theme.colors.blueTheme.blue1}
+                  margin="0px 0px 0px 20px">
+                      LISTA DE IMÓVEIS
+                </Text>
           </View>
-         <FlatList
-          data={localidade}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+
+          <FlatList
+              data={imovel}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
           />
-               
-         <Button
-              title="Inserir Nova Localidade"
-              onPress={handleLocalidades}
-            />
+                
           
-        </HomeContainer>
-      );
+   
+   </ImovelContainer>
+  );
 }
-export default Imovel;
+
+export default Imoveis;

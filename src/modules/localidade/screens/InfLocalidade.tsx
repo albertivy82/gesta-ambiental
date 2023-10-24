@@ -40,7 +40,7 @@ const InfLocalidade = () => {
       const navigation = useNavigation<NavigationProp<ParamListBase>>();
       const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
       const { localidade } = params;
-      const {localidades} = useCoordenadas(localidade.id);
+      const {coordenadas} = useCoordenadas(localidade.id);
       const {contagemImoveis, fetchImoveis} = useImoveis(localidade.id);
       const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>();
       const [ ContagemImoveis, setContagemImoveis] = useState<String>()
@@ -49,11 +49,12 @@ const InfLocalidade = () => {
 
       //inicializando listagens...
             useEffect(()=>{
-                if(localidades){
+                if(coordenadas){
                   const getCoordenadasRealm = getCoordenadas(localidade.id);
+                 
                   setCorrdenadasRealm(getCoordenadasRealm);
                 }
-            }, [localidades]);
+            }, [coordenadas]);
 
             
                    
@@ -73,8 +74,10 @@ const InfLocalidade = () => {
       }
       
       //BLOCO IMOVEL
-      const  handleGerenciaImoveis =  (localidadeId: number) =>{
+      const  handleGerenciaImoveis =  (localidadeId: number, contagemImoveis: number) =>{
+        if(contagemImoveis>0){
         imoveisDaLocalidade(navigation.navigate, localidadeId);
+        }
       }
       
 
@@ -108,7 +111,7 @@ const InfLocalidade = () => {
                     {label}:
             </Text>
           <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
-                     {values && values > 0 ? values : 'Informação não cadastrada'}
+                     {values && values > 0 ? values: 'Não há imóveis cadstrados'}
           </Text>
             </View>
         );
@@ -150,51 +153,39 @@ const InfLocalidade = () => {
 
 
       <TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Residencias', null)}
-      </View>
-      </TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      <TouchableOpacity>
-      <Icon name="plus" size={10} color="blue">
-      <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> adicionar
-      </Text>
-      </Icon>
-      </TouchableOpacity>
-      </View> 
-
-
-      <TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Postos', null)}
-      </View>
-      </TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      <TouchableOpacity>
-      <Icon name="plus" size={10} color="blue">
-      <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> adicionar
-      </Text>
-      </Icon>
-      </TouchableOpacity>
-      </View> 
-
-      <TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      {renderField('Escolas', null)}
-      </View>
-      </TouchableOpacity>
-      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-      <TouchableOpacity>
-      <Icon name="plus" size={10} color="blue">
-      <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> adicionar
-      </Text>
-      </Icon>
-      </TouchableOpacity>
-      </View> 
-
-      <TouchableOpacity onPress={() => handleGerenciaImoveis(localidade.id)}>
           <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
-             {renderImovel('Imoveis Cadastrados: ', contagemImoveis)}
+                 {renderField('Postos de Saúde', null)}
+          </View>
+      </TouchableOpacity>
+      
+      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+      
+      <TouchableOpacity>
+            <Icon name="plus" size={10} color="blue">
+                <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> 
+                    adicionar
+                </Text>
+            </Icon>
+      </TouchableOpacity>
+      </View> 
+
+      <TouchableOpacity>
+      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+      {renderField('Escolas do local', null)}
+      </View>
+      </TouchableOpacity>
+      <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+      <TouchableOpacity>
+      <Icon name="plus" size={10} color="blue">
+      <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}> adicionar
+      </Text>
+      </Icon>
+      </TouchableOpacity>
+      </View> 
+
+      <TouchableOpacity onPress={() => handleGerenciaImoveis(localidade.id, contagemImoveis)}>
+          <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+             {renderImovel('Imoveis Cadastrados', contagemImoveis)}
           </View>
       </TouchableOpacity>
        

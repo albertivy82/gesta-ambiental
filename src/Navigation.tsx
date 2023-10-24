@@ -41,7 +41,7 @@ const TabNavigation = ()=>{
         let iconName: string
             
             switch (route.name) {
-              case 'HomeTab': 
+              case 'HOME': 
               iconName = 'home';
               break;
               case 'Usuários': 
@@ -58,7 +58,7 @@ const TabNavigation = ()=>{
       tabBarInactiveTintColor: theme.colors.grayTheme.gray100,
       })}
       >
-      <Tab.Screen name="HomeTab" component={Home} />
+      <Tab.Screen name="HOME" component={Home} />
       <Tab.Screen name="Config." component={EditUser} options={{title:'Senha'}}/>
       <Tab.Screen name="Usuários" component={admUsers} options={{title:'Usuários'}}/>
       </Tab.Navigator>

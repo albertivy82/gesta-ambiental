@@ -1,4 +1,5 @@
 export enum transporteEnum {
+    CARRO = 'cARRO',
     BARCO = 'Barco',
     BICICLETA= 'Bicicleta',
     A_PÉ= 'Delocamento a pé',
