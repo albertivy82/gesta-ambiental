@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, View, FlatList} from 'react-native';
 import { imovelBody } from '../../../shared/types/imovelBody';
 import { getImoveis } from '../../../realm/services/imovelService';
@@ -16,10 +16,15 @@ export interface ImoveisParam {
   localidadeId: number;
 }
 
+export const detalharLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
+  navigate('ImovelDetail', {imovel})
+}
+
 
 
 
 const Imoveis = () => {
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
   const { localidadeId } = route.params;
 
@@ -33,11 +38,17 @@ const [imovel, setImovel] = useState<imovelBody[]>()
       }
   }, [localidadeId])
 
+  
+  const  handleGoToImovelDetail =  (imovel: imovelBody) =>{
+       detalharLocalidade(navigation.navigate, imovel );
+    
+  }
+
 
   //renderizar listagem de imóveis
   const renderItem = ({ item }: { item: imovelBody}) => {
     return (
-      <TouchableOpacity onPress={() => handleGoToImovel()}>
+      <TouchableOpacity onPress={() => handleGoToImovelDetail(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               <Text
                 type={textTypes.BUTTON_REGULAR}
@@ -81,92 +92,7 @@ const [imovel, setImovel] = useState<imovelBody[]>()
                longitude: {item.longitude}
               </Text>
 
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Situação Fundiária: {item.situacaoFundiaria}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Documentação do Imóvel: {item.documentacaoImovel}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Data de chegada no local: {item.dataChegada}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Pretende se mudar do local: {item.pretendeMudar }
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Motivo para querer mudar-se: {item.motivoVontadeMudanca }
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Sobre a relação que possui com a localidade: {item.relacaoArea }
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Sobre a relação com a vizinhança: {item.relacaoVizinhos }
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Material principal dos limites do Imóvel: {item.limites }
-              </Text>
-
               
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Principal meio de transporte utilizado: {item.transporte }
-              </Text>
-
-              
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Existem linhas de barco no Local: {item.linhasDeBarco }
-              </Text>
-
-              
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Tratamento do solo no imóvel: {item.tipoSolo }
-              </Text>
-              
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
-              >
-               Estrutura de esporte e lazer na área: {item.esporteLazer }
-              </Text>
         </View>
       </TouchableOpacity>
     );

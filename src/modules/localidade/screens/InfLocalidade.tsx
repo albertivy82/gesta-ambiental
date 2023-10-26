@@ -41,9 +41,8 @@ const InfLocalidade = () => {
       const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
       const { localidade } = params;
       const {coordenadas} = useCoordenadas(localidade.id);
-      const {contagemImoveis, fetchImoveis} = useImoveis(localidade.id);
+      const {contagemImoveis} = useImoveis(localidade.id);
       const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>();
-      const [ ContagemImoveis, setContagemImoveis] = useState<String>()
       const { deleteLocalidade } = useDeleteLocalidade(localidade.id);
 
 

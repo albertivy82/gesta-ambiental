@@ -1,7 +1,7 @@
 import { documentacao } from "../../enums/documentacao.enum";
 import { esporteLazerEnum } from "../../enums/esporteLazer.enum";
 import { limitesTerrenoEnum } from "../../enums/limitesTerreno.enum";
-import { simNao } from "../../enums/simNao.enum";
+import { simNao } from "../../enums/simNaoTalvez.enum";
 import { situacaoFundiaria } from "../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../enums/transporte.enum";
