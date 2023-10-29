@@ -1,6 +1,6 @@
 import { styled } from "styled-components/native";
 
-export const ImovelContainer = styled.View`
+export const ImovelDetailContainer = styled.View`
 
     height: 100%;
     width: 100%;

@@ -11,6 +11,7 @@ import { useLocalidades } from '../hook/useLocalidades';
 import { useEffect } from 'react';
 import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
 import { getLocalidades } from '../../../realm/services/localidadeServices';
+import { Icon } from '../../../shared/components/icon/Icon';
 
 
 
@@ -33,7 +34,7 @@ export const detalhaLocalidade = (navigate: NavigationProp<ParamListBase>['navig
 const Home = () =>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const {localidade, setLocalidade} = useLocalidadeRducer();
-  const { isPresent} = useLocalidades();
+  const { isPresent, fetchLocalidadeFromAPI, fetchLocalidadeFromDB} = useLocalidades();
  
   useEffect(() => {
     if (isPresent) {
@@ -101,12 +102,22 @@ const Home = () =>{
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           />
-               
-         <Button
-              title="Inserir Nova Localidade"
-              onPress={handleLocalidades}
-            />
-          
+        
+          <TouchableOpacity onPress={handleLocalidades}>
+              <View style={{ 
+              alignItems: 'center',  
+              flexDirection: 'row', 
+              justifyContent: 'space-between', 
+              padding: 10, 
+              borderWidth: 1, 
+              borderColor: theme.colors.blueTheme.blue2}}>
+                    <Icon size={40} name='point-right' color='blue' />
+                    <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>
+                      Inserir Nova Localidade
+                    </Text>
+               </View>
+          </TouchableOpacity>
+                       
         </HomeContainer>
       );
 }

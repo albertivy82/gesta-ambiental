@@ -11,15 +11,19 @@ export const useLocalidades = () =>{
   const [error, setError] = useState<Error | null>(null);
   const [isPresent, setIsPresent] = useState<boolean>(false);
     
-
-    const fetchLocalidade = async () => {
+const fetchLocalidadeFromDB = () =>{
+  const teste = getLocalidades();
+  if(teste.length> 0){
+    setIsPresent(true);
+  }
+}
+    
+  
+  
+  const fetchLocalidadeFromAPI = async () => {
       
       try {
-        const teste = getLocalidades();
-        if(teste.length> 0){
-          setIsPresent(true);
-        }else{
-              const response = await connectionAPIGet('http://192.168.100.28:8080/localidade');
+            const response = await connectionAPIGet('http://192.168.100.28:8080/localidade');
                   const data = response as LocalidadeType[];
                         if (data && Array.isArray(data) && data.length > 0) {
                                 await salvarLocalidades(data); 
@@ -29,7 +33,7 @@ export const useLocalidades = () =>{
                           console.error('Dados de localidade inválidos:');
                           throw new Error('Dados de localidade inválidos');
                         }
-        }
+        
       } catch (err) {
         console.error('Erro ao obter dados de localidade:', err);
               if (err instanceof Error) {
@@ -41,9 +45,10 @@ export const useLocalidades = () =>{
     };
 
   useEffect(() => {
-    fetchLocalidade();
+    fetchLocalidadeFromAPI();
+    fetchLocalidadeFromDB();
   }, []);
 
-  return { fetchLocalidade, error, isPresent };
+  return { fetchLocalidadeFromAPI, fetchLocalidadeFromDB, error, isPresent };
 
 }

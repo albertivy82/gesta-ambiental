@@ -24,7 +24,7 @@ import UserDetails from "./modules/userDetails";
 import ProfileUser from "./modules/profileUser";
 import Coordenadas from "./modules/coordenadas";
 import Imovel from "./modules/imoveis/screens/Imovel";
-import ImovelDetails from "./modules/imoveis copy/screens/imovelDetails";
+import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 
 
 const Stack = createNativeStackNavigator();
