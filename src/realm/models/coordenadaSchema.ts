@@ -3,8 +3,8 @@ export const CoordenadaSchema = {
     primaryKey: 'id',
     properties: {
       id: 'int',
-      latitude: 'string',
-      longitude: 'string',
-      localidade: 'int',
+      latitude: 'string?',
+      longitude: 'string?',
+      localidade: 'int' 
  }
 };

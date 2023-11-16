@@ -4,8 +4,14 @@ import { CoordenadaSchema } from '../models/coordenadaSchema';
 import { ImovelSchema } from '../models/imoveisSchema';
 import { PostoSchema } from '../models/postoSchema ';
 import { EscolaSchema } from '../models/escolaSchema ';
+import { BenfeitoriaSchema } from '../models/benfeitoriaSchema';
 
-const allSchemas = [LocalidadeSchema, CoordenadaSchema, ImovelSchema, PostoSchema, EscolaSchema]; 
+const allSchemas = [LocalidadeSchema,
+                     CoordenadaSchema, 
+                     ImovelSchema, 
+                     PostoSchema, 
+                     EscolaSchema, 
+                     BenfeitoriaSchema]; 
 
 export const initializeRealm =()=>{
     return new Realm({schema: allSchemas})

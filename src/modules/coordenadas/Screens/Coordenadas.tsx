@@ -9,7 +9,7 @@ import { coordenadasBody } from "../../../shared/types/coordenadaBody";
 import Navigation from "../../../Navigation";
 
 export interface LocalidadeId {
-  localidadeId: string;
+  localidadeId: number;
 }
 
 export interface coordenadaParam {

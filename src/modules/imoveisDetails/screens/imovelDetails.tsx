@@ -10,6 +10,8 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import { coordenadasBody } from '../../../shared/types/coordenadaBody';
 import { EscolaType } from '../../../shared/types/EscolaType';
 import { PostoType } from '../../../shared/types/postoTypes';
+import { useBenfeitorias } from '../hooks/useBenfeitorias';
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 
 
 
@@ -17,14 +19,27 @@ export interface ImovelParam {
  imovel: imovelBody;
 }
 
-
+//BLOCO IMOVEL
+export const benfeitoriasDoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('Imovel', {localidadeId})
+}
 
 
 const ImovelDetails = () => {
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
+  const {contagemBenfeitoria} = useBenfeitorias(params.imovel.id);
   
-      const renderField = (label: string, value: string | null| undefined) => {
-        return (
+  
+ 
+  const  handleGerenciaBenfeitorias =  (imovelId: number, contagemBenfeitorias: number) =>{
+    if(contagemBenfeitoria>0){
+      benfeitoriasDoImovel(navigation.navigate, imovelId);
+    }
+  }
+  
+  const renderField = (label: string, value: string | null| undefined) => {
+     return (
           <View style={{ marginBottom: 10 }}>
              <Text type={textTypes.SUB_TITLE_SEMI_BOLD} color={theme.colors.blueTheme.blue1}>
               {label}:
@@ -35,10 +50,8 @@ const ImovelDetails = () => {
           </View>
         );
       };
-
-
-
-     
+  
+    
 
 
 
@@ -103,10 +116,9 @@ const ImovelDetails = () => {
                                           borderColor: theme.colors.blueTheme.blue2 
                                         }}>
                             <Icon size={30} name='office' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Serviços Locais</Text>
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Serviços Básicos</Text>
                         </View>
                     </TouchableOpacity>
-
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
@@ -114,8 +126,26 @@ const ImovelDetails = () => {
                                           borderWidth: 5, 
                                           borderColor: theme.colors.blueTheme.blue2 
                                         }}>
-                            <Icon size={30} name='shrink' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Entrevistado</Text>
+                            <Icon size={30} name='cogs' color='blue' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Outros Serviços</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => handleGerenciaBenfeitorias(params.imovel.id, contagemBenfeitoria)}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          marginTop: 10, 
+                                          borderWidth: 5, 
+                                          borderColor: theme.colors.blueTheme.blue2 
+                                        }}>
+                                          
+                            <Icon size={30} name='tree' color='blue' />
+                            <View style={{ flexDirection: 'column' }}> 
+                                <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Benfeitorias</Text>
+                                <Text type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.mainTheme.black}>
+                                  {'benfeitorias cadastradas: '+contagemBenfeitoria.toString()}
+                              </Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
 

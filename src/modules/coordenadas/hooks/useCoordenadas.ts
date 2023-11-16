@@ -9,7 +9,7 @@ export const DEFAULT_COORDENADAS = {
     latitude:'',
     longitude:'',
     localidade:{
-        id: '',
+        id: 0,
     },
 };
 
@@ -35,7 +35,7 @@ export const useCoordenadas = () =>{
 
     }, [coordenadaNova]);
     
-        const registrarCoordenada = async (localidadeId: string) => {
+        const registrarCoordenada = async (localidadeId: number) => {
 
             coordenadaNova.localidade.id = localidadeId;
 
@@ -46,7 +46,7 @@ export const useCoordenadas = () =>{
         };
 
 
-        const atualizarCoordenada = async (coordenadaId: string) => {
+        const atualizarCoordenada = async (coordenadaId: number) => {
 
            const resultBack = await connectionAPIPut(`http://192.168.100.28:8080/coordenada/${coordenadaId}`, coordenadaNova);
             
