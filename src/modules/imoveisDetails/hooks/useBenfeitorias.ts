@@ -1,4 +1,4 @@
-import { getBenfeitorias } from "../../../realm/services/benfeitoriaService"
+import { getBenfeitorias, salvarBenfeitoria } from "../../../realm/services/benfeitoriaService"
 import { useEffect, useState } from "react";
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
@@ -28,6 +28,7 @@ export const useBenfeitorias = (imovelId:number)=>{
 
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
                     const constagem = bftData.length;
+                    await salvarBenfeitoria(bftData);
                     setcontagemBenfeitoria(constagem);
                 }else{
                     throw new Error('Dados de benfeitoria Inválidos'); 

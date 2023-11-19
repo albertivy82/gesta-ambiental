@@ -8,7 +8,7 @@ export const BenfeitoriaSchema = {
         funcao: 'string', 
         tipoSolo: 'string', 
         areaBenfeitoria: 'double',
-        paviementos: 'int',
+        pavimentos: 'int',
         tipoConstrucao: 'string', 
         OrigemMaterialConstrucao: 'string[]', 
         tipoCobertura: 'string', 
@@ -21,9 +21,9 @@ export const BenfeitoriaSchema = {
         energiaAlimentos: 'string', 
         informativoPredominante: 'string', 
         importanciaDeProtegerFauna: 'string',
-        importanciaDeProtegerAmibiente: 'string',
+        importanciaDeProtegerAmbiente: 'string',
         qualEspacoPrecisaSerPreservado: 'string',
-        probelmasRelacionadosAoAmbiente: 'string',
+        problemasRelacionadosAoAmbiente: 'string',
         imovel: 'int' 
     }
 };

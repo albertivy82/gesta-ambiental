@@ -79,10 +79,7 @@ const InfLocalidade = () => {
             },[postos]);
 
 
-                  
-                   
-     
-     
+        
      
       const handleDeleteLocalidade = () => {
         deleteLocalidade();

@@ -25,6 +25,8 @@ import ProfileUser from "./modules/profileUser";
 import Coordenadas from "./modules/coordenadas";
 import Imovel from "./modules/imoveis/screens/Imovel";
 import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
+import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
+import BenfeitoriaDetails from "./benfeitoriadDetails/screens/BenfeitoriasDetails";
 
 
 const Stack = createNativeStackNavigator();
@@ -118,11 +120,12 @@ const Navigation =() =>{
           <Stack.Screen name="Coordenadas" component={Coordenadas} options={{title: 'Coordenadas'}} />
           <Stack.Screen name="Imovel" component={Imovel} options={{title: 'Imóveis'}} />
           <Stack.Screen name="ImovelDetail" component={ImovelDetails} options={{title: 'Imóvel'}} />
-
-          
+          <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
+          <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );
 };
 
 export default Navigation;
+

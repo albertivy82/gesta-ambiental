@@ -8,15 +8,13 @@ import { theme } from '../../../shared/themes/theme';
 import Text from '../../../shared/components/text/Text';
 import { ImovelContainer } from '../styles/Imovel.style';
 
-export const handleGoToImovel = () => {
-  
-};
+
 
 export interface ImoveisParam {
   localidadeId: number;
 }
 
-export const detalharLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
+export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
   navigate('ImovelDetail', {imovel})
 }
 
@@ -40,7 +38,7 @@ const [imovel, setImovel] = useState<imovelBody[]>()
 
   
   const  handleGoToImovelDetail =  (imovel: imovelBody) =>{
-       detalharLocalidade(navigation.navigate, imovel );
+       detalharImovel(navigation.navigate, imovel );
     
   }
 
