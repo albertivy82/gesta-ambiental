@@ -8,7 +8,7 @@ import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/
 
 export const detalharBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
     navigate('BenfeitoriaDetails', {benfeitoria})
-  }
+}
 
 const RenderItem = ({ item }: { item: BenfeitoriaType}) => {
     const navigation = useNavigation<NavigationProp<ParamListBase>>();   
@@ -17,7 +17,7 @@ const RenderItem = ({ item }: { item: BenfeitoriaType}) => {
         detalharBenfeitoria(navigation.navigate, benfeitoria );
      
     }
-    console.log(item)
+    
     
     return (
         <TouchableOpacity onPress={() => handleBenfeitoriaDetail(item)}>

@@ -26,7 +26,9 @@ import Coordenadas from "./modules/coordenadas";
 import Imovel from "./modules/imoveis/screens/Imovel";
 import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
-import BenfeitoriaDetails from "./benfeitoriadDetails/screens/BenfeitoriasDetails";
+import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
+
+
 
 
 const Stack = createNativeStackNavigator();

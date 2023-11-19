@@ -15,6 +15,11 @@ export const mainTheme = {
   
   export const redTheme = {
     red: '#B22222',
+    red2:'#FFF9C4'
+  };
+
+  export const whiteTheme = {
+    white: '#FFFFFF',
   };
   
   

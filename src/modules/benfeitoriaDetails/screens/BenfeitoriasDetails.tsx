@@ -1,12 +1,12 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { BenfeitoriaType } from '../../shared/types/BenfeitoriaType';
-import { renderField } from '../renderFiel';
 import { BenfeitoriaDetailContainer } from '../styles/BenfeitoriaDetails.style';
-import { theme } from '../../shared/themes/theme';
-import { Icon } from '../../shared/components/icon/Icon';
-import Text from '../../shared/components/text/Text';
-import { textTypes } from '../../shared/components/text/textTypes';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { renderField } from '../ui-components/renderField';
+import Text from '../../../shared/components/text/Text';
+import { Icon } from '../../../shared/components/icon/Icon';
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { theme } from '../../../shared/themes/theme';
 
 
 
@@ -26,33 +26,10 @@ const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
   
-  console.log(params.benfeitoria.id, 'params.id')
-  
-  //vou usar sim ou não se tem pesca artesanal e outras categorias
-  //const {contagemBenfeitoria} = useBenfeitorias(params.imovel.id);
-  
-  
- /*
-  const  handleGerenciaBenfeitorias =  (imovelId: number, contagemBenfeitorias: number) =>{
-    if(contagemBenfeitoria>0){
-      benfeitoriasDoImovel(navigation.navigate, imovelId);
-    }
+  let origemMaterialConstrucaoString = '';
+  if ( params.benfeitoria.OrigemMaterialConstrucao &&  params.benfeitoria.OrigemMaterialConstrucao.length > 0) {
+      origemMaterialConstrucaoString =  params.benfeitoria.OrigemMaterialConstrucao.join(', ');
   }
-  */
- /*
-  const renderField = (label: string, value: string | null| undefined) => {
-     return (
-          <View style={{ marginBottom: 10 }}>
-             <Text type={textTypes.SUB_TITLE_SEMI_BOLD} color={theme.colors.blueTheme.blue1}>
-              {label}:
-             </Text>
-            <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.mainTheme.black}>
-              {value? value : 'Informação não cadastrada'}
-            </Text>
-          </View>
-        );
-      };
- */ 
     
 
 
@@ -65,9 +42,10 @@ const BenfeitoriaDetails = () => {
                 {renderField('Tipo', params.benfeitoria.tipoBenfeitoria)}
                 {renderField('Função', params.benfeitoria.funcao)}
                 {renderField('Tipo do Solo', params.benfeitoria.tipoSolo)}
-                {renderField('Área aproximada', params.benfeitoria.areaBenfeitoria.toString())}
+                {renderField('Área aproximada', params.benfeitoria.areaBenfeitoria.toString()+' km²')}
                 {renderField('Pavimentos', params.benfeitoria.pavimentos.toString())}
                 {renderField('Tipo de construção', params.benfeitoria.tipoConstrucao)}
+                {renderField('Origem dos materiais de construção', origemMaterialConstrucaoString)}
                 {renderField('Cobertura', params.benfeitoria.tipoCobertura)}
                 {renderField('Esquadrias', params.benfeitoria.tipoEsquadrias)}
                 {renderField('Alagamentos', params.benfeitoria.alagamentos)}
