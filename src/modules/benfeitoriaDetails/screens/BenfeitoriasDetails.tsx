@@ -1,6 +1,6 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { BenfeitoriaDetailContainer } from '../styles/BenfeitoriaDetails.style';
+import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { renderField } from '../ui-components/renderField';
 import Text from '../../../shared/components/text/Text';
@@ -38,7 +38,7 @@ const BenfeitoriaDetails = () => {
     
        <ScrollView style={{ flex: 1 }}>
         <BenfeitoriaDetailContainer>
-              <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+              <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
                 {renderField('Tipo', params.benfeitoria.tipoBenfeitoria)}
                 {renderField('Função', params.benfeitoria.funcao)}
                 {renderField('Tipo do Solo', params.benfeitoria.tipoSolo)}
@@ -63,69 +63,198 @@ const BenfeitoriaDetails = () => {
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='man' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Entrevistado</Text>
+                            <Icon name="cart" size={30} color="red" />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> consumo</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
                                         }}>
-                            <Icon size={30} name='droplet' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Saneamento</Text>
+                            <Icon size={30} name='delicious' color='orange' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> dependencias</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='office' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Serviços Básicos</Text>
+                            <Icon size={30} name='mobile' color='blue' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Serviços de Comunicação disponiveis</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='cogs' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Outros Serviços</Text>
+                            <Icon size={30} name='leaf' color='green' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Vegetação</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/peixes.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Peixes</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/macaco.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Mamíferos</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/fauna.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>fauna</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/aves.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>aves</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/agua.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Água</Text>
+                        </View>
+                    </TouchableOpacity>
+                   
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/instituicoes.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Instituições Conhecidas</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/producao.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Ativiades Produtivas</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/violencia.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>violencias</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/renda.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Outras Fontes de Renda</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/credito.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Crédito</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/moradores.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Moradores</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/pesca.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Pesca Artesanal</Text>
                         </View>
                     </TouchableOpacity>
 
                    
-
+                    
 
               <View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 
                       padding: 10,
-                      marginTop: 40, 
-                      borderWidth: 5, 
-                      borderColor: theme.colors.blueTheme.blue2 
+                      
+                      borderWidth: 2, 
+                      borderColor: theme.colors.grayTheme.gray100 
                     }}>
 
                     <TouchableOpacity onPress={() =>null}>
                         <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='bin' color='blue' />
+                            <Icon size={40} name='bin' color='red' />
                             <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Apagar Imóvel</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: theme.colors.blueTheme.blue2 }} />
+                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: theme.colors.grayTheme.gray100 }} />
 
 
                     <TouchableOpacity onPress={() => null}>

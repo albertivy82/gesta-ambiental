@@ -1,17 +1,25 @@
 import Realm from 'realm';
-import { LocalidadeSchema } from "../models/localidadeSchema";
-import { CoordenadaSchema } from '../models/coordenadaSchema';
-import { ImovelSchema } from '../models/imoveisSchema';
-import { PostoSchema } from '../models/postoSchema ';
-import { EscolaSchema } from '../models/escolaSchema ';
+import { ServicosComunicacaoSchema } from '../models/ServicosComunicacaoSchema';
+import { AlimentacaoSchema } from '../models/alimentacaoSchema';
 import { BenfeitoriaSchema } from '../models/benfeitoriaSchema';
+import { ComprasSchema } from '../models/comprasSchema';
+import { CoordenadaSchema } from '../models/coordenadaSchema';
+import { EscolaSchema } from '../models/escolaSchema ';
+import { ImovelSchema } from '../models/imoveisSchema';
+import { LocalidadeSchema } from "../models/localidadeSchema";
+import { PostoSchema } from '../models/postoSchema ';
+import { DependenciasSchema } from '../models/dependenciaSchema';
 
 const allSchemas = [LocalidadeSchema,
                      CoordenadaSchema, 
                      ImovelSchema, 
                      PostoSchema, 
                      EscolaSchema, 
-                     BenfeitoriaSchema]; 
+                     BenfeitoriaSchema,
+                     AlimentacaoSchema,
+                    ComprasSchema,
+                    ServicosComunicacaoSchema,
+                    DependenciasSchema]; 
 
 export const initializeRealm =()=>{
     return new Realm({schema: allSchemas})

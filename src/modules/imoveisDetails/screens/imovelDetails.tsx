@@ -41,7 +41,11 @@ const ImovelDetails = () => {
   
   const renderField = (label: string, value: string | null| undefined) => {
      return (
-          <View style={{ marginBottom: 10 }}>
+          <View style={{
+             marginBottom: 10, 
+             borderColor: theme.colors.grayTheme.gray100, 
+             padding: 10,
+             borderWidth: 1 } }>
              <Text type={textTypes.SUB_TITLE_SEMI_BOLD} color={theme.colors.blueTheme.blue1}>
               {label}:
              </Text>
@@ -60,7 +64,7 @@ const ImovelDetails = () => {
     
        <ScrollView style={{ flex: 1 }}>
         <ImovelDetailContainer>
-              <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.blueTheme.blue2 }}>
+              <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
                 {renderField('Número', params.imovel.numero)}
                 {renderField('Rua', params.imovel.rua)}
                 {renderField('Refencial', params.imovel.referencial)}
@@ -88,61 +92,60 @@ const ImovelDetails = () => {
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          borderWidth: 2, 
+                                           borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='man' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Entrevistado</Text>
+                            <Icon size={30} name='man' color='brown' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Entrevistado</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          
+                                          borderWidth: 2, 
+                                           borderColor: theme.colors.grayTheme.gray100 
                                         }}>
                             <Icon size={30} name='droplet' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Saneamento</Text>
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Saneamento</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          
+                                          borderWidth: 2, 
+                                           borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='office' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> Serviços Básicos</Text>
+                            <Icon size={30} name='office' color='gray' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Serviços Básicos</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() =>null}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          
+                                          borderWidth: 2, 
+                                           borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='cogs' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Outros Serviços</Text>
+                            <Icon size={30} name='cogs' color='green' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}>Outros Serviços</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => handleGerenciaBenfeitorias(params.imovel.id, contagemBenfeitoria)}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
-                                          marginTop: 10, 
-                                          borderWidth: 5, 
-                                          borderColor: theme.colors.blueTheme.blue2 
+                                          
+                                          borderWidth: 2, 
+                                           borderColor: theme.colors.grayTheme.gray100 
                                         }}>
                                           
-                            <Icon size={30} name='tree' color='blue' />
+                            <Icon size={30} name='tree' color='orange' />
                             <View style={{ flexDirection: 'column' }}> 
-                                <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Benfeitorias</Text>
+                                <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Benfeitorias</Text>
                                 <Text type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.mainTheme.black}>
                                   {'benfeitorias cadastradas: '+contagemBenfeitoria.toString()}
                               </Text>
@@ -154,25 +157,24 @@ const ImovelDetails = () => {
               <View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 
                       padding: 10,
-                      marginTop: 40, 
-                      borderWidth: 5, 
-                      borderColor: theme.colors.blueTheme.blue2 
+                      borderWidth: 2, 
+                      borderColor: theme.colors.grayTheme.gray100 
                     }}>
 
                     <TouchableOpacity onPress={() =>null}>
                         <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='bin' color='blue' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Apagar Imóvel</Text>
+                            <Icon size={40} name='bin' color='red' />
+                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.grayTheme.gray100}>Apagar Imóvel</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: theme.colors.blueTheme.blue2 }} />
+                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,   borderColor: theme.colors.grayTheme.gray100 }} />
 
 
                     <TouchableOpacity onPress={() => null}>
                         <View style={{ alignItems: 'center' }}>
                             <Icon size={40} name='pencil2' color='blue' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Editar Imóvel</Text>
+                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.grayTheme.gray100}>Editar Imóvel</Text>
                         </View>
                     </TouchableOpacity>
                </View>
