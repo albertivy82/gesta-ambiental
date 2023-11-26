@@ -9,6 +9,9 @@ import { ImovelSchema } from '../models/imoveisSchema';
 import { LocalidadeSchema } from "../models/localidadeSchema";
 import { PostoSchema } from '../models/postoSchema ';
 import { DependenciasSchema } from '../models/dependenciaSchema';
+import { AvesSchema } from '../models/avesSchema';
+import { FaunaSchema } from '../models/FaunaSchema';
+import { VegetacaoSchema } from '../models/vegetacaoSchema';
 
 const allSchemas = [LocalidadeSchema,
                      CoordenadaSchema, 
@@ -19,7 +22,13 @@ const allSchemas = [LocalidadeSchema,
                      AlimentacaoSchema,
                     ComprasSchema,
                     ServicosComunicacaoSchema,
-                    DependenciasSchema]; 
+                    DependenciasSchema,
+                    AvesSchema,
+                    FaunaSchema,
+                    VegetacaoSchema,
+                
+                
+                ]; 
 
 export const initializeRealm =()=>{
     return new Realm({schema: allSchemas})

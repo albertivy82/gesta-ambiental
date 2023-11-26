@@ -12,7 +12,7 @@ export const salvarCompras = (consumo: ComprasType)=> {
                  benfeitoria: consumo.benfeitoria.id
                };
 
-               realmInstance.create('Compras', comprasCorrigida, true )
+               realmInstance.create('Compras', comprasCorrigida, true );
             });
             
             resolve();
