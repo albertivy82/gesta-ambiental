@@ -1,0 +1,11 @@
+export enum PescariaCusteio {
+    RANCHO,
+	APETRECHO,
+	EMBARCACAO,
+	COMBUSTIVEL,
+	GELO,
+	ISOPOR,
+	OUTRO,
+	NAO_DECLARADO,
+	NAO_SE_APLICA
+ }

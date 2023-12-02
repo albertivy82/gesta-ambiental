@@ -1,27 +1,26 @@
-import { realmInstance } from './databaseService';
+import { EntrevistadoType } from '../../shared/types/EntrevistadoType';
 import { coordenadasBody } from '../../shared/types/coordenadaBody';
+import { realmInstance } from './databaseService';
 
 
 
 
-export const salvarEntrevistado = (entrevistado) => {
+export const salvarEntrevistado = (entrevistado: EntrevistadoType) => {
     
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
-                entrevistado => {
-                   
+                                 
                     const corrigidoCoordenada = {
-                        ...coordenada,
-                        localidade: coordenada.localidade.id
+                       ...entrevistado,
+                        imovel: entrevistado.imovel.id
                     };
 
-                   
-                    realmInstance.create('Coordenada', corrigidoCoordenada, true);
+                   realmInstance.create('Coordenada', corrigidoCoordenada, true);
                     
                 });
-            });
-            resolve();
+        resolve();
+
         } catch (error) {
             reject(error)
         }
@@ -30,12 +29,12 @@ export const salvarEntrevistado = (entrevistado) => {
 
 
 
-export const getCoordenadas = (localidade:number): coordenadasBody[]=>{
+export const getCoordenadas = (imovel:number) =>{
 
-    const query = `localidade == ${localidade}`;
-    const coordenadas = realmInstance.objects<coordenadasBody>('Coordenada').filtered(query).slice(); 
+    const query = `imovel == ${imovel}`;
+    const entrevistado = realmInstance.objects<coordenadasBody>('Entrevistado').filtered(query).slice(); 
    
-   const cleanCoordenadas = JSON.parse(JSON.stringify(coordenadas));
+   const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistado));
    
-    return cleanCoordenadas as coordenadasBody[];
+    return cleanEntrevistado;
 };

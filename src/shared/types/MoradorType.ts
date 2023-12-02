@@ -1,3 +1,5 @@
+import { simNao } from "../../enums/simNaoTalvez.enum";
+
 export interface MoradorType {
     id: number;
     dataNascimento: string; 
@@ -7,8 +9,9 @@ export interface MoradorType {
     estadoCivil: string; 
     escolaridade: string; 
     ondeEstuda?: string;
-    trabalho: string; 
+    trabalho: simNao; 
     religiao: string;
-    doencaIds: number[]; 
-    benfeitoriaId: number;
+    benfeitoria: {
+        id:number;
+    }
 }

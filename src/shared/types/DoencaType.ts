@@ -1,7 +1,6 @@
-﻿export interface DoencaType {
+﻿import { Molestias } from "../../enums/molestias.enum";
+
+export interface DoencaType {
     id: number;
-    nomeComum: string;
-    nomeCientifico?: string;
-    sintomas: string[];
-    tratamento?: string;
+    doencaNome: Molestias;
 }
