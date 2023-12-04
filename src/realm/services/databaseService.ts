@@ -1,32 +1,33 @@
 import Realm from 'realm';
-import { ServicosComunicacaoSchema } from '../models/ServicosComunicacaoSchema';
-import { AlimentacaoSchema } from '../models/alimentacaoSchema';
-import { BenfeitoriaSchema } from '../models/benfeitoriaSchema';
-import { ComprasSchema } from '../models/comprasSchema';
-import { CoordenadaSchema } from '../models/coordenadaSchema';
-import { EscolaSchema } from '../models/escolaSchema ';
-import { ImovelSchema } from '../models/imoveisSchema';
-import { LocalidadeSchema } from "../models/localidadeSchema";
-import { PostoSchema } from '../models/postoSchema ';
-import { DependenciasSchema } from '../models/dependenciaSchema';
-import { AvesSchema } from '../models/avesSchema';
+import { ComprasSchema } from '../models/ComprasSchema';
 import { FaunaSchema } from '../models/FaunaSchema';
+import { ParticipacaoInstituicaoSchema } from '../models/ParticipacaoInstituicaoSchema';
+import { ServicosComunicacaoSchema } from '../models/ServicosComunicacaoSchema';
+import { AguaSchema } from '../models/aguaSchema';
+import { AlimentacaoSchema } from '../models/alimentacaoSchema';
+import { AtividadeProdutivaSchema } from '../models/atividadeProdutivaSchema';
+import { AvesSchema } from '../models/avesSchema';
+import { BenfeitoriaSchema } from '../models/benfeitoriaSchema';
+import { CoordenadaSchema } from '../models/coordenadaSchema';
+import { CreditoSchema } from '../models/creditoSchema';
+import { DependenciasSchema } from '../models/dependenciaSchema';
+import { EmbarcacaoSchema } from '../models/embarcacaoSchema';
+import { EntrevistadoSchema } from '../models/entrevistadoSchema';
+import { EscolaSchema } from '../models/escolaSchema ';
+import { EspecieSchema } from '../models/especieSchema';
+import { ImovelSchema } from '../models/imoveisSchema';
+import { IndicadoConsultaPublicaSchema } from '../models/indicadoConsultaPublicaSchema';
+import { LocalidadeSchema } from "../models/localidadeSchema";
+import { MamiferosSchema } from '../models/mamiferosSchema';
+import { MoradorSchema } from '../models/moradorSchema';
+import { OutrosServicosSchema } from '../models/outrosServicosSchema';
+import { PeixesSchema } from '../models/peixesSchema';
+import { PostoSchema } from '../models/postoSchema ';
+import { QuantidadePescaPorTipoSchema } from '../models/quantidadePescaPorTipo';
+import { RendaOutrasFontesSchema } from '../models/rendaOutrasFontesSchema';
+import { RepteisSchema } from '../models/repteisSchema';
 import { VegetacaoSchema } from '../models/vegetacaoSchema';
 import { ViolenciaSchema } from '../models/violenciaSchema';
-import { MamiferosSchema } from '../models/mamiferosSchema';
-import { RepteisSchema } from '../models/repteisSchema';
-import { PeixesSchema } from '../models/peixesSchema';
-import { AguaSchema } from '../models/aguaSchema';
-import { EntrevistadoSchema } from '../models/entrevistadoSchema';
-import { IndicadoConsultaPublicaSchema } from '../models/indicadoConsultaPublicaSchema';
-import { QuantidadePescaPorTipoSchema } from '../models/quantidadePescaPorTipo';
-import { EmbarcacaoSchema } from '../models/embarcacaoSchema';
-import { EspecieSchema } from '../models/especieSchema';
-import { MoradorSchema } from '../models/moradorSchema';
-import { ParticipacaoInstituicaoSchema } from '../models/ParticipacaoInstituicaoSchema';
-import { CreditoSchema } from '../models/creditoSchema';
-import { RendaOutrasFontesSchema } from '../models/rendaOutrasFontesSchema';
-import { AtividadeProdutivaSchema } from '../models/atividadeProdutivaSchema';
 
 const allSchemas = [LocalidadeSchema,
                      CoordenadaSchema, 
@@ -55,7 +56,8 @@ const allSchemas = [LocalidadeSchema,
                      ParticipacaoInstituicaoSchema,
                      CreditoSchema,
                      RendaOutrasFontesSchema,
-                     AtividadeProdutivaSchema
+                     AtividadeProdutivaSchema,
+                     OutrosServicosSchema
                    ]; 
 
 export const initializeRealm =()=>{

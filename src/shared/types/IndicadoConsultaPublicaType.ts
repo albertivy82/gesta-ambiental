@@ -1,7 +1,11 @@
+import { PerfilDoIndicado } from "../../enums/PerfilDoIndicado";
+
 export interface IndicadoConsultaPublica {
     id: number;
     nome: string;
-    perfil: string; 
+    perfil: PerfilDoIndicado; 
     telefone: string;
-    entrevistadoId: number;
+    entrevistador: {
+        id:number;
+    }
 }

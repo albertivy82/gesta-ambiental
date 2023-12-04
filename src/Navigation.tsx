@@ -1,32 +1,30 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { TouchableOpacity, View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from "./modules/login";
-import Home from "./modules/home";
-import Splash from "./modules/splash";
-import EditUser from "./modules/editUser";
-import User from "./modules/User";
-import Localidade from "./modules/localidades";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Icon } from "./shared/components/icon/Icon";
-import { theme } from "./shared/themes/theme";
-import admUsers from "./modules/admUsers/screens/AdmUsers";
-import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
-import Text from "./shared/components/text/Text";
-import LogoutButton from "./context/authUtils";
-import { useUserReducer } from "./store/reducers/userReducer/useUserReducer";
-import { getToken } from "./context/tokenStore";
-import { getUser } from "./context/userStore";
-import { UserBody } from "./shared/types/userBody";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
-import { textTypes } from "./shared/components/text/textTypes";
-import UserDetails from "./modules/userDetails";
-import ProfileUser from "./modules/profileUser";
+import LogoutButton from "./context/authUtils";
+import { getUser } from "./context/userStore";
+import User from "./modules/User";
+import admUsers from "./modules/admUsers/screens/AdmUsers";
+import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
+import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
+import Consumo from "./modules/compras/screens/Consumo";
 import Coordenadas from "./modules/coordenadas";
+import EditUser from "./modules/editUser";
+import Home from "./modules/home";
 import Imovel from "./modules/imoveis/screens/Imovel";
 import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
-import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
-import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
+import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
+import Localidade from "./modules/localidades";
+import Login from "./modules/login";
+import ProfileUser from "./modules/profileUser";
+import Splash from "./modules/splash";
+import UserDetails from "./modules/userDetails";
+import { Icon } from "./shared/components/icon/Icon";
+import Text from "./shared/components/text/Text";
+import { textTypes } from "./shared/components/text/textTypes";
+import { theme } from "./shared/themes/theme";
+import { UserBody } from "./shared/types/userBody";
 
 
 
@@ -124,6 +122,8 @@ const Navigation =() =>{
           <Stack.Screen name="ImovelDetail" component={ImovelDetails} options={{title: 'Imóvel'}} />
           <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
           <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
+          <Stack.Screen name="Consumo" component={Consumo} options={{title: 'Dados de Consumo'}} />
+     
         </Stack.Navigator>
       </NavigationContainer>
     );

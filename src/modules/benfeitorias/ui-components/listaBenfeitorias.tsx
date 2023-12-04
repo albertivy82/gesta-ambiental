@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { BenfeitoriaType } from '../../shared/types/BenfeitoriaType';
-import { textTypes } from '../../shared/components/text/textTypes';
-import { theme } from '../../shared/themes/theme';
-import Text from '../../shared/components/text/Text';
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import Text from '../../../shared/components/text/Text';
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { theme } from '../../../shared/themes/theme';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
 export const detalharBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
     navigate('BenfeitoriaDetails', {benfeitoria})

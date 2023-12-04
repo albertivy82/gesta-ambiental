@@ -7,6 +7,7 @@ import Text from '../../../shared/components/text/Text';
 import { Icon } from '../../../shared/components/icon/Icon';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { UseConsumo } from '../hooks/UseConsumo';
 
 
 
@@ -15,22 +16,33 @@ export interface BenfeitoriaParam {
  benfeitoria: BenfeitoriaType;
 }
 
-//BLOCO IMOVEL
-export const BenfeitoriasDoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovelId: number)=>{
-  console.log(imovelId, 'imovelId')
-  navigate('Benfeitorias', {imovelId})
+//BLOCO CONSUMO
+export const comprasDaBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: number)=>{
+    navigate('Compras', {benfeitoria})
+}
+export const cadastrarCompras = (navigate: NavigationProp<ParamListBase>['navigate'])=>{
+  navigate('Compras')
 }
 
 
 const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
+  const {compras, alimentos} = UseConsumo(params.benfeitoria.id)
   
   let origemMaterialConstrucaoString = '';
   if ( params.benfeitoria.OrigemMaterialConstrucao &&  params.benfeitoria.OrigemMaterialConstrucao.length > 0) {
       origemMaterialConstrucaoString =  params.benfeitoria.OrigemMaterialConstrucao.join(', ');
   }
-    
+ 
+  
+  const  handleGerenciaConsumos =  (benfeitoria: number) =>{
+    if(alimentos && compras){
+      comprasDaBenfeitoria(navigation.navigate, benfeitoria);
+    } else {
+      cadastrarCompras(navigation.navigate)
+    }
+  }
 
 
 
@@ -60,7 +72,7 @@ const BenfeitoriaDetails = () => {
                 {renderField('quais problemas relacionados ao meio ambiente', params.benfeitoria.problemasRelacionadosAoAmbiente)}
             </View>
 
-                    <TouchableOpacity onPress={() =>null}>
+                    <TouchableOpacity onPress={() =>handleGerenciaConsumos(params.benfeitoria.id)}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
                                           borderWidth: 2, 

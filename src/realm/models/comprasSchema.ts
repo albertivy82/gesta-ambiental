@@ -1,5 +1,5 @@
 export const ComprasSchema = {
-    name: 'Consumo',
+    name: 'Compras',
     
     primaryKey: 'id',
     properties: {

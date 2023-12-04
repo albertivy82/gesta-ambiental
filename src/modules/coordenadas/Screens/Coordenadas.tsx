@@ -1,12 +1,10 @@
-import { View, TextInput, Button } from "react-native";
-import { useEffect,useState } from 'react';
-import { EditUserContainer } from "../styles/Coordenadas.style";
-import { useCoordenadas} from "../hooks/useCoordenadas";
-import { useRef } from "react";
-import Input from "../../../shared/components/input/input";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { useEffect, useRef, useState } from 'react';
+import { Button, TextInput } from "react-native";
+import Input from "../../../shared/components/input/input";
 import { coordenadasBody } from "../../../shared/types/coordenadaBody";
-import Navigation from "../../../Navigation";
+import { useCoordenadas } from "../hooks/useCoordenadas";
+import { EditUserContainer } from "../styles/Coordenadas.style";
 
 export interface LocalidadeId {
   localidadeId: number;
@@ -34,15 +32,12 @@ const Coordenadas = () =>{
     useEffect(()=>{
       console.log('antes')
       if (paramsCoordenadaParam !== undefined && Object.keys(paramsCoordenadaParam).length>1){
-        console.log()
-        console.log('entrou 1');
-        setCoordenadasAlterar(paramsCoordenadaParam)
+           setCoordenadasAlterar(paramsCoordenadaParam)
       }
     }, [paramsCoordenadaParam]
     );
 
     useEffect(() => {
-      console.log(paramsCoordenadaParam)
       if (coordenadasAlterar !== undefined){
         setCoordenadaNova({
           ...coordenadaNova,

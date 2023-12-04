@@ -6,8 +6,8 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
-import RenderItem from '../listaBenfeitorias';
 import { BenfeitoriaContainer } from '../styles/benfeitoria.style';
+import RenderItem from '../ui-components/listaBenfeitorias';
 
 export interface benfeitoriasParam {
     imovelId: number; 
@@ -19,7 +19,7 @@ const Benfeitorias = ()=>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, benfeitoriasParam>, 'Imovel'>>();
   const { imovelId } = route.params;
-  console.log(imovelId, 'imovlid');
+  
 
   const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>()
 

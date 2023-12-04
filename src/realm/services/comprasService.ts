@@ -25,7 +25,7 @@ export const salvarCompras = (consumo: ComprasType)=> {
 
 };
 
-export const getConsumo = (benfeitoria: number): ComprasType =>{
+export const getCompras = (benfeitoria: number): ComprasType =>{
 
     const query = `benfeitoria == ${benfeitoria}`;
 
