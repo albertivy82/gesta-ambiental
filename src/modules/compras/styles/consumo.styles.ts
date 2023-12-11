@@ -16,3 +16,16 @@ export const CheckboxContainer = styled.View`
     align-items: center;
     margin-bottom: 10px;
 `;
+
+export const RadioboxContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+`;
+
+export const LabelContainer = styled.View`
+    background-color: #0077B6; 
+    padding: 8px 16px; 
+    margin: 8px 0; 
+    border-radius: 10px; 
+`;

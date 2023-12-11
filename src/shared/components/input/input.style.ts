@@ -10,13 +10,13 @@ export const ContainerInput = styled.TextInput<ContainerInputProps>`
   width: 100%;
   height: 40px;
   padding: 8px 16px;
-  background-color: #bacff1;
+  background-color: #FFFFFF;
   color: ${theme.colors.mainTheme.black};
   border-bottom-width: 4px;
 
 
   border-color: ${(props) =>
-    props.isError ? theme.colors.redTheme.red : theme.colors.blueTheme.blue1};
+    props.isError ? theme.colors.redTheme.red : theme.colors.whiteTheme.white};
 `;
 
 

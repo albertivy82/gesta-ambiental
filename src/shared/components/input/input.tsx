@@ -2,10 +2,10 @@ import { forwardRef, useState } from "react";
 import { NativeSyntheticEvent, TextInput, TextInputChangeEventData, TextInputProps, View } from "react-native";
 import { isertMaskInCpf } from "../../functions/cpf";
 import { insertMaskInMatricula } from "../../functions/matricula";
+import { theme } from "../../themes/theme";
 import { DisplayFlexColumn } from "../globalStyles/globalView.style";
 import Text from "../text/Text";
 import { textTypes } from "../text/textTypes";
-import { theme } from "../../themes/theme";
 import { ContainerInput } from "./input.style";
 
 interface InputProps extends TextInputProps {
@@ -60,7 +60,7 @@ const Input = forwardRef<TextInput, InputProps>(
           {title && (
             <Text
               margin="0px 0px 4px 8px"
-              color={theme.colors.blueTheme.blue1}
+              color={theme.colors.whiteTheme.white}
               type={textTypes.BUTTON_REGULAR}
             >
               {title}

@@ -1,5 +1,8 @@
+import { useState } from "react";
 import {AlimentacaoType} from "../../shared/types/AlimentacaoType"
+import { BenfeitoriaAlimentacaoType } from "../../shared/types/BenfeitoriaAlimentacaoType";
 import { realmInstance } from "./databaseService"
+
 
 export const salvarAlimentos = (alimentos: AlimentacaoType[])=>{
 
@@ -7,14 +10,7 @@ export const salvarAlimentos = (alimentos: AlimentacaoType[])=>{
         try{
             realmInstance.write(()=>{
                 alimentos.forEach(alimento=>{
-                
-                    const aliementoCorrigido ={
-                    ...alimento,
-                    benfeitoria: alimento.benfeitoria.id
-                    }
-
-                    realmInstance.create('Alimentacao', aliementoCorrigido, true);
-                
+                  realmInstance.create('Alimentacao', alimento, true);
                 });
             })
         }catch(error){
@@ -24,11 +20,49 @@ export const salvarAlimentos = (alimentos: AlimentacaoType[])=>{
 });
 };
 
-export const getAlimentos = (benfeitoria: number):AlimentacaoType[]=>{
 
-    const query = `benfeitoria == ${benfeitoria}`
+export const salvarBenfeitoriaAlimentos = (benfeitoriaAlimentos: BenfeitoriaAlimentacaoType[])=>{
 
-    const alimentosRealm = realmInstance.objects<AlimentacaoType>('Alimnetacao').filtered(query).slice();
+    return new Promise<void>((resolve, reject)=>{
+        try{
+            realmInstance.write(()=>{
+                benfeitoriaAlimentos.forEach(benfeitoriaAlimento=>{
+                    console.log("alimentação service")
+                  realmInstance.create('BenfeitoriaAlimentos', benfeitoriaAlimento, true);
+                });
+            })
+        }catch(error){
+            reject(error)
+        }
+
+});
+};
+
+
+export const getBenfeitoriaAlimentos = (benfeitoria: number):AlimentacaoType[]=>{
+
+   
+    const query = `benfeitoria == ${benfeitoria}`;
+    const alimentosRealm = realmInstance.objects<BenfeitoriaAlimentacaoType>('BenfeitoriaAlimentos').filtered(query).slice();
+    console.log("entrou aqui em algum moemntos fdp", alimentosRealm)
+    let alimentos: AlimentacaoType[] = [];
+    alimentosRealm.forEach(e => {
+        const queryAlimentos = `id == ${e.alimentacao}`;
+        const alimentosBenfeitoria = realmInstance.objects<AlimentacaoType>('Alimentos').filtered(queryAlimentos).slice();
+        console.log("entrou aqui em algum moemntos alimentosBenfeitoria", alimentosBenfeitoria)
+        alimentos = [...alimentos, ...alimentosBenfeitoria];
+    });
+
+    console.log("entrou aqui em algum moemntos fdp", alimentos)
+
+    return JSON.parse(JSON.stringify(alimentos)) as AlimentacaoType[];
+  
+}
+
+
+export const getAlimentos = ():AlimentacaoType[]=>{
+
+    const alimentosRealm = realmInstance.objects<AlimentacaoType>('Alimentacao').slice();
 
     const alimentoCorrigido = JSON.parse(JSON.stringify(alimentosRealm));
 

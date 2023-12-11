@@ -4,6 +4,5 @@ export const AlimentacaoSchema = {
     properties: {
         id: 'int',
         alimentacaoPrincipal: 'string',
-        benfeitoria: 'int' 
-    }
+        }
 }

@@ -28,6 +28,7 @@ import { RendaOutrasFontesSchema } from '../models/rendaOutrasFontesSchema';
 import { RepteisSchema } from '../models/repteisSchema';
 import { VegetacaoSchema } from '../models/vegetacaoSchema';
 import { ViolenciaSchema } from '../models/violenciaSchema';
+import { BenfeitoriaAlimentosSchema } from '../models/benfeitoriaAlimentos';
 
 const allSchemas = [LocalidadeSchema,
                      CoordenadaSchema, 
@@ -57,7 +58,8 @@ const allSchemas = [LocalidadeSchema,
                      CreditoSchema,
                      RendaOutrasFontesSchema,
                      AtividadeProdutivaSchema,
-                     OutrosServicosSchema
+                     OutrosServicosSchema,
+                     BenfeitoriaAlimentosSchema
                    ]; 
 
 export const initializeRealm =()=>{

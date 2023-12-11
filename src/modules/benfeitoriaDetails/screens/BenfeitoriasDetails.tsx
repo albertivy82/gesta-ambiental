@@ -8,6 +8,7 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { UseConsumo } from '../hooks/UseConsumo';
+import { AlimentacaoSchema } from '../../../realm/models/alimentacaoSchema';
 
 
 
@@ -18,29 +19,31 @@ export interface BenfeitoriaParam {
 
 //BLOCO CONSUMO
 export const comprasDaBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: number)=>{
-    navigate('Compras', {benfeitoria})
+    navigate('ConsumoItens', {benfeitoria})
 }
-export const cadastrarCompras = (navigate: NavigationProp<ParamListBase>['navigate'])=>{
-  navigate('Compras')
+export const cadastrarCompras = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: number)=>{
+  navigate('Consumo', {benfeitoria})
 }
 
 
 const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
-  const {compras, alimentos} = UseConsumo(params.benfeitoria.id)
+  const {compras, benfeitoriaAlimentos} = UseConsumo(params.benfeitoria.id)
   
   let origemMaterialConstrucaoString = '';
   if ( params.benfeitoria.OrigemMaterialConstrucao &&  params.benfeitoria.OrigemMaterialConstrucao.length > 0) {
       origemMaterialConstrucaoString =  params.benfeitoria.OrigemMaterialConstrucao.join(', ');
   }
  
-  
+  console.log("estes itens devem ser boleanos", compras, benfeitoriaAlimentos);
   const  handleGerenciaConsumos =  (benfeitoria: number) =>{
-    if(alimentos && compras){
+    if(benfeitoriaAlimentos && compras){
+     
       comprasDaBenfeitoria(navigation.navigate, benfeitoria);
     } else {
-      cadastrarCompras(navigation.navigate)
+      
+      cadastrarCompras(navigation.navigate, benfeitoria)
     }
   }
 
@@ -80,7 +83,14 @@ const BenfeitoriaDetails = () => {
                                         }}>
                             <Icon name="cart" size={30} color="red" />
                             <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> consumo</Text>
-                        </View>
+                                           <View>
+                                            {!benfeitoriaAlimentos && !compras && (
+                                               <Text type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.blueTheme.blue1}> 
+                                                Não há itens cadastrados neste aspecto
+                                               </Text>
+                                            )}
+                                            </View>
+                           </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() =>null}>

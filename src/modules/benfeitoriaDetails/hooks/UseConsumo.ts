@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
+import { getBenfeitoriaAlimentos, salvarBenfeitoriaAlimentos } from "../../../realm/services/alimentacaoService";
 import { getCompras, salvarCompras } from "../../../realm/services/comprasService";
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
+import { BenfeitoriaAlimentacaoType } from "../../../shared/types/BenfeitoriaAlimentacaoType";
 import { ComprasType } from "../../../shared/types/ComprasType";
-import { getAlimentos, salvarAlimentos } from "../../../realm/services/alimentacaoService";
-import { AlimentacaoType } from "../../../shared/types/AlimentacaoType";
 
 
 export const UseConsumo = (benfeitoria: number)=>{
 
-    const [alimentos, setAlimentos] = useState<boolean>();
-    const [compras, setCompras] = useState<boolean>();
+    const [benfeitoriaAlimentos, setbenfeitoriaAlimentos] = useState<boolean>(false);
+    const [compras, setCompras] = useState<boolean>(false);
 
     const fetchcomprasRealm = async() =>{
         const comprasDB = getCompras(benfeitoria);
-        if(comprasDB){
+        if(Array.isArray(comprasDB) && comprasDB.length > 0){
             setCompras(true)
         }
     }
 
-    const fetchAlimentosRealm = async() =>{
-      const alimentosDB = getAlimentos(benfeitoria);
-      if(alimentosDB){
-        setAlimentos(true)
+    const fetchBenfeitoriaAlimentosRealm = async() =>{
+      const alimentosDB = getBenfeitoriaAlimentos(benfeitoria);
+      if(Array.isArray(alimentosDB) && alimentosDB.length > 0){
+        setbenfeitoriaAlimentos(true)
       }
   }
    
@@ -39,20 +39,24 @@ export const UseConsumo = (benfeitoria: number)=>{
             }
                 
         }catch(error){
+          console.log('erro aqui')
             console.error(error);
         }
     }
 
-    const fetchAlimentosAPI = async()=>{
+  const fetchBenfeitoriaAlimentosAPI = async()=>{
 
       try{
-        const response = await connectionAPIGet(`http://192.168.100.28:8080/compras/local-de-compras-benfeitoria/${benfeitoria}`);
-          const alimentosAPI = response as AlimentacaoType[];
-
+        const response = await connectionAPIGet(`http://192.168.100.28:8080//benfeitoria/{id}/alimentos/${benfeitoria}`);
+          
+        const alimentosAPI = response as BenfeitoriaAlimentacaoType[];
+        console.log("use consumo")
           if(alimentosAPI && Array.isArray(alimentosAPI) && alimentosAPI.length>0){
-              setCompras(true);
-              salvarAlimentos(alimentosAPI)
+               setbenfeitoriaAlimentos(true);
+               console.log("use consumo")
+               salvarBenfeitoriaAlimentos(alimentosAPI)
           }else{
+            console.log('ou aqui')
               throw new Error('Dados de alimentos inválidos'); 
           }
               
@@ -69,13 +73,13 @@ export const UseConsumo = (benfeitoria: number)=>{
     useEffect(()=>{
     fetchcomprasRealm();
     fetchComprasAPI()
-    fetchAlimentosRealm();
-    fetchAlimentosAPI()
+    fetchBenfeitoriaAlimentosRealm();
+    fetchBenfeitoriaAlimentosAPI()
   }, [])  
 
 
   return {
     compras,
-    alimentos
+    benfeitoriaAlimentos
   }
 }

@@ -25,6 +25,7 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
+import ConsumoItens from "./modules/compras/screens/ConsumoItens";
 
 
 
@@ -123,6 +124,7 @@ const Navigation =() =>{
           <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
           <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
           <Stack.Screen name="Consumo" component={Consumo} options={{title: 'Dados de Consumo'}} />
+          <Stack.Screen name="ConsumoItens" component={ConsumoItens} options={{title: 'Dados de Consumo'}} />
      
         </Stack.Navigator>
       </NavigationContainer>
