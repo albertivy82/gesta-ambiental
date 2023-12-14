@@ -36,7 +36,7 @@ const BenfeitoriaDetails = () => {
       origemMaterialConstrucaoString =  params.benfeitoria.OrigemMaterialConstrucao.join(', ');
   }
  
-  console.log("estes itens devem ser boleanos", compras, benfeitoriaAlimentos);
+  
   const  handleGerenciaConsumos =  (benfeitoria: number) =>{
     if(benfeitoriaAlimentos && compras){
      

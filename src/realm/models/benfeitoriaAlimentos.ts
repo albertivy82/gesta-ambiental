@@ -1,7 +1,8 @@
 export const BenfeitoriaAlimentosSchema = {
     name: 'BenfeitoriaAlimentos',
+    primaryKey: 'benfeitoriaId',
     properties: {
-        alimentacao: 'int',
-        benfeitoria: 'int',
-    }
+        benfeitoriaId: 'int',
+        alimentosIds: 'int[]', 
+        }
 }

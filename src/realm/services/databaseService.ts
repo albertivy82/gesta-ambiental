@@ -59,7 +59,7 @@ const allSchemas = [LocalidadeSchema,
                      RendaOutrasFontesSchema,
                      AtividadeProdutivaSchema,
                      OutrosServicosSchema,
-                     BenfeitoriaAlimentosSchema
+                     BenfeitoriaAlimentosSchema                     
                    ]; 
 
 export const initializeRealm =()=>{

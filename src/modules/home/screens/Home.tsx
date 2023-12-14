@@ -89,7 +89,13 @@ const Home = () =>{
         
 
         <HomeContainer>
-           <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
+           <View style={{  alignItems: 'center', 
+            flexDirection: 'row',
+           borderBottomWidth: 3, 
+                          borderColor: theme.colors.blueTheme.blue1, 
+                          marginBottom: 10 
+                          }}>
+           <Icon size={30} name='map2' color='#00008B'/>
           <Text 
           type={textTypes.TITLE_BOLD} 
           color={theme.colors.blueTheme.blue1}

@@ -7,7 +7,7 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import Text from '../../../shared/components/text/Text';
 import { ImovelContainer } from '../styles/Imovel.style';
-
+import { Icon } from '../../../shared/components/icon/Icon';
 
 
 export interface ImoveisParam {
@@ -101,13 +101,19 @@ const [imovel, setImovel] = useState<imovelBody[]>()
 
   return (
     <ImovelContainer>
-            <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
-              <Text 
-                  type={textTypes.TITLE_BOLD} 
-                  color={theme.colors.blueTheme.blue1}
-                  margin="0px 0px 0px 20px">
-                      LISTA DE IMÓVEIS
-                </Text>
+            <View style={{  alignItems: 'center', 
+            flexDirection: 'row',
+           borderBottomWidth: 3, 
+                          borderColor: theme.colors.blueTheme.blue1, 
+                          marginBottom: 10 
+                          }}>
+           <Icon size={30} name='stack' color='#00008B'/>
+          <Text 
+          type={textTypes.TITLE_BOLD} 
+          color={theme.colors.blueTheme.blue1}
+          margin="0px 0px 0px 20px">
+            LISTA DE IMÓVEIS
+            </Text>
           </View>
 
           <FlatList

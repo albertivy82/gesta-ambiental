@@ -8,6 +8,7 @@ import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { BenfeitoriaContainer } from '../styles/benfeitoria.style';
 import RenderItem from '../ui-components/listaBenfeitorias';
+import { Icon } from '../../../shared/components/icon/Icon';
 
 export interface benfeitoriasParam {
     imovelId: number; 
@@ -38,14 +39,20 @@ const Benfeitorias = ()=>{
     return(
        
             <BenfeitoriaContainer>
-                  <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
-                    <Text 
-                        type={textTypes.TITLE_BOLD} 
-                        color={theme.colors.blueTheme.blue1}
-                        margin="0px 0px 0px 20px">
-                            LISTA DE BENFEITORIAS
-                      </Text>
-                </View>
+                 <View style={{  alignItems: 'center', 
+                  flexDirection: 'row',
+                  borderBottomWidth: 3, 
+                  borderColor: theme.colors.blueTheme.blue1, 
+                  marginBottom: 10 
+                   }}>
+              <Icon size={30} name='tree' color='#00008B'/>
+                  <Text 
+                    type={textTypes.TITLE_BOLD} 
+                    color={theme.colors.blueTheme.blue1}
+                    margin="0px 0px 0px 20px">
+                    LISTA DE BENFEITORIAS
+                    </Text>
+               </View>
 
                 <FlatList
                     data={benfeitoria}

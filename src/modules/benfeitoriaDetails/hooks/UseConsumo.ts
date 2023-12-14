@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getBenfeitoriaAlimentos, salvarBenfeitoriaAlimentos } from "../../../realm/services/alimentacaoService";
+import { buscaAlimentosDaBenfeitoria, salvarAlimentos, salvarBenfeitoriaAlimentos } from "../../../realm/services/alimentacaoService";
 import { getCompras, salvarCompras } from "../../../realm/services/comprasService";
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
-import { BenfeitoriaAlimentacaoType } from "../../../shared/types/BenfeitoriaAlimentacaoType";
+import { AlimentacaoType } from "../../../shared/types/AlimentacaoType";
 import { ComprasType } from "../../../shared/types/ComprasType";
 
 
@@ -19,7 +19,8 @@ export const UseConsumo = (benfeitoria: number)=>{
     }
 
     const fetchBenfeitoriaAlimentosRealm = async() =>{
-      const alimentosDB = getBenfeitoriaAlimentos(benfeitoria);
+      const alimentosDB = buscaAlimentosDaBenfeitoria(benfeitoria);
+      console.log(alimentosDB)
       if(Array.isArray(alimentosDB) && alimentosDB.length > 0){
         setbenfeitoriaAlimentos(true)
       }
@@ -39,7 +40,7 @@ export const UseConsumo = (benfeitoria: number)=>{
             }
                 
         }catch(error){
-          console.log('erro aqui')
+          
             console.error(error);
         }
     }
@@ -47,18 +48,21 @@ export const UseConsumo = (benfeitoria: number)=>{
   const fetchBenfeitoriaAlimentosAPI = async()=>{
 
       try{
-        const response = await connectionAPIGet(`http://192.168.100.28:8080//benfeitoria/{id}/alimentos/${benfeitoria}`);
+        const response = await connectionAPIGet(`http://192.168.100.28:8080/alimentacao`);
           
-        const alimentosAPI = response as BenfeitoriaAlimentacaoType[];
-        console.log("use consumo")
-          if(alimentosAPI && Array.isArray(alimentosAPI) && alimentosAPI.length>0){
-               setbenfeitoriaAlimentos(true);
-               console.log("use consumo")
-               salvarBenfeitoriaAlimentos(alimentosAPI)
-          }else{
+        const alimentosAPI = response as AlimentacaoType[];
+            if(alimentosAPI && Array.isArray(alimentosAPI) && alimentosAPI.length>0){
+              salvarAlimentos(alimentosAPI)
+              const AlimentosDaBenfeitoria = await connectionAPIGet(`http://192.168.100.28:8080/benfeitoria/${benfeitoria}/alimentos`);
+                  if(AlimentosDaBenfeitoria && Array.isArray(AlimentosDaBenfeitoria) && AlimentosDaBenfeitoria.length>0){
+                      salvarBenfeitoriaAlimentos( AlimentosDaBenfeitoria, benfeitoria)
+                      setbenfeitoriaAlimentos(true)
+                  }
+               
+            }else{
             console.log('ou aqui')
               throw new Error('Dados de alimentos inválidos'); 
-          }
+            }
               
       }catch(error){
           console.error(error);

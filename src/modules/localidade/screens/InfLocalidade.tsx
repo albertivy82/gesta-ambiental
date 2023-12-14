@@ -191,7 +191,7 @@ const InfLocalidade = () => {
         {renderField('Esfera', [localidade.esfera])}
       </View>
 
-           
+      
       <View>
             {renderItemList(coordenadasRealm, 'Coordenadas', handleCoordinatePress)}
             {renderItemList(escolasRealm, 'Escolas', handleSchoolPress)}

@@ -6,7 +6,7 @@ export const ContainerSplash = styled.View`
 
     height: 100%;
     width: 100%;
-    background-color: #bacff1;
+    background-color: #000000;
     justify-content: center;
     justify-items: center;
     padding: 16px;
@@ -16,3 +16,4 @@ export const ImagelogoSplash = styled.Image`
   height: 240px;
 
 `
+
