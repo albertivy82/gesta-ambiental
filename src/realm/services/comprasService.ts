@@ -25,14 +25,26 @@ export const salvarCompras = (consumo: ComprasType)=> {
 
 };
 
-export const getCompras = (benfeitoria: number): ComprasType =>{
+export const getCompras = (benfeitoria: number): ComprasType | null =>{
+    try {
+            const query = `benfeitoria == ${benfeitoria}`;
 
-    const query = `benfeitoria == ${benfeitoria}`;
+            const comprasRealm = realmInstance.objects<ComprasType>('Compras').filtered(query).slice();
 
-    const comprasRealm = realmInstance.objects<ComprasType>('Compras').filtered(query).slice();
+            if (comprasRealm.length > 0) {
+                const cleanCompras = JSON.parse(JSON.stringify(comprasRealm[0])); // Pega apenas o primeiro elemento
+                return cleanCompras as ComprasType;
+            } else {
+            return null;
+            }
+    } catch (error) {
+            console.error("Erro ao buscar compras:", error);
+            // Dependendo de como você quer lidar com erros, você pode:
+            // - Retornar null
+            // - Relançar o erro
+            // - Ou até mesmo retornar um valor padrão
+            return null; // Exemplo: retornar null em caso de erro
+        }
 
-    const cleanCompras = JSON.parse(JSON.stringify(comprasRealm));
-
-    return cleanCompras as ComprasType;
 
 };

@@ -29,3 +29,15 @@ export const LabelContainer = styled.View`
     margin: 8px 0; 
     border-radius: 10px; 
 `;
+
+export const AlterarRegistroButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-width: 1px;
+  border-color: #708090;
+  background-color: #00008B;
+  border-radius: 10px;
+  margin: 10px;
+`;

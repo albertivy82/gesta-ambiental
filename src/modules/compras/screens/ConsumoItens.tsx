@@ -1,17 +1,17 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { buscaAlimentosDaBenfeitoria } from '../../../realm/services/alimentacaoService';
 import { getCompras } from '../../../realm/services/comprasService';
+import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { AlimentacaoType } from '../../../shared/types/AlimentacaoType';
-import { UseConsumo } from '../../benfeitoriaDetails/hooks/UseConsumo';
-import { ConsumoContainer } from '../styles/consumo.styles';
-import RenderItem from '../ui-components/lista';
 import { ComprasType } from '../../../shared/types/ComprasType';
-import { Icon } from '../../../shared/components/icon/Icon';
+import { UseConsumo } from '../../benfeitoriaDetails/hooks/UseConsumo';
+import { AlterarRegistroButton, ConsumoContainer } from '../styles/consumo.styles';
+import RenderItem from '../ui-components/lista';
 import { ConfirmacaoModal } from '../ui-components/modal';
 
 
@@ -28,7 +28,7 @@ const ConsumoItens = () => {
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
   const {compras, benfeitoriaAlimentos} = UseConsumo(params.benfeitoria)
   const [alimentosRealm, setAlimentosReal] = useState<AlimentacaoType[]>();
-  const [comprasRealm, setComprasRealm] = useState<ComprasType[]>();
+  const [comprasRealm, setComprasRealm] = useState<ComprasType|null>();
   const [modalVisible, setModalVisible] = useState(false);
  
   useEffect(() => {
@@ -40,14 +40,13 @@ const ConsumoItens = () => {
     }
   }, [compras, benfeitoriaAlimentos]);
 
-  const comprasProcessadas = comprasRealm && comprasRealm.length > 0
-    ? {
-      ...comprasRealm[0],
-      ondeFazCompras: comprasRealm[0].ondeFazCompras === "Na_Própria_Localidade"
+  const comprasProcessadas = comprasRealm ? {
+      ...comprasRealm,
+      ondeFazCompras: comprasRealm.ondeFazCompras === "Na_Própria_Localidade"
         ? "Na própria localidade"
-        : comprasRealm[0].ondeFazCompras === "Em_Outra_Localidade"
+        : comprasRealm.ondeFazCompras === "Em_Outra_Localidade"
         ? "Em outra localidade"
-        : comprasRealm[0].ondeFazCompras 
+        : comprasRealm.ondeFazCompras 
       }
   : null;
   
@@ -94,22 +93,24 @@ const ConsumoItens = () => {
         onConfirm={handleConfirm}
          />
        
-        <TouchableOpacity onPress={()=>setModalVisible(true)}>
-              <View style={{ 
-              alignItems: 'center',  
-              flexDirection: 'row', 
-              
-              padding: 10, 
-              borderWidth: 1, 
-              borderColor: theme.colors.blueTheme.blue2}}>
-                    <Icon size={30} name='tab' color='red' />
-                    <Text type={textTypes.BUTTON_BOLD} color={theme.colors.redTheme.red}>
-                          Alterar Registro
-                    </Text>
-               </View>
-          </TouchableOpacity>
+        <AlterarRegistroButton 
+            onPress={() => setModalVisible(true)}
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+              marginTop: 80,
+        }}>
+            <Icon size={30} name='pencil' color='white' />
+            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
+              Alterar Registro
+            </Text>
+      </AlterarRegistroButton>
       
-       </ConsumoContainer>
+    
+    </ConsumoContainer>
         
    
    

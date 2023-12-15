@@ -1,4 +1,7 @@
-import { TouchableOpacity, View, Modal, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, View, Modal, StyleSheet } from "react-native";
+import Text from "../../../shared/components/text/Text";
+import { textTypes } from "../../../shared/components/text/textTypes";
+import { theme } from "../../../shared/themes/theme";
 
 
 // Definição da interface para as propriedades
@@ -18,7 +21,11 @@ export const ConfirmacaoModal = ({ modalVisible, setModalVisible, onConfirm }: C
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>A alteração dos registros vai apagar os atuais. Deseja continuar?</Text>
+              <Text type={textTypes.BUTTON_BOLD}
+              color={theme.colors.blueTheme.blue1}>
+                A alteração dos registros vai apagar os atuais. DESEJA CONTINUAR?
+                </Text>
+          
           <TouchableOpacity
             onPress={onConfirm}
             style={[styles.button, styles.buttonConfirm]}
@@ -31,6 +38,7 @@ export const ConfirmacaoModal = ({ modalVisible, setModalVisible, onConfirm }: C
           >
             <Text style={styles.textStyle}>Não</Text>
           </TouchableOpacity>
+       
         </View>
       </View>
     </Modal>
