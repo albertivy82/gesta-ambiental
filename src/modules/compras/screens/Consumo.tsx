@@ -23,7 +23,7 @@ export interface BenfeitoriaParam {
 
 const Consumo = () =>{
 
-   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
+  const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
   const [localDeCompras, setLocalDeCompras] = useState('');
   const [detalheLocal, setDetalheLocal] = useState('');
   const {alimentos} = useBaseAlimentos();
@@ -77,12 +77,6 @@ const Consumo = () =>{
         const selectedItems = Object.entries(selections)
         .filter(([_, value]) => value.isSelected)
         .map(([_, value]) => value.id);
-
-        
-        console.log("Dados selecionados:", selectedItems);
-        console.log("Local de compras:", localDeCompras);
-        console.log("Detalhe do local:", detalheLocal);
-        console.log("id:", params.benfeitoria);
         sendConsumo(selectedItems, localDeCompras, detalheLocal, params.benfeitoria)
     };
      

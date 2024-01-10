@@ -9,6 +9,7 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { UseConsumo } from '../hooks/UseConsumo';
 import { AlimentacaoSchema } from '../../../realm/models/alimentacaoSchema';
+import { UseDependencia } from '../hooks/UseDependencia';
 
 
 
@@ -25,27 +26,37 @@ export const cadastrarCompras = (navigate: NavigationProp<ParamListBase>['naviga
   navigate('Consumo', {benfeitoria})
 }
 
+//BLOCO DEPENDÊNCIAS
+export const dependenciasDaBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: number)=>{
+  navigate('Dependencias', {benfeitoria})
+}
+
 
 const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
   const {compras, benfeitoriaAlimentos} = UseConsumo(params.benfeitoria.id)
+  const dependencia = UseDependencia(params.benfeitoria.id)
   
   let origemMaterialConstrucaoString = '';
   if ( params.benfeitoria.OrigemMaterialConstrucao &&  params.benfeitoria.OrigemMaterialConstrucao.length > 0) {
       origemMaterialConstrucaoString =  params.benfeitoria.OrigemMaterialConstrucao.join(', ');
   }
  
-  
-  const  handleGerenciaConsumos =  (benfeitoria: number) =>{
-    if(benfeitoriaAlimentos && compras){
-     
-      comprasDaBenfeitoria(navigation.navigate, benfeitoria);
-    } else {
-      
-      cadastrarCompras(navigation.navigate, benfeitoria)
-    }
-  }
+        ///consumo
+        const  handleGerenciaConsumos =  (benfeitoria: number) =>{
+          if(benfeitoriaAlimentos && compras){
+            comprasDaBenfeitoria(navigation.navigate, benfeitoria);
+          } else {
+            cadastrarCompras(navigation.navigate, benfeitoria)
+          }
+        }
+
+        ///dependencias
+        const  handleGerenciaDependencias =  (benfeitoria: number) =>{
+            dependenciasDaBenfeitoria(navigation.navigate, benfeitoria);
+          
+        }
 
 
 
@@ -93,7 +104,7 @@ const BenfeitoriaDetails = () => {
                            </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() =>null}>
+                    <TouchableOpacity onPress={() =>handleGerenciaDependencias(params.benfeitoria.id)}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
                                           borderWidth: 2, 
@@ -101,7 +112,14 @@ const BenfeitoriaDetails = () => {
                                         }}>
                             <Icon size={30} name='delicious' color='orange' />
                             <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}> dependencias</Text>
-                        </View>
+                                        <View>
+                                            {!dependencia && (
+                                               <Text type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.blueTheme.blue1}> 
+                                                Não há itens cadastrados neste aspecto
+                                               </Text>
+                                            )}
+                                        </View>
+                             </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() =>null}>

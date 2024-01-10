@@ -9,7 +9,9 @@ import admUsers from "./modules/admUsers/screens/AdmUsers";
 import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
 import Consumo from "./modules/compras/screens/Consumo";
+import ConsumoItens from "./modules/compras/screens/ConsumoItens";
 import Coordenadas from "./modules/coordenadas";
+import { Dependencias } from "./modules/dependencias/screens/dependencias";
 import EditUser from "./modules/editUser";
 import Home from "./modules/home";
 import Imovel from "./modules/imoveis/screens/Imovel";
@@ -25,7 +27,6 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
-import ConsumoItens from "./modules/compras/screens/ConsumoItens";
 
 
 
@@ -125,7 +126,7 @@ const Navigation =() =>{
           <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
           <Stack.Screen name="Consumo" component={Consumo} options={{title: 'Dados de Consumo'}} />
           <Stack.Screen name="ConsumoItens" component={ConsumoItens} options={{title: 'Dados de Consumo'}} />
-     
+          <Stack.Screen name="Dependencias" component={Dependencias} options={{title: 'Dependências'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -51,7 +51,8 @@ const ConsumoItens = () => {
   : null;
   
   const handleConfirm = () => {
-    // Lógica para alterar registros
+    alimentosRealm
+
     setModalVisible(false);
   };
 

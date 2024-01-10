@@ -81,7 +81,7 @@ console.log(webViewVisible);
            
           <TouchableOpacity style={styles.button} onPress={() => setWebViewVisible(true)}>
             <Icon name='enter' size={70} color={theme.colors.blueTheme.blue1}/>
-            <Text style={styles.buttonText}>Faxer Login</Text>
+            <Text style={styles.buttonText}>Fazer Login</Text>
           </TouchableOpacity>
           </ContainerSplash>
       </View>

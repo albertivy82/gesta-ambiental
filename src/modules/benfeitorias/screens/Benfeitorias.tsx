@@ -27,7 +27,6 @@ const Benfeitorias = ()=>{
   useEffect(()=>{
       if(imovelId){
         const benfeitoriaRealm = getBenfeitorias(imovelId);
-        console.log(benfeitoria, 'effect?');
         setBenfeitoria(benfeitoriaRealm);
       }
   }, [imovelId])
