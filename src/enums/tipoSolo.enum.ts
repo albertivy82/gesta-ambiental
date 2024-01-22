@@ -1,5 +1,5 @@
 export enum tipoSoloEnum {
-    VARZEA = 'Várzea',
-    TERRA_FIRME = "Terra Firme",
-    IGAPO  = 'Igapó'
+    VARZEA = 'VARZEA',
+    TERRA_FIRME = 'TERRA_FIRME',
+    IGAPO = 'IGAPO'
 }

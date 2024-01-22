@@ -22,5 +22,6 @@ export const ImovelSchema = {
           tipoSolo: 'string',
           esporteLazer:'string',   
           localidade:'int',
+          sincronizado: 'bool',
       }
 };

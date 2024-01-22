@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRoute, RouteProp, NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, View, FlatList} from 'react-native';
-import { imovelBody } from '../../../shared/types/imovelBody';
+import { imovelBody } from '../../../shared/types/imovelType';
 import { getImoveis } from '../../../realm/services/imovelService';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
@@ -18,6 +18,11 @@ export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate
   navigate('ImovelDetail', {imovel})
 }
 
+export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  console.log('novoImovel', localidadeId)
+ 
+  navigate('NovoImovel', {localidadeId})
+}
 
 
 
@@ -41,6 +46,12 @@ const [imovel, setImovel] = useState<imovelBody[]>()
        detalharImovel(navigation.navigate, imovel );
     
   }
+
+  const  handleNovoImovel =  () =>{
+    novoImovel(navigation.navigate, localidadeId );
+    console.log('handleNovoImovel', localidadeId)
+ 
+}
 
 
   //renderizar listagem de imóveis
@@ -114,8 +125,25 @@ const [imovel, setImovel] = useState<imovelBody[]>()
           margin="0px 0px 0px 20px">
             LISTA DE IMÓVEIS
             </Text>
+          
           </View>
-
+          <TouchableOpacity onPress={() => handleNovoImovel()}>
+          <View style={{  alignItems: 'center', 
+            flexDirection: 'row',
+           borderBottomWidth: 3, 
+           borderColor: theme.colors.mainTheme.black, 
+            marginBottom: 10, 
+            backgroundColor: 'orange',
+                          }}>
+           <Icon size={15} name='plus' color='#030303'/>
+          <Text 
+          type={textTypes.BUTTON_REGULAR} 
+          color={theme.colors.mainTheme.black}
+          margin="0px 0px 0px 20px">
+           Adicionar Imóvel
+            </Text>
+          </View>
+          </TouchableOpacity>
           <FlatList
               data={imovel}
               renderItem={renderItem}

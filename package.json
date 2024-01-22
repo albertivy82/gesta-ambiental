@@ -37,7 +37,8 @@
     "react-native-webview": "^13.6.0",
     "react-redux": "^8.1.2",
     "realm": "^12.2.1",
-    "styled-components": "^6.0.7"
+    "styled-components": "^6.0.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

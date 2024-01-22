@@ -1,11 +1,11 @@
-import { View, TextInput, Button } from "react-native";
-import { EditUserContainer } from "../styles/Localidade.style";
-import { useEditUser } from "../hooks/uselnputLocalidade";
-import { municipiosEnum } from "../../../enums/municipios.enum";
 import { Picker } from "@react-native-picker/picker";
+import { Button, View } from "react-native";
+import { EsferaEnum } from "../../../enums/esfera.enum";
+import { municipiosEnum } from "../../../enums/municipios.enum";
 import Input from "../../../shared/components/input/input";
 import { theme } from "../../../shared/themes/theme";
-import { EsferaEnum } from "../../../enums/esfera.enum";
+import { useEditUser } from "../hooks/uselnputLocalidade";
+import { EditUserContainer } from "../styles/Localidade.style";
 
 const Localidade = () =>{
 

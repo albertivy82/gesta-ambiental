@@ -1,6 +1,5 @@
-export enum simNao {
-
-    SIM = 'Sim',
-    NAO = 'Não'
-
+export enum SimNaoTalvez {
+    SIM = 'SIM',
+    NAO = 'NÃO',  
+    TALVEZ = 'TALVEZ'
 }

@@ -1,10 +1,9 @@
 export enum transporteEnum {
-    CARRO = 'cARRO',
-    BARCO = 'Barco',
-    BICICLETA= 'Bicicleta',
-    A_PÉ= 'Delocamento a pé',
-    MOTO= 'Motocicleta',
-    RABETA= 'Rabeta',
-    OUTRO='Outros',
-
+    CARRO = 'CARRO',
+    BARCO = 'BARCO',
+    BICICLETA = 'BICICLETA',
+    A_PE = 'A_PÉ',  // Substituído "PÉ" por "PE" para evitar problemas de codificação
+    MOTO = 'MOTO',
+    RABETA = 'RABETA',
+    OUTRO = 'OUTRO'
 }

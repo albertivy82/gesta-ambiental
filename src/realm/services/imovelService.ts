@@ -1,4 +1,4 @@
-import { imovelBody } from "../../shared/types/imovelBody"
+import { imovelBody } from "../../shared/types/imovelType"
 import { realmInstance } from "./databaseService"
 
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
@@ -13,8 +13,7 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
                     const imovelPadrao ={
                         ...imovel,
 
-                        localidade: imovel.localidade.id
-
+                        localidade: imovel.localidade.id,
                     };
 
                     realmInstance.create('Imovel', imovelPadrao, true);

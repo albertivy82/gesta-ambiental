@@ -27,6 +27,7 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
+import { NovoImovel } from "./modules/imoveis/screens/novoImovel";
 
 
 
@@ -127,6 +128,7 @@ const Navigation =() =>{
           <Stack.Screen name="Consumo" component={Consumo} options={{title: 'Dados de Consumo'}} />
           <Stack.Screen name="ConsumoItens" component={ConsumoItens} options={{title: 'Dados de Consumo'}} />
           <Stack.Screen name="Dependencias" component={Dependencias} options={{title: 'Dependências'}} />
+          <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

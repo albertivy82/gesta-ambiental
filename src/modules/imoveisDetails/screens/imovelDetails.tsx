@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { TouchableOpacity, View, ScrollView} from 'react-native';
-import { imovelBody } from '../../../shared/types/imovelBody';
+import { imovelBody } from '../../../shared/types/imovelType';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import Text from '../../../shared/components/text/Text';

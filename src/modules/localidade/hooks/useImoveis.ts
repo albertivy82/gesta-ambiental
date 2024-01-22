@@ -1,7 +1,7 @@
 import { getImoveis, salvarImoveis } from "../../../realm/services/imovelService";
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
 import { useEffect, useState } from "react";
-import { imovelBody } from "../../../shared/types/imovelBody";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 export const useImoveis = (localidadeId: number) =>{
    const [contagemImoveis, setContagemImoveis] = useState<number>(0);
@@ -18,11 +18,15 @@ export const useImoveis = (localidadeId: number) =>{
    const fetchImoveisFromAPI = async () => {
      
       try {
-          const imoveisAPI = await connectionAPIGet(`http://192.168.100.28:8080/imovel/localidade-imovel/${localidadeId}`);
-          const ImData =  imoveisAPI as imovelBody[];
+          const imoveisAPI = await connectionAPIGet<imovelBody[]>(`http://192.168.100.28:8080/imovel/localidade-imovel/${localidadeId}`);
+         const ImData = imoveisAPI.map(imovel => ({
+              ...imovel,
+              sincronizado: true, 
+              idLocal: ""         
+          }));
          
           if(ImData && Array.isArray(ImData) && ImData.length> 0){
-                await salvarImoveis(imoveisAPI as imovelBody[])
+               await salvarImoveis(ImData)
                 const contagem = ImData.length;
                 setContagemImoveis(contagem);
           } else {

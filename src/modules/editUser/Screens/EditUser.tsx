@@ -1,8 +1,8 @@
-import { View, TextInput, Button } from "react-native";
-import { EditUserContainer } from "../styles/EditUser.style";
-import { useEditUser } from "../hooks/useEditUser";
 import { useRef } from "react";
+import { Button, TextInput } from "react-native";
 import Input from "../../../shared/components/input/input";
+import { useEditUser } from "../hooks/useEditUser";
+import { EditUserContainer } from "../styles/EditUser.style";
 
 const EditUser = () =>{
 
@@ -36,7 +36,7 @@ const EditUser = () =>{
                    margin="0px 0px 16px 0px"
                    placeholder="Digite a nova senha"
                    title="Nova Senha:"
-                  ref={senhaNovaInput}
+                   ref={senhaNovaInput}
               />
 
               <Button title="enviar" disabled={disabled} onPress={handleEnviar} />

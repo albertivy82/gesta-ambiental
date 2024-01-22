@@ -27,6 +27,8 @@ export interface imovelBody{
     linhasDeBarco: string;
     tipoSolo: tipoSoloEnum;
     esporteLazer:esporteLazerEnum;   
+    sincronizado: boolean;
+    idLocal: string;
     localidade: {
         id:number;
     }

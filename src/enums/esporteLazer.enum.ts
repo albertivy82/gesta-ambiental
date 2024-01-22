@@ -1,8 +1,8 @@
 export enum esporteLazerEnum {
-    CAMPO_DE_FUTEBOL = 'Campo de Futebol',
-    QUADRA_POLIESPORTIVA = 'Quadra Poliesportiva',
-    SEDE_ESPORTIVA = 'Sede Esportiva',
-    BALNEÁRIOS = 'Balneários',
-    PARQUES = 'Parques',
-    OUTROS = 'Outros',
+    CAMPO_DE_FUTEBOL = 'CAMPO_DE_FUTEBOL',
+    QUADRA_POLIESPORTIVA = 'QUADRA_POLIESPORTIVA',
+    SEDE_ESPORTIVA = 'SEDE_ESPORTIVA',
+    BALNEARIOS = 'BALNEÁRIOS',
+    PARQUES = 'PARQUES',
+    OUTROS = 'OUTROS'
 }

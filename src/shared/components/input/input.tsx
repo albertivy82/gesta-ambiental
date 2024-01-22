@@ -60,8 +60,8 @@ const Input = forwardRef<TextInput, InputProps>(
           {title && (
             <Text
               margin="0px 0px 4px 8px"
-              color={theme.colors.whiteTheme.white}
-              type={textTypes.BUTTON_REGULAR}
+              color={theme.colors.mainTheme.black}
+              type={textTypes.SUB_TITLE_BOLD}
             >
               {title}
             </Text>

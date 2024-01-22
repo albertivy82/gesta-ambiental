@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { MethodEnum } from "../../../enums/methods.enum";
 import { getToken } from "../../../context/tokenStore";
+import { errorCase } from "./errorCase";
 
 export type MethodType = 'get'|'post'|'put'|'delete';
 
@@ -39,15 +40,9 @@ export default class ConnectionAPI {
         static async connect<T>(url:string, method:MethodType, body?: unknown): Promise<T>{
             return this.call<T>(url, method, body).catch((error)=>{
                 if (error.response) {
-                    switch (error.response.status) {
-                      case 401:
-                      case 403:
-                        throw new Error("ERROR_ACCESS_DANIED");
-                      default:
-                        throw new Error("ERROR_CONNECTION");
-                    }
+                  return errorCase(error);
                   }
-                  throw new Error("ERROR_CONNECTION");
+                  throw new Error("ERROR_NETWORK");
                 });
         }
 }

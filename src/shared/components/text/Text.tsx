@@ -6,8 +6,8 @@ import { textTypes } from './textTypes';
 
 interface TextProps extends TextPropsNative {
   color?: string;
-  type?: string;
   margin?: string;
+  type?: string;
 }
 
 const Text = ({ margin, color, type, ...props }: TextProps) => {
