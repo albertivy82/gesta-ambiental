@@ -1,7 +1,8 @@
+import { Vizinhos } from "../../enums/Vizinhos";
 import { documentacao } from "../../enums/documentacao.enum";
 import { esporteLazerEnum } from "../../enums/esporteLazer.enum";
 import { limitesTerrenoEnum } from "../../enums/limitesTerreno.enum";
-import { simNao } from "../../enums/simNaoTalvez.enum";
+import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 import { situacaoFundiaria } from "../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../enums/transporte.enum";
@@ -9,27 +10,31 @@ import { transporteEnum } from "../../enums/transporte.enum";
 export interface imovelBody{
 
     id: number;
-    rua: string | null | undefined;
-    numero: string | null | undefined;
-    bairro: string | null | undefined;
+    rua: string;
+    numero: string;
+    bairro: string;
     referencial: string;
     latitude: string;
-    longitude:string;
-    situacaoFundiaria: situacaoFundiaria;
-    documentacaoImovel: documentacao;
+    longitude: string;
+    areaImovel: number;
+    vizinhos: Vizinhos | "" | null;
+    situacaoFundiaria: situacaoFundiaria | "" | null;
+    documentacaoImovel: documentacao | "" | null;
     dataChegada: string;
-    pretendeMudar: simNao;
-    motivoVontadeMudanca: string | null | undefined;
+    pretendeMudar: SimNaoTalvez | "" | null;
+    motivoVontadeMudanca: string;
     relacaoArea: string;
-    relacaoVizinhos:string;
-    limites: limitesTerrenoEnum;
-    transporte: transporteEnum;
+    relacaoVizinhos: string;
+    limites: limitesTerrenoEnum | "" | null;
+    iluminacaoPublica: SimNaoTalvez | "" | null;
+    transporte: transporteEnum | "" | null;
+    programaInfraSaneamento: string;
     linhasDeBarco: string;
-    tipoSolo: tipoSoloEnum;
-    esporteLazer:esporteLazerEnum;   
+    tipoSolo: tipoSoloEnum | "" | null;
+    esporteLazer: esporteLazerEnum | "" | null;
+    localidade: {
+        id: number;
+    };
     sincronizado: boolean;
     idLocal: string;
-    localidade: {
-        id:number;
-    }
 }

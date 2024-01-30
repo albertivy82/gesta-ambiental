@@ -54,20 +54,37 @@ const [imovel, setImovel] = useState<imovelBody[]>()
 }
 
 
+
   //renderizar listagem de imóveis
   const renderItem = ({ item }: { item: imovelBody}) => {
     return (
       <TouchableOpacity onPress={() => handleGoToImovelDetail(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
+              
+             <Text
+                type={textTypes.BUTTON_REGULAR}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
+              >
+                situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
+              </Text>
+              
+              
+              
+              
+              
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
               >
                 Rua: {item.rua}
               </Text>
+              
+              
+              
+              
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
               >
                
                 Número: {item.numero}
@@ -75,28 +92,28 @@ const [imovel, setImovel] = useState<imovelBody[]>()
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
               >
                Bairro: {item.bairro}
               </Text>
 
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
               >
                Referencial: {item.referencial}
               </Text>
 
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
               >
                Latitude: {item.latitude}
               </Text>
 
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
               >
                longitude: {item.longitude}
               </Text>

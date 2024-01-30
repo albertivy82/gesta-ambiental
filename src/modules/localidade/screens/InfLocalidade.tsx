@@ -48,7 +48,7 @@ const InfLocalidade = () => {
       const {coordenadas} = useCoordenadas(localidade.id);
       const {escolas} = useEscolas(localidade.id);
       const {postos} = usePostos(localidade.id);     
-      const {contagemImoveis} = useImoveis(localidade.id);
+      const {contagemImoveis, sinconizeQueue} = useImoveis(localidade.id);
       const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>([]);
       const [escolasRealm, setEscolasRealm] = useState<EscolaType[]>([]);
       const [postosRealm, setPostosRealm] = useState<PostoType[]>([]);
@@ -77,6 +77,12 @@ const InfLocalidade = () => {
                 setPostosRealm(getPostosRealm);
               }
             },[postos]);
+
+            useEffect(()=>{
+              if(contagemImoveis){
+                sinconizeQueue()
+              }
+            },[contagemImoveis]);
 
 
         

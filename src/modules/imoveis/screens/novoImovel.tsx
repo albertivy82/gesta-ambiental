@@ -36,7 +36,8 @@ export const NovoImovel = ()=>{
            handleVizinhosChange,
            handleOnChangeData,
            handleIluminacaoChange,
-           disabled} = useNovoImovel();
+           handleOnChangeAreaImovel,
+           disabled} = useNovoImovel(params.localidadeId);
     
     
     const fundiarioOptions = Object.values(situacaoFundiaria);
@@ -63,7 +64,7 @@ export const NovoImovel = ()=>{
   
 
     const handleEnviar = async () => {
-      await inputImovelApi(params.localidadeId);
+      await inputImovelApi();
       
   };
 
@@ -129,7 +130,7 @@ export const NovoImovel = ()=>{
 
 <Input
     value={(novoImovel.areaImovel ?? '').toString()} 
-    onChange={(event) => handleOnChangeInput(event, 'areaImovel')}
+    onChange={handleOnChangeAreaImovel}
     keyboardType='numeric'
     // outros props...
 />

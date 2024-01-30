@@ -1,11 +1,9 @@
 import React from 'react';
-import store from "./store"
-import {Provider} from 'react-redux'
+import 'react-native-get-random-values';
+import { Provider } from 'react-redux';
 import Navigation from './Navigation';
-import { getLocalidades } from './realm/services/localidadeServices';
-import { useLocalidades } from './modules/home/hook/useLocalidades';
-import { useEffect, useState } from 'react';
-import { useLocalidadeRducer } from './store/reducers/localidadeReducer/useLocalidadeReducer';
+import store from "./store";
+
 
 
 

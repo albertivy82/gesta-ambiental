@@ -1,5 +1,7 @@
+import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { v4 as uuidv4 } from 'uuid';
 import { Vizinhos } from "../../../enums/Vizinhos";
 import { documentacao } from "../../../enums/documentacao.enum";
 import { esporteLazerEnum } from "../../../enums/esporteLazer.enum";
@@ -8,9 +10,12 @@ import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import { situacaoFundiaria } from "../../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../../enums/transporte.enum";
+import { salvarImovelQueue } from "../../../realm/services/imovelService";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatarData } from "../../../shared/functions/data";
 import { imovelInput } from "../../../shared/types/imovelInput";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     rua:'',
@@ -41,35 +46,11 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
 };
 
 
-export const useNovoImovel = () => {
+export const useNovoImovel = (id:number) => {
     const [novoImovel, setNovoImovel] = useState<imovelInput>(DEFAUL_IMOVEL_INPUT);
     const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-
-
-      console.log(novoImovel.rua,
-      novoImovel.numero, 
-      novoImovel.bairro, 
-      novoImovel.referencial,
-      novoImovel.latitude, 
-      novoImovel.longitude, 
-      novoImovel.vizinhos,
-      novoImovel.situacaoFundiaria, 
-      novoImovel.documentacaoImovel,
-      novoImovel.dataChegada,
-      novoImovel.pretendeMudar,
-      novoImovel.motivoVontadeMudanca,
-      novoImovel.relacaoArea,
-      novoImovel.relacaoVizinhos,
-      novoImovel.limites,
-      novoImovel.iluminacaoPublica,
-      novoImovel.transporte,
-      novoImovel.programaInfraSaneamento,
-      novoImovel.linhasDeBarco,
-      novoImovel.tipoSolo,          
-      novoImovel.esporteLazer,
-      )
 
        if(
         novoImovel.rua !== '' && 
@@ -95,21 +76,53 @@ export const useNovoImovel = () => {
         novoImovel.tipoSolo !== null &&           
         novoImovel.esporteLazer !== null ){
           setDisabled(false)
-          console.log('eentrou no if??')
         } 
-        console.log('executou use?')
+       
     }, [novoImovel]);
 
-    const inputImovelApi = async (id:number) => {
-      console.log('caralho', id)
-      novoImovel.localidade.id = id;
-        try {
-            const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
-            
-        } catch (error) {
-            
+    const objetoFila =()=>{
+      console.log(novoImovel)
+        const imovelData: imovelBody = {
+          ...novoImovel, 
+          id: id,  
+          sincronizado: false,  
+          idLocal: uuidv4(),
+
         }
-    };
+        return imovelData
+    }
+
+    const inputImovelApi = async () => {
+      
+      novoImovel.localidade.id = id;
+      const netInfoState = await NetInfo.fetch();
+     
+      if(netInfoState.isConnected){
+        
+              const isConnected = await testConnection();
+              
+              if (isConnected){
+              
+                      try {
+                          const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
+                          
+                      } catch (error) {
+                        console.error('Erro na inputImovelApi:', error);
+                      }
+              }else{
+                
+                const registroNaoEnviado = objetoFila()
+                salvarImovelQueue(registroNaoEnviado)
+                        
+              }
+    }else{
+      
+      const registroNaoEnviado = objetoFila()
+      salvarImovelQueue(registroNaoEnviado)
+    }
+  };
+
+
 
     const handleOnChangeInput = (
         event: NativeSyntheticEvent<TextInputChangeEventData>,
@@ -194,6 +207,19 @@ export const useNovoImovel = () => {
         }));
       };
 
+      const handleOnChangeAreaImovel = (
+        event: NativeSyntheticEvent<TextInputChangeEventData>
+    ) => {
+        const value = event.nativeEvent.text;
+        const areaImovelNum = parseFloat(value) || 0; // Converte para número, usa 0 se NaN
+    
+        setNovoImovel((currentImovel) => ({
+            ...currentImovel,
+            areaImovel: areaImovelNum,
+        }));
+    };
+    
+
     return {
         novoImovel,
         handleOnChangeInput,
@@ -208,6 +234,7 @@ export const useNovoImovel = () => {
         handleVizinhosChange,
         handleOnChangeData,
         handleIluminacaoChange,
+        handleOnChangeAreaImovel,
         disabled,
     };
 };
