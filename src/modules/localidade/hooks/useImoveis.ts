@@ -1,9 +1,48 @@
 import NetInfo from "@react-native-community/netinfo";
-import { getImoveis, getImoveisDessincronizados, salvarImoveis } from "../../../realm/services/imovelService";
+import { apagarImovelQueue, getImoveis, getImoveisDessincronizados, salvarImoveis } from "../../../realm/services/imovelService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { useEffect, useState } from "react";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { imovelInput } from "../../../shared/types/imovelInput";
+
+export const convertToImovelInput=(imovel: imovelBody) => {
+    
+
+    const imovelInput: imovelInput ={
+        ...imovel,
+        rua: imovel.rua,
+        numero: imovel.numero,
+        bairro: imovel.bairro,
+        referencial: imovel.referencial,
+        latitude: imovel.latitude,
+        longitude: imovel.longitude,
+        areaImovel: imovel.areaImovel,
+        vizinhos: imovel.vizinhos,
+        situacaoFundiaria: imovel.situacaoFundiaria,
+        documentacaoImovel: imovel.documentacaoImovel,
+        dataChegada: imovel.dataChegada,
+        pretendeMudar: imovel.pretendeMudar,
+        motivoVontadeMudanca: imovel.motivoVontadeMudanca,
+        relacaoArea: imovel.relacaoArea,
+        relacaoVizinhos: imovel.relacaoVizinhos,
+        limites: imovel.limites,
+        iluminacaoPublica: imovel.iluminacaoPublica,
+        transporte: imovel.transporte,
+        programaInfraSaneamento: imovel.programaInfraSaneamento,
+        linhasDeBarco: imovel.linhasDeBarco,
+        tipoSolo: imovel.tipoSolo,
+        esporteLazer: imovel.esporteLazer,
+        localidade: {
+            id: imovel.localidade.id
+        }
+    }
+
+    console.log('imovelInput', imovelInput)
+        return imovelInput
+    }
+
+
 
 export const useImoveis = (localidadeId: number) =>{
    const [contagemImoveis, setContagemImoveis] = useState<number>(0);
@@ -13,13 +52,21 @@ export const useImoveis = (localidadeId: number) =>{
     const imovelQueue = getImoveisDessincronizados(localidadeId);
     if (imovelQueue.length > 0) {
         for (const imovel of imovelQueue) {
+            const novoImoveIput = convertToImovelInput(imovel)
+            console.log(novoImoveIput);
             const netInfoState = await NetInfo.fetch();
             if (netInfoState.isConnected) {
                 const isConnected = await testConnection();
                 if (isConnected) {
                     try {
-                        const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', imovel);
+                        const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImoveIput);
+                        
+                        console.log(response, 'id do imóvel recebido')
                         const imovelAPI = response as imovelBody;
+                        console.log(imovelAPI.id, 'id do imóvel recebido')
+                            if(imovelAPI.id){
+                                apagarImovelQueue(imovel.idLocal)
+                            }
                     } catch (error) {
                         console.error('Erro na sincronização do imóvel:', error);
                     }
@@ -70,11 +117,12 @@ export const useImoveis = (localidadeId: number) =>{
     };
 
     useEffect(()=>{
+    sinconizeQueue()
       fetchImoveisFromAPI();
       fetchImoveisFromLocalDb();
     }, []);
   
-    return { contagemImoveis, sinconizeQueue};
+    return { contagemImoveis};
 
 
 }

@@ -1,24 +1,23 @@
-import { useRoute, RouteProp } from '@react-navigation/native';
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { getCoordenadas } from '../../../realm/services/coordenadaService';
+import { getEscolas } from '../../../realm/services/escolaService';
+import { getPostos } from '../../../realm/services/postoService';
+import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
-import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { Button, View, TouchableOpacity, ScrollView } from 'react-native';
-import { LocalidadeContainer } from '../styles/Localidade.style';
-import { Icon } from '../../../shared/components/icon/Icon';
-import { coordenadasBody } from '../../../shared/types/coordenadaBody';
-import { useCoordenadas } from '../hooks/useCoordenadas';
-import { useEscolas } from '../hooks/useEscolas';
-import { useEffect, useState } from 'react';
-import { getCoordenadas } from '../../../realm/services/coordenadaService';
-import useDeleteLocalidade from '../hooks/useDeleteLocalidade';
-import { useImoveis } from '../hooks/useImoveis';
-import { getEscolas } from '../../../realm/services/escolaService';
 import { EscolaType } from '../../../shared/types/EscolaType';
+import { LocalidadeType } from '../../../shared/types/LocalidadeType';
+import { coordenadasBody } from '../../../shared/types/coordenadaBody';
 import { PostoType } from '../../../shared/types/postoTypes';
-import { getPostos } from '../../../realm/services/postoService';
+import { useCoordenadas } from '../hooks/useCoordenadas';
+import useDeleteLocalidade from '../hooks/useDeleteLocalidade';
+import { useEscolas } from '../hooks/useEscolas';
+import { useImoveis } from '../hooks/useImoveis';
 import { usePostos } from '../hooks/usePostos';
+import { LocalidadeContainer } from '../styles/Localidade.style';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
@@ -48,7 +47,7 @@ const InfLocalidade = () => {
       const {coordenadas} = useCoordenadas(localidade.id);
       const {escolas} = useEscolas(localidade.id);
       const {postos} = usePostos(localidade.id);     
-      const {contagemImoveis, sinconizeQueue} = useImoveis(localidade.id);
+      const {contagemImoveis} = useImoveis(localidade.id);
       const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>([]);
       const [escolasRealm, setEscolasRealm] = useState<EscolaType[]>([]);
       const [postosRealm, setPostosRealm] = useState<PostoType[]>([]);
@@ -78,11 +77,7 @@ const InfLocalidade = () => {
               }
             },[postos]);
 
-            useEffect(()=>{
-              if(contagemImoveis){
-                sinconizeQueue()
-              }
-            },[contagemImoveis]);
+      
 
 
         

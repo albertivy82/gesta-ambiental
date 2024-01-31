@@ -90,3 +90,19 @@ export const getImoveisDessincronizados = (localidade:number): imovelBody[]=>{
 
     return cleanedQueue as imovelBody[];
 }
+
+export const apagarImovelQueue = (imovelidLocal: string) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `idLocal == "${imovelidLocal}"`;
+            const imovelAExcluir = realmInstance.objects<imovelBody>('Imovel').filtered(query);
+
+            if (imovelAExcluir.length > 0) {
+                realmInstance.delete(imovelAExcluir);
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir imóvel da fila:', error);
+    }
+};
