@@ -1,3 +1,4 @@
+import { imovelInput } from "../../shared/types/imovelInput";
 import { imovelBody } from "../../shared/types/imovelType"
 import { realmInstance } from "./databaseService"
 
@@ -10,13 +11,16 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
                 imoveis.forEach(imovel=>{
                     
-                    const imovelPadrao ={
-                        ...imovel,
+                    if(imovel.idLocal=="" && imovel.sincronizado){
+                    
+                                const imovelPadrao ={
+                                    ...imovel,
 
-                        localidade: imovel.localidade.id,
-                    };
+                                    localidade: imovel.localidade.id,
+                                };
 
-                    realmInstance.create('Imovel', imovelPadrao, true);
+                                realmInstance.create('Imovel', imovelPadrao, true);
+                    }
                 });
                
             });
@@ -33,7 +37,7 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
 };
 
-export const salvarImovelQueue = (imovel: imovelBody) =>{
+export const salvarImovelQueue = (imovel: imovelInput) =>{
 
     return new Promise<void>((resolve, reject)=>{
            

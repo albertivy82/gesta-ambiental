@@ -1,22 +1,20 @@
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { useRoute, RouteProp, NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
-import { TouchableOpacity, View, FlatList} from 'react-native';
-import { imovelBody } from '../../../shared/types/imovelType';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getImoveis } from '../../../realm/services/imovelService';
+import { Icon } from '../../../shared/components/icon/Icon';
+import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import Text from '../../../shared/components/text/Text';
-import { ImovelContainer } from '../styles/Imovel.style';
-import { Icon } from '../../../shared/components/icon/Icon';
+import { imovelBody } from '../../../shared/types/imovelType';
+import { ImovelContainer, ImovelContainer2 } from '../styles/Imovel.style';
+import RenderItemImovel from '../ui-components/listaImoveis';
 
 
 export interface ImoveisParam {
   localidadeId: number;
 }
 
-export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
-  navigate('ImovelDetail', {imovel})
-}
 
 export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
   console.log('novoImovel', localidadeId)
@@ -42,10 +40,7 @@ const [imovel, setImovel] = useState<imovelBody[]>()
   }, [localidadeId])
 
   
-  const  handleGoToImovelDetail =  (imovel: imovelBody) =>{
-       detalharImovel(navigation.navigate, imovel );
-    
-  }
+
 
   const  handleNovoImovel =  () =>{
     novoImovel(navigation.navigate, localidadeId );
@@ -53,77 +48,6 @@ const [imovel, setImovel] = useState<imovelBody[]>()
  
 }
 
-
-
-  //renderizar listagem de imóveis
-  const renderItem = ({ item }: { item: imovelBody}) => {
-    return (
-      <TouchableOpacity onPress={() => handleGoToImovelDetail(item)}>
-         <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
-              
-             <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-                situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
-              </Text>
-              
-              
-              
-              
-              
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-                Rua: {item.rua}
-              </Text>
-              
-              
-              
-              
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-               
-                Número: {item.numero}
-               
-              </Text>
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-               Bairro: {item.bairro}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-               Referencial: {item.referencial}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-               Latitude: {item.latitude}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-              >
-               longitude: {item.longitude}
-              </Text>
-
-              
-        </View>
-      </TouchableOpacity>
-    );
-  };
- 
 
 
 
@@ -144,27 +68,32 @@ const [imovel, setImovel] = useState<imovelBody[]>()
             </Text>
           
           </View>
+          
+          
           <TouchableOpacity onPress={() => handleNovoImovel()}>
-          <View style={{  alignItems: 'center', 
-            flexDirection: 'row',
-           borderBottomWidth: 3, 
-           borderColor: theme.colors.mainTheme.black, 
-            marginBottom: 10, 
-            backgroundColor: 'orange',
-                          }}>
-           <Icon size={15} name='plus' color='#030303'/>
-          <Text 
-          type={textTypes.BUTTON_REGULAR} 
-          color={theme.colors.mainTheme.black}
-          margin="0px 0px 0px 20px">
-           Adicionar Imóvel
-            </Text>
-          </View>
+                <View style={{  alignItems: 'center', 
+                  flexDirection: 'row',
+                borderBottomWidth: 3, 
+                borderColor: theme.colors.mainTheme.black, 
+                  marginBottom: 10, 
+                  backgroundColor: 'orange',
+                                }}>
+                        <Icon size={15} name='plus' color='#030303'/>
+                        <Text 
+                        type={textTypes.BUTTON_REGULAR} 
+                        color={theme.colors.mainTheme.black}
+                        margin="0px 0px 0px 20px">
+                        Adicionar Imóvel
+                          </Text>
+                </View>
           </TouchableOpacity>
+          
           <FlatList
               data={imovel}
-              renderItem={renderItem}
+              extraData={imovel} // ou extraData={dependencias}
+              renderItem={({ item }) => <RenderItemImovel item={item} />}
               keyExtractor={(item) => item.id.toString()}
+
           />
                 
           

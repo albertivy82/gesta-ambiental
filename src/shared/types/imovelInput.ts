@@ -8,6 +8,7 @@ import { tipoSoloEnum } from "../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../enums/transporte.enum";
 
 export interface imovelInput {
+    
     rua: string;
     numero: string;
     bairro: string;
@@ -33,4 +34,6 @@ export interface imovelInput {
     localidade: {
         id: number;
     };
+    sincronizado?: boolean;
+    idLocal?: string;
 }

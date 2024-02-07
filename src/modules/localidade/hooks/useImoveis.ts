@@ -6,11 +6,10 @@ import { imovelBody } from "../../../shared/types/imovelType";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
 
-export const convertToImovelInput=(imovel: imovelBody) => {
-    
+export const convertToImovelInput=(imovel: any) => {
 
+    
     const imovelInput: imovelInput ={
-        ...imovel,
         rua: imovel.rua,
         numero: imovel.numero,
         bairro: imovel.bairro,
@@ -34,13 +33,13 @@ export const convertToImovelInput=(imovel: imovelBody) => {
         tipoSolo: imovel.tipoSolo,
         esporteLazer: imovel.esporteLazer,
         localidade: {
-            id: imovel.localidade.id
+            id: imovel.localidade
         }
     }
 
     console.log('imovelInput', imovelInput)
         return imovelInput
-    }
+    };
 
 
 
@@ -117,7 +116,7 @@ export const useImoveis = (localidadeId: number) =>{
     };
 
     useEffect(()=>{
-    sinconizeQueue()
+      sinconizeQueue()
       fetchImoveisFromAPI();
       fetchImoveisFromLocalDb();
     }, []);

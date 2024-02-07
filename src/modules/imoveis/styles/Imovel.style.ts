@@ -11,3 +11,10 @@ export const ImovelContainer = styled.View`
 
 `
 
+
+
+export const ImovelContainer2 = styled.ScrollView`
+    flex: 1;
+    background-color: #E6E8FA;
+    padding: 16px;
+`;

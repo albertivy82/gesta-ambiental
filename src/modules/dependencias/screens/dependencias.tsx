@@ -81,7 +81,7 @@ export const Dependencias = ()=>{
             extraData={dependencias} // ou extraData={dependencias}
             renderItem={({ item }) => <RenderItem item={item} />}
             keyExtractor={(item) => item.id.toString()}
-/>
+            />
 
             </Row>
 

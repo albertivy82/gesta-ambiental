@@ -81,10 +81,12 @@ export const useNovoImovel = (id:number) => {
     }, [novoImovel]);
 
     const objetoFila =()=>{
-      console.log(novoImovel)
-        const imovelData: imovelBody = {
+     
+        const imovelData: imovelInput = {
           ...novoImovel, 
-          id: id,  
+          localidade: {
+            id:id
+          },
           sincronizado: false,  
           idLocal: uuidv4(),
 

@@ -22,10 +22,7 @@ const RenderItem = ({ item }: { item: DependenciaType}) => {
 
 
 
- 
-      
-    
-    return (
+ return (
        
            <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
                   <Row>
