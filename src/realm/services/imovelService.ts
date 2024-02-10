@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
 import { imovelInput } from "../../shared/types/imovelInput";
-import { imovelBody } from "../../shared/types/imovelType"
-import { realmInstance } from "./databaseService"
+import { imovelBody } from "../../shared/types/imovelType";
+import { realmInstance } from "./databaseService";
 
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
@@ -10,18 +11,32 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
             realmInstance.write(()=>{
 
                 imoveis.forEach(imovel=>{
-                    
-                    if(imovel.idLocal=="" && imovel.sincronizado){
-                    
-                                const imovelPadrao ={
-                                    ...imovel,
 
+                    
+                    const imovelRealm = realmInstance.objects('Imovel').filtered(`id == ${imovel.id}`)[0];
+                    console.log(imovelRealm);
+                    if(imovel.sincronizado && imovelRealm && imovel.idLocal==''){
+                        console.log('testou certo', imovel)
+                              const imovelPadrao ={
+                                    ...imovel,
                                     localidade: imovel.localidade.id,
                                 };
 
                                 realmInstance.create('Imovel', imovelPadrao, true);
+                    }else{
+                        console.log('ERRO AQUI');
+                        const imovelPadrao ={
+                            ...imovel,
+                           localidade: imovel.localidade.id,
+                        };
+
+                        realmInstance.create('Imovel', imovelPadrao, true);
                     }
+                   
+                
                 });
+
+
                
             });
 
@@ -39,31 +54,33 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
 export const salvarImovelQueue = (imovel: imovelInput) =>{
 
-    return new Promise<void>((resolve, reject)=>{
-           
-        try{
-            realmInstance.write(()=>{
 
-               const imovelPadrao ={
+        return new Promise<void>((resolve, reject) => {
+            // Função para gerar um ID aleatório
+            const Id = () => {
+                const min = Math.ceil(0);
+                const max = Math.floor(1000);
+                return Math.floor(Math.random() * (max - min + 1)) + min; 
+            };
+                   
+            try {
+                realmInstance.write(() => {
+                    console.log('ERRO QUEUE');
+                    const imovelPadrao = {
                         ...imovel,
-
+                        id: Id(), 
                         localidade: imovel.localidade.id,
-              };
-
+                    };
+        
                     realmInstance.create('Imovel', imovelPadrao, true);
-                }
-               
-            );
-
-            resolve();
-
-        }catch(error){
-            reject(error)
-        }
-    
-    
-    
-    });
+                });
+        
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+        
 
 };
 
@@ -77,6 +94,8 @@ export const getImoveis = (localidade:number): imovelBody[]=>{
     const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
     
     const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm));
+
+ 
 
     return imoveisLimpos as imovelBody[];
 }

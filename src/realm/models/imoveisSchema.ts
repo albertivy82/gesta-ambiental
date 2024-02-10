@@ -1,9 +1,8 @@
 export const ImovelSchema = {
     name: 'Imovel',
-    primaryKey: 'idLocal',
+    primaryKey: 'id',
     properties: {
-        idLocal: 'string',
-        id: 'int?',
+        id: 'int',
         rua: 'string?',
         numero: 'string?',
         bairro: 'string?',
@@ -28,7 +27,7 @@ export const ImovelSchema = {
         esporteLazer: 'string?', 
         localidade: 'int',
         sincronizado: 'bool',
-        
-    }
+        idLocal: 'string?',
+   }
 };
 

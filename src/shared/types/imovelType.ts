@@ -36,5 +36,5 @@ export interface imovelBody{
         id: number;
     };
     sincronizado: boolean;
-    idLocal: string;
+    idLocal?: string;
 }

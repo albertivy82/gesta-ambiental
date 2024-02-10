@@ -15,7 +15,6 @@ import { connectionAPIPost } from "../../../shared/functions/connection/connecti
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatarData } from "../../../shared/functions/data";
 import { imovelInput } from "../../../shared/types/imovelInput";
-import { imovelBody } from "../../../shared/types/imovelType";
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     rua:'',

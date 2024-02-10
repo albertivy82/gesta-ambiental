@@ -39,6 +39,7 @@ const [imovel, setImovel] = useState<imovelBody[]>()
       }
   }, [localidadeId])
 
+ 
   
 
 
@@ -90,10 +91,14 @@ const [imovel, setImovel] = useState<imovelBody[]>()
           
           <FlatList
               data={imovel}
-              extraData={imovel} // ou extraData={dependencias}
+              extraData={imovel} 
               renderItem={({ item }) => <RenderItemImovel item={item} />}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'fallbackId'}
 
+
+
+
+             
           />
                 
           

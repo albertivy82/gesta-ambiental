@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
 import { apagarImovelQueue, getImoveis, getImoveisDessincronizados, salvarImoveis } from "../../../realm/services/imovelService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { useEffect, useState } from "react";
-import { imovelBody } from "../../../shared/types/imovelType";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 export const convertToImovelInput=(imovel: any) => {
 
@@ -64,7 +64,7 @@ export const useImoveis = (localidadeId: number) =>{
                         const imovelAPI = response as imovelBody;
                         console.log(imovelAPI.id, 'id do imóvel recebido')
                             if(imovelAPI.id){
-                                apagarImovelQueue(imovel.idLocal)
+                                apagarImovelQueue(imovel.idLocal!)
                             }
                     } catch (error) {
                         console.error('Erro na sincronização do imóvel:', error);
@@ -98,11 +98,12 @@ export const useImoveis = (localidadeId: number) =>{
          const ImData = imoveisAPI.map(imovel => ({
               ...imovel,
               sincronizado: true, 
-              idLocal: ""         
+              idLocal: '',         
           }));
          
           if(ImData && Array.isArray(ImData) && ImData.length> 0){
                await salvarImoveis(ImData)
+               console.log('Entrou da API')
                 const contagem = ImData.length;
                 setContagemImoveis(contagem);
           } else {
