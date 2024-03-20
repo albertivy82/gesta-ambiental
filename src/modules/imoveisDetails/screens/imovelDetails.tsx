@@ -1,17 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useRoute, RouteProp } from '@react-navigation/native';
-import { TouchableOpacity, View, ScrollView} from 'react-native';
-import { imovelBody } from '../../../shared/types/imovelType';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Icon } from '../../../shared/components/icon/Icon';
+import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import Text from '../../../shared/components/text/Text';
-import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
-import { Icon } from '../../../shared/components/icon/Icon';
-import { coordenadasBody } from '../../../shared/types/coordenadaBody';
-import { EscolaType } from '../../../shared/types/EscolaType';
-import { PostoType } from '../../../shared/types/postoTypes';
+import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
+
 
 
 
@@ -19,10 +15,16 @@ export interface ImovelParam {
  imovel: imovelBody;
 }
 
-//BLOCO IMOVEL
+//BLOCO BENFEITORIA
 export const benfeitoriasDoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovelId: number)=>{
-  console.log(imovelId, 'imovelId')
   navigate('Benfeitorias', {imovelId})
+}
+
+export const novaBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], 
+                                imovelId: number, 
+                                idLocal:string|undefined,
+                                sincronizado:boolean)=>{
+  navigate('NovaBenfeitoria', {imovelId, idLocal, sincronizado})
 }
 
 
@@ -33,9 +35,14 @@ const ImovelDetails = () => {
   
   
  
-  const  handleGerenciaBenfeitorias =  (imovelId: number, contagemBenfeitorias: number) =>{
-    if(contagemBenfeitoria>0){
+  const  handleGerenciaBenfeitorias =  (imovelId: number, 
+                                        idLocal:string|undefined, 
+                                        sincronizado: boolean, 
+                                        contagemBenfeitorias: number) =>{
+    if(contagemBenfeitorias>0){
       benfeitoriasDoImovel(navigation.navigate, imovelId);
+    }else{
+      novaBenfeitoria(navigation.navigate, imovelId, idLocal, sincronizado);
     }
   }
   
@@ -135,7 +142,11 @@ const ImovelDetails = () => {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => handleGerenciaBenfeitorias(params.imovel.id, contagemBenfeitoria)}>
+                    <TouchableOpacity onPress={() => handleGerenciaBenfeitorias(
+                                                                                  params.imovel.id,
+                                                                                  params.imovel.idLocal, 
+                                                                                  params.imovel.sincronizado, 
+                                                                                  contagemBenfeitoria )}>
                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
                                           padding: 10,
                                           

@@ -25,20 +25,20 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     longitude: '',
     areaImovel: 0,
     vizinhos: null,
-    situacaoFundiaria: '',  // Defina como null ou um valor padrão
-    documentacaoImovel: null, // Defina como null ou um valor padrão
+    situacaoFundiaria: '',  
+    documentacaoImovel: null, 
     dataChegada: '',
-    pretendeMudar: null,      // Defina como null ou um valor padrão
+    pretendeMudar: null,      
     motivoVontadeMudanca: '',
     relacaoArea: '',
     relacaoVizinhos: '',
     limites: null,    
     iluminacaoPublica: null, 
-    programaInfraSaneamento: '',       // Defina como null ou um valor padrão
-    transporte: null,         // Defina como null ou um valor padrão
+    programaInfraSaneamento: '',       
+    transporte: null,         
     linhasDeBarco: '',
-    tipoSolo: null,           // Defina como null ou um valor padrão
-    esporteLazer: null,       // Defina como null ou um valor padrão
+    tipoSolo: null,          
+    esporteLazer: null,       
     localidade: {
         id: 0,
     },
@@ -73,7 +73,8 @@ export const useNovoImovel = (id:number) => {
         novoImovel.programaInfraSaneamento !== '' &&
         novoImovel.linhasDeBarco !== '' && 
         novoImovel.tipoSolo !== null &&           
-        novoImovel.esporteLazer !== null ){
+        novoImovel.esporteLazer !== null )
+        {
           setDisabled(false)
         } 
        
@@ -127,16 +128,16 @@ export const useNovoImovel = (id:number) => {
 
     const handleOnChangeInput = (
         event: NativeSyntheticEvent<TextInputChangeEventData>,
-        name: string|number
+        name: string
       ) => {
-        //event.persist(); // Manter o evento sintético
         setNovoImovel((currentImovel) => ({
           ...currentImovel,
           [name]: event.nativeEvent.text,
         }));
       };
 
-      const handleOnChangeData = ( event: NativeSyntheticEvent<TextInputChangeEventData>,
+      const handleOnChangeData = ( 
+        event: NativeSyntheticEvent<TextInputChangeEventData>,
         name: string) => {
         const dataFormatada = formatarData(event.nativeEvent.text);
         setNovoImovel((currentUser) => ({
@@ -152,6 +153,7 @@ export const useNovoImovel = (id:number) => {
           vizinhos: vizinhos,
         }));
       };
+
       const handleFundiarioChange = (situacaoFundiaria: situacaoFundiaria | "" | null) => {
         setNovoImovel((currentSituacao) => ({
           ...currentSituacao,
@@ -210,7 +212,7 @@ export const useNovoImovel = (id:number) => {
 
       const handleOnChangeAreaImovel = (
         event: NativeSyntheticEvent<TextInputChangeEventData>
-    ) => {
+       ) => {
         const value = event.nativeEvent.text;
         const areaImovelNum = parseFloat(value) || 0; // Converte para número, usa 0 se NaN
     

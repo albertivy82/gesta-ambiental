@@ -4,7 +4,7 @@ export const BenfeitoriaContainer = styled.View`
 
     height: 100%;
     width: 100%;
-    background-color: #f5f5f5;
+    background-color: #E6E8FA;
     justify-content: center;
     justify-items: center;
     padding: 16px;

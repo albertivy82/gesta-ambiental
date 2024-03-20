@@ -60,9 +60,8 @@ export const useImoveis = (localidadeId: number) =>{
                     try {
                         const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImoveIput);
                         
-                        console.log(response, 'id do imóvel recebido')
                         const imovelAPI = response as imovelBody;
-                        console.log(imovelAPI.id, 'id do imóvel recebido')
+                       
                             if(imovelAPI.id){
                                 apagarImovelQueue(imovel.idLocal!)
                             }

@@ -8,6 +8,7 @@ import User from "./modules/User";
 import admUsers from "./modules/admUsers/screens/AdmUsers";
 import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
+import { NovaBenfeitoria } from "./modules/benfeitorias/screens/novaBenfeitoria";
 import Consumo from "./modules/compras/screens/Consumo";
 import ConsumoItens from "./modules/compras/screens/ConsumoItens";
 import Coordenadas from "./modules/coordenadas";
@@ -15,6 +16,7 @@ import { Dependencias } from "./modules/dependencias/screens/dependencias";
 import EditUser from "./modules/editUser";
 import Home from "./modules/home";
 import Imovel from "./modules/imoveis/screens/Imovel";
+import { NovoImovel } from "./modules/imoveis/screens/novoImovel";
 import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
@@ -27,7 +29,6 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
-import { NovoImovel } from "./modules/imoveis/screens/novoImovel";
 
 
 
@@ -129,6 +130,7 @@ const Navigation =() =>{
           <Stack.Screen name="ConsumoItens" component={ConsumoItens} options={{title: 'Dados de Consumo'}} />
           <Stack.Screen name="Dependencias" component={Dependencias} options={{title: 'Dependências'}} />
           <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
+          <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

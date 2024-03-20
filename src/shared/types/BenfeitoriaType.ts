@@ -1,7 +1,10 @@
-﻿export interface BenfeitoriaType {
-    id: number;
-    tipoBenfeitoria: string;
-    funcao: string;
+﻿import { Funcao } from "../../enums/Funcao.enum";
+import { TipoBenfeitoria } from "../../enums/TipoBenfeitoria.enum";
+
+export interface BenfeitoriaType {
+    id?: number;
+    tipoBenfeitoria: TipoBenfeitoria|""| null;
+    funcao: Funcao | "" | null;
     tipoSolo: string;
     areaBenfeitoria: number;
     pavimentos: number;
@@ -20,8 +23,11 @@
     importanciaDeProtegerAmbiente: string;
     qualEspacoPrecisaSerPreservado: string;
     problemasRelacionadosAoAmbiente: string;
-    imovel: {
+    imovel?: {
         id:number;
     }
+    idLocalImovel?: string;
+    sincronizado: boolean;
+    idLocal?: string;
     
 }

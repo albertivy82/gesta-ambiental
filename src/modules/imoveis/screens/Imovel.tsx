@@ -7,7 +7,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer, ImovelContainer2 } from '../styles/Imovel.style';
+import { ImovelContainer } from '../styles/Imovel.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
 
 
@@ -45,9 +45,7 @@ const [imovel, setImovel] = useState<imovelBody[]>()
 
   const  handleNovoImovel =  () =>{
     novoImovel(navigation.navigate, localidadeId );
-    console.log('handleNovoImovel', localidadeId)
- 
-}
+  }
 
 
 

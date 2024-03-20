@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useRef } from "react";
 import { Button, ScrollView, TextInput, View } from "react-native";
 import { Vizinhos } from "../../../enums/Vizinhos";
@@ -49,17 +49,13 @@ export const NovoImovel = ()=>{
     const simNaoOptions =  Object.values(SimNaoTalvez);
     const vizinhoOptions =  Object.values(Vizinhos);
     
-
-    console.log('param', params)
-    console.log('localidadeId', params.localidadeId);
-
-    
     const ruaInput = useRef<TextInput>(null);
     const numeroInput = useRef<TextInput>(null);
     const bairroInput = useRef<TextInput>(null);
     const referencialInput = useRef<TextInput>(null);
     const latitudeInput = useRef<TextInput>(null);
     const longitudeInput = useRef<TextInput>(null);
+    const areaImovelInput = useRef<TextInput>(null);
    
   
 
@@ -128,23 +124,26 @@ export const NovoImovel = ()=>{
               title="Longitude:"
               ref={longitudeInput}/>
 
-<Input
-    value={(novoImovel.areaImovel ?? '').toString()} 
-    onChange={handleOnChangeAreaImovel}
-    keyboardType='numeric'
-    // outros props...
-/>
+            <Input
+                value={(novoImovel.areaImovel ?? '').toString()} 
+                onChange={handleOnChangeAreaImovel}
+                keyboardType='numeric'
+                placeholder="longitude"
+                margin="0px 0px 16px 0px"
+                title="Área do imóvel:"
+                ref={areaImovelInput}
+            />
 
 
 
 
             <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
+                <Picker
               selectedValue={novoImovel.vizinhos}
               onValueChange={(value) => handleVizinhosChange(value)}>
                 <Picker.Item label="Possui vizinhos?" color="black" value="" />
                         {vizinhoOptions.map(vizinhos => (
-                          <Picker.Item key={vizinhos} label={vizinhos} value={vizinhos} />
+                <Picker.Item key={vizinhos} label={vizinhos} value={vizinhos} />
                         ))}
                 </Picker>
             </View>
