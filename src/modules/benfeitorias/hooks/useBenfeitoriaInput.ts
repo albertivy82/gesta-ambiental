@@ -39,7 +39,7 @@ export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaType =  {
 export const UseNovaBenfeitoria =()=>{
 
 const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaType>(DEFAULT_BENFEITORIA_INPUT);
-const [disable, setdisable] = useState<boolean>(true);
+const [disabled, setdisable] = useState<boolean>(true);
 
 useEffect(()=>{
     if(
@@ -71,6 +71,22 @@ useEffect(()=>{
         setdisable(false)
     }
 },[novaBenfeitoria]);
+
+
+const enviarRegistro = (imovelId: number, idLocal : string|undefined, sincronizado: boolean) =>{
+
+  if(sincronizado){
+
+    console.log("proceder envio para fila")
+
+  }else{
+
+    console.log("Testar rede")
+
+  }
+
+  
+}
 
 
 const handleTipoBenfeitoria = (tipo: TipoBenfeitoria | "" | null) => {
@@ -152,7 +168,7 @@ const handleAlagamentos = (alagamentos: string) => {
 const handleNivelAlagamentos = (NivelAlagamentos: string) => {
   setNovaBenfeitoria((currentBenfeitoria) => ({
      ...currentBenfeitoria,
-    alagamentos: NivelAlagamentos,
+    nivelAlagamentos: NivelAlagamentos,
    }));
 };
 
@@ -222,6 +238,8 @@ const handleInformativoPredominante = (informativo: string) => {
           handleEnergiaAlimentos,
           handleInformativoPredominante,
           handleOnChangeInput,
+          enviarRegistro,
+          disabled,
         }
 
 }

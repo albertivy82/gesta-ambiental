@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import { useEffect, useState } from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { Button, ScrollView, TouchableOpacity, View } from "react-native";
 import { Efluentes } from "../../../enums/Efluentes.enum";
 import { EnergiaAlimentos } from "../../../enums/EnergiaAlimentos.enum";
 import { FonteEnergia } from "../../../enums/FonteEnergia.enum";
@@ -20,8 +20,16 @@ import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
+import { RouteProp, useRoute } from "@react-navigation/native";
+
+export interface imovelParam {
+imovelId: number, 
+idLocal : string|undefined,
+sincronizado: boolean
+}
 
 export const NovaBenfeitoria=()=>{
+    const { params } = useRoute<RouteProp<Record<string, imovelParam>>>();
     const {novaBenfeitoria, 
            handleTipoBenfeitoria,
            handleFuncao,
@@ -40,6 +48,8 @@ export const NovaBenfeitoria=()=>{
            handleEnergiaAlimentos,
            handleInformativoPredominante,
            handleOnChangeInput,
+           enviarRegistro,
+           disabled,
            } = UseNovaBenfeitoria();
    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -68,8 +78,14 @@ export const NovaBenfeitoria=()=>{
     const optionsFonteEnergia = Object.values(FonteEnergia)
     const optionsEnergiaAlimentos = Object.values(EnergiaAlimentos)
     const optionsInformativoPredominante = Object.values(InformativoPredominante)
+
+    const handleEnviar=() =>{
+        console.log("id local"+ params.idLocal, "id imóvel"+ params.imovelId, "sincronizado: "+ params.sincronizado);
+        enviarRegistro(params.imovelId, params.idLocal, params.sincronizado);
+
+    }
       
-    console.log(novaBenfeitoria);
+    
        
     return( 
     
@@ -210,7 +226,7 @@ export const NovaBenfeitoria=()=>{
 
       <Input 
       value={novaBenfeitoria.importanciaDeProtegerAmbiente} 
-      onChange={(event)=> handleOnChangeInput(event, 'protegerAmbiente')}
+      onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
       placeholder="..."
       margin="0px 0px 16px 0px"
       title="Em sua opnião, qual é a importência de protegeer o meio ambiente?"
@@ -219,7 +235,7 @@ export const NovaBenfeitoria=()=>{
 
       <Input 
       value={novaBenfeitoria.qualEspacoPrecisaSerPreservado} 
-      onChange={(event)=> handleOnChangeInput(event, 'protegerAmbiente')}
+      onChange={(event)=> handleOnChangeInput(event, 'qualEspacoPrecisaSerPreservado')}
       placeholder="..."
       margin="0px 0px 16px 0px"
       title="Qual espaço presisa ser preservado?"
@@ -228,14 +244,17 @@ export const NovaBenfeitoria=()=>{
 
       <Input 
       value={novaBenfeitoria.problemasRelacionadosAoAmbiente} 
-      onChange={(event)=> handleOnChangeInput(event, 'protegerAmbiente')}
+      onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionadosAoAmbiente')}
       placeholder="..."
       margin="0px 0px 16px 0px"
       title="Quais os problemas abeintais observados??"
       
       />
 
-     
+          
+          <View style={{ marginTop:40 }}>
+          <Button title="enviar"  onPress={handleEnviar} />
+          </View>
     
         </BenfeitoriaContainer>
     </ScrollView>
