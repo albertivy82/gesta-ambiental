@@ -109,7 +109,7 @@ export const useNovoImovel = (id:number) => {
                           const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
                           
                       } catch (error) {
-                        console.error('Erro na inputImovelApi:', error);
+                        console.error('Erro Também precisa enviar para fila:', error);
                       }
               }else{
                 

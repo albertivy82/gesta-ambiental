@@ -1,8 +1,10 @@
+import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { TipoBenfeitoria } from "../../../enums/TipoBenfeitoria.enum";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { Funcao } from "../../../enums/Funcao.enum";
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 
 export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaType =  {
 
@@ -73,15 +75,34 @@ useEffect(()=>{
 },[novaBenfeitoria]);
 
 
-const enviarRegistro = (imovelId: number, idLocal : string|undefined, sincronizado: boolean) =>{
+const enviarRegistro = async (imovelId: number, idLocal : string|undefined, sincronizado: boolean) =>{
 
-  if(sincronizado){
+ 
+  if(!sincronizado){
 
-    console.log("proceder envio para fila")
+      
+
+   
 
   }else{
+      
+      const netInfoState = await NetInfo.fetch();
+     
+        if(netInfoState.isConnected){
 
-    console.log("Testar rede")
+            try{
+            
+              const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
+    
+            } catch (error) {
+              console.error('Erro Também precisa enviar para fila:', error);
+            }
+         
+        }else{
+          
+        }
+
+   
 
   }
 
