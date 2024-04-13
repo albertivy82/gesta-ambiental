@@ -1,6 +1,5 @@
 export const BenfeitoriaSchema = {
     name: 'Benfeitoria',
-    
     primaryKey: 'id',
     properties: {
         id: 'int',
@@ -24,6 +23,9 @@ export const BenfeitoriaSchema = {
         importanciaDeProtegerAmbiente: 'string',
         qualEspacoPrecisaSerPreservado: 'string',
         problemasRelacionadosAoAmbiente: 'string',
-        imovel: 'int' 
+        imovel: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 };

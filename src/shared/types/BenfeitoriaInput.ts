@@ -1,15 +1,13 @@
-﻿import { Funcao } from "../../enums/Funcao.enum";
-import { TipoBenfeitoria } from "../../enums/TipoBenfeitoria.enum";
-
-export interface BenfeitoriaType {
-    id?: number;
+﻿
+export interface BenfeitoriaInput {
+    
     tipoBenfeitoria: string;
     funcao: string;
     tipoSolo: string;
     areaBenfeitoria: number;
     pavimentos: number;
     tipoConstrucao: string;
-    OrigemMaterialConstrucao: string[]; 
+    origemMaterialConstrucao: string[]; 
     tipoCobertura: string;
     tipoEsquadrias: string;
     alagamentos: string;
@@ -23,11 +21,10 @@ export interface BenfeitoriaType {
     importanciaDeProtegerAmbiente: string;
     qualEspacoPrecisaSerPreservado: string;
     problemasRelacionadosAoAmbiente: string;
-    imovel: {
+    imovel?: {
         id: number;
     };
-    idLocalImovel?: string;
-    sincronizado: boolean;
+    sincronizado?: boolean;
     idLocal?: string;
-    
+    idFather?:string;
 }

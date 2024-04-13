@@ -1,20 +1,19 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { TipoBenfeitoria } from "../../../enums/TipoBenfeitoria.enum";
-import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { v4 as uuidv4 } from 'uuid';
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { Funcao } from "../../../enums/Funcao.enum";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 
-export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaType =  {
+export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput =  {
 
-    tipoBenfeitoria: null,
-    funcao: null,
+    tipoBenfeitoria: '',
+    funcao: '',
     tipoSolo: '',
     areaBenfeitoria: 0,
     pavimentos: 0,
     tipoConstrucao: '',
-    OrigemMaterialConstrucao: [], 
+    origemMaterialConstrucao: [], 
     tipoCobertura: '',
     tipoEsquadrias: '',
     alagamentos: '',
@@ -31,16 +30,12 @@ export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaType =  {
     imovel: {
         id:0,
     },
-    idLocalImovel: '',
-    sincronizado: false,
-    idLocal: '',
-
-}
+    }
 
 
-export const UseNovaBenfeitoria =()=>{
+export const UseNovaBenfeitoria =(imovelId: number, idLocal : string|undefined, sincronizado: boolean)=>{
 
-const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaType>(DEFAULT_BENFEITORIA_INPUT);
+const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaInput>(DEFAULT_BENFEITORIA_INPUT);
 const [disabled, setdisable] = useState<boolean>(true);
 
 useEffect(()=>{
@@ -52,7 +47,7 @@ useEffect(()=>{
         novaBenfeitoria.areaBenfeitoria !== 0 &&
         novaBenfeitoria.pavimentos !== 0 &&
         novaBenfeitoria.tipoConstrucao !== '' &&
-        novaBenfeitoria.OrigemMaterialConstrucao.length > 0 &&
+        novaBenfeitoria.origemMaterialConstrucao.length > 0 &&
         novaBenfeitoria.tipoCobertura !== '' &&
         novaBenfeitoria.tipoEsquadrias !== '' &&
         novaBenfeitoria.alagamentos !== '' &&
@@ -75,25 +70,62 @@ useEffect(()=>{
 },[novaBenfeitoria]);
 
 
-const enviarRegistro = async (imovelId: number, idLocal : string|undefined, sincronizado: boolean) =>{
+const objetoFilaA =()=>{
+     
+  const benfeitoriaData: BenfeitoriaInput = {
+   ...novaBenfeitoria, 
+    imovel: {
+      id:imovelId
+    },
+    sincronizado: false,  
+    idLocal: uuidv4(),
+
+  }
+  return benfeitoriaData
+}
+
+const objetoFilaB =()=>{
+     
+  const benfeitoriaData: BenfeitoriaInput = {
+   ...novaBenfeitoria, 
+    imovel: {
+      id:0
+    },
+    sincronizado: false,  
+    idLocal: uuidv4(),
+    idFather: idLocal,
+  }
+  return benfeitoriaData
+}
+
+
+
+const enviarRegistro = async () =>{
 
  
-  if(!sincronizado){
+ 
+  if(!sincronizado && !imovelId){
 
-      
-
+   
    
 
   }else{
+      
+    
+    novaBenfeitoria.imovel = {id:imovelId};
+      
+    
       
       const netInfoState = await NetInfo.fetch();
      
         if(netInfoState.isConnected){
 
             try{
+              
+              
             
               const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
-    
+              console.log(benfeitoriaOk)
             } catch (error) {
               console.error('Erro Também precisa enviar para fila:', error);
             }
@@ -110,14 +142,14 @@ const enviarRegistro = async (imovelId: number, idLocal : string|undefined, sinc
 }
 
 
-const handleTipoBenfeitoria = (tipo: TipoBenfeitoria | "" | null) => {
+const handleTipoBenfeitoria = (tipo: string) => {
    setNovaBenfeitoria((currentBenfeitoria) => ({
       ...currentBenfeitoria,
       tipoBenfeitoria: tipo,
     }));
 };
 
-const handleFuncao = (funcao: Funcao | "" | null) => {
+const handleFuncao = (funcao: string) => {
     setNovaBenfeitoria((currentBenfeitoria) => ({
        ...currentBenfeitoria,
        funcao: funcao,
@@ -161,7 +193,7 @@ const handleTipoConstrucao = (tipoConstrucao:string)=>{
 };
 
 const handleMaterialConstrução = (matConstrucao:string[])=>{
-  setNovaBenfeitoria((currentBenfeitoria)=>({...currentBenfeitoria, OrigemMaterialConstrucao: matConstrucao}));
+  setNovaBenfeitoria((currentBenfeitoria)=>({...currentBenfeitoria, origemMaterialConstrucao: matConstrucao}));
 };
 
 

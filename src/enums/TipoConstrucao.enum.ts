@@ -1,6 +1,6 @@
 export enum TipoConstrucao {
     Alvenaria = 'Alvenaria',
-    Madeir = 'Madeiraa',
+    Madeir = 'Madeira',
     Taipa = 'Taipa',
     Palha = 'Palha',
     Outro = 'Outro',

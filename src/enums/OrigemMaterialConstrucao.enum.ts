@@ -1,4 +1,4 @@
-export enum OrigemMaterialConstrucao {
+export enum origemMaterialConstrucao {
 	LOJA_DA_CIDADE = 'LOJA_DA_CIDADE',
 	EXTRACAO_EM_LOCAL_DISTANTE_ACIMA_DE_5KM = 'EXTRACAO_EM_LOCAL_DISTANTE_ACIMA_DE_5KM',
 	ESTACAO_PROXIMA = 'ESTACAO_PROXIMA',

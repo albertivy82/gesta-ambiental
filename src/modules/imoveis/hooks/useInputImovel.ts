@@ -109,7 +109,9 @@ export const useNovoImovel = (id:number) => {
                           const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
                           
                       } catch (error) {
-                        console.error('Erro Também precisa enviar para fila:', error);
+                        const registroNaoEnviado = objetoFila()
+                        salvarImovelQueue(registroNaoEnviado)
+                        console.error('Objeto armazenado internamente. Erro:', error);
                       }
               }else{
                 

@@ -1,4 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Button, ScrollView, TouchableOpacity, View } from "react-native";
 import { Efluentes } from "../../../enums/Efluentes.enum";
@@ -8,7 +9,6 @@ import { Funcao } from "../../../enums/Funcao.enum";
 import { InformativoPredominante } from "../../../enums/InformativoPredominante.enum";
 import { NivelAlagamento } from "../../../enums/NivelAlagamento.enum";
 import { Ocorrencia } from "../../../enums/Ocorrencia.enum";
-import { OrigemMaterialConstrucao } from "../../../enums/OrigemMaterialConstrucao.enum";
 import { Residuos } from "../../../enums/Residuos.enum";
 import { TipoBenfeitoria } from "../../../enums/TipoBenfeitoria.enum";
 import { TipoCobertura } from "../../../enums/TipoCobertura.enum";
@@ -20,7 +20,7 @@ import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { origemMaterialConstrucao } from "../../../enums/OrigemMaterialConstrucao.enum";
 
 export interface imovelParam {
 imovelId: number, 
@@ -50,7 +50,7 @@ export const NovaBenfeitoria=()=>{
            handleOnChangeInput,
            enviarRegistro,
            disabled,
-           } = UseNovaBenfeitoria();
+           } = UseNovaBenfeitoria(params.imovelId, params.idLocal, params.sincronizado);
    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
    const toggleOption = (option:string) =>{
@@ -80,8 +80,8 @@ export const NovaBenfeitoria=()=>{
     const optionsInformativoPredominante = Object.values(InformativoPredominante)
 
     const handleEnviar=() =>{
-        console.log("id local"+ params.idLocal, "id imóvel"+ params.imovelId, "sincronizado: "+ params.sincronizado);
-        enviarRegistro(params.imovelId, params.idLocal, params.sincronizado);
+        
+        enviarRegistro();
 
     }
       
@@ -142,7 +142,7 @@ export const NovaBenfeitoria=()=>{
 
           
         <View>
-            {Object.values(OrigemMaterialConstrucao).map((option,index) =>(
+            {Object.values(origemMaterialConstrucao).map((option,index) =>(
                     <TouchableOpacity key={index} onPress={()=> toggleOption(option)}
                         style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10,}}>
 
@@ -224,6 +224,15 @@ export const NovaBenfeitoria=()=>{
       </Picker>
       </View>  
 
+      <Input 
+      value={novaBenfeitoria.importanciaDeProtegerFauna} 
+      onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerFauna')}
+      placeholder="..."
+      margin="0px 0px 16px 0px"
+      title="Em sua opnião, qual é a importência de proteger a fauna?"
+     
+      />
+      
       <Input 
       value={novaBenfeitoria.importanciaDeProtegerAmbiente} 
       onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
