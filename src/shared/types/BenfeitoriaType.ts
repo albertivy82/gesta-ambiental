@@ -1,6 +1,4 @@
-﻿import { Funcao } from "../../enums/Funcao.enum";
-import { TipoBenfeitoria } from "../../enums/TipoBenfeitoria.enum";
-
+﻿
 export interface BenfeitoriaType {
     id?: number;
     tipoBenfeitoria: string;
@@ -26,8 +24,7 @@ export interface BenfeitoriaType {
     imovel: {
         id: number;
     };
-    idLocalImovel?: string;
-    sincronizado: boolean;
+    sincronizado?: boolean;
     idLocal?: string;
-    
+    idFather?:string;
 }

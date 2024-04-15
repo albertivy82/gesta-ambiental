@@ -24,7 +24,7 @@ export const BenfeitoriaSchema = {
         qualEspacoPrecisaSerPreservado: 'string',
         problemasRelacionadosAoAmbiente: 'string',
         imovel: 'int?', 
-        sincronizado: 'bool',
+        sincronizado: 'bool?',
         idLocal: 'string?',
         idFather: 'string?'
     }

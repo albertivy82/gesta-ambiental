@@ -102,8 +102,7 @@ export const useImoveis = (localidadeId: number) =>{
          
           if(ImData && Array.isArray(ImData) && ImData.length> 0){
                await salvarImoveis(ImData)
-               console.log('Entrou da API')
-                const contagem = ImData.length;
+               const contagem = ImData.length;
                 setContagemImoveis(contagem);
           } else {
                 throw new Error('Dados de imóveis Inválidos');

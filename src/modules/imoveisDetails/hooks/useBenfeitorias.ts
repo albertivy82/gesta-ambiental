@@ -22,13 +22,18 @@ export const useBenfeitorias = (imovelId:number)=>{
     const fetchBefeitoriasAPI = async() =>{
 
         try{
-            const response = await connectionAPIGet(`http://192.168.100.28:8080/benfeitoria/imovel-benfeitoria/${imovelId}`);
+            const response = await connectionAPIGet<BenfeitoriaType[]>(`http://192.168.100.28:8080/benfeitoria/imovel-benfeitoria/${imovelId}`);
+                const bftData = response.map(bft=>({
+                    ...bft,
+                    sincronizado:true,
+                    idLocal:'',
+                    idFather:'',
 
-                const bftData = response as BenfeitoriaType[];
-
+                }))
+                    
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
-                    const constagem = bftData.length;
                     await salvarBenfeitoria(bftData);
+                    const constagem = bftData.length;
                     setcontagemBenfeitoria(constagem);
                 }else{
                     throw new Error('Dados de benfeitoria Inválidos'); 
