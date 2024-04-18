@@ -63,6 +63,11 @@ export const useImoveis = (localidadeId: number) =>{
                         const imovelAPI = response as imovelBody;
                        
                             if(imovelAPI.id){
+                                //aqui vai chamar as benfeitorias da fila que possuem apenas idlocal de imóvel
+                                //criar método de busca
+                                //realizar envio
+                                //se tiver filhos off line, buscá-los e enviá-los
+                                //apagar desde último descendente até este 'apagarImovelQueue' baixo
                                 apagarImovelQueue(imovel.idLocal!)
                             }
                     } catch (error) {

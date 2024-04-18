@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { imovelInput } from "../../shared/types/imovelInput";
 import { imovelBody } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";
@@ -14,9 +13,9 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
                     
                     const imovelRealm = realmInstance.objects('Imovel').filtered(`id == ${imovel.id}`)[0];
-                    console.log(imovelRealm);
+                    console.log('Imóvel recuperado do Realm:', imovelRealm);
                     if(imovel.sincronizado && imovelRealm && imovel.idLocal==''){
-                        console.log('testou certo', imovel)
+                        console.log('Atualizando imóvel existente:', imovel);
                               const imovelPadrao ={
                                     ...imovel,
                                     localidade: imovel.localidade.id,
@@ -24,7 +23,7 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
                                 realmInstance.create('Imovel', imovelPadrao, true);
                     }else{
-                        console.log('ERRO AQUI');
+                        console.log('Inserindo novo imóvel ou atualizando imóvel com condições diferentes:', imovel);
                         const imovelPadrao ={
                             ...imovel,
                            localidade: imovel.localidade.id,
@@ -112,7 +111,7 @@ export const getImoveisDessincronizados = (localidade:number): imovelBody[]=>{
     const cleanedQueue = JSON.parse(JSON.stringify(imoveisQueue));
 
     return cleanedQueue as imovelBody[];
-}
+};
 
 export const apagarImovelQueue = (imovelidLocal: string) => {
     try {

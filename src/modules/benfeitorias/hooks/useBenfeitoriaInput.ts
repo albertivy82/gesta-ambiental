@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
+import { salvarBenfeitoriaQueue } from "../../../realm/services/benfeitoriaService";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
 
 export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput =  {
 
@@ -33,7 +35,7 @@ export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput =  {
     }
 
 
-export const UseNovaBenfeitoria =(imovelId: number, idLocal : string|undefined, sincronizado: boolean)=>{
+export const UseNovaBenfeitoria =(imovelId: number, idImovelLocal : string|undefined, sincronizado: boolean)=>{
 
 const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaInput>(DEFAULT_BENFEITORIA_INPUT);
 const [disabled, setdisable] = useState<boolean>(true);
@@ -70,75 +72,63 @@ useEffect(()=>{
 },[novaBenfeitoria]);
 
 
-const objetoFilaA =()=>{
-     
-  const benfeitoriaData: BenfeitoriaInput = {
-   ...novaBenfeitoria, 
-    imovel: {
-      id:imovelId
-    },
-    sincronizado: false,  
-    idLocal: uuidv4(),
+const objetoFila =()=>{
 
-  }
+
+  const benfeitoriaData: BenfeitoriaInput = {
+    ...novaBenfeitoria, 
+     sincronizado: false,  
+     idLocal: uuidv4(),
+   }
+            //tem id do imóvel, será sincronizado no contexto de benfeitoria
+            if(imovelId){
+            
+                  benfeitoriaData.imovel!.id = imovelId
+            
+            }else{
+               //não tem id do imóvel, será sincronizado no contexto de sincronização de imóvel
+                  benfeitoriaData.imovel =  {id:0}
+                  benfeitoriaData.idFather =  idImovelLocal
+            }
+
   return benfeitoriaData
 }
 
-const objetoFilaB =()=>{
-     
-  const benfeitoriaData: BenfeitoriaInput = {
-   ...novaBenfeitoria, 
-    imovel: {
-      id:0
-    },
-    sincronizado: false,  
-    idLocal: uuidv4(),
-    idFather: idLocal,
-  }
-  return benfeitoriaData
-}
+
 
 
 
 const enviarRegistro = async () =>{
 
  
- 
-  if(!sincronizado && !imovelId){
-
-   
-   
-
-  }else{
+  //imovel offline
+      if(!sincronizado && !imovelId){
+        //imovel offline
+        const benfeitoriaDataQueue = objetoFila();
+        salvarBenfeitoriaQueue(benfeitoriaDataQueue);
       
-    
-    novaBenfeitoria.imovel = {id:imovelId};
-      
-    
-      
-      const netInfoState = await NetInfo.fetch();
-     
-        if(netInfoState.isConnected){
 
-            try{
-              
-              
-            
-              const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
-              console.log(benfeitoriaOk)
-            } catch (error) {
-              console.error('Erro Também precisa enviar para fila:', error);
-            }
-         
-        }else{
-          
-        }
-
-   
-
-  }
-
-  
+      }else{
+          novaBenfeitoria.imovel = {id:imovelId};
+          const netInfoState = await NetInfo.fetch();
+          const isConnected = await testConnection();
+        
+                if(netInfoState.isConnected && isConnected){
+                  
+                  try{
+                      const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
+                      console.log(benfeitoriaOk)
+                  } catch (error) {
+                      const benfeitoriaDataQueue = objetoFila();
+                      salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                      console.error('Erro Também precisa enviar para fila:', error);
+                  }
+                }else{
+                  const benfeitoriaDataQueue = objetoFila();
+                      salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                  
+                }
+      }
 }
 
 
