@@ -71,16 +71,18 @@ export const getBenfeitorias = (imovel:number): BenfeitoriaType[]=>{
     return cleanBenfeitoria as BenfeitoriaType[];
 };
 
-export const getBenfeitoriaDessincronizadas=(idImovelApi:number)=>{
+export const getBenfeitoriaDessincronizadas = (idImovelApi: number): BenfeitoriaType[] => {
+    const query = `imovel == "${idImovelApi}" AND sincronizado == false AND idFather == " "`;
+    const imoveisQueue = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query);
 
-            const query = `imovel == "${idImovelApi}" AND sincronizado == false AND idFather ==" "`;
+    //cópia para evitar modificações, mapear os objetos para um novo formato
+    const cleanedQueue = imoveisQueue.map(benfeitoria => ({
+        ...benfeitoria
+    }));
 
-            const imoveisQueue = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query).slice();
-
-            const cleanedQueue = JSON.parse(JSON.stringify(imoveisQueue));
-
-    return cleanedQueue as BenfeitoriaType[];
+    return cleanedQueue;
 };
+
 
 export const setIdImovelFromApi = (idImovelApi: number, imovelIdLocal: string) => {
     try {
