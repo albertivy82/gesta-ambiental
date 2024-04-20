@@ -71,10 +71,9 @@ export const getBenfeitorias = (imovel:number): BenfeitoriaType[]=>{
     return cleanBenfeitoria as BenfeitoriaType[];
 };
 
-export const getBenfeitoriaDessincronizadas=()=>{
+export const getBenfeitoriaDessincronizadas=(idImovelApi:number)=>{
 
-        
-            const query = `sincronizado == false`;
+            const query = `imovel == "${idImovelApi}" AND sincronizado == false AND idFather ==" "`;
 
             const imoveisQueue = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query).slice();
 
@@ -83,7 +82,25 @@ export const getBenfeitoriaDessincronizadas=()=>{
     return cleanedQueue as BenfeitoriaType[];
 };
 
-export const apagarImovelQueue = (idLocal: string) => {
+export const setIdImovelFromApi = (idImovelApi: number, imovelIdLocal: string) => {
+    try {
+        const query = `idFather == "${imovelIdLocal}" AND sincronizado == false`;
+        const benfeitoriaQueue = realmInstance.objects('Benfeitoria').filtered(query);
+
+        realmInstance.write(() => {
+            benfeitoriaQueue.forEach(benfeitoriaOrfan => {
+                benfeitoriaOrfan.idFather = '';  // Ajuste conforme a lógica do seu domínio
+                benfeitoriaOrfan.imovel = idImovelApi;
+            });
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+export const apagarBenfeitiaQueue = (idLocal: string) => {
     try {
         realmInstance.write(() => {
            

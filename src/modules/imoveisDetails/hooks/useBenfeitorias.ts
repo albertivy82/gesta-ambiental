@@ -1,4 +1,4 @@
-import { getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitoria } from "../../../realm/services/benfeitoriaService"
+import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitoria } from "../../../realm/services/benfeitoriaService"
 import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
@@ -38,43 +38,30 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
         return benfeitoriaInput
 }
 
-  
-
-
-
-
-export const useBenfeitorias = (imovelId:number)=>{
+ export const useBenfeitorias = (imovelId:number)=>{
 
     const [contagemBenfeitoria, setcontagemBenfeitoria] = useState<number>(0);
 
-    //este método precisa saber se há idmovel local ou idimoce sincronizado
-    //preciso utilizar useBenfeitorias em useImoveis para passar este método
-    //preciso gerenciar algum tipo de imovel aqui
-    const sinconizeBenfeitoriaQueue = async () => {
-        const benfeitoriaQueue = getBenfeitoriaDessincronizadas();
+   const sinconizeBenfeitoriaQueue = async () => {
+        const benfeitoriaQueue = getBenfeitoriaDessincronizadas(imovelId);
         if (benfeitoriaQueue.length > 0) {
             for (const benfeitoria of benfeitoriaQueue) {
-                //somente poderei fazer esta conversão se já houver o id de imóvel!!!!
-                const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
-                console.log(novaBenfeitoriaInput);
+               const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
+                //console.log(novaBenfeitoriaInput);
                 const netInfoState = await NetInfo.fetch();
                 if (netInfoState.isConnected) {
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
                             const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoriaInput);
-                            /*
-                            const imovelAPI = response as imovelBody;
+                            
+                            const benfeitoriaAPI = response as BenfeitoriaType;
                            
-                                if(imovelAPI.id){
-                                    //aqui vai chamar as benfeitorias da fila que possuem apenas idlocal de imóvel
-                                    //criar método de busca
-                                    //realizar envio
-                                    //se tiver filhos off line, buscá-los e enviá-los
-                                    //apagar desde último descendente até este 'apagarImovelQueue' baixo
-                                    apagarImovelQueue(imovel.idLocal!)
+                                if(benfeitoriaAPI.id){
+                                    //dar seu id para seus filhos
+                                    apagarBenfeitiaQueue(benfeitoriaAPI.idLocal!)
                                 }
-                                */
+                                
                         } catch (error) {
                             console.error('Erro na sincronização do imóvel:', error);
                         }

@@ -5,6 +5,7 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { setIdImovelFromApi } from "../../../realm/services/benfeitoriaService";
 
 export const convertToImovelInput=(imovel: any) => {
 
@@ -63,11 +64,9 @@ export const useImoveis = (localidadeId: number) =>{
                         const imovelAPI = response as imovelBody;
                        
                             if(imovelAPI.id){
-                                //aqui vai chamar as benfeitorias da fila que possuem apenas idlocal de imóvel
-                                //criar método de busca
-                                //realizar envio
-                                //se tiver filhos off line, buscá-los e enviá-los
-                                //apagar desde último descendente até este 'apagarImovelQueue' baixo
+                               //aqui ele vai dar uma pai no céu para todos os seus filhos
+                                setIdImovelFromApi(imovelAPI.id, imovel.idLocal! )
+                                //...Outros filhos de imovel
                                 apagarImovelQueue(imovel.idLocal!)
                             }
                     } catch (error) {
