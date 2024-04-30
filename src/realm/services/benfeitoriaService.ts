@@ -18,6 +18,7 @@ export const salvarBenfeitoria = (benfeitorias: BenfeitoriaType[]) => {
                     };
 
                     realmInstance.create('Benfeitoria', benfeitoriaCorrigida, true);
+                    console.log("salvarBenfeitoria", benfeitoriaCorrigida)
                     
                 });
             });
@@ -49,6 +50,7 @@ export const salvarBenfeitoriaQueue = (benfeitoria:BenfeitoriaInput)=>{
                         };
             
                         realmInstance.create('Benfeitoria', benfeitoriaPadrao, true);
+                        console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
                     });
 
                     resolve()
@@ -67,19 +69,24 @@ export const getBenfeitorias = (imovel:number): BenfeitoriaType[]=>{
     const benfeitorias = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query).slice(); 
     
     const cleanBenfeitoria = JSON.parse(JSON.stringify(benfeitorias));
+
+    console.log("getBenfeitorias", cleanBenfeitoria)
     
     return cleanBenfeitoria as BenfeitoriaType[];
 };
 
 export const getBenfeitoriaDessincronizadas = (idImovelApi: number): BenfeitoriaType[] => {
-    const query = `imovel == "${idImovelApi}" AND sincronizado == false AND idFather == " "`;
+    //ERRO, ESTOU TESTANDO APENAS O CASO DE JÁ HAVER
+    console.log("benfeitpria. ponto de sisncronização 3", idImovelApi)
+    const query = `imovel == "${idImovelApi}" AND sincronizado == false AND idFather == null`;
     const imoveisQueue = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query);
 
-    //cópia para evitar modificações, mapear os objetos para um novo formato
+    //cópia para evitar modificações, mapear os objetos para um novo formato 
     const cleanedQueue = imoveisQueue.map(benfeitoria => ({
         ...benfeitoria
     }));
 
+    console.log("getBenfeitoriaDessincronizadas", cleanedQueue)
     return cleanedQueue;
 };
 
@@ -96,6 +103,8 @@ export const setIdImovelFromApi = (idImovelApi: number, imovelIdLocal: string) =
             });
         });
 
+        console.log("setIdImovelFromApi")
+
     } catch (error) {
         console.error(error);
     }
@@ -108,11 +117,12 @@ export const apagarBenfeitiaQueue = (idLocal: string) => {
            
             const query = `idLocal == "${idLocal}"`;
             const benfeitoriaExcluir = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query);
-
+                console.log("benfeitoria que deveri ser apagada", query)
             if (benfeitoriaExcluir.length > 0) {
                 realmInstance.delete(benfeitoriaExcluir);
             } 
         });
+        console.log("apagarBenfeitiaQueue")
     } catch (error) {
         console.error('Erro ao excluir benfeitoria da fila:', error);
     }

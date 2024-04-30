@@ -8,7 +8,7 @@ import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 
 export const convertToBenfeitoriaInput=(benfeitoria: any) => {
 
-    
+console.log("imovel recuprado", benfeitoria.imovel.id)    
     const benfeitoriaInput: BenfeitoriaInput ={
         tipoBenfeitoria: benfeitoria.tipoBenfeitoria,
         funcao: benfeitoria.funcao,
@@ -31,7 +31,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
         qualEspacoPrecisaSerPreservado: benfeitoria.qualEspacoPrecisaSerPreservado,
         problemasRelacionadosAoAmbiente: benfeitoria.problemasRelacionadosAoAmbiente,
         imovel: {
-            id: benfeitoria.imovel.id,
+            id: benfeitoria.imovel,
         },
     }
     console.log('benfeitoriaInput', benfeitoriaInput)
@@ -43,23 +43,27 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
     const [contagemBenfeitoria, setcontagemBenfeitoria] = useState<number>(0);
 
    const sinconizeBenfeitoriaQueue = async () => {
+    console.log("benfeitpria. ponto de sisncronização 2")
         const benfeitoriaQueue = getBenfeitoriaDessincronizadas(imovelId);
+        console.log("benfeitpria. ponto de sisncronização 2.1", benfeitoriaQueue)
         if (benfeitoriaQueue.length > 0) {
             for (const benfeitoria of benfeitoriaQueue) {
                const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
-                //console.log(novaBenfeitoriaInput);
+               console.log("benfeitpria. ponto de sisncronização 4")
+                console.log("Como está esta benfeitoria?", novaBenfeitoriaInput);
                 const netInfoState = await NetInfo.fetch();
                 if (netInfoState.isConnected) {
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
                             const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoriaInput);
-                            
+                            console.log("benfeitpria. ponto de sisncronização 5")
                             const benfeitoriaAPI = response as BenfeitoriaType;
                            
                                 if(benfeitoriaAPI.id){
                                     //dar seu id para seus filhos
-                                    apagarBenfeitiaQueue(benfeitoriaAPI.idLocal!)
+                                    apagarBenfeitiaQueue(benfeitoria.idLocal!)
+                                    console.log("benfeitpria. ponto de sisncronização 6", )
                                 }
                                 
                         } catch (error) {
@@ -94,7 +98,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                     idFather:'',
 
                 }))
-                    
+                console.log("benfeitpria. circuito da API")    
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
                     await salvarBenfeitoria(bftData);
                     const constagem = bftData.length;
@@ -110,6 +114,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
     useEffect(()=>{
         fetchBenfeitoriasRealm();
         fetchBefeitoriasAPI();
+        sinconizeBenfeitoriaQueue();
     }, []);
 
     return {contagemBenfeitoria};

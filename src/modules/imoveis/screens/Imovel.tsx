@@ -91,7 +91,7 @@ const [imovel, setImovel] = useState<imovelBody[]>()
               data={imovel}
               extraData={imovel} 
               renderItem={({ item }) => <RenderItemImovel item={item} />}
-              keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'fallbackId'}
+              keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
 
 
 

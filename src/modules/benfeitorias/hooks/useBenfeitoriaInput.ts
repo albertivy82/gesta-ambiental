@@ -90,7 +90,7 @@ const objetoFila =()=>{
                   benfeitoriaData.imovel =  {id:0}
                   benfeitoriaData.idFather =  idImovelLocal
             }
-
+            console.log("benfeitoriadata, criação de objeto para envio", benfeitoriaData)
   return benfeitoriaData
 }
 
@@ -106,7 +106,7 @@ const enviarRegistro = async () =>{
         //imovel offline
         const benfeitoriaDataQueue = objetoFila();
         salvarBenfeitoriaQueue(benfeitoriaDataQueue);
-      
+        console.log("benfeitoria case: imóvel offline")
 
       }else{
           novaBenfeitoria.imovel = {id:imovelId};
@@ -118,14 +118,18 @@ const enviarRegistro = async () =>{
                   try{
                       const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
                       console.log(benfeitoriaOk)
+                      console.log("benfeitoria case: cadstrou")
+
                   } catch (error) {
                       const benfeitoriaDataQueue = objetoFila();
                       salvarBenfeitoriaQueue(benfeitoriaDataQueue);
-                      console.error('Erro Também precisa enviar para fila:', error);
+                      console.error('Erro Também precisa enviar para fila:', error); 
+                       console.log("benfeitoria case: mandou para fila por erro")
                   }
                 }else{
                   const benfeitoriaDataQueue = objetoFila();
                       salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                      console.log("benfeitoria case: fila benfeitoria offline")
                   
                 }
       }

@@ -56,7 +56,8 @@ const Benfeitorias = ()=>{
                 <FlatList
                     data={benfeitoria}
                     renderItem={({ item }) => <RenderItem item={item} />}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
+
                 />
 
                       

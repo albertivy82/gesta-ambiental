@@ -65,6 +65,7 @@ export const useImoveis = (localidadeId: number) =>{
                        
                             if(imovelAPI.id){
                                //aqui ele vai dar uma pai no céu para todos os seus filhos
+                               console.log("benfeitpria. ponto de sisncronização 1")
                                 setIdImovelFromApi(imovelAPI.id, imovel.idLocal! )
                                 //...Outros filhos de imovel
                                 apagarImovelQueue(imovel.idLocal!)

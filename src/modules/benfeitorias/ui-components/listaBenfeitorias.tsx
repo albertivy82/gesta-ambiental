@@ -25,7 +25,7 @@ const RenderItem = ({ item }: { item: BenfeitoriaType}) => {
                   
                   <Text
                   type={textTypes.BUTTON_REGULAR}
-                  color={theme.colors.blueTheme.blue1}
+                  color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
                    >
                     Benfeitoria: {item.id}
                    </Text>
@@ -33,14 +33,14 @@ const RenderItem = ({ item }: { item: BenfeitoriaType}) => {
                 
                 <Text
                   type={textTypes.BUTTON_REGULAR}
-                  color={theme.colors.blueTheme.blue1}
+                  color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
                 >
                   Função: {item.funcao}
                 </Text>
                 
                 <Text
                   type={textTypes.BUTTON_REGULAR}
-                  color={theme.colors.blueTheme.blue1}
+                  color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
                 >
                   Tipo: {item.tipoBenfeitoria}
                  
