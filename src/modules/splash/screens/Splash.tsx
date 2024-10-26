@@ -1,14 +1,16 @@
-import React, { useEffect} from 'react';
-import { Text } from "react-native";
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { getToken } from "../../../context/tokenStore";
-import { useNavigation, NavigationProp, ParamListBase } from '@react-navigation/native';
 import { ContainerSplash, ImagelogoSplash } from '../styles/splash.style';
+import useScreenDimensions from '../hooks/useScreenDimensions';
 
 const Splash = () =>{
     const {reset} = useNavigation<NavigationProp<ParamListBase>>();
+    const { width, height } = useScreenDimensions();
 
 useEffect(()=>{
-    const redirect = async ()=>{
+    
+  const redirect = async ()=>{
       
       setTimeout(async () => {
             const token = await getToken();
@@ -34,10 +36,15 @@ useEffect(()=>{
 
 
         
-          return (
-            <ContainerSplash>
-              <ImagelogoSplash resizeMode="contain" source={require('../../../assets/images/logo_2.png')} />
-            </ContainerSplash>
+  return (
+            <ContainerSplash width={width} height={height}>
+      <ImagelogoSplash
+        resizeMode="contain"
+        source={require('../../../assets/images/logo_2.png')}
+        width={width * 0.6}
+        height={height * 0.3}
+      />
+    </ContainerSplash>
           );
         
 }

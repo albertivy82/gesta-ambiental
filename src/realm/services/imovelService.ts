@@ -11,7 +11,9 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
                 imoveis.forEach(imovel=>{
 
-                    
+                    //essa duplicação de código foi feita para controlar atualizações de todas os registros
+                    //a primeir condição entram apenas atilizações
+                    //no segundo novos registros
                     const imovelRealm = realmInstance.objects('Imovel').filtered(`id == ${imovel.id}`)[0];
                     console.log('Imóvel recuperado do Realm:', imovelRealm);
                     if(imovel.sincronizado && imovelRealm && imovel.idLocal==''){
@@ -58,19 +60,19 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
             // Função para gerar um ID aleatório
             const Id = () => {
                 const min = Math.ceil(0);
-                const max = Math.floor(1000);
+                const max = -Math.floor(1000);
                 return Math.floor(Math.random() * (max - min + 1)) + min; 
             };
                    
             try {
                 realmInstance.write(() => {
-                    console.log('ERRO QUEUE');
+                   
                     const imovelPadrao = {
                         ...imovel,
                         id: Id(), 
                         localidade: imovel.localidade.id,
                     };
-        
+                    console.log(imovelPadrao.id)
                     realmInstance.create('Imovel', imovelPadrao, true);
                 });
         

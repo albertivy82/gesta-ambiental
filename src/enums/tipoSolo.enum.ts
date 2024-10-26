@@ -1,6 +1,5 @@
 export enum tipoSoloEnum {
-    Terreno_Natural = 'Terreno_Natural',
-    Vejetacao = 'Vejetacao',
-    Cimentado = 'Cimentado',
-    Outro = 'Outro',
+    VARZEA = 'VARZEA' ,
+    TERRA_FIRME = 'TERRA_FIRME',
+    IGAPO = 'IGAPO',
 }

@@ -7,6 +7,7 @@ import {WebView, WebViewNavigation } from 'react-native-webview';
 import { Icon } from '../../../shared/components/icon/Icon';
 import { theme } from '../../../shared/themes/theme';
 import { ContainerSplash, ImagelogoSplash } from '../../splash/styles/splash.style';
+import useScreenDimensions from '../hooks/useScreenDimensions';
 
 const generatePkceChallenge = () => {
   const challenge = pkceChallenge();
@@ -16,6 +17,7 @@ const generatePkceChallenge = () => {
 const Login = () => {
   const { handleUrlRedirect } = useRequest();
   const [webViewVisible, setWebViewVisible] = useState(false);
+  const { width, height } = useScreenDimensions();
 
   // Defina authorizationUrl fora da função handleAuthorization
   const challenge = generatePkceChallenge();
@@ -76,13 +78,17 @@ console.log(webViewVisible);
         />
       ) : (
         <View style={styles.container}>
-         <ContainerSplash>
-              <ImagelogoSplash resizeMode="contain" source={require('../../../assets/images/logo_2.png')} />
+         <ContainerSplash width={width} height={height}>
+              <ImagelogoSplash resizeMode="contain" source={require('../../../assets/images/logo_2.png')} 
+               width={width * 0.6}
+               height={height * 0.3}
+              />
            
           <TouchableOpacity style={styles.button} onPress={() => setWebViewVisible(true)}>
             <Icon name='enter' size={70} color={theme.colors.blueTheme.blue1}/>
             <Text style={styles.buttonText}>Fazer Login</Text>
           </TouchableOpacity>
+          
           </ContainerSplash>
       </View>
       )}

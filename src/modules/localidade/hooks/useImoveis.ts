@@ -52,7 +52,7 @@ export const useImoveis = (localidadeId: number) =>{
     const imovelQueue = getImoveisDessincronizados(localidadeId);
     if (imovelQueue.length > 0) {
         for (const imovel of imovelQueue) {
-            const novoImoveIput = convertToImovelInput(imovel)
+            const novoImoveIput = convertToImovelInput(imovel);
             console.log(novoImoveIput);
             const netInfoState = await NetInfo.fetch();
             if (netInfoState.isConnected) {
@@ -60,16 +60,16 @@ export const useImoveis = (localidadeId: number) =>{
                 if (isConnected) {
                     try {
                         const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImoveIput);
-                        
                         const imovelAPI = response as imovelBody;
                        
-                            if(imovelAPI.id){
-                               //aqui ele vai dar uma pai no céu para todos os seus filhos
-                               console.log("benfeitpria. ponto de sisncronização 1")
-                                setIdImovelFromApi(imovelAPI.id, imovel.idLocal! )
-                                //...Outros filhos de imovel
-                                apagarImovelQueue(imovel.idLocal!)
-                            }
+                        if (imovelAPI.id) {
+                            console.log("Imóvel sincronizado. ID recebido:", imovelAPI.id);
+                            // Atualizar as benfeitorias com o novo ID
+                            setIdImovelFromApi(imovelAPI.id, imovel.idLocal!);
+                            console.log("ID local do imóvel:", imovel.idLocal!);
+                            // Remover imóvel da fila
+                            apagarImovelQueue(imovel.idLocal!);
+                        }
                     } catch (error) {
                         console.error('Erro na sincronização do imóvel:', error);
                     }
@@ -78,6 +78,7 @@ export const useImoveis = (localidadeId: number) =>{
         }
     }
 };
+
 
    
    

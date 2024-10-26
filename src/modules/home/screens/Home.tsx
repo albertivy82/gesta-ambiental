@@ -49,13 +49,14 @@ const Home = () =>{
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={'#000000'}
               >
                 Nome: {item.nome}
               </Text>
+             
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={'#000000'}
               >
                
                 Município: {item.municipio}
@@ -63,7 +64,7 @@ const Home = () =>{
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
-                color={theme.colors.blueTheme.blue1}
+                color={'#000000'}
               >
                Iniciativa: {item.esfera}
               </Text>
@@ -89,16 +90,18 @@ const Home = () =>{
         
 
         <HomeContainer>
-           <View style={{  alignItems: 'center', 
+           <View style={{  
+            alignItems: 'center', 
             flexDirection: 'row',
-           borderBottomWidth: 3, 
-                          borderColor: theme.colors.blueTheme.blue1, 
-                          marginBottom: 10 
+            borderBottomWidth: 3, 
+            borderColor: theme.colors.grayTheme.gray100, 
+            marginBottom: 10, 
+            backgroundColor: '#505050' 
                           }}>
-           <Icon size={30} name='map2' color='#00008B'/>
+           <Icon size={30} name='map2' color='#f8f8fa'/>
           <Text 
           type={textTypes.TITLE_BOLD} 
-          color={theme.colors.blueTheme.blue1}
+          color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 20px">
             LISTA DE LOCALIDADES
             </Text>
@@ -116,9 +119,11 @@ const Home = () =>{
               justifyContent: 'space-between', 
               padding: 10, 
               borderWidth: 1, 
-              borderColor: theme.colors.blueTheme.blue2}}>
-                    <Icon size={40} name='point-right' color='blue' />
-                    <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>
+              borderColor: theme.colors.grayTheme.gray100, 
+              marginBottom: 10, 
+              backgroundColor: '#ff4500'}}>
+                    <Icon size={40} name='point-right' color='#fcf9f7' />
+                    <Text type={textTypes.BUTTON_BOLD} color={'#fcf9f7'}>
                       Inserir Nova Localidade
                     </Text>
                </View>

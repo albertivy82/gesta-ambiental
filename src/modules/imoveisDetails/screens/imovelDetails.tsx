@@ -24,6 +24,7 @@ export const novaBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigat
                                 imovelId: number, 
                                 idLocal:string|undefined,
                                 sincronizado:boolean)=>{
+                                  console.log("passando o param", idLocal)
   navigate('NovaBenfeitoria', {imovelId, idLocal, sincronizado})
 }
 
@@ -33,18 +34,17 @@ const ImovelDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const {contagemBenfeitoria} = useBenfeitorias(params.imovel.id);
   
-  
- 
-  const  handleGerenciaBenfeitorias =  (imovelId: number, 
-                                        idLocal:string|undefined, 
-                                        sincronizado: boolean, 
-                                        contagemBenfeitorias: number) =>{
-    if(contagemBenfeitorias>0){
-      benfeitoriasDoImovel(navigation.navigate, imovelId);
-    }else{
-      novaBenfeitoria(navigation.navigate, imovelId, idLocal, sincronizado);
-    }
-  }
+ const  handleGerenciaBenfeitorias =  (imovelId: number, 
+    idLocal:string|undefined, 
+    sincronizado: boolean, 
+    contagemBenfeitorias: number) =>{
+          if(contagemBenfeitorias>0){
+                      benfeitoriasDoImovel(navigation.navigate, imovelId);
+          }else{
+                    console.log("idLocal, 25/10/2024, 17:12", idLocal, imovelId)
+                      novaBenfeitoria(navigation.navigate, imovelId, idLocal, sincronizado);
+        }
+      }
   
   const renderField = (label: string, value: string | null| undefined) => {
      return (

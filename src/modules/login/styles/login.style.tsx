@@ -1,20 +1,18 @@
-import styled from 'styled-components/native'
+import { styled } from 'styled-components/native';
 
-export const ContainerLogin = styled.View`
-
-    height: 100%;
-    width: 100%;
-    background-color: #bacff1;
-    justify-content: center;
-    justify-items: center;
-    padding: 16px;
-`
-export const ImagelogoLogin = styled.Image`
-  width: 400px;
-  height: 240px;
-  display: flex;
+export const ContainerSplash = styled.View<{ width: number; height: number }>`
+  flex: 1;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
+  background-color: #000000;
   justify-content: center;
-  margin-bottom: 25px;
-  
+  align-items: center;
+  padding: 16px;
 `;
-  
+
+export const ImagelogoSplash = styled.Image<{ width: number; height: number }>`
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
+  max-width: 100%;
+  max-height: 100%;
+`;

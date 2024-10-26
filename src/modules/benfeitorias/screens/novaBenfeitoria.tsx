@@ -9,18 +9,18 @@ import { Funcao } from "../../../enums/Funcao.enum";
 import { InformativoPredominante } from "../../../enums/InformativoPredominante.enum";
 import { NivelAlagamento } from "../../../enums/NivelAlagamento.enum";
 import { Ocorrencia } from "../../../enums/Ocorrencia.enum";
+import { origemMaterialConstrucao } from "../../../enums/OrigemMaterialConstrucao.enum";
 import { Residuos } from "../../../enums/Residuos.enum";
 import { TipoBenfeitoria } from "../../../enums/TipoBenfeitoria.enum";
 import { TipoCobertura } from "../../../enums/TipoCobertura.enum";
 import { TipoConstrucao } from "../../../enums/TipoConstrucao.enum";
 import { TipoEsquadrias } from "../../../enums/TipoEsquadrias.enum";
-import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
+import { tipoSoloBenfeitoriaEnum } from "../../../enums/tipoSoloBenfeitoria.enum copy";
 import Input from "../../../shared/components/input/input";
 import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
-import { origemMaterialConstrucao } from "../../../enums/OrigemMaterialConstrucao.enum";
 
 export interface imovelParam {
 imovelId: number, 
@@ -53,6 +53,9 @@ export const NovaBenfeitoria=()=>{
            } = UseNovaBenfeitoria(params.imovelId, params.idLocal, params.sincronizado);
    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
+   console.log("25/10/2024, 18:37", params.idLocal)
+ 
+
    const toggleOption = (option:string) =>{
      if (selectedOptions.includes(option)){
         setSelectedOptions(selectedOptions.filter(item=> item !== option));
@@ -67,7 +70,7 @@ export const NovaBenfeitoria=()=>{
 
     const optionsTipoBenfeitoria = Object.values(TipoBenfeitoria)
     const optionsFuncao = Object.values(Funcao)
-    const optionsTipoSolo = Object.values(tipoSoloEnum)
+    const optionsTipoSolo = Object.values(tipoSoloBenfeitoriaEnum)
     const optionsTipoConstrucao = Object.values(TipoConstrucao)
     const optionsTipoCobertura = Object.values(TipoCobertura)
     const optionsTipoEsquadrias = Object.values(TipoEsquadrias)

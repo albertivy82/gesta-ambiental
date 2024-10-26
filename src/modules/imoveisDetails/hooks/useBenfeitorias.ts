@@ -1,4 +1,4 @@
-import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitoria } from "../../../realm/services/benfeitoriaService"
+import { apagarBenfeitiaQueue, apagarQueueBenfeitoria, apagarQueueImovel, getAllBenfeitorias, getAllImoveis, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitoria } from "../../../realm/services/benfeitoriaService"
 import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
@@ -8,7 +8,6 @@ import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 
 export const convertToBenfeitoriaInput=(benfeitoria: any) => {
 
-console.log("imovel recuprado", benfeitoria.imovel.id)    
     const benfeitoriaInput: BenfeitoriaInput ={
         tipoBenfeitoria: benfeitoria.tipoBenfeitoria,
         funcao: benfeitoria.funcao,
@@ -34,18 +33,22 @@ console.log("imovel recuprado", benfeitoria.imovel.id)
             id: benfeitoria.imovel,
         },
     }
-    console.log('benfeitoriaInput', benfeitoriaInput)
+   
         return benfeitoriaInput
 }
+
 
  export const useBenfeitorias = (imovelId:number)=>{
 
     const [contagemBenfeitoria, setcontagemBenfeitoria] = useState<number>(0);
 
    const sinconizeBenfeitoriaQueue = async () => {
-    console.log("benfeitpria. ponto de sisncronização 2")
+   
+
+    if(imovelId>0){
+        console.log("useBenfeitorias/sinconizeBenfeitoriaQueue")
         const benfeitoriaQueue = getBenfeitoriaDessincronizadas(imovelId);
-        console.log("benfeitpria. ponto de sisncronização 2.1", benfeitoriaQueue)
+      
         if (benfeitoriaQueue.length > 0) {
             for (const benfeitoria of benfeitoriaQueue) {
                const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
@@ -73,6 +76,9 @@ console.log("imovel recuprado", benfeitoria.imovel.id)
                 }
             }
         }
+
+    }
+    
     };
  
 

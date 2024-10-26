@@ -61,8 +61,11 @@ const TabNavigation = ()=>{
 
             return <Icon size={20} name={iconName} color={color}/>;
       },
-      tabBarActiveTintColor: theme.colors.blueTheme.blue1,
-      tabBarInactiveTintColor: theme.colors.grayTheme.gray100,
+      tabBarActiveTintColor: "#fcf9f7",
+      tabBarInactiveTintColor: "#ff4500",
+      tabBarStyle: {
+        backgroundColor: 'black', // Cor de fundo do rodapé
+      },
       })}
       >
       <Tab.Screen name="HOME" component={Home} />

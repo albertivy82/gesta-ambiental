@@ -72,27 +72,41 @@ useEffect(()=>{
 },[novaBenfeitoria]);
 
 
-const objetoFila =()=>{
-
+const objetoFila = () => {
+  console.log("Iniciando criação do objeto fila...");
 
   const benfeitoriaData: BenfeitoriaInput = {
-    ...novaBenfeitoria, 
-     sincronizado: false,  
-     idLocal: uuidv4(),
-   }
-            //tem id do imóvel, será sincronizado no contexto de benfeitoria
-            if(imovelId){
-            
-                  benfeitoriaData.imovel!.id = imovelId
-            
-            }else{
-               //não tem id do imóvel, será sincronizado no contexto de sincronização de imóvel
-                  benfeitoriaData.imovel =  {id:0}
-                  benfeitoriaData.idFather =  idImovelLocal
-            }
-            console.log("benfeitoriadata, criação de objeto para envio", benfeitoriaData)
-  return benfeitoriaData
-}
+      ...novaBenfeitoria, 
+      sincronizado: false,  
+      idLocal: uuidv4(), // Cria um ID único para a benfeitoria
+  };
+  // Verifica se o imóvel já possui um ID oficial (sincronizado)
+  if (imovelId>0) {
+      console.log("ID do imóvel encontrado:", imovelId);
+      // Se sim, usa o ID oficial
+      benfeitoriaData.imovel!.id = imovelId;
+      benfeitoriaData.idFather = "";
+      console.log("ID oficial do imóvel atribuído a benfeitoriaData:", benfeitoriaData.imovel);
+  } else {
+      console.log("Imóvel não possui ID oficial ainda. Verificando idLocal...");
+
+      if (idImovelLocal) {
+          console.log("ID local do imóvel encontrado:", idImovelLocal);
+          // Usa o idLocal do imóvel como referência
+          benfeitoriaData.idFather = idImovelLocal;
+          benfeitoriaData.imovel!.id = imovelId;
+      } else {
+          console.warn("ID local do imóvel não encontrado. Verifique se está sendo passado corretamente.");
+      }
+
+    
+  }
+
+  console.log("Objeto benfeitoriaData final:", benfeitoriaData);
+  return benfeitoriaData;
+};
+
+
 
 
 
@@ -102,7 +116,7 @@ const enviarRegistro = async () =>{
 
  
   //imovel offline
-      if(!sincronizado && !imovelId){
+      if(!sincronizado && imovelId<=0){
         //imovel offline
         const benfeitoriaDataQueue = objetoFila();
         salvarBenfeitoriaQueue(benfeitoriaDataQueue);
@@ -118,7 +132,7 @@ const enviarRegistro = async () =>{
                   try{
                       const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
                       console.log(benfeitoriaOk)
-                      console.log("benfeitoria case: cadstrou")
+                      console.log("benfeitoria case: cadastrou")
 
                   } catch (error) {
                       const benfeitoriaDataQueue = objetoFila();

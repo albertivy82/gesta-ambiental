@@ -92,10 +92,6 @@ const [imovel, setImovel] = useState<imovelBody[]>()
               extraData={imovel} 
               renderItem={({ item }) => <RenderItemImovel item={item} />}
               keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
-
-
-
-
              
           />
                 
