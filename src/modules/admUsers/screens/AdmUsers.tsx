@@ -1,13 +1,12 @@
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { useEffect } from 'react';
 import { Button, FlatList, TouchableOpacity, View } from 'react-native';
-import { AdmUsersContainer } from "../styles/AdmUser.style";
-import { useUserReducer } from "../../../store/reducers/userReducer/useUserReducer";
-import { UserBody } from "../../../shared/types/userBody";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
-import { theme } from "../../../shared/themes/theme";
-import { useEffect } from 'react';
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
+import { UserBody } from "../../../shared/types/userBody";
+import { useUserReducer } from "../../../store/reducers/userReducer/useUserReducer";
+import { AdmUsersContainer } from "../styles/AdmUser.style";
 
 
 
@@ -32,13 +31,13 @@ const AdmUsers = ()=>{
              <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
                   <Text
                     type={textTypes.BUTTON_REGULAR}
-                    color={theme.colors.blueTheme.blue1}
+                    color={"#000000"}
                   >
                     Nome: {item.nome}
                    </Text>
                   <Text
                     type={textTypes.BUTTON_REGULAR}
-                    color={theme.colors.blueTheme.blue1}
+                    color={"#000000"}
                   >
                   matrícula: {item.matricula}
                   </Text>
@@ -79,10 +78,10 @@ const AdmUsers = ()=>{
       return(
 
        <AdmUsersContainer>
-          <View style={{ borderBottomWidth: 3, borderColor: theme.colors.blueTheme.blue1, marginBottom: 10 }}>
+          <View style={{ borderBottomWidth: 3, borderColor: "#000000", marginBottom: 10 }}>
             <Text 
             type={textTypes.PARAGRAPH_BOLD} 
-            color={theme.colors.blueTheme.blue1}
+            color={"#000000"}
             margin="0px 0px 0px 60px">
                 LISTA DE USUÁRIOS DO SISTEMA
             </Text>
@@ -97,6 +96,7 @@ const AdmUsers = ()=>{
         <Button
              title="Adicionar Usuário"
               onPress={handlegestUser}
+              color={"#ff4500"}
          />
         </AdmUsersContainer>
     );

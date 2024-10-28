@@ -52,17 +52,19 @@ const [imovel, setImovel] = useState<imovelBody[]>()
 
   return (
     <ImovelContainer>
-            <View style={{  alignItems: 'center', 
+            <View style={{  
+            alignItems: 'center', 
             flexDirection: 'row',
-           borderBottomWidth: 3, 
-                          borderColor: theme.colors.blueTheme.blue1, 
-                          marginBottom: 10 
+            borderBottomWidth: 3, 
+            borderColor: theme.colors.grayTheme.gray100, 
+            marginBottom: 10, 
+            backgroundColor: '#505050' 
                           }}>
-           <Icon size={30} name='stack' color='#00008B'/>
+           <Icon size={30} name='stack' color='#fefeff'/>
           <Text 
           type={textTypes.TITLE_BOLD} 
-          color={theme.colors.blueTheme.blue1}
-          margin="0px 0px 0px 20px">
+          color={theme.colors.whiteTheme.white}
+          margin="0px 0px 0px 25px">
             LISTA DE IMÓVEIS
             </Text>
           

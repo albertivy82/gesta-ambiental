@@ -51,7 +51,7 @@ const UserDetails = ()=>{
     const renderField = (label: string, value: string | null)=>{
         return (
         <View style={{ marginBottom: 10 }}>
-                <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.blueTheme.blue1}>
+                <Text type={textTypes.BUTTON_REGULAR} color={"#000000"}>
                     {label}:{value || 'informação não cadastrada'}
         </Text>
         </View>)
@@ -69,17 +69,21 @@ const UserDetails = ()=>{
            {renderField('Perfil', user.grupo.nome)}          
           
            
-           
-           <Button
-             title="Editar usuário"
-             onPress={handleEditUser}
-            />
+           <View>
+                <Button
+                    title="Editar usuário"
+                    onPress={handleEditUser}
+                    color={"#ff4500"}
+                />
+            </View>
 
-            <Button
-             title="excluir usuário"
-             onPress={handleDeleteUser}
-            />
-
+            <View style={{ marginTop: 15 }}>
+                <Button
+                    title="Excluir usuário"
+                    onPress={handleDeleteUser}
+                    color={"#ff4500"}
+                />
+            </View>
         </UserContainer>
     );
 

@@ -8,6 +8,8 @@ export interface PostoType {
     localidade:{
         id: number,
     }
+    sincronizado: boolean;
+    idLocal?: string;
 
 }
 

@@ -9,6 +9,7 @@ import { theme } from '../../../shared/themes/theme';
 import { grupoEnum } from '../../../enums/grupo.enum';
 import { Picker } from '@react-native-picker/picker';
 import Text from '../../../shared/components/text/Text';
+import { textTypes } from '../../../shared/components/text/textTypes';
 
 
 
@@ -105,20 +106,30 @@ const {sendUser,
                   keyboardType='number-pad'
                   ref={cpfInput}/>
 
-                  <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.blueTheme.blue1 }}>
-                              <Picker
+                 <Text
+                        type={textTypes.SUB_TITLE_BOLD}
+                        color={theme.colors.mainTheme.black}
+                        margin="0px 0px 8px 0px">
+                        Perfil:
+                 </Text>
+
+                 <View style={{ marginBottom: 20, backgroundColor: "#FFFFFF", borderRadius: 8 }}>
+                        <Picker
                               selectedValue={novoUsuario.grupo}
-                              onValueChange={(value) => handleGrupoChange(value)}>
-                                    <Picker.Item label="Selecione um Perfil" color="blue" value="" />
-                                          {grupoOptions.map(grupo => (
-                                          <Picker.Item key={grupo} label={grupo} value={grupo} />
-                                          ))}
-                              </Picker>
-                  </View> 
+                              onValueChange={(value) => handleGrupoChange(value)}
+                              style={{ color: theme.colors.mainTheme.black }}
+                              dropdownIconColor={"#000000"}
+                        >
+                              <Picker.Item label="Selecione um Perfil" color={"#000000"} value="" />
+                              {grupoOptions.map(grupo => (
+                                    <Picker.Item key={grupo} label={grupo} value={grupo} />
+                              ))}
+                        </Picker>
+                </View>
 
                   
                   
-                  <Button title="enviar" disabled={disabled} onPress={enviar}/>
+                  <Button title="enviar" disabled={disabled} onPress={enviar} color={"#ff4500"}/>
             </GetaUserContainer>
       );
 

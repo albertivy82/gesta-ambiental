@@ -53,7 +53,7 @@ export const useImoveis = (localidadeId: number) =>{
     if (imovelQueue.length > 0) {
         for (const imovel of imovelQueue) {
             const novoImoveIput = convertToImovelInput(imovel);
-            console.log(novoImoveIput);
+            //console.log(novoImoveIput);
             const netInfoState = await NetInfo.fetch();
             if (netInfoState.isConnected) {
                 const isConnected = await testConnection();
@@ -63,10 +63,10 @@ export const useImoveis = (localidadeId: number) =>{
                         const imovelAPI = response as imovelBody;
                        
                         if (imovelAPI.id) {
-                            console.log("Imóvel sincronizado. ID recebido:", imovelAPI.id);
+                            //console.log("Imóvel sincronizado. ID recebido:", imovelAPI.id);
                             // Atualizar as benfeitorias com o novo ID
                             setIdImovelFromApi(imovelAPI.id, imovel.idLocal!);
-                            console.log("ID local do imóvel:", imovel.idLocal!);
+                            //console.log("ID local do imóvel:", imovel.idLocal!);
                             // Remover imóvel da fila
                             apagarImovelQueue(imovel.idLocal!);
                         }
@@ -96,8 +96,10 @@ export const useImoveis = (localidadeId: number) =>{
    
    const fetchImoveisFromAPI = async () => {
 
-
-     
+    const netInfoState = await NetInfo.fetch();
+    if (netInfoState.isConnected) {
+        const isConnected = await testConnection();
+        if (isConnected) {
       try {
           const imoveisAPI = await connectionAPIGet<imovelBody[]>(`http://192.168.100.28:8080/imovel/localidade-imovel/${localidadeId}`);
          const ImData = imoveisAPI.map(imovel => ({
@@ -115,8 +117,9 @@ export const useImoveis = (localidadeId: number) =>{
           }
 
       } catch (error) {
-        console.error("CONTAGEM DE IMOVEIS-ERRO!!!:", error);
+        console.log("CONTAGEM DE IMOVEIS-ERRO!!!:", error);
       }
+    }}
       
     };
 

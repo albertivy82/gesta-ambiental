@@ -8,5 +8,7 @@ export const PostoSchema = {
       urgenciaEmergencia: 'string',
       medicosPorTurno: 'int',
       localidade: 'int',
+      sincronizado: 'bool',
+      idLocal: 'string?',
  }
 };

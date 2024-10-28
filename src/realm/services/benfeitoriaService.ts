@@ -109,12 +109,12 @@ export const setIdImovelFromApi = (idImovelApi: number, imovelIdLocal: string) =
         const query = `idFather == "${imovelIdLocal}" AND (sincronizado == false and sincronizado == false)`;
         const benfeitoriaQueue = realmInstance.objects('Benfeitoria').filtered(query);
 
-        console.log("Conjunto de benfeitorias que precisam receber o ID do pai:", benfeitoriaQueue);
+        //console.log("Conjunto de benfeitorias que precisam receber o ID do pai:", benfeitoriaQueue);
 
         if (benfeitoriaQueue.length > 0) {
             realmInstance.write(() => {
                 benfeitoriaQueue.forEach(benfeitoriaOrfan => {
-                    console.log("Atualizando benfeitoria:", benfeitoriaOrfan);
+                   // console.log("Atualizando benfeitoria:", benfeitoriaOrfan);
                     // Atualizar o ID do pai (imovel) para o ID vindo da API
                     benfeitoriaOrfan.imovel = idImovelApi;
                     // Se quiser manter o idFather para referência futura, pode comentá-la
@@ -122,12 +122,12 @@ export const setIdImovelFromApi = (idImovelApi: number, imovelIdLocal: string) =
                 });
             });
 
-            console.log("Benfeitorias atualizadas com o novo ID:", benfeitoriaQueue);
+           // console.log("Benfeitorias atualizadas com o novo ID:", benfeitoriaQueue);
         } else {
-            console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+           // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
         }
 
-        console.log("setIdImovelFromApi completado");
+       // console.log("setIdImovelFromApi completado");
 
     } catch (error) {
         console.error("Erro ao atualizar benfeitorias:", error);

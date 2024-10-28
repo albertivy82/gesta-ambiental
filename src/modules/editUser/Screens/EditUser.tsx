@@ -39,7 +39,7 @@ const EditUser = () =>{
                    ref={senhaNovaInput}
               />
 
-              <Button title="enviar" disabled={disabled} onPress={handleEnviar} />
+              <Button title="enviar" disabled={disabled} onPress={handleEnviar} color={"#ff4500"} />
         </EditUserContainer>
   );
 

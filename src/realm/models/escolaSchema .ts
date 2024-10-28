@@ -4,9 +4,12 @@ export const EscolaSchema = {
     properties: {
       id: 'int',
       nome: 'string',
+      iniciativa: 'string',
       merenda: 'string',
       transporte: 'string',
       educacaoAmbiental: 'string',
       localidade:'int',
+      sincronizado: 'bool',
+      idLocal: 'string?',
  }
 };

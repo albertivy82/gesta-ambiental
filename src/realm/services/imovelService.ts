@@ -12,12 +12,12 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
                 imoveis.forEach(imovel=>{
 
                     //essa duplicação de código foi feita para controlar atualizações de todas os registros
-                    //a primeir condição entram apenas atilizações
+                    //a primeira condição entram apenas atualizações
                     //no segundo novos registros
                     const imovelRealm = realmInstance.objects('Imovel').filtered(`id == ${imovel.id}`)[0];
-                    console.log('Imóvel recuperado do Realm:', imovelRealm);
+                    //console.log('Imóvel recuperado do Realm:', imovelRealm);
                     if(imovel.sincronizado && imovelRealm && imovel.idLocal==''){
-                        console.log('Atualizando imóvel existente:', imovel);
+                       // console.log('Atualizando imóvel existente:', imovel);
                               const imovelPadrao ={
                                     ...imovel,
                                     localidade: imovel.localidade.id,
@@ -25,7 +25,7 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
                                 realmInstance.create('Imovel', imovelPadrao, true);
                     }else{
-                        console.log('Inserindo novo imóvel ou atualizando imóvel com condições diferentes:', imovel);
+                       // console.log('Inserindo novo imóvel ou atualizando imóvel com condições diferentes:', imovel);
                         const imovelPadrao ={
                             ...imovel,
                            localidade: imovel.localidade.id,
