@@ -13,14 +13,14 @@ import { transporteEnum } from "../../../enums/transporte.enum";
 import Input from "../../../shared/components/input/input";
 import { theme } from "../../../shared/themes/theme";
 import { useNovoImovel } from "../hooks/useInputImovel";
-import { ImovelContainer } from "../styles/Imovel.style";
+import { ImovelContainer } from "../styles/Postos.style";
 
 
 export interface idParam {
 localidadeId: number;
 }
 
-export const NovoImovel = ()=>{
+export const NovoPosto = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   
   const { novoImovel,

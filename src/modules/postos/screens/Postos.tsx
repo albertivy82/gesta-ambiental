@@ -1,45 +1,45 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
+import { getPostos } from '../../../realm/services/postoService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
+import { PostoType } from '../../../shared/types/postoTypes';
+import { PostoContainer } from '../styles/Postos.style';
+import RenderItemImovel from '../ui-components/listaPostos';
 
-export interface ImoveisParam {
+export interface EscolaParam {
   localidadeId: number;
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const novoPosto = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
+  navigate('NovoPosto', { localidadeId });
 }
 
-const Imoveis = () => {
+const Postos = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
+  const route = useRoute<RouteProp<Record<string, EscolaParam>, 'Posto'>>();
   const { localidadeId } = route.params;
   const flatListRef = useRef<FlatList>(null);
 
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
+  const [posto, setPosto] = useState<PostoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
+  const fetchPosto = useCallback(async () => {
     setIsLoading(true);
     if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+      const imovelRealm = getPostos(localidadeId);
+      setPosto(imovelRealm);
     }
     setIsLoading(false);
   }, [localidadeId]);
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchPosto();
+  }, [fetchPosto]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -48,16 +48,16 @@ const Imoveis = () => {
 
   // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchPosto();
     handleScrollToEnd();
   };
 
   const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+    novoPosto(navigation.navigate, localidadeId);
   };
 
   return (
-    <ImovelContainer>
+    <PostoContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -72,7 +72,7 @@ const Imoveis = () => {
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          LISTA DE IMÓVEIS
+          LISTA DE POSTOS
         </Text>
       </View>
 
@@ -108,7 +108,7 @@ const Imoveis = () => {
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
+            Add Posto
           </Text>
         </TouchableOpacity>
       </View>
@@ -118,14 +118,14 @@ const Imoveis = () => {
       ) : (
         <FlatList
           ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
+          data={posto}
+          extraData={posto} 
           renderItem={({ item }) => <RenderItemImovel item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       )}
-    </ImovelContainer>
+    </PostoContainer>
   );
 }
 
-export default Imoveis;
+export default Postos;

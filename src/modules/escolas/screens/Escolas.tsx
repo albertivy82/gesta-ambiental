@@ -1,45 +1,45 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
+import { getEscolas } from '../../../realm/services/escolaService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
+import { EscolaType } from '../../../shared/types/EscolaType';
+import { EscolaContainer } from '../styles/Escolas.style';
+import RenderItemEscola from '../ui-components/listaEscolas';
 
-export interface ImoveisParam {
+export interface EscolasParam {
   localidadeId: number;
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const novaEscola = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
+  navigate('NovaEscola', { localidadeId });
 }
 
-const Imoveis = () => {
+const Escolas = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
+  const route = useRoute<RouteProp<Record<string, EscolasParam>, 'Imovel'>>();
   const { localidadeId } = route.params;
   const flatListRef = useRef<FlatList>(null);
 
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
+  const [escola, setEscola] = useState<EscolaType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
+  const fetchEscolas = useCallback(async () => {
     setIsLoading(true);
     if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+      const escolasRealm = getEscolas(localidadeId);
+      setEscola(escolasRealm);
     }
     setIsLoading(false);
   }, [localidadeId]);
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchEscolas();
+  }, [fetchEscolas]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -48,16 +48,16 @@ const Imoveis = () => {
 
   // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchEscolas();
     handleScrollToEnd();
   };
 
   const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+    novaEscola(navigation.navigate, localidadeId);
   };
 
   return (
-    <ImovelContainer>
+    <EscolaContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -72,7 +72,7 @@ const Imoveis = () => {
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          LISTA DE IMÓVEIS
+          LISTA DE ESCOLAS
         </Text>
       </View>
 
@@ -108,7 +108,7 @@ const Imoveis = () => {
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
+            Add Escola
           </Text>
         </TouchableOpacity>
       </View>
@@ -118,14 +118,14 @@ const Imoveis = () => {
       ) : (
         <FlatList
           ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
+          data={escola}
+          extraData={escola} 
+          renderItem={({ item }) => <RenderItemEscola item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       )}
-    </ImovelContainer>
+    </EscolaContainer>
   );
 }
 
-export default Imoveis;
+export default Escolas;

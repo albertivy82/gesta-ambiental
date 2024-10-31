@@ -14,6 +14,8 @@ import ConsumoItens from "./modules/compras/screens/ConsumoItens";
 import Coordenadas from "./modules/coordenadas";
 import { Dependencias } from "./modules/dependencias/screens/dependencias";
 import EditUser from "./modules/editUser";
+import Escolas from "./modules/escolas/screens/Escolas";
+import { NovaEscola } from "./modules/escolas/screens/novaEscola";
 import Home from "./modules/home";
 import Imovel from "./modules/imoveis/screens/Imovel";
 import { NovoImovel } from "./modules/imoveis/screens/novoImovel";
@@ -21,6 +23,8 @@ import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
 import Login from "./modules/login";
+import Postos from "./modules/postos/screens/Postos";
+import { NovoPosto } from "./modules/postos/screens/novoPosto";
 import ProfileUser from "./modules/profileUser";
 import Splash from "./modules/splash";
 import UserDetails from "./modules/userDetails";
@@ -134,6 +138,10 @@ const Navigation =() =>{
           <Stack.Screen name="Dependencias" component={Dependencias} options={{title: 'Dependências'}} />
           <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
           <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
+          <Stack.Screen name="Postos" component={Postos} options={{title: 'Postos'}} />
+          <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
+          <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Ecolas'}} />
+          <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );
