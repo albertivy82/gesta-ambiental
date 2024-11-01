@@ -14,6 +14,7 @@ import Input from "../../../shared/components/input/input";
 import { theme } from "../../../shared/themes/theme";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelContainer } from "../styles/Imovel.style";
+import { RenderPicker } from "../../../shared/components/input/renderPicker";
 
 
 export interface idParam {
@@ -48,7 +49,6 @@ export const NovoImovel = ()=>{
     const lazerOptions = Object.values(esporteLazerEnum);
     const simNaoOptions =  Object.values(SimNaoTalvez);
     const vizinhoOptions =  Object.values(Vizinhos);
-    
     const ruaInput = useRef<TextInput>(null);
     const numeroInput = useRef<TextInput>(null);
     const bairroInput = useRef<TextInput>(null);
@@ -134,53 +134,37 @@ export const NovoImovel = ()=>{
                 ref={areaImovelInput}
             />
 
-
-
-
-            <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-                <Picker
+            <RenderPicker
+              label="Possui vizinhos?"
               selectedValue={novoImovel.vizinhos}
-              onValueChange={(value) => handleVizinhosChange(value)}>
-                <Picker.Item label="Possui vizinhos?" color="black" value="" />
-                        {vizinhoOptions.map(vizinhos => (
-                <Picker.Item key={vizinhos} label={vizinhos} value={vizinhos} />
-                        ))}
-                </Picker>
-            </View>
+               onValueChange={handleVizinhosChange}
+               options={vizinhoOptions}
+            />
 
-            <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
+             <RenderPicker
+              label="Situação Fundiária"
               selectedValue={novoImovel.situacaoFundiaria}
-              onValueChange={(value) => handleFundiarioChange(value)}>
-                  <Picker.Item label="Qual a situação fundiária do imóvel?" color="black" value="" />
-                        {fundiarioOptions.map(fundiario => (
-                          <Picker.Item key={fundiario} label={fundiario} value={fundiario} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
-           
-           <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
-              selectedValue={novoImovel.documentacaoImovel}
-              onValueChange={(value) => handleDocumentacaoChange(value)}>
-                  <Picker.Item label="Possui documentação?" color="black" value="" />
-                        {documentacaoOptions.map(documentacao => (
-                          <Picker.Item key={documentacao} label={documentacao} value={documentacao} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
+               onValueChange={handleFundiarioChange}
+               options={fundiarioOptions}
+            />
 
-           <Input 
-              value={novoImovel.dataChegada} 
-              onChange={(event)=> handleOnChangeData(event, 'dataChegada')}
-              placeholder="data da chegada"
-              margin="0px 0px 16px 0px"
-              title="Desde quando está no imóvel?"
-              />
+
+             <RenderPicker
+              label="Possui documentação?"
+              selectedValue={novoImovel.documentacaoImovel}
+               onValueChange={handleDocumentacaoChange}
+               options={documentacaoOptions}
+            />
+
+
+            <Input 
+                value={novoImovel.dataChegada} 
+                onChange={(event)=> handleOnChangeData(event, 'dataChegada')}
+                placeholder="Data de Chegada"
+                margin="0px 0px 16px 0px"
+                title="Desde quando está no imóvel?"
+                type="data" 
+            />
 
            <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
             <Picker
@@ -302,7 +286,7 @@ export const NovoImovel = ()=>{
 
           
           <View style={{ marginTop:40 }}>
-          <Button title="enviar" disabled={disabled} onPress={handleEnviar} />
+          <Button title="enviar" disabled={disabled} color='#ff4500' onPress={handleEnviar} />
           </View>
  
     

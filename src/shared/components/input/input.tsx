@@ -12,8 +12,17 @@ interface InputProps extends TextInputProps {
     title?: string;
     errorMessage?: string;
     margin?: string;
-    type?: 'matricula' | 'cpf';
+    type?: 'matricula' | 'cpf' | 'data';
 }
+
+const applyDateMask = (value: string) => {
+  return value
+      .replace(/\D/g, '') // Remove qualquer caractere não numérico
+      .replace(/^(\d{2})(\d)/, '$1/$2') // Insere a primeira barra após o dia
+      .replace(/(\d{2})(\d{1,4})$/, '$1/$2') // Insere a segunda barra após o mês
+      .slice(0, 10); // Limita o comprimento para 10 caracteres
+};
+
 
 const Input = forwardRef<TextInput, InputProps>(
     (
@@ -27,12 +36,10 @@ const Input = forwardRef<TextInput, InputProps>(
       }: InputProps, 
       ref
     ) => {
-      const [currentSecure, setCurrentSecure] = useState<boolean>();
-  
       const handleOnChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
         if (onChange) {
             event.persist();
-            let text= event.nativeEvent.text;
+            let text = event.nativeEvent.text;
             switch (type) {
                 case 'cpf':
                    text = isertMaskInCpf(text); 
@@ -40,8 +47,11 @@ const Input = forwardRef<TextInput, InputProps>(
                 case 'matricula':
                    text = insertMaskInMatricula(text); 
                 break;
+                case 'data':
+                   text = insertMaskInDate(text); 
+                break;
                 default:
-                text = event.nativeEvent.text;
+                   text = event.nativeEvent.text;
                 break;
             }
   
@@ -74,7 +84,6 @@ const Input = forwardRef<TextInput, InputProps>(
               onChange={handleOnChange}
               ref={ref}
              />
-           
           </View>
           {errorMessage && (
             <Text
@@ -88,6 +97,6 @@ const Input = forwardRef<TextInput, InputProps>(
         </DisplayFlexColumn>
       );
     },
-  );
-  
-  export default Input;
+);
+
+export default Input;
