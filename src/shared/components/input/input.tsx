@@ -12,16 +12,8 @@ interface InputProps extends TextInputProps {
     title?: string;
     errorMessage?: string;
     margin?: string;
-    type?: 'matricula' | 'cpf' | 'data';
+    type?: 'matricula' | 'cpf';
 }
-
-const applyDateMask = (value: string) => {
-  return value
-      .replace(/\D/g, '') // Remove qualquer caractere não numérico
-      .replace(/^(\d{2})(\d)/, '$1/$2') // Insere a primeira barra após o dia
-      .replace(/(\d{2})(\d{1,4})$/, '$1/$2') // Insere a segunda barra após o mês
-      .slice(0, 10); // Limita o comprimento para 10 caracteres
-};
 
 
 const Input = forwardRef<TextInput, InputProps>(
@@ -47,9 +39,6 @@ const Input = forwardRef<TextInput, InputProps>(
                 case 'matricula':
                    text = insertMaskInMatricula(text); 
                 break;
-                case 'data':
-                   text = insertMaskInDate(text); 
-                break;
                 default:
                    text = event.nativeEvent.text;
                 break;
@@ -68,13 +57,15 @@ const Input = forwardRef<TextInput, InputProps>(
       return (
         <DisplayFlexColumn customMargin={margin}>
           {title && (
+             <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
             <Text
               margin="0px 0px 4px 8px"
-              color={theme.colors.mainTheme.black}
+              color={theme.colors.whiteTheme.white}
               type={textTypes.SUB_TITLE_BOLD}
             >
               {title}
             </Text>
+            </View>
           )}
   
           <View>

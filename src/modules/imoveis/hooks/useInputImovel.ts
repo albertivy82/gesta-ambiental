@@ -13,7 +13,7 @@ import { transporteEnum } from "../../../enums/transporte.enum";
 import { salvarImovelQueue } from "../../../realm/services/imovelService";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { formatarData } from "../../../shared/functions/data";
+import { formatDateForApi } from "../../../shared/functions/data";
 import { imovelInput } from "../../../shared/types/imovelInput";
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
@@ -62,7 +62,7 @@ export const useNovoImovel = (id:number) => {
         novoImovel.vizinhos != null &&
         novoImovel.situacaoFundiaria !== '' && 
         novoImovel.documentacaoImovel != null &&
-        formatarData(novoImovel.dataChegada) && 
+        novoImovel.dataChegada && 
         novoImovel.pretendeMudar != null &&
         novoImovel.motivoVontadeMudanca !== '' && 
         novoImovel.relacaoArea !== '' && 
@@ -74,6 +74,7 @@ export const useNovoImovel = (id:number) => {
         novoImovel.linhasDeBarco !== '' && 
         novoImovel.tipoSolo !== null &&           
         novoImovel.esporteLazer !== null )
+        console.log(novoImovel)
         {
           setDisabled(false)
         } 
@@ -128,25 +129,27 @@ export const useNovoImovel = (id:number) => {
 
 
 
-    const handleOnChangeInput = (
-        event: NativeSyntheticEvent<TextInputChangeEventData>,
-        name: string
-      ) => {
-        setNovoImovel((currentImovel) => ({
-          ...currentImovel,
-          [name]: event.nativeEvent.text,
-        }));
-      };
-
-      const handleOnChangeData = ( 
-        event: NativeSyntheticEvent<TextInputChangeEventData>,
-        name: string) => {
-        const dataFormatada = formatarData(event.nativeEvent.text);
+  const handleOnChangeInput = (
+    value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+    name: string
+  ) => {
+    // Verifica se "value" é um evento ou uma string diretamente
+    const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+  
+    setNovoImovel((currentImovel) => ({
+      ...currentImovel,
+      [name]: newValue,
+    }));
+  };
+  
+    const handleOnChangeData = (selectedDate: Date, name: string) => {
+        const dataFormatada = formatDateForApi(selectedDate);
         setNovoImovel((currentUser) => ({
             ...currentUser,
-            dataChegada: dataFormatada,
+            [name]: dataFormatada,
         }));
     };
+
     
 
       const handleVizinhosChange = (vizinhos: Vizinhos | "" | null) => {
@@ -214,15 +217,23 @@ export const useNovoImovel = (id:number) => {
 
       const handleOnChangeAreaImovel = (
         event: NativeSyntheticEvent<TextInputChangeEventData>
-       ) => {
-        const value = event.nativeEvent.text;
-        const areaImovelNum = parseFloat(value) || 0; // Converte para número, usa 0 se NaN
-    
+      ) => {
+        let value = event.nativeEvent.text;
+      
+        // Remove qualquer caractere não numérico
+        value = value.replace(/\D/g, '');
+      
+        // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+        const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+      
+        // Atualiza o estado com o valor formatado como número
         setNovoImovel((currentImovel) => ({
-            ...currentImovel,
-            areaImovel: areaImovelNum,
+          ...currentImovel,
+          areaImovel: parseFloat(formattedValue), // Salva como número para enviar à API
         }));
-    };
+      };
+      
+      
     
 
     return {

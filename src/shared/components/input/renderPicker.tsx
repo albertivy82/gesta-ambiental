@@ -16,13 +16,15 @@ interface RenderPickerProps<T> {
 export function RenderPicker<T extends string | number>({ label, selectedValue, onValueChange, options }: RenderPickerProps<T>) {
   return (
     <View style={{ marginVertical: 10 }}>
-      <Text
-        type={textTypes.SUB_TITLE_BOLD} // Aplicando o estilo de fonte do seu sistema
-        color={theme.colors.mainTheme.black}
-        margin="0px 0px 5px 0px"
-      >
+
+      <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
+        <Text margin="0px 0px 4px 8px"
+              color={theme.colors.whiteTheme.white}
+              type={textTypes.SUB_TITLE_BOLD}>
         {label}
-      </Text>
+        </Text>
+        </View>
+      
       <View style={{ borderBottomWidth: 1, borderBottomColor: theme.colors.whiteTheme.white }}>
         <Picker selectedValue={selectedValue} onValueChange={(value) => onValueChange(value as T | null)}>
           <Picker.Item label={`Selecione uma opção...`} color="black" value={null} />

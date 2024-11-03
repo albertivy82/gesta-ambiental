@@ -1,7 +1,6 @@
-import { Picker } from "@react-native-picker/picker";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { useRef } from "react";
-import { Button, ScrollView, TextInput, View } from "react-native";
+import { useRef, useState } from "react";
+import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { Vizinhos } from "../../../enums/Vizinhos";
 import { documentacao } from "../../../enums/documentacao.enum";
 import { esporteLazerEnum } from "../../../enums/esporteLazer.enum";
@@ -10,11 +9,14 @@ import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import { situacaoFundiaria } from "../../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../../enums/transporte.enum";
+import DateSelector from "../../../shared/components/input/DateSelector";
+import LocationInput from "../../../shared/components/input/LocationInput";
 import Input from "../../../shared/components/input/input";
-import { theme } from "../../../shared/themes/theme";
+import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelContainer } from "../styles/Imovel.style";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from "react-native-paper";
 
 
 export interface idParam {
@@ -23,6 +25,9 @@ localidadeId: number;
 
 export const NovoImovel = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false); 
+   
   
   const { novoImovel,
            handleOnChangeInput,
@@ -53,16 +58,29 @@ export const NovoImovel = ()=>{
     const numeroInput = useRef<TextInput>(null);
     const bairroInput = useRef<TextInput>(null);
     const referencialInput = useRef<TextInput>(null);
-    const latitudeInput = useRef<TextInput>(null);
-    const longitudeInput = useRef<TextInput>(null);
     const areaImovelInput = useRef<TextInput>(null);
-   
-  
-
+    const motivoMudancaInput = useRef<TextInput>(null);
+    const relacaoAreaInput = useRef<TextInput>(null);
+    const relacaoVizinhoInput = useRef<TextInput>(null);
+    const linhaBarcoInput = useRef<TextInput>(null);
+    const inraestruturaInput = useRef<TextInput>(null);
+    
+    
+    
+    
     const handleEnviar = async () => {
-      await inputImovelApi();
-      
-  };
+      setLoading(true); 
+  
+      try {
+        await inputImovelApi(); 
+        navigation.goBack(); 
+      } catch (error) {
+        console.error('Erro no envio:', error);
+        Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+      } finally {
+        setLoading(false); 
+      }
+    };
 
 
 
@@ -104,35 +122,29 @@ export const NovoImovel = ()=>{
               placeholder="Informe uma referência para o imóvel"
               margin="0px 0px 16px 0px"
               title="Referencial:"
-              onSubmitEditing={()=>latitudeInput.current?.focus()}
+              onSubmitEditing={()=>areaImovelInput.current?.focus()}
               ref={referencialInput}/>
 
-            <Input 
-              value={novoImovel.latitude} 
-              onChange={(event)=> handleOnChangeInput(event, 'latitude')}
-              placeholder="latitude"
-              margin="0px 0px 16px 0px"
-              title="Latitude:"
-              onSubmitEditing={()=>longitudeInput.current?.focus()}
-              ref={latitudeInput}/>
+    
 
-            <Input 
-              value={novoImovel.longitude} 
-              onChange={(event)=> handleOnChangeInput(event, 'longitude')}
-              placeholder="longitude"
-              margin="0px 0px 16px 0px"
-              title="Longitude:"
-              ref={longitudeInput}/>
+              <LocationInput
+                onLocationChange={(lat, lon) => {
+                  handleOnChangeInput(lat, 'latitude');
+                  handleOnChangeInput(lon, 'longitude');
+                }}
+              />
+
+
 
             <Input
-                value={(novoImovel.areaImovel ?? '').toString()} 
-                onChange={handleOnChangeAreaImovel}
-                keyboardType='numeric'
-                placeholder="longitude"
-                margin="0px 0px 16px 0px"
-                title="Área do imóvel:"
-                ref={areaImovelInput}
-            />
+              value={novoImovel.areaImovel?.toFixed(2) || ''}
+              onChange={handleOnChangeAreaImovel}
+              keyboardType='numeric'
+              placeholder="Área em m²"
+              title="Área do Imóvel (m²)"
+              ref={areaImovelInput}
+           />
+
 
             <RenderPicker
               label="Possui vizinhos?"
@@ -154,99 +166,80 @@ export const NovoImovel = ()=>{
               selectedValue={novoImovel.documentacaoImovel}
                onValueChange={handleDocumentacaoChange}
                options={documentacaoOptions}
-            />
+             />
 
+
+              <DateSelector
+                label="Data de Chegada no Local"
+                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataChegada')}
+              />
+            
+
+              <RenderPicker
+                  label="Pretente mudar?"
+                  selectedValue={novoImovel.pretendeMudar}
+                  onValueChange={handleSimNaoChange}
+                  options={simNaoOptions}
+                />
+          
+              <Input 
+                  value={novoImovel.motivoVontadeMudanca} 
+                  onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
+                  placeholder="Informe um motivo"
+                  margin="0px 0px 16px 0px"
+                  title="Por que pretende mudar?"
+                  onSubmitEditing={()=>relacaoAreaInput.current?.focus()}
+                  ref={motivoMudancaInput}
+                  />
+
+              <Input 
+                    value={novoImovel.relacaoArea} 
+                    onChange={(event)=> handleOnChangeInput(event, 'relacaoArea')}
+                    placeholder="Relação do entrevistado com a área do imóvel"
+                    margin="0px 0px 16px 0px"
+                    title="Relação com a área"
+                    onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
+                    ref={relacaoAreaInput}
+                    />
 
             <Input 
-                value={novoImovel.dataChegada} 
-                onChange={(event)=> handleOnChangeData(event, 'dataChegada')}
-                placeholder="Data de Chegada"
-                margin="0px 0px 16px 0px"
-                title="Desde quando está no imóvel?"
-                type="data" 
+                  value={novoImovel.relacaoVizinhos} 
+                  onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
+                  placeholder="Relação do entrevistado com a vizinhança"
+                  margin="0px 0px 16px 0px"
+                  title="Relação com a vizinhança"
+                  ref={relacaoVizinhoInput}
+                  />
+
+          <RenderPicker
+              label="Tipo de limites do imóvel"
+              selectedValue={novoImovel.limites}
+               onValueChange={handleLimitesChange}
+               options={limitesOptions}
+            />
+              
+           <RenderPicker
+              label="Ilumincao pública?"
+              selectedValue={novoImovel.iluminacaoPublica}
+               onValueChange={handleIluminacaoChange}
+               options={simNaoOptions}
             />
 
-           <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
-              selectedValue={novoImovel.pretendeMudar}
-              onValueChange={(value) => handleSimNaoChange(value)}>
-                  <Picker.Item label="Pretente mudar?" color="black" value="" />
-                        {simNaoOptions.map(mudar => (
-                          <Picker.Item key={mudar} label={mudar} value={mudar} />
-                        ))}
-                       
-              </Picker>
-            </View>
-          
-          <Input 
-              value={novoImovel.motivoVontadeMudanca} 
-              onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
-              placeholder="Informe um motivo"
-              margin="0px 0px 16px 0px"
-              title="Por que pretende mudar?"
-              />
-
-         <Input 
-              value={novoImovel.relacaoArea} 
-              onChange={(event)=> handleOnChangeInput(event, 'relacaoArea')}
-              placeholder="Relação do entrevistado com a área do imóvel"
-              margin="0px 0px 16px 0px"
-              title="Relação com a área"
-              />
-
-         <Input 
-              value={novoImovel.relacaoVizinhos} 
-              onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
-              placeholder="Relação do entrevistado com a vizinhança"
-              margin="0px 0px 16px 0px"
-              title="Relação com a vizinhança"
-              />
-
-           <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
-              selectedValue={novoImovel.limites}
-              onValueChange={(value) => handleLimitesChange(value)}>
-                  <Picker.Item label="Possui documentação?" color="black" value="" />
-                        {limitesOptions.map(limite => (
-                          <Picker.Item key={limite} label={limite} value={limite} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
-
-           <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
-              selectedValue={novoImovel.iluminacaoPublica}
-              onValueChange={(value) => handleIluminacaoChange(value)}>
-                  <Picker.Item label="Ilumincao pública?" color="black" value="" />
-                        {simNaoOptions.map(iluminacao => (
-                          <Picker.Item key={iluminacao} label={iluminacao} value={iluminacao} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
-
-           <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
+          <RenderPicker
+              label="Qual o tipo de transporte utilizado?"
               selectedValue={novoImovel.transporte}
-              onValueChange={(value) => handleTransporteChange(value)}>
-                  <Picker.Item label="Possui documentação?" color="black" value="" />
-                        {transporteOptions.map(transporte => (
-                          <Picker.Item key={transporte} label={transporte} value={transporte} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
+               onValueChange={handleTransporteChange}
+               options={transporteOptions}
+            />
 
            <Input 
               value={novoImovel.programaInfraSaneamento} 
               onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
               placeholder="área do programaInfraSaneamento"
               margin="0px 0px 16px 0px"
-              title="programaInfraSaneamento:"
+              title="programa InfraSaneamento:"
+              onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
+              ref={inraestruturaInput}
               />
 
            <Input 
@@ -255,39 +248,31 @@ export const NovoImovel = ()=>{
               placeholder="Se houver, informe as linhas de barco do local"
               margin="0px 0px 16px 0px"
               title="Há linhas de barco no local?"
+              ref={linhaBarcoInput}
               />
 
-          <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
+         <RenderPicker
+              label="Qual o tipo de solo no imóvel?"
               selectedValue={novoImovel.tipoSolo}
-              onValueChange={(value) => handleSoloChange(value)}>
-                  <Picker.Item label="Qual o tipo de solo no imóvel?" color="black" value="" />
-                        {soloOptions.map(solo => (
-                          <Picker.Item key={solo} label={solo} value={solo} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
-
-           
-          <View style={{ borderBottomWidth: 4, borderBottomColor: theme.colors.whiteTheme.white }}>
-            <Picker
+               onValueChange={handleSoloChange}
+               options={soloOptions}
+            />
+         
+           <RenderPicker
+              label="Esporte e lazer no local:"
               selectedValue={novoImovel.esporteLazer}
-              onValueChange={(value) => handleLazerChange(value)}>
-                  <Picker.Item label="Esporte e lazer no local:" color="black" value="" />
-                        {lazerOptions.map(lazer => (
-                          <Picker.Item key={lazer} label={lazer} value={lazer} />
-                        ))}
-                       
-              </Picker>
-              
-           </View> 
+               onValueChange={handleLazerChange}
+               options={lazerOptions}
+            />
 
           
-          <View style={{ marginTop:40 }}>
-          <Button title="enviar" disabled={disabled} color='#ff4500' onPress={handleEnviar} />
-          </View>
+<View style={{ marginTop: 40 }}>
+      {loading ? (
+        <ActivityIndicator size="large" color="#ff4500" /> // Exibe o spinner enquanto está carregando
+      ) : (
+        <Button title="Enviar" onPress={handleEnviar} color='#ff4500' disabled={disabled || loading} />
+      )}
+    </View>
  
     
       
