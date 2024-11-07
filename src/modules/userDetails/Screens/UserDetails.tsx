@@ -1,31 +1,23 @@
-import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
-import {useRoute, RouteProp} from '@react-navigation/native'
-import { Button } from 'react-native';
-import { UserContainer } from "../styles/Userdetail.style";
-import { UserBody } from '../../../shared/types/userBody';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { View } from 'react-native';
-import { textTypes } from '../../../shared/components/text/textTypes';
-import { theme } from '../../../shared/themes/theme';
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
+import EditConfirmation from "../hooks/UseEditUser";
 import Text from '../../../shared/components/text/Text';
-import { connectionAPIDelete } from "../../../shared/functions/connection/connectionAPI";
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { UserBody } from '../../../shared/types/userBody';
+import { UserContainer } from "../styles/Userdetail.style";
 
 
 export const GoToUserEdit= (navigate: NavigationProp<ParamListBase>['navigate'], user: UserBody) =>{
     navigate('User', {user});
 }
 
-
+/*
 export const GoToProfileUser= (navigate: NavigationProp<ParamListBase>['navigate'], user: UserBody) =>{
     navigate('ProfileUser', {user});
 }
 
-
-
-const DeleteUser = async (id:string)=>{
-    await connectionAPIDelete(`http://192.168.100.28:8080/usuario/${id}`);
-}
-
-
+*/
 
 
 export interface UserParam{
@@ -35,18 +27,10 @@ export interface UserParam{
 
 
 const UserDetails = ()=>{
-    const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const {params} = useRoute<RouteProp<Record<string, UserParam>>>();
     const {user} = params;
 
-    const handleEditUser =() => {
-        GoToUserEdit(navigation.navigate, user);
-    };
-
-    const handleDeleteUser =() => {
-        DeleteUser(user.id);
-    };
-
+        
   
     const renderField = (label: string, value: string | null)=>{
         return (
@@ -69,20 +53,24 @@ const UserDetails = ()=>{
            {renderField('Perfil', user.grupo.nome)}          
           
            
-           <View>
-                <Button
-                    title="Editar usuário"
-                    onPress={handleEditUser}
-                    color={"#ff4500"}
-                />
-            </View>
-
-            <View style={{ marginTop: 15 }}>
-                <Button
-                    title="Excluir usuário"
-                    onPress={handleDeleteUser}
-                    color={"#ff4500"}
-                />
+           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+ 
+                   
+            <EditConfirmation 
+            user={user} 
+            destino="User" 
+            onEditSuccess={() => {
+             
+            }} 
+            />
+                    
+            <DeleteConfirmation 
+            id= {user.id} 
+            deleteEndpoint="usuario" 
+            onDeleteSuccess={() => {
+                   
+            }} 
+            />
             </View>
         </UserContainer>
     );
@@ -90,3 +78,7 @@ const UserDetails = ()=>{
 };
 
 export default UserDetails;
+            
+           
+
+       

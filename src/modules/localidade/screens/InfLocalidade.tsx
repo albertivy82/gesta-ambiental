@@ -36,15 +36,27 @@ export const imoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['nav
   navigate('Imovel', {localidadeId})
 }
 
+export const NovoImoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('NovoImovel', {localidadeId})
+}
+
 
 //BLOCO ESCOLAS
 export const escolasDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
   navigate('Escolas', {localidadeId})
 }
 
+export const NovaEscolaDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('NovaEscola', {localidadeId})
+}
+
 //BLOCO POSTOS
 export const postosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
   navigate('Postos', {localidadeId})
+}
+
+export const NovoPostoDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('NovoPosto', {localidadeId})
 }
 
 
@@ -65,7 +77,7 @@ const InfLocalidade = () => {
 
       const handleCoordinatePress = (coordenada: coordenadasBody) => {
         console.log("Coordenada selecionada:", coordenada);
-        // Aqui você pode adicionar navegação ou ações específicas para cada coordenada
+       
     };
       
 
@@ -82,8 +94,13 @@ const InfLocalidade = () => {
 
       //BLOCO IMOVEL
       const  handleGerenciaImoveis =  (localidadeId: number, contagemImoveis: number) =>{
+       
         if(contagemImoveis>0){
+         
         imoveisDaLocalidade(navigation.navigate, localidadeId);
+        }else{
+         
+        NovoImoveisDaLocalidade(navigation.navigate, localidadeId);
         }
       }
 
@@ -91,6 +108,8 @@ const InfLocalidade = () => {
        const  handleGerenciaEscolas =  (localidadeId: number, contagemImoveis: number) =>{
         if(contagemImoveis>0){
           escolasDaLocalidade(navigation.navigate, localidadeId);
+        }else{
+          NovaEscolaDaLocalidade(navigation.navigate, localidadeId);
         }
       }
 
@@ -98,7 +117,9 @@ const InfLocalidade = () => {
        const  handleGerenciaPostos =  (localidadeId: number, contagemImoveis: number) =>{
         if(contagemImoveis>0){
           postosDaLocalidade(navigation.navigate, localidadeId);
-        }
+        }else{
+          NovoPostoDaLocalidade(navigation.navigate, localidadeId);
+          }
        }
 
        const renderItemList = (items: coordenadasBody[], label: string, onItemPress: (item: coordenadasBody) => void) => {

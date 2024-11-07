@@ -7,6 +7,8 @@ import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+import EditConfirmation from '../hooks/UseEditImovel';
 
 
 
@@ -164,31 +166,23 @@ const ImovelDetails = () => {
                         </View>
                     </TouchableOpacity>
 
-
-              <View style={{ flexDirection: 'row', 
-                      justifyContent: 'space-around', 
-                      padding: 10,
-                      borderWidth: 2, 
-                      borderColor: theme.colors.grayTheme.gray100 
-                    }}>
-
-                    <TouchableOpacity onPress={() =>null}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='bin' color='red' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.grayTheme.gray100}>Apagar Imóvel</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,   borderColor: theme.colors.grayTheme.gray100 }} />
-
-
-                    <TouchableOpacity onPress={() => null}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='pencil2' color='blue' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.grayTheme.gray100}>Editar Imóvel</Text>
-                        </View>
-                    </TouchableOpacity>
-               </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>                       
+                     <EditConfirmation 
+                      imovel={params.imovel} 
+                      destino="User" 
+                      onEditSuccess={() => {
+                      
+                      }} 
+                      />
+                              
+                      <DeleteConfirmation 
+                      id={params.imovel.id} 
+                      deleteEndpoint="imovel" 
+                      onDeleteSuccess={() => {
+                            
+                      }} 
+                      />
+                      </View>
                
               
       

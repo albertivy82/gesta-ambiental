@@ -1,6 +1,6 @@
 
 export interface UserBody {
-    id: string;
+    id: number;
     nome: string;
     matricula: string;
     email: string;

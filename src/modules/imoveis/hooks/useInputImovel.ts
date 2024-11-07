@@ -47,7 +47,7 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
 
 export const useNovoImovel = (id:number) => {
     const [novoImovel, setNovoImovel] = useState<imovelInput>(DEFAUL_IMOVEL_INPUT);
-    const [disabled, setDisabled] = useState<boolean>(true);
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     useEffect(() => {
 
@@ -74,9 +74,8 @@ export const useNovoImovel = (id:number) => {
         novoImovel.linhasDeBarco !== '' && 
         novoImovel.tipoSolo !== null &&           
         novoImovel.esporteLazer !== null )
-        console.log(novoImovel)
         {
-          setDisabled(false)
+          setDisabled(true)
         } 
        
     }, [novoImovel]);

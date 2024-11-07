@@ -1,8 +1,7 @@
-import { OptionContainer, ProfileUsersContainer } from "../styles/ProfileUser.style";
 import CheckBox from '@react-native-community/checkbox';
-import {useState} from 'react'
-import { View } from "react-native";
+import { useState } from 'react';
 import Text from "../../../shared/components/text/Text";
+import { OptionContainer, ProfileUsersContainer } from "../styles/ProfileUser.style";
 
 
 const ProfileUser = ()=>{

@@ -15,7 +15,7 @@ interface RenderPickerProps<T> {
 // Componente tipado
 export function RenderPicker<T extends string | number>({ label, selectedValue, onValueChange, options }: RenderPickerProps<T>) {
   return (
-    <View style={{ marginVertical: 10 }}>
+    <View style={{ marginVertical: 20 }}>
 
       <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
         <Text margin="0px 0px 4px 8px"

@@ -87,7 +87,7 @@ export const useInputUsers = ()=>{
         }
     };
 
-    const UpdateUser = async (id:string)=>{
+    const UpdateUser = async (id:number)=>{
         
         const formattedUser = formatUserData(novoUsuario);
         try{

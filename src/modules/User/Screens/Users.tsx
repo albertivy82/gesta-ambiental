@@ -21,7 +21,7 @@ export interface userParam{
 
 const User= () =>{
 const {params} = useRoute<RouteProp<Record<string, userParam>>>();
-const user = params ? params.user : null;
+const user = params?.user;
 const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<UserBody>();
 const {sendUser, 
       novoUsuario, 
@@ -36,6 +36,7 @@ const {sendUser,
       const emailInput = useRef<TextInput>(null);
       const cpfInput = useRef<TextInput>(null);
       
+      console.log("user recebido", params)
 
 
       useEffect(() => {
@@ -46,10 +47,10 @@ const {sendUser,
           
       useEffect(() => {
             if (dadosUsuarioEditado) {
-              nomeInput.current?.setNativeProps({ text: dadosUsuarioEditado.nome });
-              matriculaInput.current?.setNativeProps({ text: dadosUsuarioEditado.matricula });
-              emailInput.current?.setNativeProps({ text: dadosUsuarioEditado.email });
-              cpfInput.current?.setNativeProps({ text: dadosUsuarioEditado.cpf });
+              nomeInput.current?.setNativeProps({ text:dadosUsuarioEditado.nome });
+              matriculaInput.current?.setNativeProps({ text:dadosUsuarioEditado.matricula });
+              emailInput.current?.setNativeProps({ text:dadosUsuarioEditado.email });
+              cpfInput.current?.setNativeProps({ text:dadosUsuarioEditado.cpf });
             }
           }, [dadosUsuarioEditado]);
       

@@ -50,6 +50,7 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
         value={latitude}
         onChange={() => {}}
         placeholder="Latitude"
+         margin="15px 10px 30px 5px"
         title="Latitude"
         editable={true}
       />
@@ -57,14 +58,15 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
         value={longitude}
         onChange={() => {}}
         placeholder="Longitude"
+        margin="15px 10px 30px 5px"
         title="Longitude"
         editable={true}
       />
       
       <TouchableOpacity onPress={getLocation} style={{
-        padding: 12,
+        padding: 0,
         backgroundColor: '#E6E8FA',
-        borderRadius: 5,
+        borderRadius: 2,
         alignItems: 'center',
        
       }}>
@@ -74,7 +76,7 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
           ) : (
               <Icon size={30} name="location2" color={theme.colors.mainTheme.black} />
             )}
-        <Text margin="0px 0px 0px 10px"  color={theme.colors.mainTheme.black} type={textTypes.PARAGRAPH_LIGHT}>
+        <Text margin="0px 0px 0px 0px"  color={theme.colors.mainTheme.black} type={textTypes.PARAGRAPH_LIGHT}>
                 atualizar localização
         </Text>
         </View>

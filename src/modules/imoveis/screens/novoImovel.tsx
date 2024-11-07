@@ -82,7 +82,7 @@ export const NovoImovel = ()=>{
       }
     };
 
-
+    console.log(disabled, loading)
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
@@ -91,7 +91,7 @@ export const NovoImovel = ()=>{
               value={novoImovel.rua} 
               onChange={(event)=> handleOnChangeInput(event, 'rua')}
               placeholder="Informe a rua do imóvel"
-              margin="0px 0px 16px 0px"
+              margin="15px 10px 30px 5px"
               title="Rua:"
               onSubmitEditing={()=>numeroInput.current?.focus()}
               ref={ruaInput}/>
@@ -100,7 +100,7 @@ export const NovoImovel = ()=>{
               value={novoImovel.numero} 
               onChange={(event)=> handleOnChangeInput(event, 'numero')}
               placeholder="Imforme o número do Imóvel"
-              margin="0px 0px 16px 0px"
+              margin="15px 10px 30px 5px"
               title="Número:"
               onSubmitEditing={()=>bairroInput.current?.focus()}
               ref={numeroInput}/>
@@ -109,7 +109,7 @@ export const NovoImovel = ()=>{
               value={novoImovel.bairro} 
               onChange={(event)=> handleOnChangeInput(event, 'bairro')}
               placeholder="Informe o bairro imóvel"
-              margin="0px 0px 16px 0px"
+              margin="15px 10px 30px 5px"
               title="Bairro:"
               onSubmitEditing={()=>referencialInput.current?.focus()}
               ref={bairroInput}
@@ -120,7 +120,7 @@ export const NovoImovel = ()=>{
               value={novoImovel.referencial} 
               onChange={(event)=> handleOnChangeInput(event, 'referencial')}
               placeholder="Informe uma referência para o imóvel"
-              margin="0px 0px 16px 0px"
+              margin="15px 10px 30px 5px"
               title="Referencial:"
               onSubmitEditing={()=>areaImovelInput.current?.focus()}
               ref={referencialInput}/>
@@ -141,6 +141,7 @@ export const NovoImovel = ()=>{
               onChange={handleOnChangeAreaImovel}
               keyboardType='numeric'
               placeholder="Área em m²"
+              margin="15px 10px 30px 5px"
               title="Área do Imóvel (m²)"
               ref={areaImovelInput}
            />
@@ -186,7 +187,7 @@ export const NovoImovel = ()=>{
                   value={novoImovel.motivoVontadeMudanca} 
                   onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
                   placeholder="Informe um motivo"
-                  margin="0px 0px 16px 0px"
+                  margin="15px 10px 30px 5px"
                   title="Por que pretende mudar?"
                   onSubmitEditing={()=>relacaoAreaInput.current?.focus()}
                   ref={motivoMudancaInput}
@@ -196,7 +197,7 @@ export const NovoImovel = ()=>{
                     value={novoImovel.relacaoArea} 
                     onChange={(event)=> handleOnChangeInput(event, 'relacaoArea')}
                     placeholder="Relação do entrevistado com a área do imóvel"
-                    margin="0px 0px 16px 0px"
+                    margin="15px 10px 30px 5px"
                     title="Relação com a área"
                     onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
                     ref={relacaoAreaInput}
@@ -206,7 +207,7 @@ export const NovoImovel = ()=>{
                   value={novoImovel.relacaoVizinhos} 
                   onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
                   placeholder="Relação do entrevistado com a vizinhança"
-                  margin="0px 0px 16px 0px"
+                  margin="15px 10px 30px 5px"
                   title="Relação com a vizinhança"
                   ref={relacaoVizinhoInput}
                   />
@@ -236,7 +237,7 @@ export const NovoImovel = ()=>{
               value={novoImovel.programaInfraSaneamento} 
               onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
               placeholder="área do programaInfraSaneamento"
-              margin="0px 0px 16px 0px"
+              margin="15px 10px 30px 5px"
               title="programa InfraSaneamento:"
               onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
               ref={inraestruturaInput}
@@ -246,7 +247,7 @@ export const NovoImovel = ()=>{
               value={novoImovel.linhasDeBarco} 
               onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
               placeholder="Se houver, informe as linhas de barco do local"
-              margin="0px 0px 16px 0px"
+              margin="15px 10px 30px 5px"
               title="Há linhas de barco no local?"
               ref={linhaBarcoInput}
               />

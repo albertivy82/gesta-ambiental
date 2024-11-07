@@ -23,8 +23,7 @@ const AdmUsers = ()=>{
     const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const {user, setUser} = useUserReducer();
 
-
-
+    
     const renderItem = ({ item }: { item: UserBody }) => {
         return (
           <TouchableOpacity onPress={() => handleUserDetail(item)}>

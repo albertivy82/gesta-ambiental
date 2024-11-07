@@ -12,7 +12,7 @@ interface QuadroDeItensProps {
 
 const QuadroDeItens = ({ label, count, onPress, emptyMessage }: QuadroDeItensProps) => {
   return (
-    <TouchableOpacity onPress={count > 0 ? onPress : undefined}>
+    <TouchableOpacity onPress={onPress}>
       <View style={{ padding: 10, borderWidth: 1, borderColor: "#ff4500" }}>
         <Text type={textTypes.BUTTON_BOLD} color="#000000">
           {label}
