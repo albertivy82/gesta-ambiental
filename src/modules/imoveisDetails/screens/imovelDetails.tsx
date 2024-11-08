@@ -8,7 +8,7 @@ import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
-import EditConfirmation from '../hooks/UseEditImovel';
+import EditConfirmation from '../ui-component/UseEditImovel';
 
 
 
@@ -166,14 +166,23 @@ const ImovelDetails = () => {
                         </View>
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>                       
+                    <View style={{ flexDirection: 'row', 
+                      justifyContent: 'space-around', 
+                      padding: 10,
+                      marginTop: 40, 
+                      borderWidth: 5, 
+                      borderColor: "#808080", 
+                      backgroundColor: '#000000'
+                    }}>                     
                      <EditConfirmation 
                       imovel={params.imovel} 
-                      destino="User" 
+                      destino="NovoImovel" 
                       onEditSuccess={() => {
                       
                       }} 
                       />
+
+                      <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#9b9999' }} />
                               
                       <DeleteConfirmation 
                       id={params.imovel.id} 

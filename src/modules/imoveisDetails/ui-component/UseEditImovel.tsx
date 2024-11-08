@@ -5,14 +5,15 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { UserBody } from '../../../shared/types/userBody';
+import { imovelBody } from '../../../shared/types/imovelType';
 
 interface EditConfirmationProps {
-  user: UserBody;
+  imovel: imovelBody;
   destino: string;
   onEditSuccess: () => void;
 }
 
-const EditConfirmation: React.FC<EditConfirmationProps> = ({ user, destino, onEditSuccess }) => {
+const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, onEditSuccess }) => {
 
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -21,8 +22,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ user, destino, onEd
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
-     console.log("aqui",user)
-      navigation.navigate(destino, {user});
+     console.log("aqui",imovel)
+      navigation.navigate(destino, {imovel});
       
       setModalVisible(false);
       onEditSuccess();
@@ -35,10 +36,10 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ user, destino, onEd
 
   return (
     <>
-      <TouchableOpacity style={{ marginHorizontal: 30 }} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
           <Icon size={40} name='pencil2' color="#ff4500" />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500">Editar Item</Text>
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500" style={{alignItems: 'baseline'}}>Editar Item</Text>
         </View>
       </TouchableOpacity>
 

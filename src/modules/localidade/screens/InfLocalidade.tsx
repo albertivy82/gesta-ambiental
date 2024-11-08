@@ -193,8 +193,8 @@ const InfLocalidade = () => {
                         <View style={{ alignItems: 'center' }}
                     
                         >
-                            <Icon size={40} name='bin' color='white' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={"#FFFFFF"}>Apagar Localidade</Text>
+                            <Icon size={40} name='bin' color="#ff4500" />
+                            <Text type={textTypes.PARAGRAPH_LIGHT} color={"#ff4500"}>Apagar Localidade</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -203,8 +203,8 @@ const InfLocalidade = () => {
 
                     <TouchableOpacity onPress={() => null}>
                         <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='pencil2' color='white' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={"#FFFFFF"}>Editar Localidade</Text>
+                            <Icon size={40} name='pencil2' color="#ff4500" />
+                            <Text type={textTypes.PARAGRAPH_LIGHT} color={"#ff4500"}>Editar Localidade</Text>
                         </View>
                     </TouchableOpacity>
         </View>

@@ -1,7 +1,7 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { View } from 'react-native';
 import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
-import EditConfirmation from "../hooks/UseEditUser";
+import EditConfirmation from "../ui-component/UseEditUser";
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { UserBody } from '../../../shared/types/userBody';
@@ -53,7 +53,14 @@ const UserDetails = ()=>{
            {renderField('Perfil', user.grupo.nome)}          
           
            
-           <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+           <View style={{ flexDirection: 'row', 
+                      justifyContent: 'space-around', 
+                      padding: 10,
+                      marginTop: 40, 
+                      borderWidth: 5, 
+                      borderColor: "#808080", 
+                      backgroundColor: '#000000'
+                    }}>
  
                    
             <EditConfirmation 
@@ -63,6 +70,8 @@ const UserDetails = ()=>{
              
             }} 
             />
+
+            <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: "#808080" }} />
                     
             <DeleteConfirmation 
             id= {user.id} 

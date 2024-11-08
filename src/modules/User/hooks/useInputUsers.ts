@@ -100,15 +100,17 @@ export const useInputUsers = ()=>{
 
 
     const handleOnChangeInput = (
-        event: NativeSyntheticEvent<TextInputChangeEventData>,
+        value: NativeSyntheticEvent<TextInputChangeEventData> | string,
         name: string
-        ) =>{
-           // event.persist();
-            setUsuario((currentUser)=>({
-            ...currentUser,
-            [name]: event.nativeEvent.text,
-            }));
-        };
+      ) => {
+        const newValue = typeof value === 'string' ? value : value.nativeEvent?.text || '';
+      
+        setUsuario((currentUser) => ({
+          ...currentUser,
+          [name]: newValue,
+        }));
+      };
+      
 
     const handleGrupoChange = (grupo: grupoEnum | "" | null) => {
 

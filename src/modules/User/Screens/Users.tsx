@@ -42,15 +42,19 @@ const {sendUser,
       useEffect(() => {
             if (user) {
               setDadosUsuarioEditado(user);
+              handleOnChangeInput(user.nome, 'nome');
+              handleOnChangeInput(user.matricula, 'matricula');
+              handleOnChangeInput(user.email, 'email');
+              handleOnChangeInput(user.cpf, 'cpf');
             }
           }, [user]);
           
       useEffect(() => {
             if (dadosUsuarioEditado) {
-              nomeInput.current?.setNativeProps({ text:dadosUsuarioEditado.nome });
-              matriculaInput.current?.setNativeProps({ text:dadosUsuarioEditado.matricula });
-              emailInput.current?.setNativeProps({ text:dadosUsuarioEditado.email });
-              cpfInput.current?.setNativeProps({ text:dadosUsuarioEditado.cpf });
+            //  nomeInput.current?.setNativeProps({ text:dadosUsuarioEditado.nome });
+           //   matriculaInput.current?.setNativeProps({ text:dadosUsuarioEditado.matricula });
+            //  emailInput.current?.setNativeProps({ text:dadosUsuarioEditado.email });
+            //  cpfInput.current?.setNativeProps({ text:dadosUsuarioEditado.cpf });
             }
           }, [dadosUsuarioEditado]);
       
