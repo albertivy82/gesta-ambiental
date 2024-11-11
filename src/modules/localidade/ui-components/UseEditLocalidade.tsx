@@ -1,41 +1,31 @@
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
-import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
-import { Icon } from '../icon/Icon';
-import Text from '../text/Text';
-import { textTypes } from '../text/textTypes';
-import { apagarImovelQueue } from '../../../realm/services/imovelService';
+import { Icon } from '../../../shared/components/icon/Icon';
+import Text from '../../../shared/components/text/Text';
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 
-interface DeleteConfirmationProps {
-  id: number;
-  idLocal: string | undefined;
-  deleteEndpoint: string;
-  onDeleteSuccess: () => void;
+interface EditConfirmationProps {
+  localidade: LocalidadeType;
+  destino: string;
+  onEditSuccess: () => void;
 }
 
-const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, deleteEndpoint, onDeleteSuccess }) => {
+const EditConfirmation: React.FC<EditConfirmationProps> = ({ localidade, destino, onEditSuccess }) => {
+
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-console.log(id, idLocal)
-  const handleConfirmDelete = async () => {
+
+  const handleConfirmEdit = async () => {
     setLoading(true);
     try {
-      if(idLocal && id<0){
-        
-        switch (deleteEndpoint) {
-          case "imovel":
-            apagarImovelQueue(idLocal);
-            break;
-        }
-              
-      }else{
-        await await connectionAPIDelete(`http://192.168.100.28:8080/${deleteEndpoint}/${id}`);
-              
-      }
+      navigation.navigate(destino, {localidade});
       setModalVisible(false);
-      onDeleteSuccess();
+      onEditSuccess();
     } catch (error) {
-      Alert.alert("Erro ao excluir", "Tente novamente mais tarde.");
+      Alert.alert("Impossível editar");
     } finally {
       setLoading(false);
     }
@@ -43,10 +33,10 @@ console.log(id, idLocal)
 
   return (
     <>
-      <TouchableOpacity style={{ marginHorizontal: 10 }} onPress={() => setModalVisible(true)}>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='bin' color="#ff4500" />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500">Apagar Item</Text>
+          <Icon size={40} name='pencil2' color="#ff4500" />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500" style={{alignItems: 'baseline'}}>Editar Item</Text>
         </View>
       </TouchableOpacity>
 
@@ -64,7 +54,7 @@ console.log(id, idLocal)
             borderRadius: 10, 
             alignItems: 'center'
           }}>
-            <Text type={textTypes.PARAGRAPH_LIGHT}>Deseja realmente excluir este item?</Text>
+            <Text type={textTypes.PARAGRAPH_LIGHT}>Deseja realmente editar este item?</Text>
             
             {loading ? (
               <ActivityIndicator size="large" color="#ff4500" />
@@ -73,7 +63,7 @@ console.log(id, idLocal)
                 <TouchableOpacity onPress={() => setModalVisible(false)} style={{ padding: 10 }}>
                   <Text type={textTypes.BUTTON_REGULAR} color="#888">Cancelar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleConfirmDelete} style={{ padding: 10 }}>
+                <TouchableOpacity onPress={handleConfirmEdit} style={{ padding: 10 }}>
                   <Text type={textTypes.BUTTON_REGULAR} color="#ff4500">Confirmar</Text>
                 </TouchableOpacity>
               </View>
@@ -85,4 +75,4 @@ console.log(id, idLocal)
   );
 };
 
-export default DeleteConfirmation;
+export default EditConfirmation;

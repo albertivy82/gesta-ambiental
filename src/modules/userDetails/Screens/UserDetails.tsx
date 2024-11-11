@@ -75,6 +75,7 @@ const UserDetails = ()=>{
                     
             <DeleteConfirmation 
             id= {user.id} 
+            idLocal = {undefined}
             deleteEndpoint="usuario" 
             onDeleteSuccess={() => {
                    

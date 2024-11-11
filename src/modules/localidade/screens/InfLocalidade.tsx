@@ -2,19 +2,17 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { getCoordenadas } from '../../../realm/services/coordenadaService';
-import { Icon } from '../../../shared/components/icon/Icon';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
-import { EscolaType } from '../../../shared/types/EscolaType';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { coordenadasBody } from '../../../shared/types/coordenadaBody';
-import { PostoType } from '../../../shared/types/postoTypes';
 import { useCoordenadas } from '../hooks/useCoordenadas';
-import useDeleteLocalidade from '../hooks/useDeleteLocalidade';
 import { useEscolas } from '../hooks/useEscolas';
 import { useImoveis } from '../hooks/useImoveis';
 import { usePostos } from '../hooks/usePostos';
 import { LocalidadeContainer } from '../styles/Localidade.style';
+import EditConfirmation from '../ui-components/UseEditLocalidade';
 import QuadroDeItens from '../ui-components/quadroDeItens';
 
 export interface LocalidadeParam {
@@ -72,7 +70,7 @@ const InfLocalidade = () => {
       const {contagemPostos} = usePostos(localidade.id);     
       const {contagemImoveis} = useImoveis(localidade.id);
       const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>([]);
-      const { deleteLocalidade } = useDeleteLocalidade(localidade.id);
+      
 
 
       const handleCoordinatePress = (coordenada: coordenadasBody) => {
@@ -88,10 +86,7 @@ const InfLocalidade = () => {
         setCorrdenadasRealm(getCoordenadasRealm);
       }
   }, [coordenadas]);
-      const handleDeleteLocalidade = () => {
-        deleteLocalidade();
-      };
-
+      
       //BLOCO IMOVEL
       const  handleGerenciaImoveis =  (localidadeId: number, contagemImoveis: number) =>{
        
@@ -180,34 +175,33 @@ const InfLocalidade = () => {
 
       
       
-      <View style={{ flexDirection: 'row', 
+           <View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 
                       padding: 10,
                       marginTop: 40, 
                       borderWidth: 5, 
                       borderColor: "#808080", 
                       backgroundColor: '#000000'
-                    }}>
+                    }}>                     
+                     <EditConfirmation 
+                      localidade={localidade} 
+                      destino="Localidade" 
+                      onEditSuccess={() => {
+                      
+                      }} 
+                      />
 
-                    <TouchableOpacity onPress={() => handleDeleteLocalidade}>
-                        <View style={{ alignItems: 'center' }}
-                    
-                        >
-                            <Icon size={40} name='bin' color="#ff4500" />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={"#ff4500"}>Apagar Localidade</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: "#808080" }} />
-
-
-                    <TouchableOpacity onPress={() => null}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='pencil2' color="#ff4500" />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={"#ff4500"}>Editar Localidade</Text>
-                        </View>
-                    </TouchableOpacity>
-        </View>
+                      <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#9b9999' }} />
+                              
+                      <DeleteConfirmation 
+                      id={localidade.id} 
+                      idLocal={undefined}
+                      deleteEndpoint="localidade" 
+                      onDeleteSuccess={() => {
+                            
+                      }} 
+                      />
+         </View>
     </LocalidadeContainer>
     </ScrollView>
   );

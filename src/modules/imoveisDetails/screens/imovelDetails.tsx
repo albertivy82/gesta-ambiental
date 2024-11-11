@@ -186,6 +186,7 @@ const ImovelDetails = () => {
                               
                       <DeleteConfirmation 
                       id={params.imovel.id} 
+                      idLocal={params.imovel.idLocal}
                       deleteEndpoint="imovel" 
                       onDeleteSuccess={() => {
                             
