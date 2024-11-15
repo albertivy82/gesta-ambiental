@@ -130,3 +130,41 @@ export const apagarImovelQueue = (imovelidLocal: string) => {
         console.error('Erro ao excluir imóvel da fila:', error);
     }
 };
+
+export const apagarImovelSyncronizado = (imovelId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${imovelId}"`;
+            const imovelAExcluir = realmInstance.objects<imovelBody>('Imovel').filtered(query);
+
+            if (imovelAExcluir.length > 0) {
+
+             realmInstance.delete(imovelAExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir imóvel da fila:', error);
+    }
+};
+
+export const apagarTodosImoveis = () => {
+    try {
+        realmInstance.write(() => {
+           
+            
+            const imovelAExcluir = realmInstance.objects<imovelBody>('Imovel');
+
+            if (imovelAExcluir.length > 0) {
+                imovelAExcluir.forEach(imovel=>{
+                        realmInstance.delete(imovel);
+                })
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir imóvel da fila:', error);
+    }
+};
+
+

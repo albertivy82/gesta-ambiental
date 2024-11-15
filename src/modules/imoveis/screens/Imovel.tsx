@@ -9,6 +9,7 @@ import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { ImovelContainer } from '../styles/Imovel.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
+import { useImoveis } from '../../localidade/hooks/useImoveis';
 
 export interface ImoveisParam {
   localidadeId: number;
@@ -22,19 +23,19 @@ const Imoveis = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
   const { localidadeId } = route.params;
+  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
   const flatListRef = useRef<FlatList>(null);
-
   const [imovel, setImovel] = useState<imovelBody[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  
 
   // Carrega a lista inicial de imóveis
   const fetchImoveis = useCallback(async () => {
-    setIsLoading(true);
+    
     if (localidadeId) {
       const imovelRealm = getImoveis(localidadeId);
       setImovel(imovelRealm);
     }
-    setIsLoading(false);
+   
   }, [localidadeId]);
 
   useEffect(() => {
@@ -95,11 +96,9 @@ const Imoveis = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         {/* Botão "Atualizar" */}
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Atualizar
-          </Text>
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />

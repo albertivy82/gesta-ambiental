@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; 
 import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
-import { apagarImovelQueue } from '../../../realm/services/imovelService';
+import { apagarImovelQueue, apagarImovelSyncronizado, apagarTodosImoveis } from '../../../realm/services/imovelService';
 
 interface DeleteConfirmationProps {
   id: number;
@@ -16,7 +17,8 @@ interface DeleteConfirmationProps {
 const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, deleteEndpoint, onDeleteSuccess }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-console.log(id, idLocal)
+  const navigation = useNavigation(); // Inicialização do hook de navegação
+
   const handleConfirmDelete = async () => {
     setLoading(true);
     try {
@@ -29,11 +31,19 @@ console.log(id, idLocal)
         }
               
       }else{
+        //verificar se tem rede
         await await connectionAPIDelete(`http://192.168.100.28:8080/${deleteEndpoint}/${id}`);
+       
+        switch (deleteEndpoint) {
+          case "imovel":
+            apagarImovelSyncronizado(id);
+            break;
+        }
               
       }
       setModalVisible(false);
       onDeleteSuccess();
+      navigation.goBack();
     } catch (error) {
       Alert.alert("Erro ao excluir", "Tente novamente mais tarde.");
     } finally {
@@ -64,7 +74,7 @@ console.log(id, idLocal)
             borderRadius: 10, 
             alignItems: 'center'
           }}>
-            <Text type={textTypes.PARAGRAPH_LIGHT}>Deseja realmente excluir este item?</Text>
+            <Text type={textTypes.PARAGRAPH_LIGHT } color="#888">Deseja realmente excluir este item?</Text>
             
             {loading ? (
               <ActivityIndicator size="large" color="#ff4500" />
