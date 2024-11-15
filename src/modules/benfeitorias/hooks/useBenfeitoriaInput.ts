@@ -130,20 +130,19 @@ const enviarRegistro = async () =>{
                 if(netInfoState.isConnected && isConnected){
                   
                   try{
-                      const benfeitoriaOk = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
-                      console.log(benfeitoriaOk)
-                      console.log("benfeitoria case: cadastrou")
+                     
+                    await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
+                      
 
                   } catch (error) {
                       const benfeitoriaDataQueue = objetoFila();
                       salvarBenfeitoriaQueue(benfeitoriaDataQueue);
-                      console.error('Erro Também precisa enviar para fila:', error); 
-                       console.log("benfeitoria case: mandou para fila por erro")
+                     
                   }
                 }else{
                   const benfeitoriaDataQueue = objetoFila();
                       salvarBenfeitoriaQueue(benfeitoriaDataQueue);
-                      console.log("benfeitoria case: fila benfeitoria offline")
+                     
                   
                 }
       }

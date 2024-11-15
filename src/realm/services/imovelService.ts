@@ -149,6 +149,9 @@ export const apagarImovelSyncronizado = (imovelId: number) => {
     }
 };
 
+
+/*
+função de limpesa do banco-> criar componente para todas as categorias
 export const apagarTodosImoveis = () => {
     try {
         realmInstance.write(() => {
@@ -166,5 +169,5 @@ export const apagarTodosImoveis = () => {
         console.error('Erro ao excluir imóvel da fila:', error);
     }
 };
-
+*/
 

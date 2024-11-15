@@ -1,4 +1,4 @@
-import { simNao } from "../../enums/simNaoTalvez.enum";
+import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface EntrevistadoType {
 
@@ -6,7 +6,7 @@ id: number;
 nome: string;
 apelido: string;
 naturalidade: string;
-conheceUcProposta: simNao;
+conheceUcProposta: SimNaoTalvez;
 propostaMelhorarArea: string;
     imovel: {
         id:number;

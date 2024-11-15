@@ -5,7 +5,7 @@ import { connectionAPIDelete } from '../../../shared/functions/connection/connec
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
-import { apagarImovelQueue, apagarImovelSyncronizado, apagarTodosImoveis } from '../../../realm/services/imovelService';
+import { apagarImovelQueue, apagarImovelSyncronizado } from '../../../realm/services/imovelService';
 
 interface DeleteConfirmationProps {
   id: number;

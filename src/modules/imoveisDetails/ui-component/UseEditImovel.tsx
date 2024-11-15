@@ -1,11 +1,13 @@
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { UserBody } from '../../../shared/types/userBody';
 import { imovelBody } from '../../../shared/types/imovelType';
+import NetInfo from "@react-native-community/netinfo";
+import { testConnection } from '../../../shared/functions/connection/testConnection';
 
 interface EditConfirmationProps {
   imovel: imovelBody;
@@ -18,6 +20,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disable, setDisable] = useState<boolean>(false);
 
   const handleConfirmEdit = async () => {
     setLoading(true);
@@ -34,12 +37,40 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
     }
   };
 
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const netInfoState = await NetInfo.fetch();
+        if (!netInfoState.isConnected && !(await testConnection())) {
+          setDisable(true);
+        } else {
+          setDisable(false);
+        }
+      } catch (error) {
+        console.error('Erro ao verificar conexão:', error);
+        setDisable(true);
+      }
+    };
+
+    checkConnection();
+  }, []);
+
+    
+   
+  
+
   return (
     <>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
+     <TouchableOpacity onPress={() => setModalVisible(true)} disabled={disable}>
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='pencil2' color="#ff4500" />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500" style={{alignItems: 'baseline'}}>Editar Item</Text>
+          <Icon size={40} name='pencil2' color={disable ? '#aaa' : "#ff4500"} />
+          <Text 
+            type={textTypes.PARAGRAPH_LIGHT} 
+            color={disable ? "#aaa" : "#ff4500"} 
+            style={{ alignItems: 'baseline' }}
+          >
+            Editar Item
+          </Text>
         </View>
       </TouchableOpacity>
 

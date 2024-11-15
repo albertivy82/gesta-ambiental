@@ -12,7 +12,7 @@ import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../../enums/transporte.enum";
 import Input from "../../../shared/components/input/input";
 import { theme } from "../../../shared/themes/theme";
-import { useNovoImovel } from "../hooks/useInputImovel";
+import { useNovoImovel } from "../hooks/useNovaEscola";
 import { ImovelContainer } from "../styles/Escolas.style";
 
 
