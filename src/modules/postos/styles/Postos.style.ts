@@ -9,6 +9,9 @@ export const PostoContainer = styled.View`
     justify-items: center;
     padding: 16px;
 
+
+    
+
 `
 
 

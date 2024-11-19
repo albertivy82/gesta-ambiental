@@ -46,17 +46,17 @@ export const convertToImovelInput=(imovel: any) => {
 
 export const useImoveis = (localidadeId: number) =>{
    const [contagemImoveis, setContagemImoveis] = useState<number>(0);
-   const [isLoading, setIsLoading] = useState<boolean>(false);
   
-   const fetchImoveisFromLocalDb = useCallback(() => {
+  
+   const fetchImoveisFromLocalDb = () => {
     const localData = getImoveis(localidadeId);
     if (localData.length > 0) {
       setContagemImoveis(localData.length);
     }
-  }, [localidadeId]);
+  };
 
 
-   const sinconizeQueue = useCallback(async () => {
+   const sinconizeQueue = async () => {
     const imovelQueue = getImoveisDessincronizados(localidadeId);
     if (imovelQueue.length > 0) {
         for (const imovel of imovelQueue) {
@@ -85,9 +85,9 @@ export const useImoveis = (localidadeId: number) =>{
             }
         }
     }
-}, [localidadeId]);
+};
 
-const fetchImoveisFromAPI = useCallback(async () => {
+const fetchImoveisFromAPI = async () => {
 
     const netInfoState = await NetInfo.fetch();
     if (netInfoState.isConnected ) {
@@ -114,23 +114,19 @@ const fetchImoveisFromAPI = useCallback(async () => {
       }
     }}
       
-    }, [localidadeId]);
+    };
 
 
      
-    const refreshImoveis = useCallback(async () => {
-        setIsLoading(true);
-        await sinconizeQueue();
-        await fetchImoveisFromAPI();
+    
+    
+      useEffect(()=>{
+        sinconizeQueue()
+        fetchImoveisFromAPI();
         fetchImoveisFromLocalDb();
-        setIsLoading(false);
-      }, [fetchImoveisFromAPI, fetchImoveisFromLocalDb, sinconizeQueue]);
+      }, []);
     
-      useEffect(() => {
-        refreshImoveis();
-      }, [refreshImoveis]);
-    
-      return { contagemImoveis, isLoading, refreshImoveis };
+      return { contagemImoveis};
 
 
 }

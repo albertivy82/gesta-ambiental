@@ -6,9 +6,12 @@ id: number;
 nome: string;
 apelido: string;
 naturalidade: string;
-conheceUcProposta: SimNaoTalvez;
+conheceUcProposta: SimNaoTalvez| "" | null;
 propostaMelhorarArea: string;
-    imovel: {
-        id:number;
-    }
+imovel: {
+    id: number;
+};
+sincronizado?: boolean;
+idLocal?: string;
+idFather?:string;
 }

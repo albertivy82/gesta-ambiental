@@ -2,7 +2,7 @@ import { escolaInput } from "../../shared/types/EscolaInput";
 import { EscolaType } from "../../shared/types/EscolaType"
 import { realmInstance } from "./databaseService"
 
-export const salvarImoveis = (escolas: EscolaType[]) =>{
+export const salvarEscolas = (escolas: EscolaType[]) =>{
 
     return new Promise<void>((resolve, reject)=>{
            

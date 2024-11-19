@@ -95,11 +95,21 @@ export const useNovoPosto = (id: number) => {
     }));
   };
 
-  const handleMedicosPorTurnoChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    const value = parseInt(event.nativeEvent.text.replace(/\D/g, ""), 10) || 0;
+  
+  const handleMedicosPorTurnoChange = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    let value = event.nativeEvent.text;
+  
+    value = value.replace(/\D/g, '');
+  
+    // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+    const formattedValue = parseInt(value, 10);
+  
+    // Atualiza o estado com o valor formatado como número
     setNovoPosto((currentPosto) => ({
       ...currentPosto,
-      medicosPorTurno: value,
+      medicosPorTurno: formattedValue, // Salva como número para enviar à API
     }));
   };
 

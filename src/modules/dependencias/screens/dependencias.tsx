@@ -6,7 +6,7 @@ import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { DependenciaType } from "../../../shared/types/DependenciasType";
-import { UseCadastrarRegistro } from "../hooks/useCadastro";
+import { UseCadastrarRegistro } from "../hooks/useInputDependencia";
 import { Container, Row, Title } from "../styles/depndencia.style";
 import DropdownDependencias from "../ui-components/dropdownDependencias";
 import RenderItem from "../ui-components/listaDeDependencias";

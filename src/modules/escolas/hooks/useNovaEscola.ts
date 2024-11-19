@@ -7,17 +7,15 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import { salvarEscolaQueue } from "../../../realm/services/escolaService";
+import { EsferaEnum } from "../../../enums/esfera.enum";
 
 
 export const DEFAULT_ESCOLA_INPUT: escolaInput = {
   nome: "",
-  endereco: "",
-  numeroAlunos: 0,
-  tipoEnsino: "",
-  horarioFuncionamento: "",
-  possuiTransporteEscolar: null,
-  possuiLaboratorio: null,
-  possuiQuadraEsportiva: null,
+  iniciativa: null,
+  merenda: null,
+  transporte: null,
+  educacaoAmbiental: null,
   localidade: {
     id: 0,
   },
@@ -28,15 +26,14 @@ export const useNovaEscola = (id: number) => {
   const [disabled, setDisabled] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log(novaEscola)
     if (
-      novaEscola.nome !== "" &&
-      novaEscola.endereco !== "" &&
-      novaEscola.numeroAlunos > 0 &&
-      novaEscola.tipoEnsino !== "" &&
-      novaEscola.horarioFuncionamento !== "" &&
-      novaEscola.possuiTransporteEscolar !== null &&
-      novaEscola.possuiLaboratorio !== null &&
-      novaEscola.possuiQuadraEsportiva !== null
+      novaEscola.nome !== '' && 
+      novaEscola.iniciativa != null &&
+      novaEscola.merenda != null &&
+      novaEscola.transporte!= null &&
+      novaEscola.educacaoAmbiental != null
+     
     ) {
       setDisabled(true);
     }
@@ -90,18 +87,45 @@ export const useNovaEscola = (id: number) => {
     }));
   };
 
-  const handleSimNaoChange = (campo: keyof escolaInput, value: SimNaoTalvez) => {
-    setNovaEscola((currentEscola) => ({
-      ...currentEscola,
-      [campo]: value,
+  const handleIniciativa = (iniciativa: EsferaEnum | "" | null) => {
+    setNovaEscola((currentIniciativa) => ({
+      ...currentIniciativa,
+      iniciativa: iniciativa,
     }));
   };
+
+  const handleMerenda = (merenda: SimNaoTalvez | "" | null) => {
+    setNovaEscola((currentMerenda) => ({
+      ...currentMerenda,
+      merenda: merenda,
+    }));
+  };
+
+  const handleEducAmbiental = (educaAmbiental: SimNaoTalvez | "" | null) => {
+    setNovaEscola((currentEducaAbiental) => ({
+      ...currentEducaAbiental,
+      educacaoAmbiental: educaAmbiental,
+    }));
+  };
+
+
+  const handleTransporte = (transporte: SimNaoTalvez | "" | null) => {
+    setNovaEscola((currentTransporte) => ({
+      ...currentTransporte,
+      transporte: transporte,
+    }));
+  };
+
+
 
   return {
     novaEscola,
     handleOnChangeInput,
     inputEscolaApi,
-    handleSimNaoChange,
+    handleIniciativa,
+    handleMerenda,
+    handleEducAmbiental,
+    handleTransporte,
     disabled,
   };
 };

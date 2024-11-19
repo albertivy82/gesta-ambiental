@@ -1,17 +1,16 @@
+import { EsferaEnum } from "../../enums/esfera.enum";
 import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface escolaInput {
   nome: string;
-  endereco: string;
-  numeroAlunos: number;
-  tipoEnsino: string;
-  horarioFuncionamento: string;
-  possuiTransporteEscolar: SimNaoTalvez | "" | null;
-  possuiLaboratorio: SimNaoTalvez | "" | null;
-  possuiQuadraEsportiva: SimNaoTalvez | "" | null;
+  iniciativa: EsferaEnum| "" | null;
+  merenda: SimNaoTalvez | "" | null; 
+  transporte: SimNaoTalvez | "" | null; 
+  educacaoAmbiental: SimNaoTalvez | "" | null;
   localidade: {
-    id: number;
-  };
+      id: number;
+  }
   sincronizado?: boolean;
   idLocal?: string;
 }
+

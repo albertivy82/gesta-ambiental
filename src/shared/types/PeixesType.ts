@@ -1,11 +1,16 @@
+import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+
 export interface PeixesType {
     id: number;
     especie: string;
-    locaisEspeciais: string;
-    locaisEspecificosAlimentacao: string;
-    usoAlimnetacao: string;
-    usoComercio: string;
-    benfeitoria: {
-        id:number
-    }
+    locaisEspeciais: SimNaoTalvez |null|'';
+    locaisEspecificosAlimentacao: SimNaoTalvez |null|'';
+    usoAlimnetacao: SimNaoTalvez |null|'';
+    usoComercio: SimNaoTalvez |null|'';
+    benfeitoria?: {
+        id: number;
+    };
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
 }

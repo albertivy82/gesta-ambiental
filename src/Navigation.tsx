@@ -14,6 +14,8 @@ import ConsumoItens from "./modules/compras/screens/ConsumoItens";
 import Coordenadas from "./modules/coordenadas";
 import { Dependencias } from "./modules/dependencias/screens/dependencias";
 import EditUser from "./modules/editUser";
+import Entrevistados from "./modules/entrevistado/screens/Entrevistado";
+import { NovoEntrevistado } from "./modules/entrevistado/screens/novoEntrevistado";
 import Escolas from "./modules/escolas/screens/Escolas";
 import { NovaEscola } from "./modules/escolas/screens/novaEscola";
 import Home from "./modules/home";
@@ -23,9 +25,13 @@ import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
 import Login from "./modules/login";
+import OutrosServicos from "./modules/outrosSevicos/screens/OutroServico";
+import { NovoOutroServico } from "./modules/outrosSevicos/screens/novoOutroServico";
 import Postos from "./modules/postos/screens/Postos";
 import { NovoPosto } from "./modules/postos/screens/novoPosto";
 import ProfileUser from "./modules/profileUser";
+import ServicosBasicos from "./modules/sevicosBasicos/screens/SevicoBasico";
+import { NovoServicoBasico } from "./modules/sevicosBasicos/screens/novoServicoBasico";
 import Splash from "./modules/splash";
 import UserDetails from "./modules/userDetails";
 import { Icon } from "./shared/components/icon/Icon";
@@ -142,6 +148,12 @@ const Navigation =() =>{
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
           <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Ecolas'}} />
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
+          <Stack.Screen name="Entrevistados" component={Entrevistados} options={{title: 'Entrevistado'}} />
+          <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />
+          <Stack.Screen name="OutrosServicos" component={OutrosServicos} options={{title: 'Outros Serviços'}} />
+          <Stack.Screen name="NovoOutroServico" component={NovoOutroServico} options={{title: 'Cadastro de Serviços'}} />
+          <Stack.Screen name="ServicosBasicos" component={ServicosBasicos} options={{title: 'Saneamento Básico'}} />
+          <Stack.Screen name="NovoServicosBasicos" component={NovoServicoBasico} options={{title: 'Levantamento sobre Saneamento Básico'}} />        
         </Stack.Navigator>
       </NavigationContainer>
     );

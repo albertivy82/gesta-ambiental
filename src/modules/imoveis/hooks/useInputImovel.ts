@@ -179,10 +179,10 @@ export const useNovoImovel = (id:number) => {
         }));
       };
 
-      const handleIluminacaoChange = (mudanca: SimNaoTalvez | "" | null) => {
-        setNovoImovel((currentMudanca) => ({
-          ...currentMudanca,
-          iluminacaoPublica: mudanca,
+      const handleIluminacaoChange = (iluminacao: SimNaoTalvez | "" | null) => {
+        setNovoImovel((currentIluminacao) => ({
+          ...currentIluminacao,
+          iluminacaoPublica: iluminacao,
         }));
       };
 

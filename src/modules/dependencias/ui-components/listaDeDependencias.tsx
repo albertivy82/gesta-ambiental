@@ -5,7 +5,7 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { DependenciaType } from '../../../shared/types/DependenciasType';
 import { Row } from '../styles/depndencia.style';
-import { UseDeletarRegistro } from '../hooks/useCadastro';
+import { UseDeletarRegistro } from '../hooks/useInputDependencia';
 
 
 

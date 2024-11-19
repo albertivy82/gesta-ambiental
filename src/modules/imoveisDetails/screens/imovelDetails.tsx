@@ -116,18 +116,6 @@ const ImovelDetails = () => {
                                           borderWidth: 2, 
                                            borderColor: theme.colors.grayTheme.gray100 
                                         }}>
-                            <Icon size={30} name='droplet' color='blue' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Saneamento</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() =>null}>
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          
-                                          borderWidth: 2, 
-                                           borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
                             <Icon size={30} name='office' color='gray' />
                             <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Serviços Básicos</Text>
                         </View>
