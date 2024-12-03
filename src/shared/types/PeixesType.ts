@@ -7,7 +7,7 @@ export interface PeixesType {
     locaisEspecificosAlimentacao: SimNaoTalvez |null|'';
     usoAlimnetacao: SimNaoTalvez |null|'';
     usoComercio: SimNaoTalvez |null|'';
-    benfeitoria?: {
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

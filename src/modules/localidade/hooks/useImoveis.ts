@@ -5,7 +5,10 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
-import { setIdImovelFromApi } from "../../../realm/services/benfeitoriaService";
+import { setIdImovelFromApiOnBenfeitoria } from "../../../realm/services/benfeitoriaService";
+import { setIdImovelFromApiOnEntrevistado } from "../../../realm/services/entrevistado";
+import { setIdImovelFromApiServsBsics } from "../../../realm/services/ServicosBasicosService";
+import { setIdImovelFromApiOtherServs } from "../../../realm/services/outrosServicosService";
 
 export const convertToImovelInput=(imovel: any) => {
 
@@ -73,7 +76,11 @@ export const useImoveis = (localidadeId: number) =>{
                         if (imovelAPI.id) {
                             //console.log("Imóvel sincronizado. ID recebido:", imovelAPI.id);
                             // Atualizar as benfeitorias com o novo ID
-                            setIdImovelFromApi(imovelAPI.id, imovel.idLocal!);
+                            setIdImovelFromApiOnBenfeitoria(imovelAPI.id, imovel.idLocal!);
+                            setIdImovelFromApiOnEntrevistado(imovelAPI.id, imovel.idLocal!);
+                            setIdImovelFromApiServsBsics(imovelAPI.id, imovel.idLocal!);
+                            setIdImovelFromApiOtherServs(imovelAPI.id, imovel.idLocal!);
+                            
                             //console.log("ID local do imóvel:", imovel.idLocal!);
                             // Remover imóvel da fila
                             apagarImovelQueue(imovel.idLocal!);

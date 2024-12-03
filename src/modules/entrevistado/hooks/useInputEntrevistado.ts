@@ -15,6 +15,7 @@ import { connectionAPIPost } from "../../../shared/functions/connection/connecti
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatDateForApi } from "../../../shared/functions/data";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
+import { salvarEntrevistadoQueue } from "../../../realm/services/entrevistado";
 
 export const DEFAUL_ENTREVISTADO_INPUT: EntrevistadoInput = {
   nome: ' ',
@@ -23,12 +24,12 @@ export const DEFAUL_ENTREVISTADO_INPUT: EntrevistadoInput = {
   conheceUcProposta: null,
   propostaMelhorarArea: '',
   imovel: {
-      id: 0,
+    id:0,
   },
 };
 
 
-export const useNovoEntrevistado = (id:number) => {
+export const useNovoEntrevistado = (imovelId: number, idImovelLocal : string|undefined, sincronizado: boolean) => {
     const [novoEntrevistado, setnovoEntrevistado] = useState<EntrevistadoInput>(DEFAUL_ENTREVISTADO_INPUT);
     const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -48,176 +49,76 @@ export const useNovoEntrevistado = (id:number) => {
     }, [novoEntrevistado]);
 
     
-    const objetoFila =()=>{
-     
-        const entrevistadoData: EntrevistadoInput = {
-          ...novoEntrevistado, 
-          imovel: {
-            id:id
-          },
-          sincronizado: false,  
-          idLocal: uuidv4(),
-
-        }
-        return entrevistadoData
-    }
-
-    const inputImovelApi = async () => {
-      
-      novoImovel.localidade.id = id;
-      const netInfoState = await NetInfo.fetch();
-     
-      if(netInfoState.isConnected){
+    const objetoFila = () => {
+      //console.log("Iniciando criação do objeto fila...");
+    
+      const entrevistadoData: EntrevistadoInput = {
         
-              const isConnected = await testConnection();
-              
-              if (isConnected){
-              
-                      try {
-                          const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
-                          
-                      } catch (error) {
-                        const registroNaoEnviado = objetoFila()
-                        salvarImovelQueue(registroNaoEnviado)
-                        console.error('Objeto armazenado internamente. Erro:', error);
-                      }
-              }else{
-                
-                const registroNaoEnviado = objetoFila()
-                salvarImovelQueue(registroNaoEnviado)
-                        
-              }
-    }else{
-      
-      const registroNaoEnviado = objetoFila()
-      salvarImovelQueue(registroNaoEnviado)
-    }
-  };
-
-
-
-  const handleOnChangeInput = (
-    value: NativeSyntheticEvent<TextInputChangeEventData> | string,
-    name: string
-  ) => {
-    // Verifica se "value" é um evento ou uma string diretamente
-    const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
-  
-    setNovoImovel((currentImovel) => ({
-      ...currentImovel,
-      [name]: newValue,
-    }));
-  };
-  
-    const handleOnChangeData = (selectedDate: Date, name: string) => {
-        const dataFormatada = formatDateForApi(selectedDate);
-        setNovoImovel((currentUser) => ({
-            ...currentUser,
-            [name]: dataFormatada,
-        }));
+          ...novoEntrevistado, 
+          sincronizado: false,  
+          idLocal: uuidv4(), // Cria um ID único para a benfeitoria
+      };
+      // Verifica se o imóvel já possui um ID oficial (sincronizado)
+      if (imovelId>0) {
+         // console.log("ID do imóvel encontrado:", imovelId);
+          // Se sim, usa o ID oficial
+          entrevistadoData.imovel!.id = imovelId;
+          entrevistadoData.idFather = "";
+         // console.log("ID oficial do imóvel atribuído a benfeitoriaData:", benfeitoriaData.imovel);
+      } else {
+         // console.log("Imóvel não possui ID oficial ainda. Verificando idLocal...");
+    
+          if (idImovelLocal) {
+            //  console.log("ID local do imóvel encontrado:", idImovelLocal);
+              // Usa o idLocal do imóvel como referência
+              entrevistadoData.idFather = idImovelLocal;
+              entrevistadoData.imovel!.id = imovelId;
+          } else {
+              console.warn("ID local do imóvel não encontrado. Verifique se está sendo passado corretamente.");
+          }
+    
+        
+      }
+    
+      //console.log("Objeto benfeitoriaData final:", benfeitoriaData);
+      return entrevistadoData;
     };
+
+    const enviarEntrevistado = async () => {
+      if (!sincronizado && imovelId <= 0) {
+        // Imóvel offline
+        const entrevistadoDataQueue = objetoFila();
+        salvarEntrevistadoQueue(entrevistadoDataQueue);
+        console.log("Entrevistado case: imóvel offline");
+      } else {
+        novoEntrevistado.imovel = { id: imovelId };
+        const netInfoState = await NetInfo.fetch();
+        const isConnected = await testConnection();
+    
+        if (netInfoState.isConnected && isConnected) {
+          try {
+            await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado);
+          } catch (error) {
+            const entrevistadoDataQueue = objetoFila();
+            salvarEntrevistadoQueue(entrevistadoDataQueue);
+          }
+        } else {
+          const entrevistadoDataQueue = objetoFila();
+          salvarEntrevistadoQueue(entrevistadoDataQueue);
+        }
+      }
+    };
+    
+
+
 
     
 
-      const handleVizinhosChange = (vizinhos: Vizinhos | "" | null) => {
-        setNovoImovel((currentoVizinhos) => ({
-          ...currentoVizinhos,
-          vizinhos: vizinhos,
-        }));
-      };
-
-      const handleFundiarioChange = (situacaoFundiaria: situacaoFundiaria | "" | null) => {
-        setNovoImovel((currentSituacao) => ({
-          ...currentSituacao,
-          situacaoFundiaria: situacaoFundiaria,
-        }));
-      };
-
-      const handleDocumentacaoChange = (documentacao: documentacao | "" | null) => {
-        setNovoImovel((currentDocumnetacao) => ({
-          ...currentDocumnetacao,
-          documentacaoImovel: documentacao,
-        }));
-      };
-
-      const handleSimNaoChange = (mudanca: SimNaoTalvez | "" | null) => {
-        setNovoImovel((currentMudanca) => ({
-          ...currentMudanca,
-          pretendeMudar: mudanca,
-        }));
-      };
-
-      const handleIluminacaoChange = (iluminacao: SimNaoTalvez | "" | null) => {
-        setNovoImovel((currentIluminacao) => ({
-          ...currentIluminacao,
-          iluminacaoPublica: iluminacao,
-        }));
-      };
-
-      const handleLimitesChange = (limites: limitesTerrenoEnum | "" | null) => {
-        setNovoImovel((currentLimites) => ({
-          ...currentLimites,
-          limites: limites,
-        }));
-      };
-
-      const handleTransporteChange = (transporte: transporteEnum | "" | null) => {
-        setNovoImovel((currenttransporte) => ({
-          ...currenttransporte,
-          transporte: transporte,
-        }));
-      };
-
-      const handleSoloChange = (solo: tipoSoloEnum | "" | null) => {
-        setNovoImovel((currentSolo) => ({
-          ...currentSolo,
-          tipoSolo: solo,
-        }));
-      };
-
-      const handleLazerChange = (lazer: esporteLazerEnum | "" | null) => {
-        setNovoImovel((currentLazer) => ({
-          ...currentLazer,
-          esporteLazer: lazer,
-        }));
-      };
-
-      const handleOnChangeAreaImovel = (
-        event: NativeSyntheticEvent<TextInputChangeEventData>
-      ) => {
-        let value = event.nativeEvent.text;
-      
-        // Remove qualquer caractere não numérico
-        value = value.replace(/\D/g, '');
-      
-        // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
-        const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
-      
-        // Atualiza o estado com o valor formatado como número
-        setNovoImovel((currentImovel) => ({
-          ...currentImovel,
-          areaImovel: parseFloat(formattedValue), // Salva como número para enviar à API
-        }));
-      };
-      
       
     
 
     return {
-        novoImovel,
-        handleOnChangeInput,
-        inputImovelApi,
-        handleDocumentacaoChange,
-        handleTransporteChange,
-        handleLazerChange,
-        handleSoloChange,
-        handleLimitesChange,
-        handleSimNaoChange,
-        handleFundiarioChange,
-        handleVizinhosChange,
-        handleOnChangeData,
-        handleIluminacaoChange,
-        handleOnChangeAreaImovel,
+        
         disabled,
     };
 };

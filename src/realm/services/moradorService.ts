@@ -1,31 +1,98 @@
-
-import { MoradorType } from '../../shared/types/MoradorType';
 import { realmInstance } from './databaseService';
+import { MoradorInput } from '../../shared/types/MoradorInput';
+import { MoradorType } from '../../shared/types/MoradorType';
 
-export const salvarMorador = (moradores: MoradorType[]): Promise<void> => {
+export const salvarMoradores = (moradores: MoradorType[]) => {
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
                 moradores.forEach(morador => {
-                   
-                    const moradorCorrigido = {
-                        ...morador,
-                        benfeitoria: morador.benfeitoria.id
+                    const moradorRealm = realmInstance.objects('Morador').filtered(`id == ${morador.id}`)[0];
+                    if (morador.sincronizado && moradorRealm && morador.idLocal == '') {
+                        const moradorPadrao = {
+                            ...morador,
+                            benfeitoria: morador.benfeitoria.id,
+                        };
+                        realmInstance.create('Morador', moradorPadrao, true);
+                    } else {
+                        const moradorPadrao = {
+                            ...morador,
+                            benfeitoria: morador.benfeitoria.id,
+                        };
+                        realmInstance.create('Morador', moradorPadrao, true);
                     }
-                    realmInstance.create('Morador', moradorCorrigido, true);
                 });
-                resolve();
             });
+            resolve();
         } catch (error) {
-            reject();
+            reject(error);
         }
     });
-}
+};
 
-export const getMoradores = (benfeitoria: number): MoradorType[] => {
-   
-    const query = `benfeitoria == ${benfeitoria}`;
-    const moradoresRealm = realmInstance.objects<MoradorType>('Morador').filtered(query).slice();
-    const moradoresLimpos = JSON.parse(JSON.stringify(moradoresRealm));
-    return moradoresLimpos as MoradorType[];
+export const salvarMoradorQueue = (morador: MoradorInput) => {
+    return new Promise<void>((resolve, reject) => {
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return -Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+        try {
+            realmInstance.write(() => {
+                const moradorPadrao = {
+                    ...morador,
+                    id: Id(),
+                    benfeitoria: morador.benfeitoria?.id,
+                };
+                realmInstance.create('Morador', moradorPadrao, true);
+            });
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+export const getMoradores = (benfeitoriaId: number): MoradorType[] => {
+    const query = `benfeitoria == ${benfeitoriaId}`;
+    const moradores = realmInstance.objects<MoradorType>('Morador').filtered(query).slice();
+    return JSON.parse(JSON.stringify(moradores)) as MoradorType[];
+};
+
+export const getMoradoresDessincronizados = (benfeitoriaId: number): MoradorType[] => {
+    const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+    const moradorQueue = realmInstance.objects<MoradorType>('Morador').filtered(query).slice();
+    return JSON.parse(JSON.stringify(moradorQueue)) as MoradorType[];
+};
+
+export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfeitoriaIdLocal: string) => {
+    try {
+        const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
+        const moradorQueue = realmInstance.objects('Morador').filtered(query);
+
+        if (moradorQueue.length > 0) {
+            realmInstance.write(() => {
+                moradorQueue.forEach(moradorOrfan => {
+                    moradorOrfan.benfeitoria = idBenfeitoriaApi;
+                    moradorOrfan.idFather = '';
+                });
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar registros de moradores:', error);
+    }
+};
+
+export const apagarMoradorQueue = (idLocal: string) => {
+    try {
+        realmInstance.write(() => {
+            const query = `idLocal == "${idLocal}"`;
+            const moradorExcluir = realmInstance.objects<MoradorType>('Morador').filtered(query);
+            if (moradorExcluir.length > 0) {
+                realmInstance.delete(moradorExcluir);
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao excluir morador da fila:', error);
+    }
 };

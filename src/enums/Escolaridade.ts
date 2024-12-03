@@ -1,10 +1,10 @@
 ﻿export enum Escolaridade {
-    NENHUM = 'Nenhum',
-    FUNDAMENTAL_COMPLETO = 'Fundamental completo',
-    FUNDAMENTAL_INCOMPLETO = 'Fundamental incompleto',
-    MÉDIO_COMPLETO = 'Médio completo',
-    MÉDIO_INCOMPLETO = 'Médio incompleto',
-    SUPERIOR_COMPLETO = 'Superior completo',
-    SUPERIOR_INCOMPLETO = 'Superior incompleto',
-    PÓS_GRADUAÇÃO = 'Pós-graduação'
+    NENHUM = 'NENHUM',
+    FUNDAMENTAL_COMPLETO = 'FUNDAMENTAL_COMPLETO',
+    FUNDAMENTAL_INCOMPLETO = 'FUNDAMENTAL_INCOMPLETO',
+    MÉDIO_COMPLETO = 'MÉDIO_COMPLETO',
+    MÉDIO_INCOMPLETO = 'MÉDIO_INCOMPLETO',
+    SUPERIOR_COMPLETO = 'SUPERIOR_COMPLETO',
+    SUPERIOR_INCOMPLETO = 'SUPERIOR_INCOMPLETO',
+    PÓS_GRADUAÇÃO = 'PÓS_GRADUAÇÃO'
 }

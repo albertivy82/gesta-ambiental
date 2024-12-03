@@ -21,7 +21,7 @@ export interface VegetacaoType {
     quemEnsinouUso: string;
     repassaConhecimento: string;
     observacoesEspontaneas: string;
-    benfeitoria?: {
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

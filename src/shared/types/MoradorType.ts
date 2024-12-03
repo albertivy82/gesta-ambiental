@@ -1,17 +1,24 @@
-import { simNao } from "../../enums/simNaoTalvez.enum";
+import { Escolaridade } from "../../enums/Escolaridade";
+import { EstadoCivil } from "../../enums/EstadoCivil.enum";
+import { Perfil } from "../../enums/Perfil";
+import { Sexo } from "../../enums/Sexo";
+import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface MoradorType {
     id: number;
     dataNascimento: string; 
     idade: number;
-    perfil: string; 
-    sexo: string; 
-    estadoCivil: string; 
-    escolaridade: string; 
+    perfil: Perfil|null|''; 
+    sexo: Sexo|null|''; 
+    estadoCivil: EstadoCivil|null|''; 
+    escolaridade: Escolaridade|null|''; 
     ondeEstuda?: string;
-    trabalho: simNao; 
+    trabalho: SimNaoTalvez|null|''; 
     religiao: string;
     benfeitoria: {
-        id:number;
-    }
+        id: number;
+    };
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
 }

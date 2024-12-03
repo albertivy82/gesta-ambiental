@@ -73,7 +73,7 @@ useEffect(()=>{
 
 
 const objetoFila = () => {
-  console.log("Iniciando criação do objeto fila...");
+  //console.log("Iniciando criação do objeto fila...");
 
   const benfeitoriaData: BenfeitoriaInput = {
       ...novaBenfeitoria, 
@@ -82,16 +82,16 @@ const objetoFila = () => {
   };
   // Verifica se o imóvel já possui um ID oficial (sincronizado)
   if (imovelId>0) {
-      console.log("ID do imóvel encontrado:", imovelId);
+     // console.log("ID do imóvel encontrado:", imovelId);
       // Se sim, usa o ID oficial
       benfeitoriaData.imovel!.id = imovelId;
       benfeitoriaData.idFather = "";
-      console.log("ID oficial do imóvel atribuído a benfeitoriaData:", benfeitoriaData.imovel);
+     // console.log("ID oficial do imóvel atribuído a benfeitoriaData:", benfeitoriaData.imovel);
   } else {
-      console.log("Imóvel não possui ID oficial ainda. Verificando idLocal...");
+     // console.log("Imóvel não possui ID oficial ainda. Verificando idLocal...");
 
       if (idImovelLocal) {
-          console.log("ID local do imóvel encontrado:", idImovelLocal);
+        //  console.log("ID local do imóvel encontrado:", idImovelLocal);
           // Usa o idLocal do imóvel como referência
           benfeitoriaData.idFather = idImovelLocal;
           benfeitoriaData.imovel!.id = imovelId;
@@ -102,14 +102,9 @@ const objetoFila = () => {
     
   }
 
-  console.log("Objeto benfeitoriaData final:", benfeitoriaData);
+  //console.log("Objeto benfeitoriaData final:", benfeitoriaData);
   return benfeitoriaData;
 };
-
-
-
-
-
 
 
 const enviarRegistro = async () =>{

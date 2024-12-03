@@ -5,7 +5,7 @@ export interface DependenciaType {
     id: number;
     dependencia: DependenciasEnum | null|"";
     quantidade: number;
-    benfeitoria?: {
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

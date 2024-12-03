@@ -1,17 +1,23 @@
+import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+
 export interface AvesType {
     id: number;
-    possuiForneceimentoPublico: string;
-    qualidadeFornecimentoPublico: string;
-    corAguaForncimentoPublico: string;
-    saborAguaFornecimentoPublico: string;
-    cheiroAguaFornecimentoPublico: string;
-    poco: string;
-    profundidadePoco: number;
-    corAguaPoco: string;
-    saborAguaPoco: string;
-    cheiroAguaPoco: string;
-    tratamentoAgua: string;
+    especie: String;
+    useCosumo: SimNaoTalvez|null|'';
+    usoComercio: SimNaoTalvez|null|'';
+    usoCriacao: SimNaoTalvez|null|'';
+    usoRemedio: SimNaoTalvez|null|'';
+    usoOutros: SimNaoTalvez|null|'';
+    problemasRelacionados: string;
+    ameacaSofrida: string;
+    localDeAglomeracao: string;
+	qualImpotanciaDaEespecie: string;
+	alimentacao: string;
+	desricaoEspontanea: string;
     benfeitoria: {
-        id:number;
-    }
+        id: number;
+    };
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
 }

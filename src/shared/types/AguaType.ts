@@ -1,17 +1,25 @@
+import { MetodoTratamentoAgua } from "../../enums/MetodoTratamentoAgua.enum";
+import { PocoEnum } from "../../enums/Poco.enum";
+import { QualidadeAguaEnum } from "../../enums/qualidadeAgua.enum";
+import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+
 export interface AguaType {
     id: number;
-    possuiForneceimentoPublico: string;
-    qualidadeFornecimentoPublico: string;
+    possuiForneceimentoPublico: SimNaoTalvez|null|'';
+    qualidadeFornecimentoPublico: QualidadeAguaEnum|null|'';
     corAguaForncimentoPublico: string;
     saborAguaFornecimentoPublico: string;
     cheiroAguaFornecimentoPublico: string;
-    poco: string;
+    poco: PocoEnum|null|'';
     profundidadePoco: number;
     corAguaPoco: string;
     saborAguaPoco: string;
     cheiroAguaPoco: string;
-    tratamentoAgua: string;
+    tratamentoAgua: MetodoTratamentoAgua|null|'';
     benfeitoria: {
         id: number;
-    }
+    };
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
 }

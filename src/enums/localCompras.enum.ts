@@ -1,0 +1,5 @@
+export enum localComprasEnum {
+    NA_PROPRIA_LOCALIDADE = 'NA_PROPRIA_LOCALIDADE',
+    EM_OUTRA_LOCALIDADE = 'EM_OUTRA_LOCALIDADE',
+    
+}

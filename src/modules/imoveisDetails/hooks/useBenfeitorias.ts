@@ -1,10 +1,27 @@
-import { apagarBenfeitiaQueue, apagarQueueBenfeitoria, apagarQueueImovel, getAllBenfeitorias, getAllImoveis, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitoria } from "../../../realm/services/benfeitoriaService"
-import { useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
+import { useEffect, useState } from "react";
+import { setIdBenfeitoriaFromApiOnAguas } from "../../../realm/services/aguasService";
+import { setIdBenfeitoriaFromApiOnAlimentacao } from "../../../realm/services/alimentacaoService";
+import { setIdBenfeitoriaFromApiOnAtvProd } from "../../../realm/services/atividadeProdutivaService";
+import { setIdBenfeitoriaFromApiOnAves } from "../../../realm/services/avesService";
+import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
+import { setIdBenfeitoriaFromApiCompras } from "../../../realm/services/comprasService";
+import { setIdBenfeitoriaFromApiCredito } from "../../../realm/services/creditoService";
+import { setIdBenfeitoriaFromApiOnDependencias } from "../../../realm/services/dependenciaService";
+import { setIdBenfeitoriaFromApiOnFauna } from "../../../realm/services/faunaService";
+import { setIdBenfeitoriaFromApiOnIstConheci } from "../../../realm/services/instituicaoConhecidaService";
+import { setIdBenfeitoriaFromApiOnMamiferos } from "../../../realm/services/mamiferosService";
+import { setIdBenfeitoriaFromApiOnMorador } from "../../../realm/services/moradorService";
+import { setIdBenfeitoriaFromApiOnPeixes } from "../../../realm/services/peixesService";
+import { setIdBenfeitoriaFromApiOnPesca } from "../../../realm/services/pescaService";
+import { setIdBenfeitoriaFromApiOnRendasOF } from "../../../realm/services/rendaOutrasFontes";
+import { setIdBenfeitoriaFromApiOnCS } from "../../../realm/services/servicosComunicacaoService";
+import { setIdBenfeitoriaFromApiOnVegetacao } from "../../../realm/services/vegetacaoService";
+import { setIdBenfeitoriaFromApiOnViolencia } from "../../../realm/services/violenciaService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 export const convertToBenfeitoriaInput=(benfeitoria: any) => {
 
@@ -64,7 +81,23 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                             const benfeitoriaAPI = response as BenfeitoriaType;
                            
                                 if(benfeitoriaAPI.id){
-                                    //dar seu id para seus filhos
+                                    setIdBenfeitoriaFromApiOnAlimentacao(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiCompras(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnDependencias(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnAves(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnFauna(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnIstConheci(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnMamiferos(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnMorador(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnPeixes(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnPesca(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnCS(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnVegetacao(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnViolencia(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     apagarBenfeitiaQueue(benfeitoria.idLocal!)
                                     console.log("benfeitpria. ponto de sisncronização 6", )
                                 }
@@ -106,7 +139,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                 }))
                 console.log("benfeitpria. circuito da API")    
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
-                    await salvarBenfeitoria(bftData);
+                    await salvarBenfeitorias(bftData);
                     const constagem = bftData.length;
                     setcontagemBenfeitoria(constagem);
                 }else{

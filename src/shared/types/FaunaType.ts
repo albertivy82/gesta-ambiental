@@ -14,7 +14,7 @@ export interface FaunaType {
     frequenciaAtual: string;
     frequenciaPassada: Ocorrencia|null|'';
     tempoQueNaoVe: TempoQueNaoAvistaEnum|null|'';
-    benfeitoria?: {
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

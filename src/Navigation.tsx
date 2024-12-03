@@ -9,10 +9,9 @@ import admUsers from "./modules/admUsers/screens/AdmUsers";
 import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
 import { NovaBenfeitoria } from "./modules/benfeitorias/screens/novaBenfeitoria";
-import Consumo from "./modules/compras/screens/Consumo";
-import ConsumoItens from "./modules/compras/screens/ConsumoItens";
+import Consumo from "./modules/consumo/screens/Consumo";
+import ConsumoItens from "./modules/consumo/screens/ConsumoItens";
 import Coordenadas from "./modules/coordenadas";
-import { Dependencias } from "./modules/dependencias/screens/dependencias";
 import EditUser from "./modules/editUser";
 import Entrevistados from "./modules/entrevistado/screens/Entrevistado";
 import { NovoEntrevistado } from "./modules/entrevistado/screens/novoEntrevistado";
@@ -39,6 +38,35 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
+import { NovaVegetacao } from "./modules/vegetacao/screens/novaVegetacao";
+import Vegetacoes from "./modules/vegetacao/screens/Vegetacao";
+import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoServicoComunicacao";
+import ServicosComunicacao from "./modules/servicoComunicacao/screens/ServicoComunicacao";
+import Peixes from "./modules/peixe/screens/Peixe";
+import { NovoPeixe } from "./modules/peixe/screens/novoPeixe";
+import Dependencias from "./modules/dependencias/screens/Dependencia";
+import Mamiferos from "./modules/mamifero/screens/Mamifero";
+import { NovoMamifero } from "./modules/mamifero/screens/novoMamifero";
+import Faunas from "./modules/fauna/screens/Fauna";
+import { NovaFauna } from "./modules/fauna/screens/novaFauna";
+import Aguas from "./modules/agua/screens/Agua";
+import { NovaAgua } from "./modules/agua/screens/novaAgua";
+import Aves from "./modules/aves/screens/Ave";
+import { NovaAve } from "./modules/aves/screens/novaAve";
+import IntituicoesConhecidas from "./modules/insituticaoConhecida/screens/InstituicaoConhecida";
+import { NovaInstituicaoConhecida } from "./modules/insituticaoConhecida/screens/novaInsituicaoConhecida";
+import AtividadesProdutivas from "./modules/atividadeProdutiva/screens/AtividadeProdutiva";
+import { NovaAtividadeProdutiva } from "./modules/atividadeProdutiva/screens/novaAtividadeProdutiva";
+import Violencias from "./modules/violencia/screens/Violencia";
+import { NovaViolencia } from "./modules/violencia/screens/novaViolencia";
+import RendasOutrasFontes from "./modules/credito/screens/rendaOutrasFontes";
+import { NovaRendaOutrasFontes } from "./modules/credito/screens/novoMamifero";
+import Creditos from "./modules/rendaOutrasFontes/screens/Credito";
+import { NovoCredito } from "./modules/rendaOutrasFontes/screens/novoCredito";
+import Moradores from "./modules/morador/screens/Morador";
+import { NovoMorador } from "./modules/morador/screens/novoMorador";
+import PescasArtesanais from "./modules/pescaArtesanal/screens/PescaArtesanal";
+import { NovaPescaArtesal } from "./modules/pescaArtesanal/screens/novaPescaArtesanal";
 
 
 
@@ -154,6 +182,34 @@ const Navigation =() =>{
           <Stack.Screen name="NovoOutroServico" component={NovoOutroServico} options={{title: 'Cadastro de Serviços'}} />
           <Stack.Screen name="ServicosBasicos" component={ServicosBasicos} options={{title: 'Saneamento Básico'}} />
           <Stack.Screen name="NovoServicosBasicos" component={NovoServicoBasico} options={{title: 'Levantamento sobre Saneamento Básico'}} />        
+          <Stack.Screen name="Vegetacoes" component={Vegetacoes} options={{title: 'Vegetação'}} />
+          <Stack.Screen name="NovaVegetacao" component={NovaVegetacao} options={{title: 'Levantamento sobre vegetação'}} />        
+          <Stack.Screen name="ServicosComunicacao" component={ServicosComunicacao} options={{title: 'Serviços de Comunicação'}} />
+          <Stack.Screen name="NovoServicoComunicacao" component={NovoServicoComunicacao} options={{title: 'Serviços de comunicação disponíveis'}} />        
+          <Stack.Screen name="Peixes" component={Peixes} options={{title: 'Registro de Peixes'}} />
+          <Stack.Screen name="NovoPeixe" component={NovoPeixe} options={{title: 'Peixes'}} /> 
+          <Stack.Screen name="Mamiferos" component={Mamiferos} options={{title: 'Registro de mamíferos'}} />
+          <Stack.Screen name="NovoMamifero" component={NovoMamifero} options={{title: 'Mamíferos'}} /> 
+          <Stack.Screen name="Faunas" component={Faunas} options={{title: 'Registro de Fauna'}} />
+          <Stack.Screen name="NovasFaunas" component={NovaFauna} options={{title: 'Fauna'}} /> 
+          <Stack.Screen name="Aguas" component={Aguas} options={{title: 'Água'}} />
+          <Stack.Screen name="NovaAgua" component={NovaAgua} options={{title: 'Água'}} /> 
+          <Stack.Screen name="Aves" component={Aves} options={{title: 'Aves'}} />
+          <Stack.Screen name="NovaAve" component={NovaAve} options={{title: 'Aves'}} />
+          <Stack.Screen name="IntituicoesConhecidas" component={IntituicoesConhecidas} options={{title: 'Instituições conhecidas'}} />
+          <Stack.Screen name="NovaInstituicaoConhecida" component={NovaInstituicaoConhecida} options={{title: 'Cadastro de Intituições Conhecidas'}} /> 
+          <Stack.Screen name="AtividadesProdutivas" component={AtividadesProdutivas} options={{title: 'Atividades Produtivas'}} />
+          <Stack.Screen name="NovaAtividadeProdutiva" component={NovaAtividadeProdutiva} options={{title: 'Lvantamento sobre Atidades Produtivas'}} /> 
+          <Stack.Screen name="Violencias" component={Violencias} options={{title: 'Casos de Violencia'}} />
+          <Stack.Screen name="NovaViolencia" component={NovaViolencia} options={{title: 'Levantamento sobre violência'}} /> 
+          <Stack.Screen name="RendasOutrasFontes" component={RendasOutrasFontes} options={{title: 'Outras Fontes deRenda'}} />
+          <Stack.Screen name="NovaRendaOutrasFontes" component={NovaRendaOutrasFontes} options={{title: 'Levantamento de Outras Fontes de Renda'}} /> 
+          <Stack.Screen name="Creditos" component={Creditos} options={{title: 'Creditos acessados'}} />
+          <Stack.Screen name="NovoCredito" component={NovoCredito} options={{title: 'Levantamento sobre Créditos Acessados'}} /> 
+          <Stack.Screen name="Moradores" component={Moradores} options={{title: 'Moradores'}} />
+          <Stack.Screen name="NovoMorador" component={NovoMorador} options={{title: 'Moradores do Imovel'}} /> 
+          <Stack.Screen name="PescasArtesanais" component={PescasArtesanais} options={{title: 'Pesca Artesanal'}} />
+          <Stack.Screen name="NovaPescaArtesal" component={NovaPescaArtesal} options={{title: 'Levantamento sobre PescaA rtesanal'}} /> 
         </Stack.Navigator>
       </NavigationContainer>
     );

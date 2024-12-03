@@ -1,8 +1,13 @@
+import { localComprasEnum } from "../../enums/localCompras.enum";
+
 export interface ComprasInput {
-    ondeFazCompras: string;
+    ondeFazCompras: localComprasEnum;
     detalheLocalDeCompras?: string;
-    benfeitoria: {
-        id:number;
-    }
+    benfeitoria?: {
+        id: number;
+    };
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
     
 }

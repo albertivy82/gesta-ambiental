@@ -4,7 +4,7 @@ export interface ServicosBasicosInput {
     
     tipoAtendimento: string; 
     servicosDeficitarios: ServicoPublicos|""| null; 
-    imovel?: {
+    imovel: {
         id: number;
     };
     sincronizado?: boolean;

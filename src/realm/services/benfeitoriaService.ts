@@ -6,28 +6,50 @@ import { imovelBody } from '../../shared/types/imovelType';
 
 
 
-export const salvarBenfeitoria = (benfeitorias: BenfeitoriaType[]) => {
-    
-    return new Promise<void>((resolve, reject) => {
-        try {
-            realmInstance.write(() => {
-                benfeitorias.forEach(benfeitoria => {
-                   
-                    const benfeitoriaCorrigida = {
-                        ...benfeitoria,
-                        imovel: benfeitoria.imovel.id
-                    };
+export const salvarBenfeitorias = (benfeitorias: BenfeitoriaType[]) =>{
 
-                    realmInstance.create('Benfeitoria', benfeitoriaCorrigida, true);
-                    console.log("salvarBenfeitoria", benfeitoriaCorrigida)
+    return new Promise<void>((resolve, reject)=>{
+           
+        try{
+            realmInstance.write(()=>{
+
+                benfeitorias.forEach(benfeitoria=>{
+
+                    const benfeitoriaRealm = realmInstance.objects('Benfeitoria').filtered(`id == ${benfeitoria.id}`)[0];
                     
+                    if(benfeitoria.sincronizado && benfeitoriaRealm && benfeitoria.idLocal==''){
+                             const benfeitoriaPadrao ={
+                                    ...benfeitoria,
+                                    imovel: benfeitoria.imovel.id,
+                                };
+
+                                realmInstance.create('Benfeitoria', benfeitoriaPadrao, true);
+                    }else{
+                       const benfeitoriaPadrao ={
+                            ...benfeitoria,
+                            imovel: benfeitoria.imovel.id,
+                        };
+
+                        realmInstance.create('Benfeitoria', benfeitoriaPadrao, true);
+                    }
+                   
+                
                 });
+
+
+               
             });
+
             resolve();
-        } catch (error) {
+
+        }catch(error){
             reject(error)
         }
-    })
+    
+    
+    
+    });
+
 };
 
 export const salvarBenfeitoriaQueue = (benfeitoria:BenfeitoriaInput)=>{
@@ -104,7 +126,7 @@ export const getBenfeitoriaDessincronizadas = (idImovelApi: number): Benfeitoria
 };
 
 
-export const setIdImovelFromApi = (idImovelApi: number, imovelIdLocal: string) => {
+export const setIdImovelFromApiOnBenfeitoria = (idImovelApi: number, imovelIdLocal: string) => {
     try {
         const query = `idFather == "${imovelIdLocal}" AND (sincronizado == false and sincronizado == false)`;
         const benfeitoriaQueue = realmInstance.objects('Benfeitoria').filtered(query);

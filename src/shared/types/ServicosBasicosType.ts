@@ -4,9 +4,10 @@ export interface ServicosBasicosType {
     id: number;
     tipoAtendimento: string; 
     servicosDeficitarios: ServicoPublicos; 
-    localidade: {
+    imovel: {
         id: number;
     };
-    sincronizado: boolean;
+    sincronizado?: boolean;
     idLocal?: string;
+    idFather?:string;
 }

@@ -3,6 +3,9 @@
     nome: string;
     valor: number; 
     benfeitoria: {
-        id: number; 
-    }
+        id: number;
+    };
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
 }
