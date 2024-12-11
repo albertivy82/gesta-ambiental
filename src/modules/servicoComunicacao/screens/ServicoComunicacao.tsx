@@ -1,15 +1,15 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getImoveis } from '../../../realm/services/imovelService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
+import { useImoveis } from '../../localidade/hooks/useImoveis';
 import { ImovelContainer } from '../styles/Imovel.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
 
 export interface ImoveisParam {
   localidadeId: number;
@@ -85,7 +85,8 @@ const ServicosComunicacao = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-        {/* Botão "Ir para o Fim" */}
+        
+        
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -95,7 +96,8 @@ const ServicosComunicacao = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        {/* Botão "Atualizar" */}
+        
+        
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
@@ -103,7 +105,7 @@ const ServicosComunicacao = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        {/* Botão "Adicionar Imóvel" */}
+       
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -128,3 +130,4 @@ const ServicosComunicacao = () => {
 }
 
 export default ServicosComunicacao;
+ */

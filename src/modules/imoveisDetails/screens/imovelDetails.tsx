@@ -1,14 +1,15 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { Icon } from '../../../shared/components/icon/Icon';
-import Text from '../../../shared/components/text/Text';
-import { textTypes } from '../../../shared/components/text/textTypes';
+import { ScrollView, View } from 'react-native';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
+import { handleGerenciaFilhas } from '../hooks/useChild';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
-import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+import QuadroDeItens from '../ui-component/QuadroDeItens';
 import EditConfirmation from '../ui-component/UseEditImovel';
+import { renderField } from '../ui-component/renderFilds';
+
 
 
 
@@ -17,58 +18,12 @@ export interface ImovelParam {
  imovel: imovelBody;
 }
 
-//BLOCO BENFEITORIA
-export const benfeitoriasDoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovelId: number)=>{
-  navigate('Benfeitorias', {imovelId})
-}
-
-export const novaBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], 
-                                imovelId: number, 
-                                idLocal:string|undefined,
-                                sincronizado:boolean)=>{
-                                  console.log("passando o param", idLocal)
-  navigate('NovaBenfeitoria', {imovelId, idLocal, sincronizado})
-}
-
-
 const ImovelDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const {contagemBenfeitoria} = useBenfeitorias(params.imovel.id);
   
- const  handleGerenciaBenfeitorias =  (imovelId: number, 
-    idLocal:string|undefined, 
-    sincronizado: boolean, 
-    contagemBenfeitorias: number) =>{
-          if(contagemBenfeitorias>0){
-                      benfeitoriasDoImovel(navigation.navigate, imovelId);
-          }else{
-                    console.log("idLocal, 25/10/2024, 17:12", idLocal, imovelId)
-                      novaBenfeitoria(navigation.navigate, imovelId, idLocal, sincronizado);
-        }
-      }
-  
-  const renderField = (label: string, value: string | null| undefined) => {
-     return (
-          <View style={{
-             marginBottom: 10, 
-             borderColor: theme.colors.grayTheme.gray100, 
-             padding: 10,
-             borderWidth: 1 } }>
-             <Text type={textTypes.SUB_TITLE_SEMI_BOLD} color={theme.colors.blueTheme.blue1}>
-              {label}:
-             </Text>
-            <Text type={textTypes.BUTTON_REGULAR} color={theme.colors.mainTheme.black}>
-              {value? value : 'Informação não cadastrada'}
-            </Text>
-          </View>
-        );
-      };
-  
-    
-
-
-
+ 
   return (
     
        <ScrollView style={{ flex: 1 }}>
@@ -98,61 +53,57 @@ const ImovelDetails = () => {
                 {renderField('Estruturas de esporte e lazer próximos ao imóvel', params.imovel.esporteLazer)}
             </View>
 
-                    <TouchableOpacity onPress={() =>null}>
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          borderWidth: 2, 
-                                           borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                            <Icon size={30} name='man' color='brown' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Entrevistado</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <QuadroDeItens
+                      contagemItem={contagemBenfeitoria}
+                      icone='man'
+                      elemento='Entrevistado'
+                      onPress={() => handleGerenciaFilhas(
+                        navigation.navigate,
+                        { imovel: params.imovel, 
+                        contagemItem: contagemBenfeitoria, 
+                        item: "Entrevistado" 
+                        })}
+                      />   
 
-                    <TouchableOpacity onPress={() =>null}>
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          
-                                          borderWidth: 2, 
-                                           borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                            <Icon size={30} name='office' color='gray' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Serviços Básicos</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() =>null}>
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          
-                                          borderWidth: 2, 
-                                           borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                            <Icon size={30} name='cogs' color='green' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}>Outros Serviços</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <QuadroDeItens
+                      contagemItem={contagemBenfeitoria}
+                      icone='office'
+                      elemento='Serviços Básicos'
+                      onPress={() => handleGerenciaFilhas(
+                        navigation.navigate,{ 
+                        imovel: params.imovel, 
+                        contagemItem: contagemBenfeitoria, 
+                        item: "Serviços Básicos" 
+                      })}
+                      />
 
-                    <TouchableOpacity onPress={() => handleGerenciaBenfeitorias(
-                                                                                  params.imovel.id,
-                                                                                  params.imovel.idLocal, 
-                                                                                  params.imovel.sincronizado, 
-                                                                                  contagemBenfeitoria )}>
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          
-                                          borderWidth: 2, 
-                                           borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                                          
-                            <Icon size={30} name='tree' color='orange' />
-                            <View style={{ flexDirection: 'column' }}> 
-                                <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray100}> Benfeitorias</Text>
-                                <Text type={textTypes.PARAGRAPH_REGULAR} color={theme.colors.mainTheme.black}>
-                                  {'benfeitorias cadastradas: '+contagemBenfeitoria.toString()}
-                              </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+
+                    <QuadroDeItens
+                      contagemItem={contagemBenfeitoria}
+                      icone='cogs'
+                      elemento='Outros Serviços'
+                      onPress={() => handleGerenciaFilhas(
+                        navigation.navigate,
+                        { 
+                        imovel: params.imovel, 
+                        contagemItem: contagemBenfeitoria, 
+                        item: "Outros Serviços" 
+                      })}
+                      />
+
+                    <QuadroDeItens
+                      contagemItem={contagemBenfeitoria}
+                      icone='tree'
+                      elemento='Benfeitorias'
+                      onPress={() => handleGerenciaFilhas(
+                        navigation.navigate,
+                        { 
+                        imovel: params.imovel, 
+                        contagemItem: contagemBenfeitoria, 
+                        item: "Benfeitoria" 
+                      })}
+                      />
+
 
                     <View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 

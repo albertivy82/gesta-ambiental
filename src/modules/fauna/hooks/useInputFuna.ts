@@ -1,13 +1,10 @@
-import { DependenciaInput } from "../../../shared/types/DependenciaIput"
-import { connectionAPIDelete, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI"
+import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { ServicosComunicacaoInput } from "../../../shared/types/ComunicacaoInput";
-import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
-import { PeixesInput } from "../../../shared/types/PeixesInput";
-import { MamiferosType } from "../../../shared/types/MamiferosType";
-import { MamiferosInput } from "../../../shared/types/MamiferosInput";
 import { FaunaInput } from "../../../shared/types/FaunaInput";
+import { salvarFaunaQueue } from "../../../realm/services/faunaService";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 
 export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   especie: '',
@@ -25,7 +22,7 @@ export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   },
 };
 
-export const useNovaFauna = (id: number) => {
+export const useNovaFauna = (benfeitoriaId: number, idBenfeitoriaLocal : string|undefined, sincronizado: boolean) => {
   const [novaFauna, setNovaFauna] = useState<FaunaInput>(DEFAULT_FAUNA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -52,13 +49,52 @@ export const useNovaFauna = (id: number) => {
   const objetoFila = () => {
     const faunaData: FaunaInput = {
       ...novaFauna,
-      benfeitoria: {
-        id: id,
-      },
       sincronizado: false,
-      idLocal: uuidv4(),
+      idLocal: uuidv4(), // Cria um ID único para o registro de fauna
     };
+  
+    if (benfeitoriaId > 0) {
+      // Caso a benfeitoria tenha um ID oficial
+      faunaData.benfeitoria = { id: benfeitoriaId };
+      faunaData.idFather = "";
+    } else {
+      if (idBenfeitoriaLocal) {
+        // Caso a benfeitoria esteja offline, usa o ID local
+        faunaData.idFather = idBenfeitoriaLocal;
+        faunaData.benfeitoria = { id: benfeitoriaId };
+      } else {
+        console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
+      }
+    }
+  
     return faunaData;
   };
+
+  const enviarRegistro = async () => {
+    if (!sincronizado && benfeitoriaId <= 0) {
+      // Benfeitoria offline
+      const faunaDataQueue = objetoFila();
+      salvarFaunaQueue(faunaDataQueue);
+      console.log("Fauna case: benfeitoria offline");
+    } else {
+      novaFauna.benfeitoria = { id: benfeitoriaId };
+      const netInfoState = await NetInfo.fetch();
+      const isConnected = await testConnection();
+  
+      if (netInfoState.isConnected && isConnected) {
+        try {
+          await connectionAPIPost('http://192.168.100.28:8080/fauna', novaFauna);
+        } catch (error) {
+          const faunaDataQueue = objetoFila();
+          salvarFaunaQueue(faunaDataQueue);
+        }
+      } else {
+        const faunaDataQueue = objetoFila();
+        salvarFaunaQueue(faunaDataQueue);
+      }
+    }
+  };
+  
+  
 
 }

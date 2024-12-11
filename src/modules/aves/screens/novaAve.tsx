@@ -1,4 +1,4 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+/* import { RouteProp, useRoute } from "@react-navigation/native";
 import { useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { Vizinhos } from "../../../enums/Vizinhos";
@@ -281,4 +281,4 @@ export const NovaAve = ()=>{
         </ImovelContainer>
         </ScrollView>
     )
-}
+} */

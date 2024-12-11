@@ -1,7 +1,6 @@
-import { View, TouchableOpacity } from 'react-native'; 
+import { TouchableOpacity, View } from 'react-native';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
-import { Icon } from '../../../shared/components/icon/Icon';
 
 interface QuadroDeItensProps {
   label: string;

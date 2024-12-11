@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getImoveis } from '../../../realm/services/imovelService';
@@ -85,7 +85,7 @@ const Creditos = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-        {/* Botão "Ir para o Fim" */}
+        
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -95,7 +95,7 @@ const Creditos = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        {/* Botão "Atualizar" */}
+    
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
@@ -103,7 +103,7 @@ const Creditos = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        {/* Botão "Adicionar Imóvel" */}
+       
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -128,3 +128,4 @@ const Creditos = () => {
 }
 
 export default Creditos;
+ */
