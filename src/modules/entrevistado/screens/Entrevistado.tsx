@@ -1,4 +1,4 @@
-/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { getImoveis } from '../../../realm/services/imovelService';
@@ -7,58 +7,59 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
+import { EntrevitadoContainer, ImovelContainer } from '../styles/entrevistado.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
 import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { getEntrevistados } from '../../../realm/services/entrevistado';
+import { useEntrevistado } from '../../imoveisDetails/hooks/useEntrevistado';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
-export interface ImoveisParam {
-  localidadeId: number;
+export interface entrevistadoParam {
+  imovelId: number; 
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
+/*
+export const novoEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
   navigate('NovoImovel', { localidadeId });
-}
+}*/
 
 const Entrevistados = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const route = useRoute<RouteProp<Record<string, entrevistadoParam>, 'Imovel'>>();
+  const { imovelId } = route.params;
+  //const { contagemEntrevistado } = useEntrevistado(imovelId);
+  
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
+  const [entrevistado, setEntrevistado] = useState<EntrevistadoType[]>([]);
   
 
   // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
+  const fetchEntrevistado = useCallback(async () => {
     
-    if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+    if (imovelId) {
+      const entrevistadoRealm = getEntrevistados(imovelId);
+      setEntrevistado(entrevistadoRealm);
     }
    
-  }, [localidadeId]);
+  }, [imovelId]);
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchEntrevistado();
+  }, [fetchEntrevistado]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
-  const handleRefresh = () => {
-    fetchImoveis();
-    handleScrollToEnd();
-  };
 
-  const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
-  };
+ /*
+  const handleNovoEntrevistado = () => {
+    novoEntrevistado(navigation.navigate, imovelId);
+  };*/
 
   return (
-    <ImovelContainer>
+    <EntrevitadoContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -123,9 +124,8 @@ const Entrevistados = () => {
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       )}
-    </ImovelContainer>
+    </EntrevitadoContainer>
   );
 }
 
 export default Entrevistados;
- */

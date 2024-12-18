@@ -107,7 +107,7 @@ export const useNovoImovel = (id:number) => {
               
                       try {
                           const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
-                          
+                          pegar id do imóvel e inserir no entrevistado
                       } catch (error) {
                         const registroNaoEnviado = objetoFila()
                         salvarImovelQueue(registroNaoEnviado)
@@ -117,12 +117,14 @@ export const useNovoImovel = (id:number) => {
                 
                 const registroNaoEnviado = objetoFila()
                 salvarImovelQueue(registroNaoEnviado)
+                pegar id do imóvel e inserir no entrevistado
                         
               }
     }else{
       
       const registroNaoEnviado = objetoFila()
       salvarImovelQueue(registroNaoEnviado)
+      pegar id do imóvel e inserir no entrevistado
     }
   };
 

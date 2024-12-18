@@ -53,7 +53,7 @@ export const NovaBenfeitoria=()=>{
            } = UseNovaBenfeitoria(params.imovelId, params.idLocal, params.sincronizado);
    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
-   console.log("25/10/2024, 18:37", params.idLocal)
+   //console.log("25/10/2024, 18:37", params.idLocal)
  
 
    const toggleOption = (option:string) =>{

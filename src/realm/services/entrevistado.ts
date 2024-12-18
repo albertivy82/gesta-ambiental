@@ -76,9 +76,9 @@ export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput) => {
                     id: Id(),
                     imovel: entrevistado.imovel!.id,
                 };
-
+                console.log(entrevistadoPadrao)
                 realmInstance.create('Entrevistado', entrevistadoPadrao, true);
-                console.log('salvarEntrevistadoQueue', entrevistadoPadrao);
+                
             });
 
             resolve();
@@ -105,16 +105,26 @@ export const getAllEntrevistados = (): EntrevistadoType[] => {
     return cleanEntrevistados as EntrevistadoType[];
 };
 
-export const getEntrevistadosDessincronizados = (idImovelApi: number): EntrevistadoType[] => {
+export const getEntrevistadosDessincronizados = (idImovelApi: number): EntrevistadoType | undefined => {
     const query = `imovel == "${idImovelApi}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const entrevistadosQueue = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query);
+    
+    const cleanedQueue = entrevistadosQueue.map(entrevistado => ({ ...entrevistado }));
+    const primeiroRegistro = cleanedQueue[0];
 
-    const cleanedQueue = entrevistadosQueue.map(entrevistado => ({
-        ...entrevistado,
-    }));
+    console.log('getEntrevistadosDessincronizados', primeiroRegistro);
+    return primeiroRegistro;
+};
 
-    console.log('getEntrevistadosDessincronizados', cleanedQueue);
-    return cleanedQueue;
+export const getEntrevistadosPendente = (EntrevistadoIdLocal:string): EntrevistadoType => {
+    const query = `idLocal == "${EntrevistadoIdLocal}"`;
+    const entrevistadosQueue = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query);
+    
+    const cleanedQueue = entrevistadosQueue.map(entrevistado => ({ ...entrevistado }));
+    const primeiroRegistro = cleanedQueue[0];
+
+   console.log(primeiroRegistro);
+    return primeiroRegistro;
 };
 
 export const apagarEntrevistadoQueue = (idLocal: string) => {

@@ -17,9 +17,11 @@ import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelContainer } from "../styles/Imovel.style";
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from "react-native-paper";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 
 export interface idParam {
+Entrevistado: EntrevistadoType;
 localidadeId: number;
 }
 
@@ -28,7 +30,7 @@ export const NovoImovel = ()=>{
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false); 
    
-  
+  console.log(params)
   const { novoImovel,
            handleOnChangeInput,
            inputImovelApi,

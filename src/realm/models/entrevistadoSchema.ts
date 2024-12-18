@@ -8,6 +8,9 @@ export const EntrevistadoSchema = {
           naturalidade: 'string?',
           conheceUcProposta: 'string?',
           propostaMelhorarArea: 'string?',
-          imovel: 'int' 
+          imovel: 'int?', 
+          sincronizado: 'bool?',
+          idLocal: 'string?',
+          idFather: 'string?' 
   }
 };

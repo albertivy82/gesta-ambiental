@@ -5,10 +5,13 @@ import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { handleGerenciaFilhas } from '../hooks/useChild';
+import { useEntrevistado } from '../hooks/useEntrevistado';
+import { useServicosBasicos } from '../hooks/useServicoBasico';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import QuadroDeItens from '../ui-component/QuadroDeItens';
 import EditConfirmation from '../ui-component/UseEditImovel';
 import { renderField } from '../ui-component/renderFilds';
+import { useEffect } from 'react';
 
 
 
@@ -22,8 +25,11 @@ const ImovelDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const {contagemBenfeitoria} = useBenfeitorias(params.imovel.id);
+  const {contagemServicosBasicos} = useServicosBasicos(params.imovel.id);
+    
   
- 
+  
+
   return (
     
        <ScrollView style={{ flex: 1 }}>
@@ -54,25 +60,13 @@ const ImovelDetails = () => {
             </View>
 
                     <QuadroDeItens
-                      contagemItem={contagemBenfeitoria}
-                      icone='man'
-                      elemento='Entrevistado'
-                      onPress={() => handleGerenciaFilhas(
-                        navigation.navigate,
-                        { imovel: params.imovel, 
-                        contagemItem: contagemBenfeitoria, 
-                        item: "Entrevistado" 
-                        })}
-                      />   
-
-                    <QuadroDeItens
-                      contagemItem={contagemBenfeitoria}
+                      contagemItem={contagemServicosBasicos}
                       icone='office'
                       elemento='Serviços Básicos'
                       onPress={() => handleGerenciaFilhas(
                         navigation.navigate,{ 
                         imovel: params.imovel, 
-                        contagemItem: contagemBenfeitoria, 
+                        contagemItem: contagemServicosBasicos, 
                         item: "Serviços Básicos" 
                       })}
                       />

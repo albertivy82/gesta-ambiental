@@ -1,139 +1,97 @@
 import NetInfo from "@react-native-community/netinfo";
-import { useEffect, useState } from "react";
-import { setIdBenfeitoriaFromApiOnAguas } from "../../../realm/services/aguasService";
-import { setIdBenfeitoriaFromApiOnAlimentacao } from "../../../realm/services/alimentacaoService";
-import { setIdBenfeitoriaFromApiOnAtvProd } from "../../../realm/services/atividadeProdutivaService";
-import { setIdBenfeitoriaFromApiOnAves } from "../../../realm/services/avesService";
-import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
-import { setIdBenfeitoriaFromApiCompras } from "../../../realm/services/comprasService";
-import { setIdBenfeitoriaFromApiCredito } from "../../../realm/services/creditoService";
-import { setIdBenfeitoriaFromApiOnDependencias } from "../../../realm/services/dependenciaService";
-import { setIdBenfeitoriaFromApiOnFauna } from "../../../realm/services/faunaService";
-import { setIdBenfeitoriaFromApiOnIstConheci } from "../../../realm/services/instituicaoConhecidaService";
-import { setIdBenfeitoriaFromApiOnMamiferos } from "../../../realm/services/mamiferosService";
-import { setIdBenfeitoriaFromApiOnMorador } from "../../../realm/services/moradorService";
-import { setIdBenfeitoriaFromApiOnPeixes } from "../../../realm/services/peixesService";
-import { setIdBenfeitoriaFromApiOnPesca } from "../../../realm/services/pescaService";
-import { setIdBenfeitoriaFromApiOnRendasOF } from "../../../realm/services/rendaOutrasFontes";
-import { setIdBenfeitoriaFromApiOnCS } from "../../../realm/services/servicosComunicacaoService";
-import { setIdBenfeitoriaFromApiOnVegetacao } from "../../../realm/services/vegetacaoService";
-import { setIdBenfeitoriaFromApiOnViolencia } from "../../../realm/services/violenciaService";
+import { useEffect } from "react";
+import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/entrevistado";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
-import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
-export const convertToEntrevistadoInput=(benfeitoria: any) => {
+export const convertToEntrevistadoInput=(entrevistado: any) => {
 
     const entrevistdoInput: EntrevistadoInput ={
-        
+
+        nome: entrevistado.nome,
+        apelido: entrevistado.apelido,
+        naturalidade: entrevistado.naturalidade,
+        conheceUcProposta: entrevistado.conheceUcProposta,
+        propostaMelhorarArea: entrevistado.propostaMelhorarArea,
+        imovel: {
+            id: entrevistado.imovel,
+        },
+      
     }
    
-        return benfeitoriaInput
+        return entrevistdoInput
 }
 
 
- export const useBenfeitorias = (imovelId:number)=>{
+ export const useEntrevistado = (imovelId:number)=>{
 
-    const [contagemBenfeitoria, setcontagemBenfeitoria] = useState<number>(0);
-
-   const sinconizeBenfeitoriaQueue = async () => {
+   const sinconizeEntrevistadoQueue = async () => {
    
 
-    if(imovelId>0){
-        console.log("useBenfeitorias/sinconizeBenfeitoriaQueue")
-        const benfeitoriaQueue = getBenfeitoriaDessincronizadas(imovelId);
+           
+        const entrevistadoQueue = getEntrevistadosDessincronizados(imovelId);
       
-        if (benfeitoriaQueue.length > 0) {
-            for (const benfeitoria of benfeitoriaQueue) {
-               const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
-               console.log("benfeitpria. ponto de sisncronização 4")
-                console.log("Como está esta benfeitoria?", novaBenfeitoriaInput);
-                const netInfoState = await NetInfo.fetch();
+        if (!entrevistadoQueue) {
+           const novoEntrevistadoInput = convertToEntrevistadoInput(entrevistadoQueue)
+               const netInfoState = await NetInfo.fetch();
                 if (netInfoState.isConnected) {
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoriaInput);
-                            console.log("benfeitpria. ponto de sisncronização 5")
-                            const benfeitoriaAPI = response as BenfeitoriaType;
+                            const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoInput);
+                             const entrevistadoAPI = response as EntrevistadoType;
                            
-                                if(benfeitoriaAPI.id){
-                                    setIdBenfeitoriaFromApiOnAlimentacao(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiCompras(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnDependencias(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAves(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnFauna(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnIstConheci(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnMamiferos(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnMorador(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnPeixes(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnPesca(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnCS(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnVegetacao(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnViolencia(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    apagarBenfeitiaQueue(benfeitoria.idLocal!)
-                                    console.log("benfeitpria. ponto de sisncronização 6", )
+                                if(entrevistadoAPI.id){
+                                    apagarEntrevistadoQueue(entrevistadoAPI.idLocal!)
                                 }
                                 
                         } catch (error) {
-                            console.error('Erro na sincronização do imóvel:', error);
+                            console.error('Erro na sincronização do entrevistado:', error);
                         }
                     }
                 }
-            }
+            
         }
 
-    }
+    
     
     };
  
 
-    const fetchBenfeitoriasRealm = ()=>{
+    const fetchEntrevistadoRealm = ()=>{
 
-        const benfeitoriasRealm = getBenfeitorias(imovelId);
-
-            if(benfeitoriasRealm.length>0){
-                const benfeitoriasContagem = benfeitoriasRealm.length;
-                setcontagemBenfeitoria(benfeitoriasContagem);
-                              
-            }
+        const entrevistadoRealm = getEntrevistados(imovelId);
     }
 
-    const fetchBefeitoriasAPI = async() =>{
+    const fetchEntrevistadosAPI = async() =>{
 
         try{
-            const response = await connectionAPIGet<BenfeitoriaType[]>(`http://192.168.100.28:8080/benfeitoria/imovel-benfeitoria/${imovelId}`);
-                const bftData = response.map(bft=>({
-                    ...bft,
+            const response = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/imovel-entrevistado/${imovelId}`);
+                const entrevistadoData = response.map(entrevistado=>({
+                    ...entrevistado,
                     sincronizado:true,
                     idLocal:'',
                     idFather:'',
 
                 }))
-                console.log("benfeitpria. circuito da API")    
-                if(bftData && Array.isArray(bftData) && bftData.length>0){
-                    await salvarBenfeitorias(bftData);
-                    const constagem = bftData.length;
-                    setcontagemBenfeitoria(constagem);
+                //console.log("benfeitpria. circuito da API")    
+                if(!entrevistadoData ){
+                    await salvarEntrevistados(entrevistadoData);
                 }else{
-                    throw new Error('Dados de benfeitoria Inválidos'); 
+                    throw new Error('Dados de entrevistado Inválidos'); 
                 }
         } catch (error) {
-                console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                console.error("CONTAGEM DE ENTREVISTADO!!!:", error);
         }
     };
 
     useEffect(()=>{
-        fetchBenfeitoriasRealm();
-        fetchBefeitoriasAPI();
-        sinconizeBenfeitoriaQueue();
+        fetchEntrevistadoRealm();
+        fetchEntrevistadosAPI();
+        sinconizeEntrevistadoQueue();
     }, []);
 
-    return {contagemBenfeitoria};
+    
 }

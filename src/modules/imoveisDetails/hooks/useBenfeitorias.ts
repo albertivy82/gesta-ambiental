@@ -69,9 +69,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
         if (benfeitoriaQueue.length > 0) {
             for (const benfeitoria of benfeitoriaQueue) {
                const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
-               console.log("benfeitpria. ponto de sisncronização 4")
-                console.log("Como está esta benfeitoria?", novaBenfeitoriaInput);
-                const netInfoState = await NetInfo.fetch();
+                 const netInfoState = await NetInfo.fetch();
                 if (netInfoState.isConnected) {
                     const isConnected = await testConnection();
                     if (isConnected) {
@@ -103,7 +101,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                                 }
                                 
                         } catch (error) {
-                            console.error('Erro na sincronização do imóvel:', error);
+                            //console.error('Erro na sincronização da benfeitoria:', error);
                         }
                     }
                 }
@@ -146,7 +144,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                     throw new Error('Dados de benfeitoria Inválidos'); 
                 }
         } catch (error) {
-                console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
         }
     };
 

@@ -34,10 +34,14 @@ export const imoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['nav
   navigate('Imovel', {localidadeId})
 }
 
+/*
 export const NovoImoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
   navigate('NovoImovel', {localidadeId})
 }
-
+*/
+export const NovoEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('NovoEntrevistado', {localidadeId})
+}
 
 //BLOCO ESCOLAS
 export const escolasDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
@@ -91,11 +95,12 @@ const InfLocalidade = () => {
       const  handleGerenciaImoveis =  (localidadeId: number, contagemImoveis: number) =>{
        
         if(contagemImoveis>0){
-         
+         //pegar entrevistado
         imoveisDaLocalidade(navigation.navigate, localidadeId);
         }else{
-         
-        NovoImoveisDaLocalidade(navigation.navigate, localidadeId);
+        //novo entrevistado 
+        NovoEntrevistado(navigation.navigate, localidadeId)
+        //NovoImoveisDaLocalidade(navigation.navigate, localidadeId);
         }
       }
 

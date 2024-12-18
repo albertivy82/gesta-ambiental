@@ -33,6 +33,7 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
+import { NovoEntrevistado } from "./modules/entrevistado/screens/novoEntrevistado";
 
 
 
@@ -141,6 +142,7 @@ const Navigation =() =>{
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
           <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Ecolas'}} />
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
+          <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />
             
          </Stack.Navigator>
       </NavigationContainer>
