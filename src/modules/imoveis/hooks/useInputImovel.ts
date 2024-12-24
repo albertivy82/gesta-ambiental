@@ -15,6 +15,9 @@ import { connectionAPIPost } from "../../../shared/functions/connection/connecti
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatDateForApi } from "../../../shared/functions/data";
 import { imovelInput } from "../../../shared/types/imovelInput";
+import { gerenciarEntrevistado } from "../gerenciarEntrevistado";
+import { setIdImovelFromApiOnEntrevistado } from "../../../realm/services/entrevistado";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     rua:'',
@@ -94,7 +97,7 @@ export const useNovoImovel = (id:number) => {
         return imovelData
     }
 
-    const inputImovelApi = async () => {
+    const inputImovelApi = async (entrevistadoIdLocal:string) => {
       
       novoImovel.localidade.id = id;
       const netInfoState = await NetInfo.fetch();
@@ -106,25 +109,27 @@ export const useNovoImovel = (id:number) => {
               if (isConnected){
               
                       try {
-                          const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
-                          pegar id do imóvel e inserir no entrevistado
+                          const imovel = await connectionAPIPost<imovelBody>('http://192.168.100.28:8080/imovel', novoImovel);
+                          gerenciarEntrevistado(entrevistadoIdLocal, imovel.idLocal, imovel.id);
                       } catch (error) {
                         const registroNaoEnviado = objetoFila()
                         salvarImovelQueue(registroNaoEnviado)
+                        gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
                         console.error('Objeto armazenado internamente. Erro:', error);
                       }
               }else{
                 
                 const registroNaoEnviado = objetoFila()
                 salvarImovelQueue(registroNaoEnviado)
-                pegar id do imóvel e inserir no entrevistado
+                gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
                         
               }
     }else{
       
       const registroNaoEnviado = objetoFila()
       salvarImovelQueue(registroNaoEnviado)
-      pegar id do imóvel e inserir no entrevistado
+      gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
+     
     }
   };
 

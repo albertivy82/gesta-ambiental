@@ -2,11 +2,11 @@ import { realmInstance } from './databaseService';
 import { EntrevistadoInput } from '../../shared/types/EntrevistadoInput';
 import { EntrevistadoType } from '../../shared/types/EntrevistadoType';
 
-export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) => {
+export const salvarEntrevistados = (entrevistado: EntrevistadoType) => {
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
-                entrevistados.forEach(entrevistado => {
+              
                     const entrevistadoRealm = realmInstance.objects('Entrevistado').filtered(`id == ${entrevistado.id}`)[0];
 
                     if (entrevistado.sincronizado && entrevistadoRealm && entrevistado.idLocal === '') {
@@ -23,7 +23,7 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) => {
                         realmInstance.create('Entrevistado', entrevistadoPadrao, true);
                     }
                 });
-            });
+          
             resolve();
         } catch (error) {
             reject(error);

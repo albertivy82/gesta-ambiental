@@ -6,6 +6,7 @@ import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 import { situacaoFundiaria } from "../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../enums/transporte.enum";
+import { EntrevistadoType } from "./EntrevistadoType";
 
 export interface imovelBody{
 
@@ -37,4 +38,8 @@ export interface imovelBody{
     };
     sincronizado: boolean;
     idLocal?: string;
+}
+
+export interface ImovelComEntrevistado extends imovelBody {
+    entrevistado?: EntrevistadoType | null; // Adiciona o campo para o entrevistado (opcional)
 }

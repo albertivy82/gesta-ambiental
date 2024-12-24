@@ -1,5 +1,5 @@
 import { TouchableOpacity, View } from "react-native";
-import { imovelBody } from "../../../shared/types/imovelType";
+import { imovelBody, ImovelComEntrevistado } from "../../../shared/types/imovelType";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
@@ -10,10 +10,12 @@ export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate
     navigate('ImovelDetail', {imovel})
   }
   
+  interface RenderItemImovelProps {
+    item: ImovelComEntrevistado;
+  }
 
 
-
-const RenderItemImovel = ({ item }: { item: imovelBody}) => {
+const RenderItemImovel: React.FC<RenderItemImovelProps> = ({ item })=> {
 const navigation = useNavigation<NavigationProp<ParamListBase>>();
 
     const  handleGoToImovelDetail =  (imovel: imovelBody) =>{
@@ -26,6 +28,18 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
       <TouchableOpacity onPress={() => handleGoToImovelDetail(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               
+         {item.entrevistado ? (
+          <Text type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000": theme.colors.redTheme.red}>
+            {item.entrevistado.nome}</Text> // Renderiza o nome do entrevistado, se existir
+         ) : (
+          <Text type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000": theme.colors.redTheme.red}>Sem entrevistado</Text>
+          )}
+
+
+
+
              <Text
                 type={textTypes.BUTTON_REGULAR}
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}

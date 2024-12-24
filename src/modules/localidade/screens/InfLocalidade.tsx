@@ -1,13 +1,9 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { getCoordenadas } from '../../../realm/services/coordenadaService';
+import { ScrollView, View } from 'react-native';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
-import { coordenadasBody } from '../../../shared/types/coordenadaBody';
-import { useCoordenadas } from '../hooks/useCoordenadas';
 import { useEscolas } from '../hooks/useEscolas';
 import { useImoveis } from '../hooks/useImoveis';
 import { usePostos } from '../hooks/usePostos';
@@ -69,27 +65,13 @@ const InfLocalidade = () => {
       const navigation = useNavigation<NavigationProp<ParamListBase>>();
       const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
       const { localidade } = params;
-      const {coordenadas} = useCoordenadas(localidade.id);
       const {contagemEscolas} = useEscolas(localidade.id);
       const {contagemPostos} = usePostos(localidade.id);     
       const {contagemImoveis} = useImoveis(localidade.id);
-      const [coordenadasRealm, setCorrdenadasRealm] = useState<coordenadasBody[]>([]);
       
-
-
-      const handleCoordinatePress = (coordenada: coordenadasBody) => {
-        console.log("Coordenada selecionada:", coordenada);
-       
-    };
       
-
-    useEffect(()=>{
-      if(coordenadas){
-        const getCoordenadasRealm = getCoordenadas(localidade.id);
-       
-        setCorrdenadasRealm(getCoordenadasRealm);
-      }
-  }, [coordenadas]);
+  
+      
       
       //BLOCO IMOVEL
       const  handleGerenciaImoveis =  (localidadeId: number, contagemImoveis: number) =>{
@@ -122,25 +104,7 @@ const InfLocalidade = () => {
           }
        }
 
-       const renderItemList = (items: coordenadasBody[], label: string, onItemPress: (item: coordenadasBody) => void) => {
-        return (
-            <View style={{ padding: 10, borderWidth: 1, borderColor: "#ff4500"}}>
-                <Text type={textTypes.BUTTON_BOLD} color={"#000000"}>{label}</Text>
-                {items.length > 0 ? (
-                    items.map((item, index) => (
-                        <TouchableOpacity key={index} onPress={() => onItemPress(item)}>
-                            <Text type={textTypes.BUTTON_REGULAR} color={"#000000"}>
-                                {item.latitude}, {item.longitude}
-                            </Text>
-                        </TouchableOpacity>
-                    ))
-                ) : (
-                    <Text type={textTypes.BUTTON_REGULAR} color={"#000000"}>Não há itens cadastrados</Text>
-                )}
-            </View>
-        );
-    };
-    
+           
       
 
         
@@ -155,8 +119,7 @@ const InfLocalidade = () => {
           <Text type={textTypes.BUTTON_BOLD} color="#000000">Esfera: {localidade.esfera}</Text>
         </View>
 
-        {renderItemList(coordenadasRealm, 'Coordenadas', handleCoordinatePress)}
-              
+                   
         <QuadroDeItens
           label="Escolas Cadastradas" 
           count={contagemEscolas} 

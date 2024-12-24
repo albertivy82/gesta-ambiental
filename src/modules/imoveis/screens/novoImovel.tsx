@@ -21,7 +21,7 @@ import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 
 export interface idParam {
-Entrevistado: EntrevistadoType;
+EntrevistadoId: string;
 localidadeId: number;
 }
 
@@ -74,7 +74,7 @@ export const NovoImovel = ()=>{
       setLoading(true); 
   
       try {
-        await inputImovelApi(); 
+        await inputImovelApi(params.EntrevistadoId); 
         navigation.goBack(); 
       } catch (error) {
         console.error('Erro no envio:', error);

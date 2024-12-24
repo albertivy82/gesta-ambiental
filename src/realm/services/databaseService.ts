@@ -8,7 +8,6 @@ import { AlimentacaoSchema } from '../models/alimentacaoSchema';
 import { AtividadeProdutivaSchema } from '../models/atividadeProdutivaSchema';
 import { AvesSchema } from '../models/avesSchema';
 import { BenfeitoriaSchema } from '../models/benfeitoriaSchema';
-import { CoordenadaSchema } from '../models/coordenadaSchema';
 import { CreditoSchema } from '../models/creditoSchema';
 import { DependenciasSchema } from '../models/dependenciaSchema';
 import { EmbarcacaoSchema } from '../models/embarcacaoSchema';
@@ -31,7 +30,6 @@ import { ViolenciaSchema } from '../models/violenciaSchema';
 import { BenfeitoriaAlimentosSchema } from '../models/benfeitoriaAlimentos';
 
 const allSchemas = [LocalidadeSchema,
-                     CoordenadaSchema, 
                      ImovelSchema, 
                      PostoSchema, 
                      EscolaSchema, 

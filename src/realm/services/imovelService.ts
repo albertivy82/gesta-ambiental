@@ -1,6 +1,7 @@
 import { imovelInput } from "../../shared/types/imovelInput";
-import { imovelBody } from "../../shared/types/imovelType";
+import { imovelBody, ImovelComEntrevistado } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";
+import { getEntrevistados } from "./entrevistado";
 
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
@@ -100,6 +101,20 @@ export const getImoveis = (localidade:number): imovelBody[]=>{
 
     return imoveisLimpos as imovelBody[];
 }
+
+export const getImoveisComEntrevistados = (localidadeId: number): ImovelComEntrevistado[] => {
+    const imoveis = getImoveis(localidadeId);
+
+    return imoveis.map((imovel) => {
+        const entrevistados = getEntrevistados(imovel.id); // Busca os entrevistados associados ao imóvel
+        return {
+            ...imovel,
+            entrevistados, // Retorna a lista de entrevistados relacionados ao imóvel
+        };
+    });
+};
+
+
 
 
 export const getImoveisDessincronizados = (localidade:number): imovelBody[]=>{

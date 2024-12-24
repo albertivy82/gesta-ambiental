@@ -1,12 +1,12 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { getImoveis, getImoveisComEntrevistados } from '../../../realm/services/imovelService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
+import { imovelBody, ImovelComEntrevistado } from '../../../shared/types/imovelType';
 import { ImovelContainer } from '../styles/Imovel.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
 import { useImoveis } from '../../localidade/hooks/useImoveis';
@@ -25,15 +25,15 @@ const Imoveis = () => {
   const { localidadeId } = route.params;
   const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
+  const [imovel, setImovel] = useState<ImovelComEntrevistado[]>([]);
   
 
   // Carrega a lista inicial de imóveis
   const fetchImoveis = useCallback(async () => {
     
     if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+      const imovelRealmComEntrevistados = getImoveisComEntrevistados(localidadeId);
+      setImovel(imovelRealmComEntrevistados);
     }
    
   }, [localidadeId]);
