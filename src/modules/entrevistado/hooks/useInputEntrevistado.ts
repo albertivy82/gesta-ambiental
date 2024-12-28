@@ -57,8 +57,8 @@ export const useNovoEntrevistado = () => {
       return entrevistadoData.idLocal;
     };
 
-    const enviarEntrevistado = async (entrevistado: EntrevistadoType, imovel:imovelBody) => {
-      //converter para o tipo input
+    const enviarEntrevistado = async (entrevistado: EntrevistadoInput, imovel:imovelBody) => {
+      console.log("O que retornou??????", imovel)
       if (!imovel.sincronizado && imovel.id <= 0) {
         salvarEntrevistadoQueue(entrevistado);
         console.log("Entrevistado case: imóvel offline");
@@ -69,6 +69,7 @@ export const useNovoEntrevistado = () => {
     
         if (netInfoState.isConnected && isConnected) {
           try {
+            console.log("api");
             await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado);
           } catch (error) {
             salvarEntrevistadoQueue(entrevistado);
@@ -108,6 +109,7 @@ export const useNovoEntrevistado = () => {
 
     return {
       novoEntrevistado,
+      enviarEntrevistado,
       handleOnChangeInput,
       handlePropostaUcChange,
       objetoFila,

@@ -2,29 +2,38 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useRef } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
+import { getImoveis } from "../../../realm/services/imovelService";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { ImovelComEntrevistado } from "../../../shared/types/imovelType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
 
 
 export interface localidadeParam {
-   localidadeId: number,
+   item: ImovelComEntrevistado,
   }
 
-export const iniciarImovel = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoIdLocal: string, localidadeId:number)=>{
-      navigate('NovoImovel', {entrevistadoIdLocal, localidadeId})
+export const iniciarImovel = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoIdLocal: string|undefined, localidade:number)=>{
+ 
+  navigate('NovoImovel', {entrevistadoIdLocal, localidade})
+}
+
+export const Imovel = (navigate: NavigationProp<ParamListBase>['navigate'], item:localidadeParam)=>{
+ 
+  navigate('Imovel', {item})
 }
 
 export const NovoEntrevistado = ()=>{
   const { params } = useRoute<RouteProp<Record<string, localidadeParam>>>();
   const navigation = useNavigation();
   
-   
+   console.log(params.item.localidade)
   
   const { novoEntrevistado,
           handleOnChangeInput,
           handlePropostaUcChange,
+          enviarEntrevistado,
           objetoFila,
           disabled} = useNovoEntrevistado();
     
@@ -39,13 +48,22 @@ export const NovoEntrevistado = ()=>{
     const handleEnviar = async () => {
        
       try {
-        const entrevistadoIdLocal = objetoFila(); 
-            
+
+        if(params.item.sincronizado){
+          const imovel = getImoveis(params.item.id)
+          console.log("O que retornou?", imovel[0])
+          await enviarEntrevistado(novoEntrevistado, imovel[0]);
+                Imovel(navigation.navigate, params);
+        }else{
+             const entrevistadoIdLocal = objetoFila(); 
+        
             if (entrevistadoIdLocal) {
-              iniciarImovel(navigation.navigate, entrevistadoIdLocal, params.localidadeId);
+               
+                iniciarImovel(navigation.navigate, params.item.idLocal, params.item.localidade.id);
             } else {
               Alert.alert("Erro ao salvar", "Não foi possível encontrar o entrevistado pendente.");
             }
+        }
       } catch (error) {
             Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
             console.error("Erro ao navegar para NovoImovel:", error);

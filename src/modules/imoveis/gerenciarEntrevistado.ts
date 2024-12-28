@@ -17,20 +17,24 @@ export const convertToEntrevistadoInput = (entrevistado: EntrevistadoType): Entr
 
 export const gerenciarEntrevistado = async (entrevistadoId:string, imovelIdLocal:string|undefined, imovelIdApi: number|undefined) => {
             
-  
+      
       const entrevistadoPendente = getEntrevistadosPendente(entrevistadoId)
+      console.log('@', entrevistadoPendente)
       entrevistadoPendente.imovel.id = imovelIdApi ?? 0;
       entrevistadoPendente.idFather = imovelIdLocal ?? "";
-            
+       console.log('@', entrevistadoPendente)
      
-      if ( entrevistadoPendente.imovel.id>0 && imovelIdLocal=="") {
+      if ( entrevistadoPendente.imovel.id>0) {
        
+     
         const netInfoState = await NetInfo.fetch();
         const isConnected = await testConnection();
     
         if (netInfoState.isConnected && isConnected) {
               const entrevistadoEnvio =  convertToEntrevistadoInput(entrevistadoPendente); 
+              
               try {
+                
                 await connectionAPIPost('http://192.168.100.28:8080/entrevistado', entrevistadoEnvio);
               } catch (error) {
                 salvarEntrevistados(entrevistadoPendente);

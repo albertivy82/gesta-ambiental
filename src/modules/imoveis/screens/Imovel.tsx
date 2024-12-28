@@ -1,18 +1,19 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis, getImoveisComEntrevistados } from '../../../realm/services/imovelService';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getImoveisComEntrevistados } from '../../../realm/services/imovelService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody, ImovelComEntrevistado } from '../../../shared/types/imovelType';
+import { ImovelComEntrevistado } from '../../../shared/types/imovelType';
+import { useEntrevistado } from '../hooks/useEntrevistado';
 import { ImovelContainer } from '../styles/Imovel.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
 
 export interface ImoveisParam {
   localidadeId: number;
+  idsImoveis: number[];
 }
 
 export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
@@ -22,8 +23,9 @@ export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], 
 const Imoveis = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const { localidadeId} = route.params;
+  const { idsImoveis} = route.params;
+  useEntrevistado(idsImoveis)
   const flatListRef = useRef<FlatList>(null);
   const [imovel, setImovel] = useState<ImovelComEntrevistado[]>([]);
   
@@ -33,10 +35,14 @@ const Imoveis = () => {
     
     if (localidadeId) {
       const imovelRealmComEntrevistados = getImoveisComEntrevistados(localidadeId);
+      console.log('retorno va vinculação ent-imv', imovelRealmComEntrevistados)
       setImovel(imovelRealmComEntrevistados);
+
     }
    
   }, [localidadeId]);
+
+  
 
   useEffect(() => {
     fetchImoveis();
@@ -96,7 +102,7 @@ const Imoveis = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         {/* Botão "Atualizar" */}
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} >
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
@@ -112,9 +118,7 @@ const Imoveis = () => {
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
+      
         <FlatList
           ref={flatListRef}
           data={imovel}
@@ -122,8 +126,7 @@ const Imoveis = () => {
           renderItem={({ item }) => <RenderItemImovel item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
-      )}
-    </ImovelContainer>
+        </ImovelContainer>
   );
 }
 

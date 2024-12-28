@@ -49,6 +49,7 @@ export const convertToImovelInput=(imovel: any) => {
 
 export const useImoveis = (localidadeId: number) =>{
    const [contagemImoveis, setContagemImoveis] = useState<number>(0);
+   const [idsImoveis, setIdsImoveis] = useState<number[]>();
   
   
    const fetchImoveisFromLocalDb = () => {
@@ -123,7 +124,21 @@ const fetchImoveisFromAPI = async () => {
       
     };
 
-
+    const carregarImoveis = async () => {
+        
+        const imoveis = getImoveis(localidadeId);
+    
+       
+        const imovelIds = imoveis.map((imovel) => {
+            if (imovel.sincronizado) {
+                return imovel.id; 
+            }
+        });
+    
+        const idsValidos = imovelIds.filter((id) => id !== undefined && id !== null);
+    
+        setIdsImoveis(idsValidos)
+    };
      
     
     
@@ -131,9 +146,10 @@ const fetchImoveisFromAPI = async () => {
         sinconizeQueue()
         fetchImoveisFromAPI();
         fetchImoveisFromLocalDb();
+        carregarImoveis();
       }, []);
     
-      return { contagemImoveis};
+      return { contagemImoveis, idsImoveis};
 
 
 }

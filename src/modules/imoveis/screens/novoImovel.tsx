@@ -30,7 +30,7 @@ export const NovoImovel = ()=>{
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false); 
    
-  console.log(params)
+  console.log(params, '!!!!')
   const { novoImovel,
            handleOnChangeInput,
            inputImovelApi,

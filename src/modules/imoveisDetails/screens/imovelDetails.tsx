@@ -5,13 +5,11 @@ import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { handleGerenciaFilhas } from '../hooks/useChild';
-import { useEntrevistado } from '../hooks/useEntrevistado';
 import { useServicosBasicos } from '../hooks/useServicoBasico';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import QuadroDeItens from '../ui-component/QuadroDeItens';
 import EditConfirmation from '../ui-component/UseEditImovel';
 import { renderField } from '../ui-component/renderFilds';
-import { useEffect } from 'react';
 
 
 

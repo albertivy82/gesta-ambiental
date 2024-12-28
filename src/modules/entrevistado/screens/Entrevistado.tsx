@@ -11,7 +11,7 @@ import { EntrevitadoContainer, ImovelContainer } from '../styles/entrevistado.st
 import RenderItemImovel from '../ui-components/listaImoveis';
 import { useImoveis } from '../../localidade/hooks/useImoveis';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
-import { useEntrevistado } from '../../imoveisDetails/hooks/useEntrevistado';
+import { useEntrevistado } from '../../imoveis/hooks/useEntrevistado';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 export interface entrevistadoParam {

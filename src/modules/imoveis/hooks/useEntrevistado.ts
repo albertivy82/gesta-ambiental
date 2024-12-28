@@ -1,6 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect } from "react";
-import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/entrevistado";
+import { apagarEntrevistadoQueue, getEntrevistado, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/entrevistado";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
@@ -25,9 +25,9 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
 }
 
 
- export const useEntrevistado = (imovelId:number)=>{
+ export const useEntrevistado = (idsImoveis:number[])=>{
 
-   const sinconizeEntrevistadoQueue = async () => {
+   const sinconizeEntrevistadoQueue = async (imovelId:number) => {
    
 
            
@@ -60,38 +60,48 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
     };
  
 
-    const fetchEntrevistadoRealm = ()=>{
+    const fetchEntrevistadoRealm = (idImovel:number)=>{
 
-        const entrevistadoRealm = getEntrevistados(imovelId);
+        const entrevistadoRealm = getEntrevistado(idImovel);
     }
 
-    const fetchEntrevistadosAPI = async() =>{
-
-        try{
-            const response = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/imovel-entrevistado/${imovelId}`);
-                const entrevistadoData = response.map(entrevistado=>({
-                    ...entrevistado,
-                    sincronizado:true,
-                    idLocal:'',
-                    idFather:'',
-
-                }))
-                //console.log("benfeitpria. circuito da API")    
-                if(!entrevistadoData ){
-                    await salvarEntrevistados(entrevistadoData);
-                }else{
-                    throw new Error('Dados de entrevistado Inválidos'); 
-                }
+    const fetchEntrevistadoAPI = async (idImovel: number) => {
+        try {
+          const response = await connectionAPIGet<EntrevistadoType>(
+            `http://192.168.100.28:8080/entrevistado/imovel-entrevistado/${idImovel}`);
+      
+          if (response as EntrevistadoType && response.id) {
+            const entrevistadoData: EntrevistadoType  = {
+              ...response,
+              sincronizado: true,
+              idLocal: '',
+              idFather: '',
+            };
+      
+            console.log("Entrevistado recebido:", entrevistadoData);
+      
+            // Salva o entrevistado recebido
+            await salvarEntrevistados(entrevistadoData);
+          } else {
+            throw new Error("Dados de entrevistado inválidos");
+          }
         } catch (error) {
-                console.error("CONTAGEM DE ENTREVISTADO!!!:", error);
+          console.error("Erro ao buscar entrevistado:", error);
         }
-    };
+      };
+      
+    
 
-    useEffect(()=>{
-        fetchEntrevistadoRealm();
-        fetchEntrevistadosAPI();
-        sinconizeEntrevistadoQueue();
-    }, []);
+    useEffect(() => {
+        idsImoveis.forEach(async (idImovel) => {
+          // Sincronize ou obtenha os entrevistados para cada ID de imóvel
+          await fetchEntrevistadoRealm(idImovel);
+          await fetchEntrevistadoAPI(idImovel);
+          await sinconizeEntrevistadoQueue(idImovel);
+        });
+      }, [idsImoveis]);
 
+
+    
     
 }

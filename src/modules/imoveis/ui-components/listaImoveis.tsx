@@ -6,13 +6,20 @@ import { theme } from "../../../shared/themes/theme";
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 
 
-export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
-    navigate('ImovelDetail', {imovel})
+export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], item:ImovelComEntrevistado)=>{
+
+  if(!item.entrevistado){
+    navigate('NovoEntrevistado', {item})
+  }else{
+    navigate('ImovelDetail', {item})
   }
+}
   
   interface RenderItemImovelProps {
     item: ImovelComEntrevistado;
   }
+
+  
 
 
 const RenderItemImovel: React.FC<RenderItemImovelProps> = ({ item })=> {
@@ -28,16 +35,14 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
       <TouchableOpacity onPress={() => handleGoToImovelDetail(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               
-         {item.entrevistado ? (
-          <Text type={textTypes.BUTTON_REGULAR}
-          color={item.sincronizado ? "#000000": theme.colors.redTheme.red}>
-            {item.entrevistado.nome}</Text> // Renderiza o nome do entrevistado, se existir
-         ) : (
-          <Text type={textTypes.BUTTON_REGULAR}
-          color={item.sincronizado ? "#000000": theme.colors.redTheme.red}>Sem entrevistado</Text>
-          )}
-
-
+              {item.entrevistado ? (
+                <Text type={textTypes.BUTTON_BOLD}
+                      color={item.sincronizado ? "#000000": theme.colors.redTheme.red}>
+                  {item.entrevistado.nome}</Text> // Renderiza o nome do entrevistado, se existir
+              ) : (
+                <Text type={textTypes.BUTTON_BOLD}
+                color={item.sincronizado ? "#000000": theme.colors.redTheme.red}>Sem entrevistado cadastrado</Text>
+                )}
 
 
              <Text

@@ -1,35 +1,36 @@
-import { realmInstance } from './databaseService';
 import { EntrevistadoInput } from '../../shared/types/EntrevistadoInput';
 import { EntrevistadoType } from '../../shared/types/EntrevistadoType';
+import { realmInstance } from './databaseService';
+
 
 export const salvarEntrevistados = (entrevistado: EntrevistadoType) => {
     return new Promise<void>((resolve, reject) => {
-        try {
-            realmInstance.write(() => {
-              
-                    const entrevistadoRealm = realmInstance.objects('Entrevistado').filtered(`id == ${entrevistado.id}`)[0];
-
-                    if (entrevistado.sincronizado && entrevistadoRealm && entrevistado.idLocal === '') {
-                        const entrevistadoPadrao = {
-                            ...entrevistado,
-                            imovel: entrevistado.imovel.id,
-                        };
-                        realmInstance.create('Entrevistado', entrevistadoPadrao, true);
-                    } else {
-                        const entrevistadoPadrao = {
-                            ...entrevistado,
-                            imovel: entrevistado.imovel.id,
-                        };
-                        realmInstance.create('Entrevistado', entrevistadoPadrao, true);
-                    }
-                });
-          
-            resolve();
-        } catch (error) {
-            reject(error);
-        }
+      try {
+        realmInstance.write(() => {
+          const entrevistadoRealm = realmInstance
+            .objects('Entrevistado')
+            .filtered(`id == ${entrevistado.id}`)[0];
+  
+          console.log("Recebido para salvar:", entrevistado);
+  
+          const entrevistadoPadrao = {
+            ...entrevistado,
+            imovel: entrevistado.imovel.id,
+          };
+  
+          realmInstance.create('Entrevistado', entrevistadoPadrao, true);
+  
+          console.log("Entrevistado salvo:", entrevistadoPadrao);
+        });
+  
+        resolve();
+      } catch (error) {
+        console.error("Erro ao salvar entrevistado:", error);
+        reject(error);
+      }
     });
-};
+  };
+  
 
 export const setIdImovelFromApiOnEntrevistado = (idImovelApi: number, imovelIdLocal: string) => {
     try {
@@ -88,15 +89,22 @@ export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput) => {
     });
 };
 
-export const getEntrevistados = (imovel: number): EntrevistadoType[] => {
+export const getEntrevistado = (imovel: number): EntrevistadoType | null => {
     const query = `imovel == ${imovel}`;
-    const entrevistados = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query).slice();
+    const entrevistados = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query);
 
-    const cleanEntrevistados = JSON.parse(JSON.stringify(entrevistados));
-    console.log('getEntrevistados', cleanEntrevistados);
+    // Verifica se há algum entrevistado e retorna o primeiro
+    if (entrevistados.length > 0) {
+        const entrevistado = entrevistados[0];
+        const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistado));
+        console.log('getEntrevistado', cleanEntrevistado);
+        return cleanEntrevistado as EntrevistadoType;
+    }
 
-    return cleanEntrevistados as EntrevistadoType[];
+    // Retorna null se não encontrar nenhum entrevistado
+    return null;
 };
+
 
 export const getAllEntrevistados = (): EntrevistadoType[] => {
     const entrevistados = realmInstance.objects<EntrevistadoType>('Entrevistado');
@@ -159,3 +167,6 @@ export const apagarQueueEntrevistados = () => {
         console.error('Erro ao excluir entrevistados da fila:', error);
     }
 };
+
+
+
