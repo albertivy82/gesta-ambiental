@@ -78,8 +78,7 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
               idFather: '',
             };
       
-            console.log("Entrevistado recebido:", entrevistadoData);
-      
+            
             // Salva o entrevistado recebido
             await salvarEntrevistados(entrevistadoData);
           } else {

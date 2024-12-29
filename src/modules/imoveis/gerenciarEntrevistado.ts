@@ -19,10 +19,10 @@ export const gerenciarEntrevistado = async (entrevistadoId:string, imovelIdLocal
             
       
       const entrevistadoPendente = getEntrevistadosPendente(entrevistadoId)
-      console.log('@', entrevistadoPendente)
+     
       entrevistadoPendente.imovel.id = imovelIdApi ?? 0;
       entrevistadoPendente.idFather = imovelIdLocal ?? "";
-       console.log('@', entrevistadoPendente)
+      
      
       if ( entrevistadoPendente.imovel.id>0) {
        
@@ -37,6 +37,7 @@ export const gerenciarEntrevistado = async (entrevistadoId:string, imovelIdLocal
                 
                 await connectionAPIPost('http://192.168.100.28:8080/entrevistado', entrevistadoEnvio);
               } catch (error) {
+                
                 salvarEntrevistados(entrevistadoPendente);
               }
             } else {

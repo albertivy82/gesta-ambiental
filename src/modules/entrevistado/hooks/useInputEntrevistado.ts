@@ -58,8 +58,8 @@ export const useNovoEntrevistado = () => {
     };
 
     const enviarEntrevistado = async (entrevistado: EntrevistadoInput, imovel:imovelBody) => {
-      console.log("O que retornou??????", imovel)
-      if (!imovel.sincronizado && imovel.id <= 0) {
+      console.log("useInputEntrevistado.ts-enviarEntrevistado", imovel)
+      if (!imovel.sincronizado && imovel.id <0) {
         salvarEntrevistadoQueue(entrevistado);
         console.log("Entrevistado case: imóvel offline");
       } else {
@@ -71,11 +71,13 @@ export const useNovoEntrevistado = () => {
           try {
             console.log("api");
             await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado);
+            console.log("useInputEntrevistado.ts...enviando api...");
           } catch (error) {
-            salvarEntrevistadoQueue(entrevistado);
+            salvarEntrevistadoQueue(novoEntrevistado);
           }
         } else {
-          //const entrevistadoDataQueue = objetoFila();
+          console.log("seInputEntrevistado.ts-enviarEntrevistado, deveria salava na fila, mas se perdeu");
+          salvarEntrevistadoQueue(novoEntrevistado);
           
         }
       }

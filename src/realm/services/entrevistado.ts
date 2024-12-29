@@ -130,7 +130,7 @@ export const getEntrevistadosPendente = (EntrevistadoIdLocal:string): Entrevista
     
     const cleanedQueue = entrevistadosQueue.map(entrevistado => ({ ...entrevistado }));
     const primeiroRegistro = cleanedQueue[0];
-
+    
    console.log(primeiroRegistro);
     return primeiroRegistro;
 };
@@ -150,6 +150,9 @@ export const apagarEntrevistadoQueue = (idLocal: string) => {
         console.error('Erro ao excluir entrevistado da fila:', error);
     }
 };
+
+
+
 
 export const apagarQueueEntrevistados = () => {
     try {

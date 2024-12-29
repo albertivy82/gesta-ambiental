@@ -35,7 +35,6 @@ const Imoveis = () => {
     
     if (localidadeId) {
       const imovelRealmComEntrevistados = getImoveisComEntrevistados(localidadeId);
-      console.log('retorno va vinculação ent-imv', imovelRealmComEntrevistados)
       setImovel(imovelRealmComEntrevistados);
 
     }

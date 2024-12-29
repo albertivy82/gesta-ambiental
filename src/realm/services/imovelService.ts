@@ -2,7 +2,7 @@ import { useEntrevistado } from "../../modules/imoveis/hooks/useEntrevistado";
 import { imovelInput } from "../../shared/types/imovelInput";
 import { imovelBody, ImovelComEntrevistado } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";
-import { getEntrevistado } from "./entrevistado";
+import { apagarEntrevistadoQueue, apagarQueueEntrevistados, getEntrevistado } from "./entrevistado";
 
 
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
@@ -110,7 +110,6 @@ export const getImoveisComEntrevistados = (localidadeId: number): ImovelComEntre
     
     return imoveis.map((imovel) => {
         const entrevistado = getEntrevistado(imovel.id); // Busca os entrevistados associados ao imóvel
-       console.log('entrevistados', entrevistado)
         return {
             ...imovel,
             entrevistado, // Retorna a lista de entrevistados relacionados ao imóvel

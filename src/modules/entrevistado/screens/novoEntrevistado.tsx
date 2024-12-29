@@ -50,23 +50,21 @@ export const NovoEntrevistado = ()=>{
       try {
 
         if(params.item.sincronizado){
-          const imovel = getImoveis(params.item.id)
-          console.log("O que retornou?", imovel[0])
-          await enviarEntrevistado(novoEntrevistado, imovel[0]);
-                Imovel(navigation.navigate, params);
+          console.log("novoEntrevistado-handleEnviar: objeto sincronizado 1")
+          await enviarEntrevistado(novoEntrevistado, params.item);
+          Imovel(navigation.navigate, params);
         }else{
              const entrevistadoIdLocal = objetoFila(); 
         
             if (entrevistadoIdLocal) {
-               
-                iniciarImovel(navigation.navigate, params.item.idLocal, params.item.localidade.id);
+               iniciarImovel(navigation.navigate, params.item.idLocal, params.item.localidade.id);
             } else {
               Alert.alert("Erro ao salvar", "Não foi possível encontrar o entrevistado pendente.");
             }
         }
       } catch (error) {
-            Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-            console.error("Erro ao navegar para NovoImovel:", error);
+            Alert.alert("Erro ao enviar (novoEntrevistado: handleEnviar)", "Tente novamente mais tarde.");
+            console.error("Erro ao navegar para NovoImovel novoEntrevistado: handleEnviar:", error);
       } 
     };
     
