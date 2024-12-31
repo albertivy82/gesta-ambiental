@@ -7,11 +7,10 @@ import { salvarEntrevistadoQueue } from "../../../realm/services/entrevistado";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 
 export const DEFAUL_ENTREVISTADO_INPUT: EntrevistadoInput = {
-  nome: ' ',
+  nome: '',
   apelido: '',
   naturalidade: '',
   conheceUcProposta: null,
@@ -36,7 +35,7 @@ export const useNovoEntrevistado = () => {
         novoEntrevistado.propostaMelhorarArea !== '' 
         )
         {
-          console.log(disabled)
+        
           setDisabled(false)
         } 
        
@@ -48,7 +47,7 @@ export const useNovoEntrevistado = () => {
       const entrevistadoData: EntrevistadoInput = {
         
           ...novoEntrevistado, 
-          sincronizado: false,  
+          sincronizado:false,  
           idLocal: uuidv4(), 
       };
       
@@ -58,10 +57,10 @@ export const useNovoEntrevistado = () => {
     };
 
     const enviarEntrevistado = async (entrevistado: EntrevistadoInput, imovel:imovelBody) => {
-      console.log("useInputEntrevistado.ts-enviarEntrevistado", imovel)
+     
       if (!imovel.sincronizado && imovel.id <0) {
         salvarEntrevistadoQueue(entrevistado);
-        console.log("Entrevistado case: imóvel offline");
+       
       } else {
         novoEntrevistado.imovel = { id: imovel.id };
         const netInfoState = await NetInfo.fetch();
@@ -69,16 +68,17 @@ export const useNovoEntrevistado = () => {
     
         if (netInfoState.isConnected && isConnected) {
           try {
-            console.log("api");
+         
             await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado);
             console.log("useInputEntrevistado.ts...enviando api...");
           } catch (error) {
-            salvarEntrevistadoQueue(novoEntrevistado);
+            objetoFila();
+            
           }
         } else {
           console.log("seInputEntrevistado.ts-enviarEntrevistado, deveria salava na fila, mas se perdeu");
-          salvarEntrevistadoQueue(novoEntrevistado);
-          
+          objetoFila();
+                  
         }
       }
     };

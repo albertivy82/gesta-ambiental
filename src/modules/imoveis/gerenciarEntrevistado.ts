@@ -16,7 +16,7 @@ export const convertToEntrevistadoInput = (entrevistado: EntrevistadoType): Entr
 
 
 export const gerenciarEntrevistado = async (entrevistadoId:string, imovelIdLocal:string|undefined, imovelIdApi: number|undefined) => {
-            
+  console.log("teste atual: 0")
       
       const entrevistadoPendente = getEntrevistadosPendente(entrevistadoId)
      
@@ -26,15 +26,15 @@ export const gerenciarEntrevistado = async (entrevistadoId:string, imovelIdLocal
      
       if ( entrevistadoPendente.imovel.id>0) {
        
-     
+        console.log("teste atual: 1")
         const netInfoState = await NetInfo.fetch();
         const isConnected = await testConnection();
     
         if (netInfoState.isConnected && isConnected) {
               const entrevistadoEnvio =  convertToEntrevistadoInput(entrevistadoPendente); 
-              
+              console.log("teste atual: 2", entrevistadoEnvio)
               try {
-                
+                console.log("teste atual: 3 ", entrevistadoEnvio)
                 await connectionAPIPost('http://192.168.100.28:8080/entrevistado', entrevistadoEnvio);
               } catch (error) {
                 

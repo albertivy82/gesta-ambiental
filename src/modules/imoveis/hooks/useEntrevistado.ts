@@ -29,17 +29,17 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
 
    const sinconizeEntrevistadoQueue = async (imovelId:number) => {
    
-
-           
-        const entrevistadoQueue = getEntrevistadosDessincronizados(imovelId);
+       const entrevistadoQueue = getEntrevistadosDessincronizados(imovelId);
       
         if (!entrevistadoQueue) {
+         
            const novoEntrevistadoInput = convertToEntrevistadoInput(entrevistadoQueue)
                const netInfoState = await NetInfo.fetch();
                 if (netInfoState.isConnected) {
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
+                          console.log('tentar enviar o entrevistado pendente', novoEntrevistadoInput)
                             const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoInput);
                              const entrevistadoAPI = response as EntrevistadoType;
                            
@@ -61,7 +61,7 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
  
 
     const fetchEntrevistadoRealm = (idImovel:number)=>{
-
+        //pra que este método?
         const entrevistadoRealm = getEntrevistado(idImovel);
     }
 
@@ -97,6 +97,7 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
           await fetchEntrevistadoRealm(idImovel);
           await fetchEntrevistadoAPI(idImovel);
           await sinconizeEntrevistadoQueue(idImovel);
+        
         });
       }, [idsImoveis]);
 

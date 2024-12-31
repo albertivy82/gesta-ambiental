@@ -50,7 +50,6 @@ export const NovoEntrevistado = ()=>{
       try {
 
         if(params.item.sincronizado){
-          console.log("novoEntrevistado-handleEnviar: objeto sincronizado 1")
           await enviarEntrevistado(novoEntrevistado, params.item);
           Imovel(navigation.navigate, params);
         }else{
