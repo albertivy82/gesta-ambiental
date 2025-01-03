@@ -15,9 +15,8 @@ import { connectionAPIPost } from "../../../shared/functions/connection/connecti
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatDateForApi } from "../../../shared/functions/data";
 import { imovelInput } from "../../../shared/types/imovelInput";
-import { gerenciarEntrevistado } from "../gerenciarEntrevistado";
-import { setIdImovelFromApiOnEntrevistado } from "../../../realm/services/entrevistado";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { gerenciarEntrevistado } from "../gerenciarEntrevistado";
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     rua:'',
@@ -50,7 +49,7 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
 
 export const useNovoImovel = (id:number) => {
     const [novoImovel, setNovoImovel] = useState<imovelInput>(DEFAUL_IMOVEL_INPUT);
-    const [disabled, setDisabled] = useState<boolean>(false);
+    const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
 
@@ -78,13 +77,13 @@ export const useNovoImovel = (id:number) => {
         novoImovel.tipoSolo !== null &&           
         novoImovel.esporteLazer !== null )
         {
-          setDisabled(true)
+          setDisabled(false)
         } 
-       
+       console.log('testanto o que ocorre com id', id)
     }, [novoImovel]);
 
     const objetoFila =()=>{
-     
+      console.log('o que se passa com id na fila? ',id)
         const imovelData: imovelInput = {
           ...novoImovel, 
           localidade: {
@@ -94,12 +93,14 @@ export const useNovoImovel = (id:number) => {
           idLocal: uuidv4(),
 
         }
+      
         return imovelData
     }
 
     const inputImovelApi = async (entrevistadoIdLocal:string) => {
       
       novoImovel.localidade.id = id;
+      
       const netInfoState = await NetInfo.fetch();
      
       if(netInfoState.isConnected){
@@ -121,13 +122,16 @@ export const useNovoImovel = (id:number) => {
                 
                 const registroNaoEnviado = objetoFila()
                 salvarImovelQueue(registroNaoEnviado)
+                console.log('inputImovelApi-id de localidade', id)
                 gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
                         
               }
     }else{
       
       const registroNaoEnviado = objetoFila()
+      console.log('inputImovelApi-id de localidade de pois da fila', registroNaoEnviado)
       salvarImovelQueue(registroNaoEnviado)
+      console.log('inputImovelApi-id de localidade', id)
       gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
      
     }

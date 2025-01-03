@@ -16,16 +16,20 @@ export interface ImoveisParam {
   idsImoveis: number[];
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const NovoEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('NovoEntrevistado', {localidadeId})
 }
+
+/*export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
+  navigate('NovoImovel', { localidadeId });
+}*/
 
 const Imoveis = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
   const { localidadeId} = route.params;
   const { idsImoveis} = route.params;
-  useEntrevistado(idsImoveis)
+  useEntrevistado(idsImoveis);
   const flatListRef = useRef<FlatList>(null);
   const [imovel, setImovel] = useState<ImovelComEntrevistado[]>([]);
   
@@ -59,7 +63,9 @@ const Imoveis = () => {
   };
 
   const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+   
+    NovoEntrevistado(navigation.navigate, localidadeId)
+   
   };
 
   return (

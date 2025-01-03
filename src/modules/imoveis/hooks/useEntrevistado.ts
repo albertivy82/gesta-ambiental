@@ -29,9 +29,10 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
 
    const sinconizeEntrevistadoQueue = async (imovelId:number) => {
    
+   
        const entrevistadoQueue = getEntrevistadosDessincronizados(imovelId);
       
-        if (!entrevistadoQueue) {
+        if (entrevistadoQueue) {
          
            const novoEntrevistadoInput = convertToEntrevistadoInput(entrevistadoQueue)
                const netInfoState = await NetInfo.fetch();
@@ -39,7 +40,7 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                          console.log('tentar enviar o entrevistado pendente', novoEntrevistadoInput)
+                         
                             const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoInput);
                              const entrevistadoAPI = response as EntrevistadoType;
                            

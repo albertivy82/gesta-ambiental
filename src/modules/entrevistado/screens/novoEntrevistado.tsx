@@ -2,7 +2,6 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useRef } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
-import { getImoveis } from "../../../realm/services/imovelService";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { ImovelComEntrevistado } from "../../../shared/types/imovelType";
@@ -12,11 +11,12 @@ import { EntrevistadoContainer } from "../styles/entrevistado.style";
 
 export interface localidadeParam {
    item: ImovelComEntrevistado,
+   localidadeId: number,
   }
 
 export const iniciarImovel = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoIdLocal: string|undefined, localidade:number)=>{
- 
-  navigate('NovoImovel', {entrevistadoIdLocal, localidade})
+    
+      navigate('NovoImovel', {entrevistadoIdLocal, localidade})
 }
 
 export const Imovel = (navigate: NavigationProp<ParamListBase>['navigate'], item:localidadeParam)=>{
@@ -28,7 +28,7 @@ export const NovoEntrevistado = ()=>{
   const { params } = useRoute<RouteProp<Record<string, localidadeParam>>>();
   const navigation = useNavigation();
   
-   console.log(params.item.localidade)
+  // console.log(params.item.localidade, params.localidadeId)
   
   const { novoEntrevistado,
           handleOnChangeInput,
@@ -49,18 +49,28 @@ export const NovoEntrevistado = ()=>{
        
       try {
 
-        if(params.item.sincronizado){
-          await enviarEntrevistado(novoEntrevistado, params.item);
-          Imovel(navigation.navigate, params);
+        if(params.localidadeId){
+         
+           const entrevistadoIdLocal = objetoFila(); 
+             if (entrevistadoIdLocal) {
+                iniciarImovel(navigation.navigate, entrevistadoIdLocal, params.localidadeId);
+             } else {
+               Alert.alert("Erro ao salvar", "Não foi possível encontrar o entrevistado pendente.");
+             }
         }else{
-             const entrevistadoIdLocal = objetoFila(); 
-        
-            if (entrevistadoIdLocal) {
-               iniciarImovel(navigation.navigate, params.item.idLocal, params.item.localidade.id);
-            } else {
-              Alert.alert("Erro ao salvar", "Não foi possível encontrar o entrevistado pendente.");
+              if(params.item.sincronizado){
+                await enviarEntrevistado(novoEntrevistado, params.item);
+                Imovel(navigation.navigate, params);
+              }else{
+                  const entrevistadoIdLocal = objetoFila(); 
+              
+                  if (entrevistadoIdLocal) {
+                    iniciarImovel(navigation.navigate, params.item.idLocal, params.item.localidade.id);
+                  } else {
+                    Alert.alert("Erro ao salvar", "Não foi possível encontrar o entrevistado pendente.");
+                  }
+              }
             }
-        }
       } catch (error) {
             Alert.alert("Erro ao enviar (novoEntrevistado: handleEnviar)", "Tente novamente mais tarde.");
             console.error("Erro ao navegar para NovoImovel novoEntrevistado: handleEnviar:", error);
@@ -71,7 +81,7 @@ export const NovoEntrevistado = ()=>{
     
 
     return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'}}>
         <EntrevistadoContainer>
            <Input 
               value={novoEntrevistado.nome} 

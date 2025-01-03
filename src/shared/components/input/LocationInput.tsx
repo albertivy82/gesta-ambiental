@@ -17,19 +17,22 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
   const [longitude, setLongitude] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const getLocation = () => {
-   
-    Geolocation.getCurrentPosition(
+  // Atualiza os valores nos inputs e no formulário principal
+  const updateLocation = (lat: string, lon: string) => {
+    setLatitude(lat);
+    setLongitude(lon);
+    onLocationChange(lat, lon);
+  };
 
-      
+  // Obtém a localização atual
+  const getLocation = () => {
+    setLoading(true);
+    Geolocation.getCurrentPosition(
       (position) => {
         setLoading(false);
-                
         const lat = position.coords.latitude.toString();
         const lon = position.coords.longitude.toString();
-        setLatitude(lat);
-        setLongitude(lon);
-        onLocationChange(lat, lon); // Envia as coordenadas para o formulário principal
+        updateLocation(lat, lon);
       },
       (error) => {
         setLoading(false);
@@ -41,47 +44,54 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
 
   useEffect(() => {
     Geolocation.requestAuthorization();
-    getLocation();
   }, []);
 
   return (
     <View style={{ marginBottom: 20 }}>
+      {/* Input para Latitude */}
       <Input
         value={latitude}
-        onChange={() => {}}
+        onChange={(event) => updateLocation(event.nativeEvent.text, longitude)}
         placeholder="Latitude"
-         margin="15px 10px 30px 5px"
+        margin="15px 10px 30px 5px"
         title="Latitude"
-        editable={true}
+        editable={true} // Permitir edição manual
       />
+      
+      {/* Input para Longitude */}
       <Input
         value={longitude}
-        onChange={() => {}}
+        onChange={(event) => updateLocation(latitude, event.nativeEvent.text)}
         placeholder="Longitude"
         margin="15px 10px 30px 5px"
         title="Longitude"
-        editable={true}
+        editable={true} // Permitir edição manual
       />
-      
-      <TouchableOpacity onPress={getLocation} style={{
-        padding: 0,
-        backgroundColor: '#E6E8FA',
-        borderRadius: 2,
-        alignItems: 'center',
-       
-      }}>
-         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-         {loading ? (
-              <ActivityIndicator size="small" color={theme.colors.mainTheme.black} />
+
+      {/* Botão para atualizar localização */}
+      <TouchableOpacity
+        onPress={getLocation}
+        style={{
+          padding: 10,
+          backgroundColor: '#E6E8FA',
+          borderRadius: 2,
+          alignItems: 'center',
+        }}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {loading ? (
+            <ActivityIndicator size="small" color={theme.colors.mainTheme.black} />
           ) : (
-              <Icon size={30} name="location2" color={theme.colors.mainTheme.black} />
-            )}
-        <Text margin="0px 0px 0px 0px"  color={theme.colors.mainTheme.black} type={textTypes.PARAGRAPH_LIGHT}>
-                atualizar localização
-        </Text>
+            <Icon size={30} name="location2" color={theme.colors.mainTheme.black} />
+          )}
+          <Text
+            margin="0px 0px 0px 0px"
+            color={theme.colors.mainTheme.black}
+            type={textTypes.PARAGRAPH_LIGHT}
+          >
+            Atualizar localização
+          </Text>
         </View>
-       
-       
       </TouchableOpacity>
     </View>
   );

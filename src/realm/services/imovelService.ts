@@ -2,7 +2,7 @@ import { useEntrevistado } from "../../modules/imoveis/hooks/useEntrevistado";
 import { imovelInput } from "../../shared/types/imovelInput";
 import { imovelBody, ImovelComEntrevistado } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";
-import { apagarEntrevistadoQueue, apagarQueueEntrevistados, getEntrevistado } from "./entrevistado";
+import { apagarEntrevistadoQueue, apagarQueueEntrevistados, getEntrevistado, getEntrevistadoByIdFather } from "./entrevistado";
 
 
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
@@ -57,7 +57,7 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 };
 
 export const salvarImovelQueue = (imovel: imovelInput) =>{
-
+    console.log('salvarImovelqueue', imovel)
 
         return new Promise<void>((resolve, reject) => {
             // Função para gerar um ID aleatório
@@ -75,8 +75,9 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
                         id: Id(), 
                         localidade: imovel.localidade.id,
                     };
-                    console.log(imovelPadrao.id)
+                    console.log('salvarImovelqueue', imovelPadrao)
                     realmInstance.create('Imovel', imovelPadrao, true);
+                    console.log('salvarImovelQueue - Ok!')
                 });
         
                 resolve();
@@ -91,12 +92,12 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
 
 export const getImoveis = (localidade:number): imovelBody[]=>{
 
-   
+   console.log(localidade)
     const query = `localidade == ${localidade}`;
    
   
     const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
-    
+    console.log(imoveisRealm)
     const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm));
 
  
@@ -105,18 +106,26 @@ export const getImoveis = (localidade:number): imovelBody[]=>{
 }
 
 export const getImoveisComEntrevistados = (localidadeId: number): ImovelComEntrevistado[] => {
-    
     const imoveis = getImoveis(localidadeId);
-    
+  
     return imoveis.map((imovel) => {
-        const entrevistado = getEntrevistado(imovel.id); // Busca os entrevistados associados ao imóvel
-        return {
-            ...imovel,
-            entrevistado, // Retorna a lista de entrevistados relacionados ao imóvel
-           
-        };
+      let entrevistado;
+  
+      if (imovel.sincronizado) {
+        // Para imóveis sincronizados, utiliza o ID do imóvel
+        entrevistado = getEntrevistado(imovel.id);
+      } else if (imovel.idLocal) {
+        // Para imóveis offline, utiliza o idFather
+        entrevistado = getEntrevistadoByIdFather(imovel.idLocal);
+      }
+  
+      return {
+        ...imovel,
+        entrevistado,
+      };
     });
-};
+  };
+  
 
 
 
@@ -189,4 +198,22 @@ export const apagarTodosImoveis = () => {
     }
 };
 */
+
+
+
+export const getTodosImoveis = (): imovelBody[] => {
+  try {
+    const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').slice();
+    console.log('Todos os imóveis:', imoveisRealm);
+
+    // Serializando os objetos do Realm para garantir uma cópia limpa
+    const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm));
+
+    return imoveisLimpos as imovelBody[];
+  } catch (error) {
+    console.error('Erro ao buscar todos os imóveis:', error);
+    return [];
+  }
+};
+
 

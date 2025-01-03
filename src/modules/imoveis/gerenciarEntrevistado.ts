@@ -16,17 +16,29 @@ export const convertToEntrevistadoInput = (entrevistado: EntrevistadoType): Entr
 
 
 export const gerenciarEntrevistado = async (entrevistadoId:string, imovelIdLocal:string|undefined, imovelIdApi: number|undefined) => {
-  console.log("teste atual: 0")
-      
+ 
+      console.log('gerenciarEntrevistado', entrevistadoId)
       const entrevistadoPendente = getEntrevistadosPendente(entrevistadoId)
      
-      entrevistadoPendente.imovel.id = imovelIdApi ?? 0;
-      entrevistadoPendente.idFather = imovelIdLocal ?? "";
+      if( imovelIdApi){
+        entrevistadoPendente.imovel.id = imovelIdApi;
+        
+      }else{
+        entrevistadoPendente.imovel.id = 0;
+      }
+
+      if(imovelIdLocal){
+        entrevistadoPendente.idFather = imovelIdLocal;
+      }else{
+        entrevistadoPendente.idFather = "";
+      }
+      
+      
       
      
       if ( entrevistadoPendente.imovel.id>0) {
        
-        console.log("teste atual: 1")
+       
         const netInfoState = await NetInfo.fetch();
         const isConnected = await testConnection();
     

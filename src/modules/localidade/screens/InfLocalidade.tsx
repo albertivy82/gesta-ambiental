@@ -16,14 +16,6 @@ export interface LocalidadeParam {
 }
 
 
-//BLOCO COORDENADAS
-export const novasCoorenadas = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) =>{
-   navigate('Coordenadas', {localidadeId});
-}
-
-export const editarCoordenadas = (navigate: NavigationProp<ParamListBase>['navigate'], coordenadas: null) =>{
-  navigate('Coordenadas', {coordenadas});
-}
 
 //BLOCO IMOVEL
 export const imoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number, idsImoveis: number[])=>{
@@ -81,6 +73,7 @@ const InfLocalidade = () => {
         imoveisDaLocalidade(navigation.navigate, localidadeId, idsImoveis || []);
         }else{
         //novo entrevistado 
+        console.log(localidadeId)
         NovoEntrevistado(navigation.navigate, localidadeId)
         //NovoImoveisDaLocalidade(navigation.navigate, localidadeId);
         }

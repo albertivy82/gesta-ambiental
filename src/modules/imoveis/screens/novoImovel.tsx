@@ -1,6 +1,7 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { Vizinhos } from "../../../enums/Vizinhos";
 import { documentacao } from "../../../enums/documentacao.enum";
 import { esporteLazerEnum } from "../../../enums/esporteLazer.enum";
@@ -15,22 +16,24 @@ import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelContainer } from "../styles/Imovel.style";
-import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator } from "react-native-paper";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 
 export interface idParam {
-EntrevistadoId: string;
-localidadeId: number;
+  entrevistadoIdLocal: string;
+  localidade: number;
 }
+
+export const RetornarListaImoveis = (navigate: NavigationProp<ParamListBase>['navigate'])=>{
+  navigate('Imovel');
+}
+
 
 export const NovoImovel = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false); 
    
-  console.log(params, '!!!!')
+  
   const { novoImovel,
            handleOnChangeInput,
            inputImovelApi,
@@ -45,8 +48,8 @@ export const NovoImovel = ()=>{
            handleOnChangeData,
            handleIluminacaoChange,
            handleOnChangeAreaImovel,
-           disabled} = useNovoImovel(params.localidadeId);
-    
+           disabled} = useNovoImovel(params.localidade);
+   
     
     const fundiarioOptions = Object.values(situacaoFundiaria);
     const documentacaoOptions = Object.values(documentacao);
@@ -68,14 +71,14 @@ export const NovoImovel = ()=>{
     const inraestruturaInput = useRef<TextInput>(null);
     
     
-    
+    console.log(params.entrevistadoIdLocal)
     
     const handleEnviar = async () => {
       setLoading(true); 
   
       try {
-        await inputImovelApi(params.EntrevistadoId); 
-        navigation.goBack(); 
+        await inputImovelApi(params.entrevistadoIdLocal); 
+        RetornarListaImoveis(navigation.navigate)
       } catch (error) {
         console.error('Erro no envio:', error);
         Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
@@ -84,7 +87,7 @@ export const NovoImovel = ()=>{
       }
     };
 
-    console.log(disabled, loading)
+    
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>

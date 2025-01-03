@@ -54,7 +54,7 @@ export const NovaEscola = ()=>{
 
 
     return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
         <EscolaContainer>
 
         <Input 

@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
 import NetInfo from "@react-native-community/netinfo";
-import { apagarImovelQueue, getImoveis, getImoveisDessincronizados, salvarImoveis } from "../../../realm/services/imovelService";
+import { useEffect, useState } from "react";
+import { setIdImovelFromApiOnBenfeitoria } from "../../../realm/services/benfeitoriaService";
+import { setIdImovelFromApiOnEntrevistado } from "../../../realm/services/entrevistado";
+import { apagarImovelQueue, getImoveis, getImoveisDessincronizados, getTodosImoveis, salvarImoveis } from "../../../realm/services/imovelService";
+import { setIdImovelFromApiOtherServs } from "../../../realm/services/outrosServicosService";
+import { setIdImovelFromApiServsBsics } from "../../../realm/services/ServicosBasicosService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
-import { setIdImovelFromApiOnBenfeitoria } from "../../../realm/services/benfeitoriaService";
-import { setIdImovelFromApiOnEntrevistado } from "../../../realm/services/entrevistado";
-import { setIdImovelFromApiServsBsics } from "../../../realm/services/ServicosBasicosService";
-import { setIdImovelFromApiOtherServs } from "../../../realm/services/outrosServicosService";
 
 export const convertToImovelInput=(imovel: any) => {
 
@@ -41,7 +41,7 @@ export const convertToImovelInput=(imovel: any) => {
         }
     }
 
-    console.log('imovelInput', imovelInput)
+   
         return imovelInput
     };
 
@@ -53,6 +53,7 @@ export const useImoveis = (localidadeId: number) =>{
   
   
    const fetchImoveisFromLocalDb = () => {
+    
     const localData = getImoveis(localidadeId);
     if (localData.length > 0) {
       setContagemImoveis(localData.length);
@@ -125,10 +126,10 @@ const fetchImoveisFromAPI = async () => {
     };
 
     const carregarImoveis = async () => {
-        
+                
         const imoveis = getImoveis(localidadeId);
     
-       
+       console.log('useImoveis-carregarImoveis', imoveis, localidadeId)
         const imovelIds = imoveis.map((imovel) => {
             if (imovel.sincronizado) {
                 return imovel.id; 
