@@ -2,7 +2,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { setIdImovelFromApiOnBenfeitoria } from "../../../realm/services/benfeitoriaService";
 import { setIdImovelFromApiOnEntrevistado } from "../../../realm/services/entrevistado";
-import { apagarImovelQueue, getImoveis, getImoveisDessincronizados, getTodosImoveis, salvarImoveis } from "../../../realm/services/imovelService";
+import { apagarImovelQueue, carregarImoveis, getImoveis, getImoveisDessincronizados, getTodosImoveis, salvarImoveis } from "../../../realm/services/imovelService";
 import { setIdImovelFromApiOtherServs } from "../../../realm/services/outrosServicosService";
 import { setIdImovelFromApiServsBsics } from "../../../realm/services/ServicosBasicosService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
@@ -125,20 +125,9 @@ const fetchImoveisFromAPI = async () => {
       
     };
 
-    const carregarImoveis = async () => {
-                
-        const imoveis = getImoveis(localidadeId);
-    
-       console.log('useImoveis-carregarImoveis', imoveis, localidadeId)
-        const imovelIds = imoveis.map((imovel) => {
-            if (imovel.sincronizado) {
-                return imovel.id; 
-            }
-        });
-    
-        const idsValidos = imovelIds.filter((id) => id !== undefined && id !== null);
-    
-        setIdsImoveis(idsValidos)
+    const carregarIdsImoveis = async () => {
+        const ids = carregarImoveis(localidadeId); 
+        setIdsImoveis(ids); 
     };
      
     
@@ -147,7 +136,7 @@ const fetchImoveisFromAPI = async () => {
         sinconizeQueue()
         fetchImoveisFromAPI();
         fetchImoveisFromLocalDb();
-        carregarImoveis();
+        carregarIdsImoveis();
       }, []);
     
       return { contagemImoveis, idsImoveis};

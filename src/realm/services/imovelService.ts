@@ -2,7 +2,7 @@ import { useEntrevistado } from "../../modules/imoveis/hooks/useEntrevistado";
 import { imovelInput } from "../../shared/types/imovelInput";
 import { imovelBody, ImovelComEntrevistado } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";
-import { apagarEntrevistadoQueue, apagarQueueEntrevistados, getEntrevistado, getEntrevistadoByIdFather } from "./entrevistado";
+import { apagarEntrevistadoQueue, apagarQueueEntrevistados, getAllEntrevistados, getEntrevistado, getEntrevistadoByIdFather } from "./entrevistado";
 
 
 export const salvarImoveis = (imoveis: imovelBody[]) =>{
@@ -92,12 +92,12 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
 
 export const getImoveis = (localidade:number): imovelBody[]=>{
 
-   console.log(localidade)
+  
     const query = `localidade == ${localidade}`;
    
   
     const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
-    console.log(imoveisRealm)
+    
     const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm));
 
  
@@ -107,16 +107,19 @@ export const getImoveis = (localidade:number): imovelBody[]=>{
 
 export const getImoveisComEntrevistados = (localidadeId: number): ImovelComEntrevistado[] => {
     const imoveis = getImoveis(localidadeId);
-  
+ 
     return imoveis.map((imovel) => {
       let entrevistado;
   
       if (imovel.sincronizado) {
         // Para imóveis sincronizados, utiliza o ID do imóvel
         entrevistado = getEntrevistado(imovel.id);
+        console.log(entrevistado)
+       
       } else if (imovel.idLocal) {
         // Para imóveis offline, utiliza o idFather
         entrevistado = getEntrevistadoByIdFather(imovel.idLocal);
+       
       }
   
       return {
@@ -215,5 +218,16 @@ export const getTodosImoveis = (): imovelBody[] => {
     return [];
   }
 };
+
+
+export const carregarImoveis = (localidadeId: number): number[]=>{
+      const imoveis = getImoveis(localidadeId); // Obtém imóveis do banco de dados local
+  
+      return imoveis
+        .filter((imovel) => imovel.sincronizado)
+        .map((imovel) => imovel.id!); // Retorna apenas os IDs dos imóveis sincronizados
+}
+  
+  
 
 

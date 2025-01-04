@@ -16,6 +16,8 @@ import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelContainer } from "../styles/Imovel.style";
+import { carregarImoveis } from "../../../realm/services/imovelService";
+import { getLocalidades, getLocalidadesPorId } from "../../../realm/services/localidadeServices";
 
 
 export interface idParam {
@@ -23,14 +25,10 @@ export interface idParam {
   localidade: number;
 }
 
-export const RetornarListaImoveis = (navigate: NavigationProp<ParamListBase>['navigate'])=>{
-  navigate('Imovel');
-}
-
 
 export const NovoImovel = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false); 
    
   
@@ -71,14 +69,16 @@ export const NovoImovel = ()=>{
     const inraestruturaInput = useRef<TextInput>(null);
     
     
-    console.log(params.entrevistadoIdLocal)
+    
     
     const handleEnviar = async () => {
       setLoading(true); 
   
       try {
         await inputImovelApi(params.entrevistadoIdLocal); 
-        RetornarListaImoveis(navigation.navigate)
+        const localidade = getLocalidadesPorId(params.localidade)
+        navigation.navigate('Localidade_Detalhada', {localidade}); 
+       
       } catch (error) {
         console.error('Erro no envio:', error);
         Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");

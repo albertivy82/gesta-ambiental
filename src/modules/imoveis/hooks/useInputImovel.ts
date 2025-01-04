@@ -79,11 +79,11 @@ export const useNovoImovel = (id:number) => {
         {
           setDisabled(false)
         } 
-       console.log('testanto o que ocorre com id', id)
+       
     }, [novoImovel]);
 
     const objetoFila =()=>{
-      console.log('o que se passa com id na fila? ',id)
+    
         const imovelData: imovelInput = {
           ...novoImovel, 
           localidade: {
@@ -122,16 +122,16 @@ export const useNovoImovel = (id:number) => {
                 
                 const registroNaoEnviado = objetoFila()
                 salvarImovelQueue(registroNaoEnviado)
-                console.log('inputImovelApi-id de localidade', id)
+                
                 gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
                         
               }
     }else{
       
       const registroNaoEnviado = objetoFila()
-      console.log('inputImovelApi-id de localidade de pois da fila', registroNaoEnviado)
+    
       salvarImovelQueue(registroNaoEnviado)
-      console.log('inputImovelApi-id de localidade', id)
+     
       gerenciarEntrevistado(entrevistadoIdLocal, registroNaoEnviado.idLocal, undefined)
      
     }

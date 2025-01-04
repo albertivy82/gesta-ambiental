@@ -80,7 +80,7 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
             };
       
             
-            // Salva o entrevistado recebido
+            
             await salvarEntrevistados(entrevistadoData);
           } else {
             throw new Error("Dados de entrevistado inválidos");

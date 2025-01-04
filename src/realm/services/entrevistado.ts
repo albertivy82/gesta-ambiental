@@ -95,6 +95,7 @@ export const getEntrevistado = (imovel: number): EntrevistadoType | null => {
 
     // Verifica se há algum entrevistado e retorna o primeiro
     if (entrevistados.length > 0) {
+        
         const entrevistado = entrevistados[0];
         const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistado));
       

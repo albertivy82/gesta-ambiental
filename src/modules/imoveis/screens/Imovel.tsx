@@ -51,6 +51,9 @@ const Imoveis = () => {
     fetchImoveis();
   }, [fetchImoveis]);
 
+  
+  
+
   // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });

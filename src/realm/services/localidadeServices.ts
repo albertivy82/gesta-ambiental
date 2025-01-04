@@ -34,3 +34,18 @@ export const getLocalidades = (): LocalidadeType[]=>{
   
     return cleanLocalidades as LocalidadeType[];
 }
+
+
+export const getLocalidadesPorId = (islocalidade:number): LocalidadeType=>{
+   
+   const query = `id == ${islocalidade}`;
+      
+     
+       const localidadeRealm = realmInstance.objects<LocalidadeType>('Localidade').filtered(query).slice();
+       
+       const localidadeLimpa = JSON.parse(JSON.stringify(localidadeRealm[0]));
+   
+       
+   
+       return localidadeLimpa as LocalidadeType;
+}
