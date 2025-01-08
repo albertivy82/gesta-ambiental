@@ -1,4 +1,3 @@
-// Exploracao.ts
 export enum Exploracao {
     POUCO = "POUCO",
     MEDIO = "MEDIO",

@@ -10,14 +10,15 @@ import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import { situacaoFundiaria } from "../../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../../enums/transporte.enum";
+import { getLocalidadesPorId } from "../../../realm/services/localidadeServices";
 import DateSelector from "../../../shared/components/input/DateSelector";
 import LocationInput from "../../../shared/components/input/LocationInput";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelContainer } from "../styles/Imovel.style";
-import { carregarImoveis } from "../../../realm/services/imovelService";
-import { getLocalidades, getLocalidadesPorId } from "../../../realm/services/localidadeServices";
+import CheckboxSelector from "../../../shared/components/input/checkBox";
+import { ServicosBasicos } from "../../../enums/servicosBasicos.enum";
 
 
 export interface idParam {
@@ -54,6 +55,7 @@ export const NovoImovel = ()=>{
     const limitesOptions = Object.values(limitesTerrenoEnum);
     const transporteOptions = Object.values(transporteEnum);
     const soloOptions = Object.values(tipoSoloEnum);
+    const servBasicsOptions = Object.values(ServicosBasicos);
     const lazerOptions = Object.values(esporteLazerEnum);
     const simNaoOptions =  Object.values(SimNaoTalvez);
     const vizinhoOptions =  Object.values(Vizinhos);
@@ -62,9 +64,6 @@ export const NovoImovel = ()=>{
     const bairroInput = useRef<TextInput>(null);
     const referencialInput = useRef<TextInput>(null);
     const areaImovelInput = useRef<TextInput>(null);
-    const motivoMudancaInput = useRef<TextInput>(null);
-    const relacaoAreaInput = useRef<TextInput>(null);
-    const relacaoVizinhoInput = useRef<TextInput>(null);
     const linhaBarcoInput = useRef<TextInput>(null);
     const inraestruturaInput = useRef<TextInput>(null);
     
@@ -130,16 +129,12 @@ export const NovoImovel = ()=>{
               onSubmitEditing={()=>areaImovelInput.current?.focus()}
               ref={referencialInput}/>
 
-    
-
-              <LocationInput
+            <LocationInput
                 onLocationChange={(lat, lon) => {
                   handleOnChangeInput(lat, 'latitude');
                   handleOnChangeInput(lon, 'longitude');
                 }}
               />
-
-
 
             <Input
               value={novoImovel.areaImovel?.toFixed(2) || ''}
@@ -152,11 +147,11 @@ export const NovoImovel = ()=>{
            />
 
 
-            <RenderPicker
-              label="Possui vizinhos?"
-              selectedValue={novoImovel.vizinhos}
-               onValueChange={handleVizinhosChange}
-               options={vizinhoOptions}
+            <CheckboxSelector
+                options={vizinhoOptions}
+                label="Possui Vizinhos:"
+                selectedValues={novoImovel.vizinhos ? novoImovel.vizinhos.split(',') : []}
+                onSave={(selectedValues) => handleOnChangeInput(selectedValues.join(','), 'vizinhos')}
             />
 
              <RenderPicker
@@ -175,104 +170,71 @@ export const NovoImovel = ()=>{
              />
 
 
-              <DateSelector
-                label="Data de Chegada no Local"
-                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataChegada')}
+             <RenderPicker
+                    label="Tipo de limites do imóvel"
+                    selectedValue={novoImovel.limites}
+                    onValueChange={handleLimitesChange}
+                    options={limitesOptions}
+                  />
+                    
+              <RenderPicker
+                    label="Ilumincao pública?"
+                    selectedValue={novoImovel.iluminacaoPublica}
+                    onValueChange={handleIluminacaoChange}
+                    options={simNaoOptions}
               />
-            
 
               <RenderPicker
-                  label="Pretente mudar?"
-                  selectedValue={novoImovel.pretendeMudar}
-                  onValueChange={handleSimNaoChange}
-                  options={simNaoOptions}
-                />
-          
-              <Input 
-                  value={novoImovel.motivoVontadeMudanca} 
-                  onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
-                  placeholder="Informe um motivo"
-                  margin="15px 10px 30px 5px"
-                  title="Por que pretende mudar?"
-                  onSubmitEditing={()=>relacaoAreaInput.current?.focus()}
-                  ref={motivoMudancaInput}
+                    label="Qual o tipo de transporte utilizado?"
+                    selectedValue={novoImovel.transporte}
+                    onValueChange={handleTransporteChange}
+                    options={transporteOptions}
                   />
 
               <Input 
-                    value={novoImovel.relacaoArea} 
-                    onChange={(event)=> handleOnChangeInput(event, 'relacaoArea')}
-                    placeholder="Relação do entrevistado com a área do imóvel"
+                    value={novoImovel.programaInfraSaneamento} 
+                    onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
+                    placeholder="Conhece algum destinado para a área"
                     margin="15px 10px 30px 5px"
-                    title="Relação com a área"
-                    onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
-                    ref={relacaoAreaInput}
+                    title="Programas de Infraestrutura e Saneamento:"
+                    onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
+                    ref={inraestruturaInput}
                     />
 
-            <Input 
-                  value={novoImovel.relacaoVizinhos} 
-                  onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
-                  placeholder="Relação do entrevistado com a vizinhança"
-                  margin="15px 10px 30px 5px"
-                  title="Relação com a vizinhança"
-                  ref={relacaoVizinhoInput}
+              <Input 
+                    value={novoImovel.linhasDeBarco} 
+                    onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
+                    placeholder="Se houver, informe as linhas de barco do local"
+                    margin="15px 10px 30px 5px"
+                    title="Há linhas de barco no local?"
+                    ref={linhaBarcoInput}
+                    />
+
+              <RenderPicker
+                    label="Qual o tipo de solo no imóvel?"
+                    selectedValue={novoImovel.tipoSolo}
+                    onValueChange={handleSoloChange}
+                    options={soloOptions}
+                  />
+              
+                <RenderPicker
+                    label="Espaços de Lazer?"
+                    selectedValue={novoImovel.esporteLazer}
+                    onValueChange={handleLazerChange}
+                    options={lazerOptions}
                   />
 
-          <RenderPicker
-              label="Tipo de limites do imóvel"
-              selectedValue={novoImovel.limites}
-               onValueChange={handleLimitesChange}
-               options={limitesOptions}
-            />
-              
-           <RenderPicker
-              label="Ilumincao pública?"
-              selectedValue={novoImovel.iluminacaoPublica}
-               onValueChange={handleIluminacaoChange}
-               options={simNaoOptions}
-            />
+                <CheckboxSelector
+                options={servBasicsOptions}
+                label="Equipamentos e serviços urbanos?"
+                selectedValues={novoImovel.servicosBasicos ? novoImovel.servicosBasicos.split(',') : []}
+                onSave={(selectedValues) => handleOnChangeInput(selectedValues.join(','), 'servicosBasicos')}
+                />
 
-          <RenderPicker
-              label="Qual o tipo de transporte utilizado?"
-              selectedValue={novoImovel.transporte}
-               onValueChange={handleTransporteChange}
-               options={transporteOptions}
-            />
-
-           <Input 
-              value={novoImovel.programaInfraSaneamento} 
-              onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
-              placeholder="área do programaInfraSaneamento"
-              margin="15px 10px 30px 5px"
-              title="programa InfraSaneamento:"
-              onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
-              ref={inraestruturaInput}
-              />
-
-           <Input 
-              value={novoImovel.linhasDeBarco} 
-              onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
-              placeholder="Se houver, informe as linhas de barco do local"
-              margin="15px 10px 30px 5px"
-              title="Há linhas de barco no local?"
-              ref={linhaBarcoInput}
-              />
-
-         <RenderPicker
-              label="Qual o tipo de solo no imóvel?"
-              selectedValue={novoImovel.tipoSolo}
-               onValueChange={handleSoloChange}
-               options={soloOptions}
-            />
-         
-           <RenderPicker
-              label="Esporte e lazer no local:"
-              selectedValue={novoImovel.esporteLazer}
-               onValueChange={handleLazerChange}
-               options={lazerOptions}
-            />
+                ///serviços públicos deficitários
 
           
-<View style={{ marginTop: 40 }}>
+     <View style={{ marginTop: 40 }}>
       {loading ? (
         <ActivityIndicator size="large" color="#ff4500" /> // Exibe o spinner enquanto está carregando
       ) : (

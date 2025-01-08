@@ -45,6 +45,15 @@ export const convertToEntrevistadoInput=(entrevistado: any) => {
                              const entrevistadoAPI = response as EntrevistadoType;
                            
                                 if(entrevistadoAPI.id){
+                                   //console.log("Imóvel sincronizado. ID recebido:", EntrevistadoAPI.id);
+                                                              // Atualizar as benfeitorias com o novo ID
+                                                              setIdEntrevistadoFromApiOnBenfeitoria(EntrevistadoAPI.id, Entrevistado.idLocal!);
+                                                              setIdEntrevistadoFromApiOnEntrevistado(EntrevistadoAPI.id, Entrevistado.idLocal!);
+                                                              setIdEntrevistadoFromApiServsBsics(EntrevistadoAPI.id, Entrevistado.idLocal!);
+                                                              setIdEntrevistadoFromApiOtherServs(EntrevistadoAPI.id, Entrevistado.idLocal!);
+                                                              
+                                                              //console.log("ID local do imóvel:", Entrevistado.idLocal!);
+                                                              // Remover imóvel da fila
                                     apagarEntrevistadoQueue(entrevistadoAPI.idLocal!)
                                 }
                                 

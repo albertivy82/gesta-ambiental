@@ -8,11 +8,28 @@ import { connectionAPIPost } from "../../../shared/functions/connection/connecti
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { formatDateForApi } from "../../../shared/functions/data";
 
 export const DEFAUL_ENTREVISTADO_INPUT: EntrevistadoInput = {
-  nome: '',
-  apelido: '',
-  naturalidade: '',
+ 
+ nome:"",
+ naturalidade:"",
+ nascimentoData:"",
+ sexo: null,
+ apelido:"",
+ escolaridade:null,
+ estadoCivil:null,
+ religiao:"",
+ dataChegada:"",
+ pretendeMudar: null;
+ motivoVontadeMudanca: "",
+ relacaoArea:"",
+ relacaoVizinhos:"",
+ conheceUc: SimNao;
+ conheceUcProposta: SimNao| "" | null;
+ conheceArea: SimNao;
+ utilizaArea: String;
+ propostaMelhorarArea: string; 
   conheceUcProposta: null,
   propostaMelhorarArea: '',
   imovel: {
@@ -104,6 +121,14 @@ export const useNovoEntrevistado = () => {
         conheceUcProposta: conheceUcProposta,
       }));
     };
+
+     const handleOnChangeData = (selectedDate: Date, name: string) => {
+            const dataFormatada = formatDateForApi(selectedDate);
+            setnovoEntrevistado((currentUser) => ({
+                ...currentUser,
+                [name]: dataFormatada,
+            }));
+        };
     
 
       
@@ -114,6 +139,7 @@ export const useNovoEntrevistado = () => {
       enviarEntrevistado,
       handleOnChangeInput,
       handlePropostaUcChange,
+      handleOnChangeData,
       objetoFila,
       disabled,
     };

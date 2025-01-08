@@ -8,8 +8,7 @@ import { tipoSoloEnum } from "../../enums/tipoSolo.enum";
 import { transporteEnum } from "../../enums/transporte.enum";
 import { EntrevistadoType } from "./EntrevistadoType";
 
-export interface imovelBody{
-
+export interface imovelBody {
     id: number;
     rua: string;
     numero: string;
@@ -18,28 +17,41 @@ export interface imovelBody{
     latitude: string;
     longitude: string;
     areaImovel: number;
+    tipoSolo: tipoSoloEnum | "" | null;
     vizinhos: Vizinhos | "" | null;
     situacaoFundiaria: situacaoFundiaria | "" | null;
     documentacaoImovel: documentacao | "" | null;
-    dataChegada: string;
-    pretendeMudar: SimNaoTalvez | "" | null;
-    motivoVontadeMudanca: string;
-    relacaoArea: string;
-    relacaoVizinhos: string;
     limites: limitesTerrenoEnum | "" | null;
-    iluminacaoPublica: SimNaoTalvez | "" | null;
-    transporte: transporteEnum | "" | null;
-    programaInfraSaneamento: string;
+
+    caratwerizaçção do imovel: miToRadians, misto, comércio/criação/plantação etc
+   
+    fonteDeEnergia:
+
+    meiosLocomocao: transporteEnum | "" | null;
+    
     linhasDeBarco: string;
-    tipoSolo: tipoSoloEnum | "" | null;
-    esporteLazer: esporteLazerEnum | "" | null;
-    localidade: {
+    
+    
+    
+    pavimentacao: pavimentacaoEnum|""|null;
+    iluminacaoPublica: SimNaoTalvez | "" | null;
+    equipamntosUrbanos:
+    espacosEsporteLazer: esporteLazerEnum | "" | null;
+    programaInfraSaneamento: string;
+
+
+    servicosBasicos: string; 
+    
+    entrevistado: {
         id: number;
     };
-    sincronizado: boolean;
+    sincronizado?: boolean;
     idLocal?: string;
+    idFather?:string;
+    
 }
 
-export interface ImovelComEntrevistado extends imovelBody {
-    entrevistado?: EntrevistadoType | null; // Adiciona o campo para o entrevistado (opcional)
-}
+
+
+
+

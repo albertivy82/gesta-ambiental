@@ -56,6 +56,37 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
 
 };
 
+
+export const setIdEntrevistadoFromApiOnImovel = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
+    try {
+        const query = `idFather == "${entrevistadoIdLocal}" AND (sincronizado == false and sincronizado == false)`;
+        const imovelQueue = realmInstance.objects('Benfeitoria').filtered(query);
+
+        //console.log("Conjunto de imovels que precisam receber o ID do pai:", imovelQueue);
+
+        if (imovelQueue.length > 0) {
+            realmInstance.write(() => {
+                imovelQueue.forEach(imovelOrfan => {
+                   // console.log("Atualizando imovel:", imovelOrfan);
+                    // Atualizar o ID do pai (imovel) para o ID vindo da API
+                    imovelOrfan.imovel = idEntrevistadoApi;
+                    // Se quiser manter o idFather para referência futura, pode comentá-la
+                    imovelOrfan.idFather = '';  
+                });
+            });
+
+           // console.log("Benfeitorias atualizadas com o novo ID:", imovelQueue);
+        } else {
+           // console.log("Nenhuma imovel encontrada para o ID local:", imovelIdLocal);
+        }
+
+       // console.log("setIdImovelFromApi completado");
+
+    } catch (error) {
+        console.error("Erro ao atualizar imovels:", error);
+    }
+};
+
 export const salvarImovelQueue = (imovel: imovelInput) =>{
     console.log('salvarImovelqueue', imovel)
 
@@ -104,31 +135,6 @@ export const getImoveis = (localidade:number): imovelBody[]=>{
 
     return imoveisLimpos as imovelBody[];
 }
-
-export const getImoveisComEntrevistados = (localidadeId: number): ImovelComEntrevistado[] => {
-    const imoveis = getImoveis(localidadeId);
- 
-    return imoveis.map((imovel) => {
-      let entrevistado;
-  
-      if (imovel.sincronizado) {
-        // Para imóveis sincronizados, utiliza o ID do imóvel
-        entrevistado = getEntrevistado(imovel.id);
-        console.log(entrevistado)
-       
-      } else if (imovel.idLocal) {
-        // Para imóveis offline, utiliza o idFather
-        entrevistado = getEntrevistadoByIdFather(imovel.idLocal);
-       
-      }
-  
-      return {
-        ...imovel,
-        entrevistado,
-      };
-    });
-  };
-  
 
 
 

@@ -9,7 +9,7 @@ import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { EntrevitadoContainer, ImovelContainer } from '../styles/entrevistado.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { useImoveis } from '../../localidade/hooks/useEntrevistados';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
 import { useEntrevistado } from '../../imoveis/hooks/useEntrevistado';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';

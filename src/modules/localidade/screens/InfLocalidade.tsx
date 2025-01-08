@@ -5,7 +5,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { useEscolas } from '../hooks/useEscolas';
-import { useImoveis } from '../hooks/useImoveis';
+import { useEntrevistados } from '../hooks/useEntrevistados';
 import { usePostos } from '../hooks/usePostos';
 import { LocalidadeContainer } from '../styles/Localidade.style';
 import EditConfirmation from '../ui-components/UseEditLocalidade';
@@ -18,12 +18,12 @@ export interface LocalidadeParam {
 
 
 //BLOCO IMOVEL
-export const imoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number, idsImoveis: number[])=>{
-  navigate('Imovel', {localidadeId, idsImoveis})
+export const entrevistadosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number, idsEntrevistados: number[])=>{
+  navigate('Entevistados', {localidadeId, idsEntrevistados})
 }
 
 /*
-export const NovoImoveisDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+export const NovoEntrevistadosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
   navigate('NovoImovel', {localidadeId})
 }
 */
@@ -59,29 +59,25 @@ const InfLocalidade = () => {
       const { localidade } = params;
       const {contagemEscolas} = useEscolas(localidade.id);
       const {contagemPostos} = usePostos(localidade.id);     
-      const {contagemImoveis, idsImoveis} = useImoveis(localidade.id);
+      const {contagemEntrevistados} = useEntrevistados(localidade.id);
       
       
   
       
       
       //BLOCO IMOVEL
-      const  handleGerenciaImoveis =  (localidadeId: number, contagemImoveis: number) =>{
+      const  handleGerenciaEntrevistados =  (localidadeId: number, contagemEntrevistados: number) =>{
        
-        if(contagemImoveis>0){
-         //pegar entrevistado
-        imoveisDaLocalidade(navigation.navigate, localidadeId, idsImoveis || []);
+        if(contagemEntrevistados>0){
+          
         }else{
-        //novo entrevistado 
-        console.log(localidadeId)
-        NovoEntrevistado(navigation.navigate, localidadeId)
-        //NovoImoveisDaLocalidade(navigation.navigate, localidadeId);
+          NovoEntrevistado(navigation.navigate, localidadeId);
         }
       }
 
        //BLOCO ESCOLAS
-       const  handleGerenciaEscolas =  (localidadeId: number, contagemImoveis: number) =>{
-        if(contagemImoveis>0){
+       const  handleGerenciaEscolas =  (localidadeId: number, contagemEntrevistados: number) =>{
+        if(contagemEntrevistados>0){
           escolasDaLocalidade(navigation.navigate, localidadeId);
         }else{
           NovaEscolaDaLocalidade(navigation.navigate, localidadeId);
@@ -89,8 +85,8 @@ const InfLocalidade = () => {
       }
 
       //BLOCO POSTOS
-       const  handleGerenciaPostos =  (localidadeId: number, contagemImoveis: number) =>{
-        if(contagemImoveis>0){
+       const  handleGerenciaPostos =  (localidadeId: number, contagemEntrevistados: number) =>{
+        if(contagemEntrevistados>0){
           postosDaLocalidade(navigation.navigate, localidadeId);
         }else{
           NovoPostoDaLocalidade(navigation.navigate, localidadeId);
@@ -128,10 +124,10 @@ const InfLocalidade = () => {
         />
 
          <QuadroDeItens
-          label="Imóveis Cadastrados" 
-          count={contagemImoveis} 
-          onPress={() => handleGerenciaImoveis(localidade.id, contagemImoveis)}
-          emptyMessage="Não há imóveis cadastrados"
+          label="Entrevistas" 
+          count={contagemEntrevistas} 
+          onPress={() => handleGerenciaEntrevistados(localidade.id, contagemEntrevistados)}
+          emptyMessage="Não há Entrevistas Realizadas"
         />
 
       

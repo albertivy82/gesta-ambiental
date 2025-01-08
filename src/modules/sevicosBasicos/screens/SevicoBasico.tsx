@@ -9,7 +9,7 @@ import { theme } from '../../../shared/themes/theme';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { ImovelContainer } from '../styles/Imovel.style';
 import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { useImoveis } from '../../localidade/hooks/useEntrevistados';
 
 export interface ImoveisParam {
   localidadeId: number;

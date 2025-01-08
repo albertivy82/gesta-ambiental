@@ -130,7 +130,7 @@ const Navigation =() =>{
           <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
           <Stack.Screen name="ProfileUser" component={ProfileUser} options={{title: 'Editar Perfil'}} />
           <Stack.Screen name="Coordenadas" component={Coordenadas} options={{title: 'Coordenadas'}} />
-          <Stack.Screen name="Imovel" component={Imovel} options={{title: 'Imóveis'}} />
+          <Stack.Screen name="Entrevitados" component={Entrevitados} options={{title: 'Entrevistados'}} />
           <Stack.Screen name="ImovelDetail" component={ImovelDetails} options={{title: 'Imóvel'}} />
           <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
           <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />

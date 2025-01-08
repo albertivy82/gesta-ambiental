@@ -61,8 +61,8 @@ const Imoveis = () => {
 
   // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
-    handleScrollToEnd();
+    setImovel([]); // Limpa os imóveis antes de carregar novamente
+    fetchImoveis(); // Recarrega a lista
   };
 
   const handleNovoImovel = () => {
@@ -102,7 +102,7 @@ const Imoveis = () => {
         {/* Botão "Ir para o Fim" */}
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>
             Fim da Página
           </Text>
         </TouchableOpacity>
@@ -110,7 +110,7 @@ const Imoveis = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         {/* Botão "Atualizar" */}
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} >
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>

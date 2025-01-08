@@ -15,25 +15,22 @@ export interface imovelInput {
     referencial: string;
     latitude: string;
     longitude: string;
-    areaImovel: number,
-    vizinhos: Vizinhos |""| null;
+    areaImovel: number;
+    vizinhos: Vizinhos | "" | null;
     situacaoFundiaria: situacaoFundiaria | "" | null;
     documentacaoImovel: documentacao | "" | null;
-    dataChegada: string;
-    pretendeMudar: SimNaoTalvez | "" | null;
-    motivoVontadeMudanca: string;
-    relacaoArea: string;
-    relacaoVizinhos: string;
     limites: limitesTerrenoEnum | "" | null;
     iluminacaoPublica: SimNaoTalvez | "" | null;
-    programaInfraSaneamento: string;
     transporte: transporteEnum | "" | null;
+    programaInfraSaneamento: string;
     linhasDeBarco: string;
     tipoSolo: tipoSoloEnum | "" | null;
     esporteLazer: esporteLazerEnum | "" | null;
-    localidade: {
+    servicosBasicos: string; 
+    entrevistado: {
         id: number;
     };
     sincronizado?: boolean;
     idLocal?: string;
+    idFather?:string;
 }
