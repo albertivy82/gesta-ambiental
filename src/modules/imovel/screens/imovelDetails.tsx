@@ -43,10 +43,7 @@ const ImovelDetails = () => {
               {renderField('Vizinhos Confinantes', params.imovel.vizinhosConfinantes)}
               {renderField('Situação Fundiária', params.imovel.situacaoFundiaria)}
               {renderField('Documentação do Imóvel', params.imovel.documentacaoImovel)}
-              {renderField('Caracterização do Imóvel', params.imovel.caracterizacaoDoImovel)}
               {renderField('Material utilizado no entorno do imóvel (Limites)', params.imovel.limites)}
-              {renderField('Fonte de Energia', params.imovel.fonteDeEnergia)}
-              {renderField('Principal meio de locomoção', params.imovel.meiosLocomocao)}
               {renderField('Linhas de Barco Disponíveis', params.imovel.linhasDeBarco)}
               {renderField('Pavimentação', params.imovel.pavimentacao)}
               {renderField('Iluminação Pública', params.imovel.iluminacaoPublica)}

@@ -17,8 +17,6 @@ import EditUser from "./modules/editUser";
 import Escolas from "./modules/escolas/screens/Escolas";
 import { NovaEscola } from "./modules/escolas/screens/novaEscola";
 import Home from "./modules/home";
-import { NovoImovel } from "./modules/imoveis/screens/novoImovel";
-import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
 import Login from "./modules/login";
@@ -35,6 +33,8 @@ import { UserBody } from "./shared/types/userBody";
 import Entrevistados from "./modules/entrevistados/screens/Entrevistado";
 import { NovoEntrevistado } from "./modules/entrevistados/screens/novoEntrevistado";
 import EntrevistadoDetails from "./modules/entrevistadoDetails/screens/EntrevistadoDetails";
+import { NovoImovel } from "./modules/imovel/screens/novoImovel";
+import ImovelDetails from "./modules/imovel/screens/imovelDetails";
 
 
 

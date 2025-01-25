@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Button } from 'react-native';
+import { View } from 'react-native';
 import Text from '../text/Text';
 import CheckBox from '@react-native-community/checkbox';
+import { theme } from '../../themes/theme';
+import { textTypes } from '../text/textTypes';
+import { DisplayFlexColumn } from '../globalStyles/globalView.style';
 
 interface CheckboxSelectorProps {
     options: string[]; // Lista de opções para exibir
@@ -19,31 +22,45 @@ const CheckboxSelector: React.FC<CheckboxSelectorProps> = ({
     const [selectedOptions, setSelectedOptions] = useState<string[]>(selectedValues);
 
     const toggleOption = (option: string) => {
-        setSelectedOptions((prev) =>
-            prev.includes(option)
-                ? prev.filter((item) => item !== option) // Remove a opção
-                : [...prev, option] // Adiciona a opção
-        );
-    };
+        const updatedOptions = selectedOptions.includes(option)
+            ? selectedOptions.filter((item) => item !== option) // Remove a opção
+            : [...selectedOptions, option]; // Adiciona a opção
 
-    const handleSave = () => {
-        onSave(selectedOptions); // Retorna os valores selecionados para o pai
+        setSelectedOptions(updatedOptions);
+        onSave(updatedOptions); // Notifica o pai sobre a mudança imediatamente
     };
 
     return (
+         <DisplayFlexColumn customMargin={"15px 10px 30px 5px"}>
         <View>
-            {label && <Text style={{ marginBottom: 10 }}>{label}</Text>}
+            {label && (
+            <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
+                <Text
+                    margin="0px 0px 4px 8px"
+                    color={theme.colors.whiteTheme.white}
+                    type={textTypes.SUB_TITLE_BOLD}
+                >
+                    {label}
+                </Text>
+            </View>
+             )}
             {options.map((option) => (
                 <View key={option} style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <CheckBox
                         value={selectedOptions.includes(option)}
                         onValueChange={() => toggleOption(option)}
                     />
-                    <Text>{option}</Text>
+                    <Text
+                        margin="0px 0px 4px 8px"
+                        color={theme.colors.mainTheme.black}
+                        type={textTypes.SUB_TITLE_REGULAR}
+                        >
+                        {option}
+                    </Text>
                 </View>
             ))}
-            <Button title="Salvar" onPress={handleSave} />
         </View>
+        </DisplayFlexColumn>
     );
 };
 

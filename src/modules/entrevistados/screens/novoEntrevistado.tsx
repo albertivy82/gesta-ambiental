@@ -80,6 +80,8 @@ export const NovoEntrevistado = ()=>{
         ...(outrosLocais ? [`Outras: ${outrosLocais}`] : []),
       ];
 
+      console.log("mudanças no local de compras", novoEntrevistado.localCompras)
+
       handleArrayFieldChange('localCompras', consolidaDados);
     
     },[localCompras, outrosLocais ])
@@ -145,7 +147,7 @@ export const NovoEntrevistado = ()=>{
 
            <DateSelector
                 label="Data de nascimento"
-                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataNascimento')}
+                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'nascimentoData')}
               />
 
             <RenderPicker
@@ -162,7 +164,8 @@ export const NovoEntrevistado = ()=>{
               margin="15px 10px 30px 5px"
               title="Apelido:"
               onSubmitEditing={()=>naturalidadeInput.current?.focus()}
-              ref={nomeInput}/>
+              ref={nomeInput}
+            />
              
           <RenderPicker
               label="Escolaridade"
@@ -183,7 +186,7 @@ export const NovoEntrevistado = ()=>{
               onChange={(event)=> handleOnChangeInput(event, 'religiao')}
               placeholder="Qual a sua religião"
               margin="15px 10px 30px 5px"
-              title="Apelido:"
+              title="Qual a sua religião?"
               onSubmitEditing={()=>naturalidadeInput.current?.focus()}
               ref={nomeInput}/>
 
@@ -211,7 +214,7 @@ export const NovoEntrevistado = ()=>{
                   <View style={{ marginTop: 10 }}>
                     <Text
                       margin="0px 0px 4px 8px"
-                      color={theme.colors.whiteTheme.white}
+                      color={theme.colors.mainTheme.black}
                       type={textTypes.SUB_TITLE_BOLD}
                     >
                       Informe o motivo:
@@ -232,19 +235,19 @@ export const NovoEntrevistado = ()=>{
               onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
               placeholder="Por qual motivo?"
               margin="15px 10px 30px 5px"
-              title="Apelido:"
+              title="Motivo:"
               onSubmitEditing={()=>naturalidadeInput.current?.focus()}
               ref={nomeInput}/>
 
               <Input 
-                    value={novoEntrevistado.relacaoAreaImovel} 
-                    onChange={(event)=> handleOnChangeInput(event, 'relacaoArea')}
-                    placeholder="Relação do entrevistado com a área do imóvel"
-                    margin="15px 10px 30px 5px"
-                    title="Relação com a área"
-                    onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
-                    ref={relacaoAreaInput}
-                    />
+              value={novoEntrevistado.relacaoAreaImovel} 
+              onChange={(event)=> handleOnChangeInput(event, 'relacaoAreaImovel')}
+              placeholder="Relação do entrevistado com a área do imóvel"
+              margin="15px 10px 30px 5px"
+              title="Relação com a área"
+              onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
+              ref={relacaoAreaInput}
+              />
 
             <Input 
                   value={novoEntrevistado.relacaoVizinhos} 
@@ -261,16 +264,16 @@ export const NovoEntrevistado = ()=>{
                 label="Selecione as opções de Alimentação"
                 onSave={(selectedValues) => {
                     setAlimentacoInformada(selectedValues);
-                    if (!selectedValues.includes('Outras')) {
+                    if (!selectedValues.includes('OUTRAS')) {
                         setOutrasInformadas('');
                     }
                 }}
             />
-            {alimentacoInformada.includes('Outras') && (
+            {alimentacoInformada.includes('OUTRAS') && (
                 <View style={{ marginTop: 10 }}>
                     <Text
                         margin="0px 0px 4px 8px"
-                        color={theme.colors.whiteTheme.white}
+                        color={theme.colors.mainTheme.black}
                         type={textTypes.SUB_TITLE_BOLD}
                     >
                         Informe quais:
@@ -301,7 +304,7 @@ export const NovoEntrevistado = ()=>{
                 <View style={{ marginTop: 10 }}>
                     <Text
                         margin="0px 0px 4px 8px"
-                        color={theme.colors.whiteTheme.white}
+                        color={theme.colors.mainTheme.black}
                         type={textTypes.SUB_TITLE_BOLD}
                     >
                         Informe onde:
@@ -324,7 +327,7 @@ export const NovoEntrevistado = ()=>{
                 onSave={(selectedValues) => {
                   setServicosPublicos(selectedValues);
                   if (!selectedValues.includes('OUTRA_LOCALIDADE')) {
-                      SetOutrosServicosPublicos('');
+                      //SetOutrosServicosPublicos('');
                   }
               }}
             />
@@ -332,7 +335,7 @@ export const NovoEntrevistado = ()=>{
                 <View style={{ marginTop: 10 }}>
                     <Text
                         margin="0px 0px 4px 8px"
-                        color={theme.colors.whiteTheme.white}
+                        color={theme.colors.mainTheme.black}
                         type={textTypes.SUB_TITLE_BOLD}
                     >
                         Especifique qual ou quais:
@@ -349,7 +352,7 @@ export const NovoEntrevistado = ()=>{
 
 
              <Input
-              value={novoEntrevistado.sofreuAssaltos?.toFixed(2) || ''}
+              value={novoEntrevistado.sofreuAssaltos?.toString() || ''}
               onChange={(event)=>handleNumberChange(event, 'sofreuAssaltos')}
               keyboardType='numeric'
               placeholder="Área em m²"
@@ -359,7 +362,7 @@ export const NovoEntrevistado = ()=>{
 
              
              <Input
-              value={novoEntrevistado.presenciouAssalto?.toFixed(2) || ''}
+              value={novoEntrevistado.presenciouAssalto?.toString() || ''}
               onChange={(event)=> handleNumberChange(event, 'presenciouAssalto')}
               keyboardType='numeric'
               placeholder="Área em m²"

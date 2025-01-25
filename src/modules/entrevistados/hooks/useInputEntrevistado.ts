@@ -48,6 +48,7 @@ export const useNovoEntrevistado = (id:number) => {
     const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
+     console.log(novoEntrevistado)
       if (
           novoEntrevistado.nome !== '' && 
           novoEntrevistado.apelido !== '' && 
@@ -69,7 +70,9 @@ export const useNovoEntrevistado = (id:number) => {
           novoEntrevistado.conheceAreaUc !== null &&
           novoEntrevistado.utilizaAreaUc !== '' &&
           novoEntrevistado.propostaMelhorarArea !== ''
+          
       ) {
+        
           setDisabled(false);
       }
   }, [novoEntrevistado]);
@@ -137,12 +140,12 @@ const handleOnChangeData = (selectedDate: Date, name: string) => {
 
 
 const handleArrayFieldChange = (field: keyof EntrevistadoInput, values: string[]) => {
+  const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
   setnovoEntrevistado((currentState) => ({
-    ...currentState,
-    [field]: values,
+      ...currentState,
+      [field]: concatenatedValues, // Salva como string no estado
   }));
 };
-
 
 
 
