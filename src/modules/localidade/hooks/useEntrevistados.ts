@@ -1,6 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/EntrevistadoService";
+import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/Entrevistado";
 import { setIdEntrevistadoFromApiOnImovel } from "../../../realm/services/imovelService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";

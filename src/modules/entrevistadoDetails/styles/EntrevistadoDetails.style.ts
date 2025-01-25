@@ -1,15 +1,12 @@
 import { styled } from "styled-components/native";
 
-export const ImovelContainer = styled.View`
+export const EntrevistadoDetailContainer = styled.View`
 
     height: 100%;
     width: 100%;
-    background-color: #E6E8FA;
+    background-color: #ffffff;
     justify-content: center;
     justify-items: center;
     padding: 16px;
 
 `
-
-
-

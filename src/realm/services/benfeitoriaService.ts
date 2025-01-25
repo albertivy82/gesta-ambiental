@@ -208,22 +208,4 @@ export const getAllImoveis=()=>{
 };
 
 
-export const apagarQueueImovel = () => {
-    try {
-        realmInstance.write(() => {
-            // Seleciona todos os imóveis no banco
-            const imovelExcluir = realmInstance.objects<imovelBody>('Imovel'); // Use o nome correto do esquema
-
-            if (imovelExcluir.length > 0) {
-                // Deleta todos os imóveis encontrados
-                realmInstance.delete(imovelExcluir);
-                console.log(`${imovelExcluir.length} imóveis excluídos com sucesso.`);
-            } else {
-                console.log('Nenhum imóvel encontrado para exclusão.');
-            }
-        });
-    } catch (error) {
-        console.error('Erro ao excluir imóveis da fila:', error);
-    }
-};
 

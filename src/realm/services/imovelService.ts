@@ -1,18 +1,14 @@
-import { useEntrevistado } from "../../modules/imoveis/hooks/useEntrevistado";
 import { imovelInput } from "../../shared/types/imovelInput";
-import { imovelBody, ImovelComEntrevistado } from "../../shared/types/imovelType";
+import { imovelBody } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";
-import { apagarEntrevistadoQueue, apagarQueueEntrevistados, getAllEntrevistados, getEntrevistado, getEntrevistadoByIdFather } from "./entrevistado";
 
 
-export const salvarImoveis = (imoveis: imovelBody[]) =>{
+export const salvarImoveis = (imovel: imovelBody) =>{
 
     return new Promise<void>((resolve, reject)=>{
            
         try{
             realmInstance.write(()=>{
-
-                imoveis.forEach(imovel=>{
 
                     //essa duplicação de código foi feita para controlar atualizações de todas os registros
                     //a primeira condição entram apenas atualizações
@@ -23,7 +19,7 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
                        // console.log('Atualizando imóvel existente:', imovel);
                               const imovelPadrao ={
                                     ...imovel,
-                                    localidade: imovel.localidade.id,
+                                    entrevistado: imovel.entrevistado.id,
                                 };
 
                                 realmInstance.create('Imovel', imovelPadrao, true);
@@ -31,14 +27,14 @@ export const salvarImoveis = (imoveis: imovelBody[]) =>{
                        // console.log('Inserindo novo imóvel ou atualizando imóvel com condições diferentes:', imovel);
                         const imovelPadrao ={
                             ...imovel,
-                           localidade: imovel.localidade.id,
+                            entrevistado: imovel.entrevistado.id,
                         };
 
                         realmInstance.create('Imovel', imovelPadrao, true);
                     }
                    
                 
-                });
+               
 
 
                
@@ -88,8 +84,7 @@ export const setIdEntrevistadoFromApiOnImovel = (idEntrevistadoApi: number, entr
 };
 
 export const salvarImovelQueue = (imovel: imovelInput) =>{
-    console.log('salvarImovelqueue', imovel)
-
+   
         return new Promise<void>((resolve, reject) => {
             // Função para gerar um ID aleatório
             const Id = () => {
@@ -104,11 +99,11 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
                     const imovelPadrao = {
                         ...imovel,
                         id: Id(), 
-                        localidade: imovel.localidade.id,
+                        entrevistado: imovel.entrevistado.id,
                     };
-                    console.log('salvarImovelqueue', imovelPadrao)
+                   
                     realmInstance.create('Imovel', imovelPadrao, true);
-                    console.log('salvarImovelQueue - Ok!')
+                   
                 });
         
                 resolve();
@@ -121,36 +116,36 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
 };
 
 
-export const getImoveis = (localidade:number): imovelBody[]=>{
+export const getImovel = (entrevistadoId:number): imovelBody=>{
 
   
-    const query = `localidade == ${localidade}`;
+    const query = `localidade == ${entrevistadoId}`;
    
   
     const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
     
-    const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm));
+    const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm[0]));
 
  
 
-    return imoveisLimpos as imovelBody[];
+    return imoveisLimpos as imovelBody;
 }
 
 
-
-
-export const getImoveisDessincronizados = (localidade:number): imovelBody[]=>{
-
+export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBody | undefined => {
+    
+    const query = `entrevistado == "${idEntrevistadoApi}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+    const imoveisQueue = realmInstance.objects<imovelBody>('Imovel').filtered(query);
    
-    const query = `localidade == ${localidade} and sincronizado == false`;
-
-    const imoveisQueue = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
-
+    const cleanedQueue = imoveisQueue.map(imovel => ({ ...imovel }));
+    
+    const primeiroRegistro = cleanedQueue[0];
      
-    const cleanedQueue = JSON.parse(JSON.stringify(imoveisQueue));
-
-    return cleanedQueue as imovelBody[];
+    return primeiroRegistro;
 };
+
+
+
 
 export const apagarImovelQueue = (imovelidLocal: string) => {
     try {
@@ -186,27 +181,37 @@ export const apagarImovelSyncronizado = (imovelId: number) => {
     }
 };
 
+export const getImovelByIdFather = (idFather: string): imovelBody | undefined => {
+    const query = `idFather == "${idFather}"`;
+    const imoveis = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
 
-/*
-função de limpesa do banco-> criar componente para todas as categorias
-export const apagarTodosImoveis = () => {
+    if (imoveis.length > 0) {
+        // Retorna o primeiro imóvel encontrado
+        return JSON.parse(JSON.stringify(imoveis[0])) as imovelBody;
+    }
+    return undefined;
+};
+
+
+export const apagarQueueImovel = () => {
     try {
         realmInstance.write(() => {
-           
-            
-            const imovelAExcluir = realmInstance.objects<imovelBody>('Imovel');
+            // Seleciona todos os imóveis no banco
+            const imovelExcluir = realmInstance.objects<imovelBody>('Imovel'); // Use o nome correto do esquema
 
-            if (imovelAExcluir.length > 0) {
-                imovelAExcluir.forEach(imovel=>{
-                        realmInstance.delete(imovel);
-                })
-            } 
+            if (imovelExcluir.length > 0) {
+                // Deleta todos os imóveis encontrados
+                realmInstance.delete(imovelExcluir);
+                console.log(`${imovelExcluir.length} imóveis excluídos com sucesso.`);
+            } else {
+                console.log('Nenhum imóvel encontrado para exclusão.');
+            }
         });
     } catch (error) {
-        console.error('Erro ao excluir imóvel da fila:', error);
+        console.error('Erro ao excluir imóveis da fila:', error);
     }
 };
-*/
+
 
 
 
@@ -226,13 +231,7 @@ export const getTodosImoveis = (): imovelBody[] => {
 };
 
 
-export const carregarImoveis = (localidadeId: number): number[]=>{
-      const imoveis = getImoveis(localidadeId); // Obtém imóveis do banco de dados local
-  
-      return imoveis
-        .filter((imovel) => imovel.sincronizado)
-        .map((imovel) => imovel.id!); // Retorna apenas os IDs dos imóveis sincronizados
-}
+
   
   
 

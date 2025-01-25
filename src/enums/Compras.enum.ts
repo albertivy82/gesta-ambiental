@@ -1,0 +1,5 @@
+export enum Compras {
+    NA_LOCALIDADE = 'NA_LOCALIDADE',
+    OUTRA_LOCALIDADE = 'OUTRA_LOCALIDADE',
+    
+}

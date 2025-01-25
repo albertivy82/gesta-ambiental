@@ -18,15 +18,11 @@ export interface LocalidadeParam {
 
 
 //BLOCO IMOVEL
-export const entrevistadosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number, idsEntrevistados: number[])=>{
-  navigate('Entevistados', {localidadeId, idsEntrevistados})
+export const entrevistadosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
+  navigate('Entevistados', {localidadeId})
 }
 
-/*
-export const NovoEntrevistadosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
-  navigate('NovoImovel', {localidadeId})
-}
-*/
+
 export const NovoEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
   navigate('NovoEntrevistado', {localidadeId})
 }
@@ -69,7 +65,7 @@ const InfLocalidade = () => {
       const  handleGerenciaEntrevistados =  (localidadeId: number, contagemEntrevistados: number) =>{
        
         if(contagemEntrevistados>0){
-          
+          entrevistadosDaLocalidade(navigation.navigate, localidadeId);
         }else{
           NovoEntrevistado(navigation.navigate, localidadeId);
         }
@@ -125,7 +121,7 @@ const InfLocalidade = () => {
 
          <QuadroDeItens
           label="Entrevistas" 
-          count={contagemEntrevistas} 
+          count={contagemEntrevistados} 
           onPress={() => handleGerenciaEntrevistados(localidade.id, contagemEntrevistados)}
           emptyMessage="Não há Entrevistas Realizadas"
         />

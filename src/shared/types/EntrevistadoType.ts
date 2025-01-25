@@ -1,4 +1,3 @@
-import { alimento } from "../../enums/Alimento.enum";
 import { Escolaridade } from "../../enums/Escolaridade";
 import { EstadoCivil } from "../../enums/EstadoCivil.enum";
 import { Sexo } from "../../enums/Sexo";
@@ -30,8 +29,8 @@ presenciouAssalto: number;
 problemasDeViolenciaLocal: string;
 conheceUcs: SimNao| "" | null;
 conheceUcProposta: SimNao| "" | null;
-conheceAreaUc: SimNao;
-utilizaAreaUc: String;
+conheceAreaUc: SimNao| "" | null;
+utilizaAreaUc: string;
 propostaMelhorarArea: string;
 indicadoConsultaPublica: string;
 contatoIndicadoConsultaPublica: string;

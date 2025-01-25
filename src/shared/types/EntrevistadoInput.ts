@@ -28,8 +28,8 @@ export interface EntrevistadoInput {
     problemasDeViolenciaLocal: string;
     conheceUcs: SimNao| "" | null;
     conheceUcProposta: SimNao| "" | null;
-    conheceAreaUc: SimNao;
-    utilizaAreaUc: String;
+    conheceAreaUc: SimNao| "" | null;
+    utilizaAreaUc: string;
     propostaMelhorarArea: string;
     indicadoConsultaPublica: string;
     contatoIndicadoConsultaPublica: string;

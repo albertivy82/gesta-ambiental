@@ -17,7 +17,6 @@ import EditUser from "./modules/editUser";
 import Escolas from "./modules/escolas/screens/Escolas";
 import { NovaEscola } from "./modules/escolas/screens/novaEscola";
 import Home from "./modules/home";
-import Imovel from "./modules/imoveis/screens/Imovel";
 import { NovoImovel } from "./modules/imoveis/screens/novoImovel";
 import ImovelDetails from "./modules/imoveisDetails/screens/imovelDetails";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
@@ -33,7 +32,10 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
-import { NovoEntrevistado } from "./modules/entrevistado/screens/novoEntrevistado";
+import Entrevistados from "./modules/entrevistados/screens/Entrevistado";
+import { NovoEntrevistado } from "./modules/entrevistados/screens/novoEntrevistado";
+import EntrevistadoDetails from "./modules/entrevistadoDetails/screens/EntrevistadoDetails";
+
 
 
 
@@ -130,20 +132,21 @@ const Navigation =() =>{
           <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
           <Stack.Screen name="ProfileUser" component={ProfileUser} options={{title: 'Editar Perfil'}} />
           <Stack.Screen name="Coordenadas" component={Coordenadas} options={{title: 'Coordenadas'}} />
-          <Stack.Screen name="Entrevitados" component={Entrevitados} options={{title: 'Entrevistados'}} />
+          <Stack.Screen name="Entrevitados" component={Entrevistados} options={{title: 'Entrevistados'}} />
+          <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />
+          <Stack.Screen name="EntrevistadoDetails" component={EntrevistadoDetails} options={{title: 'Entrevistado'}} />
+          <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
           <Stack.Screen name="ImovelDetail" component={ImovelDetails} options={{title: 'Imóvel'}} />
           <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
           <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
           <Stack.Screen name="Consumo" component={Consumo} options={{title: 'Dados de Consumo'}} />
           <Stack.Screen name="ConsumoItens" component={ConsumoItens} options={{title: 'Dados de Consumo'}} />
-          <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
           <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
           <Stack.Screen name="Postos" component={Postos} options={{title: 'Postos'}} />
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
           <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Ecolas'}} />
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
-          <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />
-            
+         
          </Stack.Navigator>
       </NavigationContainer>
     );

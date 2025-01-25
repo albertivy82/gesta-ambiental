@@ -32,44 +32,35 @@ const ImovelDetails = () => {
        <ScrollView style={{ flex: 1 }}>
         <ImovelDetailContainer>
               <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
-                {renderField('Número', params.imovel.numero)}
-                {renderField('Rua', params.imovel.rua)}
-                {renderField('Refencial', params.imovel.referencial)}
-                {renderField('Bairro', params.imovel.bairro)}
-                {renderField('Latitude', params.imovel.latitude)}
-                {renderField('Longitude', params.imovel.longitude)}
-
-                {renderField('Material utilizado no entorno do imóvel', params.imovel.limites)}
-                {renderField('Tipo do solo verificado no imóvel', params.imovel.tipoSolo)}
-                
-              
-                {renderField('Situação Fundiária', params.imovel.situacaoFundiaria)}
-                {renderField('Documentação', params.imovel.documentacaoImovel)}
-                {renderField('Data de chegada na localidade', params.imovel.dataChegada)}
-                {renderField('Intenção de mudar-se do imóvel', params.imovel.pretendeMudar)}
-                {renderField('Motivo de querer mudar-se', params.imovel.motivoVontadeMudanca)}
-           
-                {renderField('Relação com a área', params.imovel.relacaoArea)}
-                {renderField('Relação com os vizinhos', params.imovel.relacaoVizinhos)}
-                {renderField('Linhas de barcos no local', params.imovel.linhasDeBarco)}
-                {renderField('Principal meio utilizado como meio de transporte', params.imovel.transporte)}
-                {renderField('Estruturas de esporte e lazer próximos ao imóvel', params.imovel.esporteLazer)}
+              {renderField('Número', params.imovel.numero)}
+              {renderField('Rua', params.imovel.rua)}
+              {renderField('Referencial', params.imovel.referencial)}
+              {renderField('Bairro', params.imovel.bairro)}
+              {renderField('Latitude', params.imovel.latitude)}
+              {renderField('Longitude', params.imovel.longitude)}
+              {renderField('Área do Imóvel (m²)', params.imovel.areaImovel?.toString())}
+              {renderField('Tipo de Solo', params.imovel.tipoSolo)}
+              {renderField('Vizinhos Confinantes', params.imovel.vizinhosConfinantes)}
+              {renderField('Situação Fundiária', params.imovel.situacaoFundiaria)}
+              {renderField('Documentação do Imóvel', params.imovel.documentacaoImovel)}
+              {renderField('Caracterização do Imóvel', params.imovel.caracterizacaoDoImovel)}
+              {renderField('Material utilizado no entorno do imóvel (Limites)', params.imovel.limites)}
+              {renderField('Fonte de Energia', params.imovel.fonteDeEnergia)}
+              {renderField('Principal meio de locomoção', params.imovel.meiosLocomocao)}
+              {renderField('Linhas de Barco Disponíveis', params.imovel.linhasDeBarco)}
+              {renderField('Pavimentação', params.imovel.pavimentacao)}
+              {renderField('Iluminação Pública', params.imovel.iluminacaoPublica)}
+              {renderField('Equipamentos Urbanos Presentes', params.imovel.equipamentosUrbanos)}
+              {renderField('Espaços de Esporte e Lazer', params.imovel.espacosEsporteLazer)}
+              {renderField('Programa de Infraestrutura e Saneamento', params.imovel.programaInfraSaneamento)}
+              {renderField('ID do Entrevistado Associado', params.imovel.entrevistado?.id?.toString())}
+              {renderField('Sincronizado', params.imovel.sincronizado ? 'Sim' : 'Não')}
+              {renderField('ID Local', params.imovel.idLocal)}
+              {renderField('ID Pai', params.imovel.idFather)}
             </View>
 
                     
-                    <QuadroDeItens
-                      contagemItem={contagemBenfeitoria}
-                      icone='cogs'
-                      elemento='Outros Serviços'
-                      onPress={() => handleGerenciaFilhas(
-                        navigation.navigate,
-                        { 
-                        imovel: params.imovel, 
-                        contagemItem: contagemBenfeitoria, 
-                        item: "Outros Serviços" 
-                      })}
-                      />
-
+                    
                     <QuadroDeItens
                       contagemItem={contagemBenfeitoria}
                       icone='tree'

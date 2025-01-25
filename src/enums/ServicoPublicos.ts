@@ -4,5 +4,5 @@
     SEGURANÇA_PÚBLICA = 'Segurança pública',
     SAÚDE = 'Saúde',
     EDUCAÇÃO = 'Educação',
-    OUTROS = 'Outros'
+    OUTROS = 'OUTROS'
 }
