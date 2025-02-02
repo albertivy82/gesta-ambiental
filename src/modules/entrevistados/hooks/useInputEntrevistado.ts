@@ -100,6 +100,7 @@ export const useNovoEntrevistado = (id:number) => {
     const isConnected = await testConnection();
       if (netInfoState.isConnected && isConnected) {
           try {
+            console.log("useInputEntrevistado.ts...enviando api...", novoEntrevistado);
             await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado);
             console.log("useInputEntrevistado.ts...enviando api...");
           } catch (error) {
@@ -157,16 +158,17 @@ const handleEnumChange = (field: keyof EntrevistadoInput, value: any) => {
 };
 
 const handleNumberChange = (
-  event: NativeSyntheticEvent<TextInputChangeEventData>, field: keyof EntrevistadoInput
+  event: NativeSyntheticEvent<TextInputChangeEventData>, 
+  field: keyof EntrevistadoInput
 ) => {
-  let value = event.nativeEvent.text.replace(/\D/g, '');
-  const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+  let value = event.nativeEvent.text.replace(/\D/g, ''); // Remove caracteres não numéricos
 
   setnovoEntrevistado((current) => ({
     ...current,
-    [field]: parseFloat(formattedValue), // Armazena como número
+    [field]: value ? parseInt(value, 10) : 0, // Garante que seja um número inteiro
   }));
 };
+
 
 
 

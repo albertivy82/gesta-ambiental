@@ -61,6 +61,8 @@ export const NovoEntrevistado = ()=>{
     const [servicosPublicos, setServicosPublicos] = useState<string[]>([]);  
     const [outrosLServicosPublicos, SetOutrosServicosPublicos] = useState<string>('');
 
+    const [usoArea, setUsoArea] = useState<string>('');  
+    const [sobreUso, SetSobreUso] = useState<string>('');  
     
     
     useEffect(()=>{
@@ -96,6 +98,17 @@ export const NovoEntrevistado = ()=>{
       handleArrayFieldChange('servicosDeficitarios', consolidaDados);
     
     },[servicosPublicos, outrosLServicosPublicos ])
+
+
+    useEffect(() => {
+      const consolidaDados = usoArea === 'SIM' 
+        ? (sobreUso ? [`COMO: ${sobreUso}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+        : ['NÃO']; // Se não for "SIM", mantém apenas "NÃO"
+    
+      handleArrayFieldChange('utilizaAreaUc', consolidaDados);
+    
+    }, [usoArea, sobreUso]);
+    
    
     
     
@@ -212,13 +225,6 @@ export const NovoEntrevistado = ()=>{
                 {/* Exibe o campo de texto apenas se a resposta for 'Sim' */}
                 {novoEntrevistado.pretendeMudar === SimNaoTalvez.SIM && ( 
                   <View style={{ marginTop: 10 }}>
-                    <Text
-                      margin="0px 0px 4px 8px"
-                      color={theme.colors.mainTheme.black}
-                      type={textTypes.SUB_TITLE_BOLD}
-                    >
-                      Informe o motivo:
-                    </Text>
                     <Input 
                       value={novoEntrevistado.motivoVontadeMudanca} 
                       onChange={(event) => handleOnChangeInput(event, 'motivoVontadeMudanca')}
@@ -229,15 +235,6 @@ export const NovoEntrevistado = ()=>{
                   </View>
                 )}
 
-
-              <Input 
-              value={novoEntrevistado.motivoVontadeMudanca} 
-              onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
-              placeholder="Por qual motivo?"
-              margin="15px 10px 30px 5px"
-              title="Motivo:"
-              onSubmitEditing={()=>naturalidadeInput.current?.focus()}
-              ref={nomeInput}/>
 
               <Input 
               value={novoEntrevistado.relacaoAreaImovel} 
@@ -271,13 +268,6 @@ export const NovoEntrevistado = ()=>{
             />
             {alimentacoInformada.includes('OUTRAS') && (
                 <View style={{ marginTop: 10 }}>
-                    <Text
-                        margin="0px 0px 4px 8px"
-                        color={theme.colors.mainTheme.black}
-                        type={textTypes.SUB_TITLE_BOLD}
-                    >
-                        Informe quais:
-                    </Text>
                     <Input
                         value={outrasInformadas}
                         onChangeText={setOutrasInformadas}
@@ -302,13 +292,6 @@ export const NovoEntrevistado = ()=>{
             />
             {localCompras.includes('OUTRA_LOCALIDADE') && (
                 <View style={{ marginTop: 10 }}>
-                    <Text
-                        margin="0px 0px 4px 8px"
-                        color={theme.colors.mainTheme.black}
-                        type={textTypes.SUB_TITLE_BOLD}
-                    >
-                        Informe onde:
-                    </Text>
                     <Input
                         value={outrosLocais}
                         onChangeText={SetOutrosLocais}
@@ -327,19 +310,12 @@ export const NovoEntrevistado = ()=>{
                 onSave={(selectedValues) => {
                   setServicosPublicos(selectedValues);
                   if (!selectedValues.includes('OUTRA_LOCALIDADE')) {
-                      //SetOutrosServicosPublicos('');
+                      SetOutrosServicosPublicos('');
                   }
               }}
             />
             {servicosPublicos.includes('OUTROS') && (
                 <View style={{ marginTop: 10 }}>
-                    <Text
-                        margin="0px 0px 4px 8px"
-                        color={theme.colors.mainTheme.black}
-                        type={textTypes.SUB_TITLE_BOLD}
-                    >
-                        Especifique qual ou quais:
-                    </Text>
                     <Input
                         value={outrosLServicosPublicos}
                         onChangeText={SetOutrosServicosPublicos}
@@ -400,13 +376,29 @@ export const NovoEntrevistado = ()=>{
                 options={simNaoOptions}
               />
 
-              <Input 
-              value={novoEntrevistado.utilizaAreaUc} 
-              onChange={(event)=> handleOnChangeInput(event, 'utilizaAreaUc')}
-              placeholder="Como?"
-              margin="15px 10px 30px 5px"
-              title="Utiliza a área?"
-              />
+             
+                <RenderPicker
+                  label="Utiliza a área?"
+                  selectedValue={usoArea}
+                  onValueChange={(value) => {
+                    setUsoArea(value ?? ''); 
+                    if (value !== 'SIM') {
+                      SetSobreUso('');
+                    }
+                  }}
+                  options={['SIM', 'NÃO']}
+                />
+            {usoArea.includes('SIM') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={sobreUso}
+                        onChangeText={SetSobreUso}
+                        placeholder="Separe por vírgulas"
+                        margin="15px 10px 30px 5px"
+                        title="Como?"
+                    />
+                </View>
+            )}
               
               <Input 
               value={novoEntrevistado.propostaMelhorarArea} 

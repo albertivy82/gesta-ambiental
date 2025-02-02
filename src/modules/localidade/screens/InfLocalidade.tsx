@@ -19,7 +19,7 @@ export interface LocalidadeParam {
 
 //BLOCO IMOVEL
 export const entrevistadosDaLocalidade = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
-  navigate('Entevistados', {localidadeId})
+  navigate('Entrevistados', {localidadeId})
 }
 
 

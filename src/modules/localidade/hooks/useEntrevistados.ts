@@ -74,7 +74,7 @@ export const useEntrevistados = (localidadeId: number) =>{
                 const isConnected = await testConnection();
                 if (isConnected) {
                     try {
-                        const response = await connectionAPIPost('http://192.168.100.28:8080/Entrevistado', novoEntrevistadoIput);
+                        const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoIput);
                         const EntrevistadoAPI = response as EntrevistadoType;
                        
                         if (EntrevistadoAPI.id) {
@@ -98,7 +98,7 @@ const fetchEntrevistadosFromAPI = async () => {
         const isConnected = await testConnection();
         if (isConnected) {
       try {
-          const imoveisAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/Entrevistado/localidade-Entrevistado/${localidadeId}`);
+          const imoveisAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-Entrevistado/${localidadeId}`);
          const ImData = imoveisAPI.map(Entrevistado => ({
               ...Entrevistado,
               sincronizado: true, 

@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -23,7 +23,7 @@ const Entrevistados = () => {
   const [entrevistados, setEntrevistados] = useState<EntrevistadoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchEntrevistados = useCallback(async () => {
+ useEffect(() => {
     if (localidadeId) {
       const entrevistadoRealm = getEntrevistados(localidadeId);
       setEntrevistados(entrevistadoRealm);
@@ -38,7 +38,6 @@ const Entrevistados = () => {
 
   const refreshEntrevistados = () => {
     setIsLoading(true);
-    fetchEntrevistados();
     setIsLoading(false);
   };
 
