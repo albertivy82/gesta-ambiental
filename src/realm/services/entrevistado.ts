@@ -24,7 +24,7 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
                                     localidade: entrevistado.localidade.id,
                                 };
 
-                                realmInstance.create('Entervistado', entrevistadoPadrao, true);
+                                realmInstance.create('Entrevistado', entrevistadoPadrao, true);
                     }else{
                        // console.log('Inserindo novo imóvel ou atualizando imóvel com condições diferentes:', entrevistado);
                         const entrevistadoPadrao ={
@@ -32,7 +32,7 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
                            localidade: entrevistado.localidade.id,
                         };
 
-                        realmInstance.create('Entervistado', entrevistadoPadrao, true);
+                        realmInstance.create('Entrevistado', entrevistadoPadrao, true);
                     }
                    
                 

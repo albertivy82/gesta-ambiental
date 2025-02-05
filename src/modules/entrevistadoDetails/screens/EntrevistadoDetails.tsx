@@ -12,13 +12,12 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { imovelBody } from '../../../shared/types/imovelType';
 
 
-export const hendleImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody, entrevistado: EntrevistadoType)=>{
-  if(imovel){
-    navigate('ImovelDetail', {imovel})
-  }else{
-    navigate('NovoImovel', {entrevistado})
-  }
-  
+export const hendleImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
+     navigate('ImovelDetail', {imovel})
+}
+
+export const hendleNOvoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType)=>{
+      navigate('NovoImovel', {entrevistado})
 }
 
 
@@ -100,27 +99,36 @@ const EntrevistadoDetails = () => {
             </View>
 
             <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
+                 
+           
+
+                </View>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: theme.colors.grayTheme.gray80,
+                    padding: 10,
+                    borderRadius: 5,
+                    alignItems: 'center',
+                    marginBottom: 10,
+                  }}
+                  onPress={() => {
+                    if (imovelPresente) {
+                      hendleImovel(navigation.navigate, imovelPresente);
+                    }else{
+                      hendleNOvoImovel(navigation.navigate, params.entrevistado);
+                    }
+                  }}
+                >
                   {imovelPresente ? (
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: theme.colors.grayTheme.gray80,
-                        padding: 10,
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        marginBottom: 10,
-                      }}
-                      onPress={() => {
-                        hendleImovel(navigation.navigate,imovelPresente, params.entrevistado );
-                      }}
-                    >
+                    <View style={{ alignItems: 'center' }}> 
                       <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
-                        Detalhes do Imóvel
+                        Imóvel Cadastrado
                       </Text>
-                      <View style={{ marginTop: 10 }}>
+                      <View style={{ marginTop: 10 }}>  
                         {renderField('Documentação do Imóvel', imovelPresente.documentacaoImovel)}
                         {renderField('Sincronizado', imovelPresente.sincronizado ? 'Sim' : 'Não')}
                       </View>
-                    </TouchableOpacity>
+                    </View>
                   ) : (
                     <View style={{ alignItems: 'center', marginTop: 10 }}>
                       <Text type={textTypes.BUTTON_BOLD} color={theme.colors.redTheme.red}>
@@ -128,7 +136,7 @@ const EntrevistadoDetails = () => {
                       </Text>
                     </View>
                   )}
-                </View>
+               </TouchableOpacity>
 
 
           

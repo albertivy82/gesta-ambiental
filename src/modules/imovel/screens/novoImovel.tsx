@@ -62,7 +62,6 @@ export const NovoImovel = ()=>{
       
   },[pavimentacaoInformada, outrasInformadas ])
 
-
   
   useEffect(() => {
     const consolidaVizinhosConfinantes = [

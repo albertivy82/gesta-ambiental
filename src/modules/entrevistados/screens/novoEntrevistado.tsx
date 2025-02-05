@@ -14,9 +14,6 @@ import CheckboxSelector from "../../../shared/components/input/checkBox";
 import DateSelector from "../../../shared/components/input/DateSelector";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import Text from "../../../shared/components/text/Text";
-import { textTypes } from "../../../shared/components/text/textTypes";
-import { theme } from "../../../shared/themes/theme";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
 

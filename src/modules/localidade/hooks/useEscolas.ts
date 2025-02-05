@@ -58,7 +58,7 @@ export const useEscolas= (localidadeId:number)=>{
               }
     }
 
-
+/*
     const fetchEscolasromAPI = async () => {
 
         const netInfoState = await NetInfo.fetch();
@@ -87,11 +87,11 @@ export const useEscolas= (localidadeId:number)=>{
           }
         }}
           
-        };
+        };*/
 
         useEffect(()=>{
             sinconizeQueue()
-            fetchEscolasromAPI();
+            //fetchEscolasromAPI();
             fetchEscolasFromLocalDb();
           }, []);
         

@@ -20,14 +20,11 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
       vizinhosConfinantes: imovel.vizinhosConfinantes,
       situacaoFundiaria: imovel.situacaoFundiaria,
       documentacaoImovel: imovel.documentacaoImovel,
-      caracterizacaoDoImovel: imovel.caracterizacaoDoImovel,
       limites: imovel.limites,
-      fonteDeEnergia: imovel.fonteDeEnergia,
-      meiosLocomocao: imovel.meiosLocomocao,
       linhasDeBarco: imovel.linhasDeBarco,
       pavimentacao: imovel.pavimentacao,
       iluminacaoPublica: imovel.iluminacaoPublica,
-      equipamntosUrbanos: imovel.equipamntosUrbanos,
+      equipamentosUrbanos: imovel.equipamntosUrbanos,
       espacosEsporteLazer: imovel.espacosEsporteLazer,
       programaInfraSaneamento: imovel.programaInfraSaneamento,
       entrevistado: {
@@ -81,7 +78,7 @@ export const useImovel = (idEntrevistado: number) => {
     const fetchImovelAPI = async () => {
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `http://192.168.100.28:8080/imovel/entrevistado-imovel/${idEntrevistado}`
+          `http://192.168.100.28:8080/imovel/imovel-entrevistado/${idEntrevistado}`
         );
   
         if (response as imovelBody && response.id) {

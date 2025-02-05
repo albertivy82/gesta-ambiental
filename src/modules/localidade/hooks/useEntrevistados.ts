@@ -50,6 +50,7 @@ export const convertToEntrevistadoInput=(entrevistado:any) => {
 
 
 export const useEntrevistados = (localidadeId: number) =>{
+    
    const [contagemEntrevistados, setContagemEntrevistados] = useState<number>(0);
    
   
@@ -58,6 +59,7 @@ export const useEntrevistados = (localidadeId: number) =>{
     
     const localData = getEntrevistados(localidadeId);
     if (localData.length > 0) {
+        console.log(localData);
       setContagemEntrevistados(localData.length);
     }
   };
@@ -92,21 +94,25 @@ export const useEntrevistados = (localidadeId: number) =>{
 };
 
 const fetchEntrevistadosFromAPI = async () => {
-
+   
     const netInfoState = await NetInfo.fetch();
     if (netInfoState.isConnected ) {
         const isConnected = await testConnection();
         if (isConnected) {
+            console.log("here")
       try {
-          const imoveisAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-Entrevistado/${localidadeId}`);
+          const imoveisAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`);
          const ImData = imoveisAPI.map(Entrevistado => ({
               ...Entrevistado,
               sincronizado: true, 
               idLocal: '',         
           }));
+
+          console.log("nunca se concretiza, por que?", ImData)
          
           if(ImData && Array.isArray(ImData) && ImData.length> 0){
                await salvarEntrevistados(ImData)
+             
                const contagem = ImData.length;
                 setContagemEntrevistados(contagem);
           } else {
@@ -124,11 +130,10 @@ const fetchEntrevistadosFromAPI = async () => {
     
     
       useEffect(()=>{
-        sinconizeQueue()
+        sinconizeQueue();
         fetchEntrevistadosFromAPI();
         fetchEntrevistadosFromLocalDb();
-        
-      }, []);
+     }, []);
     
       return { contagemEntrevistados};
 

@@ -44,6 +44,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType) => {
     const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
+      console.log(novoImovel)
       if (
           novoImovel.rua !== '' && 
           novoImovel.numero !== '' && 
@@ -94,22 +95,28 @@ export const useNovoImovel = (entrevistado:EntrevistadoType) => {
     
     if (!entrevistado.sincronizado && entrevistado.id <= 0) {
         const imovelDataQueue = objetoFila();
+        console.log("useInputImovel_a", novoImovel)
         salvarImovelQueue(imovelDataQueue);
     } else {
         novoImovel.entrevistado = { id: entrevistado.id };
         const netInfoState = await NetInfo.fetch();
         const isConnected = await testConnection();
+        console.log("useInputImovel_b", novoImovel)
   
         if (netInfoState.isConnected && isConnected) {
+          console.log("useInputImovel_c", novoImovel)
             try {
                 await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel);
+                console.log("useInputImovel_d", novoImovel)
             } catch (error) {
                 const imovelDataQueue = objetoFila();
                 salvarImovelQueue(imovelDataQueue);
+                console.log("useInputImovel_e", novoImovel)
             }
         } else {
             const imovelDataQueue = objetoFila();
             salvarImovelQueue(imovelDataQueue);
+            console.log("useInputImovel_f", novoImovel)
         }
     }
   };
@@ -163,14 +170,14 @@ export const useNovoImovel = (entrevistado:EntrevistadoType) => {
       };
 
       const handleArrayFieldChange = (field: keyof imovelInput, values: string[]) => {
+        const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
         setNovoImovel((currentState) => ({
           ...currentState,
-          [field]: values,
+          [field]: concatenatedValues,
         }));
       };
       
-      
-    
+       
 
     return {
         novoImovel,

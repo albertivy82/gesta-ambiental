@@ -116,20 +116,18 @@ export const salvarImovelQueue = (imovel: imovelInput) =>{
 };
 
 
-export const getImovel = (entrevistadoId:number): imovelBody=>{
-
-  
-    const query = `localidade == ${entrevistadoId}`;
-   
-  
-    const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query).slice();
+export const getImovel = (entrevistadoId: number): imovelBody | null => {
+    const query = `entrevistado == ${entrevistadoId}`; // Se "entrevistado" for um objeto com "id"
     
-    const imoveisLimpos = JSON.parse(JSON.stringify(imoveisRealm[0]));
+    const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query);
+    
+    if (imoveisRealm.length === 0) {
+        return null; // Retorna null se não encontrar um imóvel
+    }
 
- 
+    return JSON.parse(JSON.stringify(imoveisRealm[0])) as imovelBody;
+};
 
-    return imoveisLimpos as imovelBody;
-}
 
 
 export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBody | undefined => {
