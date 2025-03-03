@@ -9,26 +9,28 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 
 export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput =  {
 
-    tipoBenfeitoria: '',
-    funcao: '',
-    tipoSolo: '',
+    tipoBenfeitoria: null,
+    funcao: null,
+    afastamentoDaPrincipal: '',
+    impermeabilizacaoSolo: null,
+    limites: '',
     areaBenfeitoria: 0,
     pavimentos: 0,
-    tipoConstrucao: '',
-    origemMaterialConstrucao: [], 
-    tipoCobertura: '',
-    tipoEsquadrias: '',
+    paredes: null,
+    tipoCobertura: null,
+    tipoEsquadrias: null,
+    origemMadeiraDaConstrucao: '',
+    origemPedraDaConstrucao: '',
+    origemAreiaDaConstrucao: '',
     alagamentos: '',
-    nivelAlagamentos:'',
-    efluentes: '',
-    residuos: '',
-    fonteEnergia: '',
-    energiaAlimentos: '',
-    informativoPredominante: '',
-    importanciaDeProtegerFauna: '',
-    importanciaDeProtegerAmbiente: '',
-    qualEspacoPrecisaSerPreservado: '',
-    problemasRelacionadosAoAmbiente: '',
+    epocaOcorrencia: '',
+    efluentes: null,
+    residuos: null,
+    fonteEnergia: null,
+    energiaAlimentos: null,
+    meiosLocomocao: null,
+    linhasOnibus: '',
+    informativoPredominante: null,
     imovel: {
         id:0,
     },
@@ -43,26 +45,28 @@ const [disabled, setdisable] = useState<boolean>(true);
 useEffect(()=>{
     if(
 
-        novaBenfeitoria.tipoBenfeitoria !== '' &&
-        novaBenfeitoria.funcao !== '' &&
-        novaBenfeitoria.tipoSolo !== '' &&
-        novaBenfeitoria.areaBenfeitoria !== 0 &&
-        novaBenfeitoria.pavimentos !== 0 &&
-        novaBenfeitoria.tipoConstrucao !== '' &&
-        novaBenfeitoria.origemMaterialConstrucao.length > 0 &&
-        novaBenfeitoria.tipoCobertura !== '' &&
-        novaBenfeitoria.tipoEsquadrias !== '' &&
-        novaBenfeitoria.alagamentos !== '' &&
-        novaBenfeitoria.nivelAlagamentos !== '' &&
-        novaBenfeitoria.efluentes !== '' &&
-        novaBenfeitoria.residuos !== '' &&
-        novaBenfeitoria.fonteEnergia !== '' &&
-        novaBenfeitoria.energiaAlimentos !== '' &&
-        novaBenfeitoria.informativoPredominante !== '' &&
-        novaBenfeitoria.importanciaDeProtegerFauna !== '' &&
-        novaBenfeitoria.importanciaDeProtegerAmbiente !== '' &&
-        novaBenfeitoria.qualEspacoPrecisaSerPreservado !== '' &&
-        novaBenfeitoria.problemasRelacionadosAoAmbiente !== ''
+      novaBenfeitoria.tipoBenfeitoria !== null &&
+      novaBenfeitoria.funcao !== null &&
+      novaBenfeitoria.afastamentoDaPrincipal !== '' &&
+      novaBenfeitoria.impermeabilizacaoSolo !== null &&
+      novaBenfeitoria.limites !== '' &&
+      novaBenfeitoria.areaBenfeitoria > 0 &&
+      novaBenfeitoria.pavimentos > 0 &&
+      novaBenfeitoria.paredes !== null &&
+      novaBenfeitoria.tipoCobertura !== null &&
+      novaBenfeitoria.tipoEsquadrias !== null &&
+      novaBenfeitoria.origemMadeiraDaConstrucao !== '' &&
+      novaBenfeitoria.origemPedraDaConstrucao !== '' &&
+      novaBenfeitoria.origemAreiaDaConstrucao !== '' &&
+      novaBenfeitoria.alagamentos !== null &&
+      novaBenfeitoria.epocaOcorrencia !== null &&
+      novaBenfeitoria.efluentes !== null &&
+      novaBenfeitoria.residuos !== null &&
+      novaBenfeitoria.fonteEnergia !== null &&
+      novaBenfeitoria.energiaAlimentos !== null &&
+      novaBenfeitoria.meiosLocomocao !== null &&
+      novaBenfeitoria.linhasOnibus !== '' &&
+      novaBenfeitoria.informativoPredominante !== null
         
 
     )
@@ -143,157 +147,70 @@ const enviarRegistro = async () =>{
       }
 }
 
+  const handleEnumChange = (field: keyof BenfeitoriaInput, value: any) => {
+     setNovaBenfeitoria((current) => ({
+       ...current,
+       [field]: value,
+     }));
+   };
 
-const handleTipoBenfeitoria = (tipo: string) => {
-   setNovaBenfeitoria((currentBenfeitoria) => ({
-      ...currentBenfeitoria,
-      tipoBenfeitoria: tipo,
+   const handleArrayFieldChange = (field: keyof BenfeitoriaInput, values: string[]) => {
+           const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+           setNovaBenfeitoria((currentState) => ({
+             ...currentState,
+             [field]: concatenatedValues,
+           }));
+   };
+
+
+   const handleOnChangeAreaBenfeitoria = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    let value = event.nativeEvent.text;
+  
+    // Remove qualquer caractere não numérico
+    value = value.replace(/\D/g, '');
+  
+    // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+    const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+  
+    // Atualiza o estado com o valor formatado como número
+    setNovaBenfeitoria((currentImovel) => ({
+      ...currentImovel,
+      areaImovel: parseFloat(formattedValue), // Salva como número para enviar à API
     }));
-};
+  };
 
-const handleFuncao = (funcao: string) => {
-    setNovaBenfeitoria((currentBenfeitoria) => ({
-       ...currentBenfeitoria,
-       funcao: funcao,
-     }));
-};
+  const handleNumberChange = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>, 
+    field: keyof BenfeitoriaInput
+  ) => {
+    let value = event.nativeEvent.text.replace(/\D/g, ''); // Remove caracteres não numéricos
+  
+    setNovaBenfeitoria((current) => ({
+      ...current,
+      [field]: value ? parseInt(value, 10) : 0, // Garante que seja um número inteiro
+    }));
+  };
 
-
-const handleSolo = (solo: string) => {
-    setNovaBenfeitoria((currentBenfeitoria) => ({
-       ...currentBenfeitoria,
-       tipoSolo: solo,
-     }));
-};
-
-const handleAreaBenfeitoria = (
-  event: NativeSyntheticEvent<TextInputChangeEventData>
- ) => {
-  const value = event.nativeEvent.text;
-  const areaNum = parseFloat(value) || 0;
-
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-      ...currentBenfeitoria,
-      areaBenfeitoria: areaNum,
-  }));
-};
-
-const handlePavimentos = (
-  event: NativeSyntheticEvent<TextInputChangeEventData>
- ) => {
-  const value = event.nativeEvent.text;
-  const pavimentosNum = parseInt(value) || 0; 
-
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-      ...currentBenfeitoria,
-      pavimentos: pavimentosNum,
-  }));
-};
-
-const handleTipoConstrucao = (tipoConstrucao:string)=>{
-  setNovaBenfeitoria((currentBenfeitoria)=>({...currentBenfeitoria, tipoConstrucao: tipoConstrucao}));
-};
-
-const handleMaterialConstrução = (matConstrucao:string[])=>{
-  setNovaBenfeitoria((currentBenfeitoria)=>({...currentBenfeitoria, origemMaterialConstrucao: matConstrucao}));
-};
-
-
-const handleCobertura = (cobertura: string) => {
-    setNovaBenfeitoria((currentBenfeitoria) => ({
-       ...currentBenfeitoria,
-       tipoCobertura: cobertura,
-     }));
-};
-
-const handleEsquadrias = (esquadrias: string) => {
-    setNovaBenfeitoria((currentBenfeitoria) => ({
-       ...currentBenfeitoria,
-       tipoEsquadrias: esquadrias,
-     }));
-};
-
-const handleAlagamentos = (alagamentos: string) => {
-    setNovaBenfeitoria((currentBenfeitoria) => ({
-       ...currentBenfeitoria,
-      alagamentos: alagamentos,
-     }));
-};
-
-const handleNivelAlagamentos = (NivelAlagamentos: string) => {
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-     ...currentBenfeitoria,
-    nivelAlagamentos: NivelAlagamentos,
-   }));
-};
-
-
-const handleEfluentes = (efluentes: string) => {
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-     ...currentBenfeitoria,
-    efluentes: efluentes,
-   }));
-};
-
-const hendleResiduos = (residuos: string) => {
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-     ...currentBenfeitoria,
-     residuos: residuos,
-   }));
-};
-
-const handleFonteEnergia = (fonteEnergia: string) => {
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-     ...currentBenfeitoria,
-     fonteEnergia: fonteEnergia,
-   }));
-};
-
-const handleEnergiaAlimentos = (energiaAlimentos: string) => {
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-     ...currentBenfeitoria,
-     energiaAlimentos: energiaAlimentos,
-   }));
-};
-
-const handleOnChangeInput = (
-  event: NativeSyntheticEvent<TextInputChangeEventData>,
-  name:string
- ) => {
-   setNovaBenfeitoria((currentBenfeitoria) => ({
-      ...currentBenfeitoria,
-      [name]: event.nativeEvent.text,
-  }));
-};
-
-
-const handleInformativoPredominante = (informativo: string) => {
-  setNovaBenfeitoria((currentBenfeitoria) => ({
-     ...currentBenfeitoria,
-     informativoPredominante: informativo,
-   }));
-};
-
+  
+  const handleOnChangeInput = (
+    value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+    name: string
+  ) => {
+    // Verifica se "value" é um evento ou uma string diretamente
+    const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+  
+    setNovaBenfeitoria((current) => ({
+      ...current,
+      [name]: newValue,
+    }));
+    };
 
  return {novaBenfeitoria, 
-          handleTipoBenfeitoria,
-          handleFuncao,
-          handleSolo,
-          handleAreaBenfeitoria,
-          handlePavimentos,
-          handleTipoConstrucao,
-          handleMaterialConstrução,
-          handleCobertura,
-          handleEsquadrias,
-          handleAlagamentos,
-          handleNivelAlagamentos,
-          handleEfluentes,
-          hendleResiduos,
-          handleFonteEnergia,
-          handleEnergiaAlimentos,
-          handleInformativoPredominante,
-          handleOnChangeInput,
-          enviarRegistro,
+         handleEnumChange,
+         handleArrayFieldChange,
+         handleOnChangeAreaBenfeitoria,
+         handleNumberChange,
+         handleOnChangeInput,
           disabled,
         }
 

@@ -242,14 +242,6 @@ export const NovoImovel = ()=>{
               options={limitesOptions}
              />
 
-                            
-              <RenderPicker
-              label="Ilumincao pública?"
-              selectedValue={novoImovel.iluminacaoPublica}
-              onValueChange={(value) => handleEnumChange('iluminacaoPublica', value)}
-              options={simNaoOptions}
-              />
-
               <Input 
               value={novoImovel.linhasDeBarco} 
               onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
@@ -288,6 +280,16 @@ export const NovoImovel = ()=>{
                     />
                 </View>
             )}
+
+                            
+              <RenderPicker
+              label="Ilumincao pública?"
+              selectedValue={novoImovel.iluminacaoPublica}
+              onValueChange={(value) => handleEnumChange('iluminacaoPublica', value)}
+              options={simNaoOptions}
+              />
+
+             
 
                 <CheckboxSelector
                     options={equipamentosUrbanosOptions}
@@ -329,15 +331,15 @@ export const NovoImovel = ()=>{
              />
 
               
-              <Input 
-                    value={novoImovel.programaInfraSaneamento} 
-                    onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
-                    placeholder="Conhece algum destinado para a área"
-                    margin="15px 10px 30px 5px"
-                    title="Programas de Infraestrutura e Saneamento:"
-                    onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
-                    ref={inraestruturaInput}
-                    />
+             <Input 
+              value={novoImovel.programaInfraSaneamento} 
+              onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
+              placeholder="Conhece algum destinado para a área"
+              margin="15px 10px 30px 5px"
+              title="Programas de Infraestrutura e Saneamento:"
+              onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
+              ref={inraestruturaInput}
+              />
 
 
           

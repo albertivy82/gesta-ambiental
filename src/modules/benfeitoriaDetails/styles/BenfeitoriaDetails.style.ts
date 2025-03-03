@@ -21,6 +21,4 @@ export const LabelContainer = styled.View`
 export const Icones = styled.Image`
   width: 55px;
   height: 40px;
- 
-
 `

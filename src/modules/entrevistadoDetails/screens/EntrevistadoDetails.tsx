@@ -4,12 +4,13 @@ import DeleteConfirmation from '../../../shared/components/input/DeleteComponent
 import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { useImovel } from '../hooks/useImovel';
-import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
+import { EntrevistadoDetailContainer, Icones } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
 import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { imovelBody } from '../../../shared/types/imovelType';
+import { Icon } from '../../../shared/components/icon/Icon';
 
 
 export const hendleImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
@@ -137,6 +138,63 @@ const EntrevistadoDetails = () => {
                     </View>
                   )}
                </TouchableOpacity>
+
+               <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icon size={30} name='leaf' color='green' />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Vegetação</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/peixes.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Peixes</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/macaco.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Mamíferos</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/fauna.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>fauna</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() =>null}>
+                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                                          padding: 10,
+                                          borderWidth: 2, 
+                                          borderColor: theme.colors.grayTheme.gray100 
+                                        }}>
+                            <Icones resizeMode="contain" source={require('../../../assets/images/aves.png')} />
+                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>aves</Text>
+                        </View>
+                    </TouchableOpacity>
+
 
 
           

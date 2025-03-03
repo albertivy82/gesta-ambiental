@@ -1,6 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
-import { Alert, Button, ScrollView, TextInput, View } from "react-native";
+import { Alert, Button, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
 import { Compras } from "../../../enums/Compras.enum";
@@ -16,6 +16,12 @@ import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
+import { Icon } from "../../../shared/components/icon/Icon";
+import Text from "../../../shared/components/text/Text";
+import { Icones } from "../../entrevistadoDetails/styles/EntrevistadoDetails.style";
+import { textTypes } from "../../../shared/components/text/textTypes";
+import { theme } from "../../../shared/themes/theme";
+import { AtendimentoSaude } from "../../../enums/AtendimentoSaude.enum";
 
 export interface localidadeParam {
    localidadeId: number,
@@ -39,6 +45,7 @@ export const NovoEntrevistado = ()=>{
     const nomeInput = useRef<TextInput>(null);
     const naturalidadeInput = useRef<TextInput>(null);
     const sexoOptions = Object.values(Sexo);
+    const saudeOptions = Object.values(AtendimentoSaude);
     const sexoEscolaridade = Object.values(Escolaridade);
     const simNaoOptions = Object.values(SimNao);
     const estadoCivilOptions = Object.values(EstadoCivil);
@@ -60,8 +67,14 @@ export const NovoEntrevistado = ()=>{
 
     const [usoArea, setUsoArea] = useState<string>('');  
     const [sobreUso, SetSobreUso] = useState<string>('');  
+
+    const [cuidadoMedico, setCuidadoMedico] = useState<string[]>([]);   
+    const [outrosCuidados, SetOutrosCuidados] = useState<string>(''); 
+
+    const [conheceInstituicao, setConheceInstituicao] = useState<string>('');     
+    const [quaisConhece, SetQuaisConhece] = useState<string>('');
     
-    
+
     useEffect(()=>{
       const consolidaDados = [
         ...alimentacoInformada.filter((item) => item !== 'Outras'),
@@ -105,11 +118,30 @@ export const NovoEntrevistado = ()=>{
       handleArrayFieldChange('utilizaAreaUc', consolidaDados);
     
     }, [usoArea, sobreUso]);
+
+
+    useEffect(()=>{
+      const consolidaDados = [
+        ...cuidadoMedico.filter((item) => item !== 'OUTROS'),
+        ...(outrosCuidados ? [`Outras: ${outrosCuidados}`] : []),
+      ];
+
+      handleArrayFieldChange('comoCuidaSaudeFamilia', consolidaDados);
+    
+    },[cuidadoMedico, outrosCuidados ])
+
+
+    useEffect(() => {
+      const consolidaDados = conheceInstituicao === 'SIM' 
+        ? (quaisConhece ? [`COMO: ${quaisConhece}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+        : ['NÃO']; // Se não for "SIM", mantém apenas "NÃO"
+    
+      handleArrayFieldChange('instituicaoConhecida', consolidaDados);
+    
+    }, [conheceInstituicao, quaisConhece]);
     
    
-    
-    
-    
+       
     
     const handleEnviar = async () => {
 
@@ -299,7 +331,29 @@ export const NovoEntrevistado = ()=>{
                 </View>
             )}
 
-
+            <CheckboxSelector
+                options={saudeOptions}
+                selectedValues={cuidadoMedico}
+                label="Como é feito o atendimento de saúde a sua família?"
+                onSave={(selectedValues) => {
+                    setCuidadoMedico(selectedValues);
+                    if (!selectedValues.includes('OUTROS')) {
+                        SetOutrosCuidados('');
+                    }
+                }}
+            />
+            {cuidadoMedico.includes('OUTROS') && (
+                <View style={{ marginTop: 10 }}>
+                    <Input
+                        value={outrosCuidados}
+                        onChangeText={SetOutrosCuidados}
+                        placeholder="Separe as informações por vírgula"
+                        margin="15px 10px 30px 5px"
+                        title="Informe quais:"
+                    />
+                </View>
+            )}
+          
           <CheckboxSelector
                 options={servicosOptions}
                 selectedValues={servicosPublicos}
@@ -349,9 +403,65 @@ export const NovoEntrevistado = ()=>{
               placeholder="separe por vírgulas se houver mais de uma relato"
               margin="15px 10px 30px 5px"
               title="Quais os problemas de violência aqui no local?"
-               />
+              />
 
+              <RenderPicker
+                  label="Você conhece o trabalho de alguma instituição governamental ou não governamental na sua localidade??"
+                  selectedValue={conheceInstituicao}
+                  onValueChange={(value) => {
+                    setConheceInstituicao(value ?? ''); 
+                    if (value !== 'SIM') {
+                      SetOutrosCuidados('');
+                    }
+                  }}
+                  options={['SIM', 'NÃO']}
+              />
+               {conheceInstituicao.includes('SIM') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={sobreUso}
+                        onChangeText={SetOutrosCuidados}
+                        placeholder="Separe por vírgulas"
+                        margin="15px 10px 30px 5px"
+                        title="Qual(is) a(s) instituição(ões) e que tipo de trabalho desenvolve?"
+                    />
+                </View>
+               )}
 
+             
+              <Input 
+              value={novoEntrevistado.importanciaDeProtegerAmbiente} 
+              onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Para você, qual a importância de protejer o meio ambiente?"
+              />
+
+              <Input 
+              value={novoEntrevistado.importanciaDeProtegerFauna} 
+              onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerFauna')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Qual a importância de proteger a fauna?"
+              />
+
+              <Input 
+              value={novoEntrevistado.qualEspacoPrecisaSerPreservado} 
+              onChange={(event)=> handleOnChangeInput(event, 'qualEspacoPrecisaSerPreservado')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Há algum espaço na sua localidade que você acredite que precisa ser protegido?"
+              />
+
+              <Input 
+              value={novoEntrevistado.problemasRelacionadosAoAmbiente} 
+              onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionadosAoAmbiente')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Qual é o problema relacionado ao meio ambiente que você percebe em sua localidade?"
+              />
+
+              
               <RenderPicker
                 label="Já ouviu falar de UC?"
                 selectedValue={novoEntrevistado.conheceUcs}
@@ -373,7 +483,7 @@ export const NovoEntrevistado = ()=>{
                 options={simNaoOptions}
               />
 
-             
+       
                 <RenderPicker
                   label="Utiliza a área?"
                   selectedValue={usoArea}
@@ -396,7 +506,8 @@ export const NovoEntrevistado = ()=>{
                     />
                 </View>
             )}
-              
+
+
               <Input 
               value={novoEntrevistado.propostaMelhorarArea} 
               onChange={(event)=> handleOnChangeInput(event, 'propostaMelhorarArea')}
@@ -421,8 +532,7 @@ export const NovoEntrevistado = ()=>{
               title="Informe um contato do indicado"
               ref={relacaoVizinhoInput}/>
 
-    
-         
+       
          
     <View style={{ marginTop: 40 }}>
       {loading ? (

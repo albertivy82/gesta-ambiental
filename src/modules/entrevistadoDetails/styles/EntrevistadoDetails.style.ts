@@ -10,3 +10,9 @@ export const EntrevistadoDetailContainer = styled.View`
     padding: 16px;
 
 `
+
+
+export const Icones = styled.Image`
+  width: 55px;
+  height: 40px;
+`
