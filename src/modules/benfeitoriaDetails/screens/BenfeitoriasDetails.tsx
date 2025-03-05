@@ -1,15 +1,14 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
-import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
-import { renderField } from '../ui-components/renderField';
-import Text from '../../../shared/components/text/Text';
 import { Icon } from '../../../shared/components/icon/Icon';
+import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { UseConsumo } from '../hooks/UseConsumo';
-import { AlimentacaoSchema } from '../../../realm/models/alimentacaoSchema';
 import { UseDependencia } from '../hooks/UseDependencia';
+import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
+import { renderField } from '../ui-components/renderField';
 
 
 
@@ -38,12 +37,7 @@ const BenfeitoriaDetails = () => {
   const {compras, benfeitoriaAlimentos} = UseConsumo(params.benfeitoria.id)
   const dependencia = UseDependencia(params.benfeitoria.id)
   
-  let origemMaterialConstrucaoString = '';
-  if ( params.benfeitoria.OrigemMaterialConstrucao &&  params.benfeitoria.OrigemMaterialConstrucao.length > 0) {
-      origemMaterialConstrucaoString =  params.benfeitoria.OrigemMaterialConstrucao.join(', ');
-  }
- 
-        ///consumo
+         ///consumo
         const  handleGerenciaConsumos =  (benfeitoria: number) =>{
           if(benfeitoriaAlimentos && compras){
             comprasDaBenfeitoria(navigation.navigate, benfeitoria);
@@ -67,23 +61,21 @@ const BenfeitoriaDetails = () => {
               <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
                 {renderField('Tipo', params.benfeitoria.tipoBenfeitoria)}
                 {renderField('Função', params.benfeitoria.funcao)}
-                {renderField('Tipo do Solo', params.benfeitoria.tipoSolo)}
+                {renderField('Tipo do Solo', params.benfeitoria.impermeabilizacaoSolo)}
                 {renderField('Área aproximada', params.benfeitoria.areaBenfeitoria.toString()+' km²')}
                 {renderField('Pavimentos', params.benfeitoria.pavimentos.toString())}
-                {renderField('Tipo de construção', params.benfeitoria.tipoConstrucao)}
-                {renderField('Origem dos materiais de construção', origemMaterialConstrucaoString)}
+                {renderField('Tipo de construção', params.benfeitoria.paredes)}
+                {renderField('Origem dos materiais de construção', params.benfeitoria.origemAreiaDaConstrucao)}
                 {renderField('Cobertura', params.benfeitoria.tipoCobertura)}
                 {renderField('Esquadrias', params.benfeitoria.tipoEsquadrias)}
                 {renderField('Alagamentos', params.benfeitoria.alagamentos)}
-                {renderField('Nivel de alagamentos', params.benfeitoria.nivelAlagamentos)}
+                {renderField('Nivel de alagamentos', params.benfeitoria.alagamentos)}
                 {renderField('Efluentes', params.benfeitoria.efluentes)}
                 {renderField('Resíduos', params.benfeitoria.residuos)}
                 {renderField('Fonte de Energia', params.benfeitoria.fonteEnergia)}
                 {renderField('Fonte de Enrgia para preparar alimentos', params.benfeitoria.energiaAlimentos)}
                 {renderField('Informativo predominante', params.benfeitoria.informativoPredominante)}
-                {renderField('Qual importância de proteger a fauna', params.benfeitoria.importanciaDeProtegerFauna)}
-                {renderField('Qual espaço precisa ser preservado', params.benfeitoria.qualEspacoPrecisaSerPreservado)}
-                {renderField('quais problemas relacionados ao meio ambiente', params.benfeitoria.problemasRelacionadosAoAmbiente)}
+              
             </View>
 
                     <TouchableOpacity onPress={() =>handleGerenciaConsumos(params.benfeitoria.id)}>

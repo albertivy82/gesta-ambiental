@@ -9,26 +9,33 @@ import { formatDateForApi } from "../../../shared/functions/data";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 
 export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
-  nome: "",
-  naturalidade: "",
-  nascimentoData: "",
+
+  nome: '',
+  naturalidade: '',
+  nascimentoData: '',
   sexo: null,
-  apelido: "",
+  apelido: '',
   escolaridade: null,
   estadoCivil: null,
-  religiao: "",
+  religiao: '',
   morador: null,
-  dataChegada: "",
+  dataChegada: '',
   pretendeMudar: null,
-  motivoVontadeMudanca: "",
-  relacaoAreaImovel: "",
-  relacaoVizinhos: "",
-  tipoAlimentacao: "",
-  localCompras: "",
+  motivoVontadeMudanca: '',
+  relacaoAreaImovel: '',
+  relacaoVizinhos: '',
+  tipoAlimentacao: '',
+  localCompras: '',
+  comoCuidaSaudeFamilia:'',
   servicosDeficitarios: "",
   sofreuAssaltos: 0,
   presenciouAssalto: 0,
-  problemasDeViolenciaLocal: "",
+  problemasDeViolenciaLocal: '',
+  instituicaoConhecida:'',
+  importanciaDeProtegerAmbiente: '',
+  importanciaDeProtegerFauna: '',
+  qualEspacoPrecisaSerPreservado: '',
+  problemasRelacionadosAoAmbiente: '',
   conheceUcs: null,
   conheceUcProposta: null,
   conheceAreaUc: null,
@@ -51,12 +58,13 @@ export const useNovoEntrevistado = (id:number) => {
      console.log(novoEntrevistado)
       if (
           novoEntrevistado.nome !== '' && 
-          novoEntrevistado.apelido !== '' && 
           novoEntrevistado.naturalidade !== '' && 
           novoEntrevistado.nascimentoData !== '' &&
           novoEntrevistado.sexo !== null &&
+          novoEntrevistado.apelido !== '' && 
           novoEntrevistado.escolaridade !== null &&
           novoEntrevistado.estadoCivil !== null &&
+          novoEntrevistado.religiao !== '' &&
           novoEntrevistado.morador !== null &&
           novoEntrevistado.dataChegada !== '' &&
           novoEntrevistado.pretendeMudar !== null &&
@@ -64,12 +72,23 @@ export const useNovoEntrevistado = (id:number) => {
           novoEntrevistado.relacaoVizinhos !== '' &&
           novoEntrevistado.tipoAlimentacao !== '' &&
           novoEntrevistado.localCompras !== '' &&
+          novoEntrevistado.comoCuidaSaudeFamilia!== '' &&
           novoEntrevistado.servicosDeficitarios !== '' &&
+          novoEntrevistado.sofreuAssaltos > 0 &&
+          novoEntrevistado.presenciouAssalto > 0 &&
+          novoEntrevistado.problemasDeViolenciaLocal !== '' &&
+          novoEntrevistado.instituicaoConhecida !== '' &&
+          novoEntrevistado.importanciaDeProtegerAmbiente!== '' &&
+          novoEntrevistado.importanciaDeProtegerFauna!== '' &&
+          novoEntrevistado.qualEspacoPrecisaSerPreservado!== '' &&
+          novoEntrevistado.problemasRelacionadosAoAmbiente!== '' &&
           novoEntrevistado.conheceUcs !== null &&
           novoEntrevistado.conheceUcProposta !== null &&
           novoEntrevistado.conheceAreaUc !== null &&
           novoEntrevistado.utilizaAreaUc !== '' &&
-          novoEntrevistado.propostaMelhorarArea !== ''
+          novoEntrevistado.propostaMelhorarArea !== '' &&
+          novoEntrevistado.indicadoConsultaPublica !== '' &&
+          novoEntrevistado.contatoIndicadoConsultaPublica!== ''
           
       ) {
         
@@ -105,7 +124,6 @@ export const useNovoEntrevistado = (id:number) => {
             console.log("useInputEntrevistado.ts...enviando api...");
           } catch (error) {
             objetoFila();
-            
           }
       } else {
           console.log("seInputEntrevistado.ts-enviarEntrevistado, deveria salava na fila, mas se perdeu");
@@ -170,15 +188,7 @@ const handleNumberChange = (
 };
 
 
-
-
-
-    
-   
-      
-    
-
-    return {
+return {
       novoEntrevistado,
       enviarEntrevistado,
       handleOnChangeInput,

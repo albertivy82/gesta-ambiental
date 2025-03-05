@@ -1,11 +1,12 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
-import { salvarBenfeitoriaQueue } from "../../../realm/services/benfeitoriaService";
+import { v4 as uuidv4 } from 'uuid';
+import { salvarBenfeitoria, salvarBenfeitoriaQueue, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput =  {
 
@@ -24,13 +25,13 @@ export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput =  {
     origemAreiaDaConstrucao: '',
     alagamentos: '',
     epocaOcorrencia: '',
-    efluentes: null,
-    residuos: null,
-    fonteEnergia: null,
-    energiaAlimentos: null,
-    meiosLocomocao: null,
+    efluentes: '',
+    residuos: '',
+    fonteEnergia: '',
+    energiaAlimentos: '',
+    meiosLocomocao: '',
     linhasOnibus: '',
-    informativoPredominante: null,
+    informativoPredominante: '',
     imovel: {
         id:0,
     },
@@ -58,15 +59,15 @@ useEffect(()=>{
       novaBenfeitoria.origemMadeiraDaConstrucao !== '' &&
       novaBenfeitoria.origemPedraDaConstrucao !== '' &&
       novaBenfeitoria.origemAreiaDaConstrucao !== '' &&
-      novaBenfeitoria.alagamentos !== null &&
-      novaBenfeitoria.epocaOcorrencia !== null &&
-      novaBenfeitoria.efluentes !== null &&
-      novaBenfeitoria.residuos !== null &&
-      novaBenfeitoria.fonteEnergia !== null &&
-      novaBenfeitoria.energiaAlimentos !== null &&
+      novaBenfeitoria.alagamentos !== '' &&
+      novaBenfeitoria.epocaOcorrencia !== '' &&
+      novaBenfeitoria.efluentes !== '' &&
+      novaBenfeitoria.residuos !== '' &&
+      novaBenfeitoria.fonteEnergia !== '' &&
+      novaBenfeitoria.energiaAlimentos !== '' &&
       novaBenfeitoria.meiosLocomocao !== null &&
       novaBenfeitoria.linhasOnibus !== '' &&
-      novaBenfeitoria.informativoPredominante !== null
+      novaBenfeitoria.informativoPredominante !== ''
         
 
     )
@@ -118,8 +119,9 @@ const enviarRegistro = async () =>{
       if(!sincronizado && imovelId<=0){
         //imovel offline
         const benfeitoriaDataQueue = objetoFila();
-        salvarBenfeitoriaQueue(benfeitoriaDataQueue);
-        console.log("benfeitoria case: imóvel offline")
+        const benfeitoriaQueue = await salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+        return benfeitoriaQueue;
+       
 
       }else{
           novaBenfeitoria.imovel = {id:imovelId};
@@ -130,22 +132,48 @@ const enviarRegistro = async () =>{
                   
                   try{
                      
-                    await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria);
-                      
+                    const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria) as BenfeitoriaType;
+                        
+                    if (response && response.id) {
+                          return fetchBefeitoriaAPI(response.id);
+                        }
 
                   } catch (error) {
                       const benfeitoriaDataQueue = objetoFila();
-                      salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                      const benfeitoriaQueue = await salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                      return benfeitoriaQueue;
                      
                   }
                 }else{
                   const benfeitoriaDataQueue = objetoFila();
-                      salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                  const benfeitoriaQueue = await salvarBenfeitoriaQueue(benfeitoriaDataQueue);
+                  return benfeitoriaQueue;
                      
                   
                 }
       }
 }
+
+ const fetchBefeitoriaAPI = async(id:number) =>{
+
+        try{
+            const response = await connectionAPIGet<BenfeitoriaType>(`http://192.168.100.28:8080/benfeitoria/${id}`);
+            if (response) {
+              const bftData = {
+                  ...response,
+                  sincronizado: true,
+                  idLocal: '',
+                  idFather: '',
+              };
+                 return await salvarBenfeitoria(bftData);
+            }else{
+                    throw new Error('Dados de benfeitoria Inválidos'); 
+                }
+        } catch (error) {
+                //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+        }
+    };
+
 
   const handleEnumChange = (field: keyof BenfeitoriaInput, value: any) => {
      setNovaBenfeitoria((current) => ({
@@ -206,6 +234,7 @@ const enviarRegistro = async () =>{
     };
 
  return {novaBenfeitoria, 
+         enviarRegistro,
          handleEnumChange,
          handleArrayFieldChange,
          handleOnChangeAreaBenfeitoria,

@@ -1,12 +1,12 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, View } from "react-native";
+import { Alert, Button, ScrollView, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { Efluentes } from "../../../enums/Efluentes.enum";
 import { EnergiaAlimentos } from "../../../enums/EnergiaAlimentos.enum";
 import { FonteEnergia } from "../../../enums/FonteEnergia.enum";
 import { Funcao } from "../../../enums/Funcao.enum";
 import { InformativoPredominante } from "../../../enums/InformativoPredominante.enum";
-import { NivelAlagamento } from "../../../enums/NivelAlagamento.enum";
 import { origemMaterialConstrucao } from "../../../enums/OrigemMaterialConstrucao.enum";
 import { Residuos } from "../../../enums/Residuos.enum";
 import { TipoBenfeitoria } from "../../../enums/TipoBenfeitoria.enum";
@@ -16,12 +16,13 @@ import { TipoEsquadrias } from "../../../enums/TipoEsquadrias.enum";
 import { Vizinhos } from "../../../enums/Vizinhos";
 import { limitesTerrenoEnum } from "../../../enums/limitesTerreno.enum";
 import { tipoSoloBenfeitoriaEnum } from "../../../enums/tipoSoloBenfeitoria.enum copy";
+import { transporteEnum } from "../../../enums/transporte.enum";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
-import { transporteEnum } from "../../../enums/transporte.enum";
 
 export interface imovelParam {
 imovelId: number, 
@@ -29,9 +30,15 @@ idLocal : string|undefined,
 sincronizado: boolean
 }
 
+export const detalharBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
+    navigate('BenfeitoriaDetails', {benfeitoria})
+}
+
 export const NovaBenfeitoria=()=>{
     const { params } = useRoute<RouteProp<Record<string, imovelParam>>>();
+    const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const {novaBenfeitoria, 
+           enviarRegistro,
            handleEnumChange,
            handleArrayFieldChange,
            handleOnChangeAreaBenfeitoria,
@@ -41,7 +48,7 @@ export const NovaBenfeitoria=()=>{
            } = UseNovaBenfeitoria(params.imovelId, params.idLocal, params.sincronizado);
 
     const [referencaiDaPrincipal, setReferencaiDaPrincipal] = useState<string[]>([]);
-    
+    const [loading, setLoading] = useState(false);    
     const [alagamento, setAlagamento] = useState<string>('');     
     const [ocorrencia, SetOcorrencia] = useState<string>('');
     const [efluenteSanitario, setEfluenteSanitário] = useState<string[]>([]);     
@@ -143,10 +150,29 @@ export const NovaBenfeitoria=()=>{
     const optionsFonteEnergia = Object.values(FonteEnergia)
     const optionsEnergiaAlimentos = Object.values(EnergiaAlimentos)
     const optionsInformativoPredominante = Object.values(InformativoPredominante)
-
-   
       
-    const optionsNivelAlagamento = Object.values(NivelAlagamento)//apagar do enums
+    
+
+
+    const handleEnviar = async () => {
+      setLoading(true);
+    
+      try {
+        const benfeitoriaSalva = await enviarRegistro(); 
+            if (benfeitoriaSalva){
+              detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+            } else {
+              Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+              navigation.goBack();
+            }
+      } catch (error) {
+        console.error("Erro no envio:", error);
+        Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
        
     return( 
     
@@ -368,6 +394,28 @@ export const NovaBenfeitoria=()=>{
                   )}
 
 
+               <CheckboxSelector
+                options={optionsEnergiaAlimentos}
+                selectedValues={energiAlimento}
+                label="Qual a fonte de energia usada para a produção de alimentos?"
+                onSave={(selectedValues) => {
+                    setEnergiAlimento(selectedValues);
+                    if (!selectedValues.includes('Outros')) {
+                        SetOutrasEnergias('');
+                    }
+                }}
+              />
+                  {energiAlimento.includes('Outros') && (
+                      <View style={{ marginTop: 10 }}>
+                          <Input
+                              value={outrasEnergias}
+                              onChangeText={SetOutrasEnergias}
+                              placeholder="Separe as informações por vírgula"
+                              margin="15px 10px 30px 5px"
+                              title="Qual?"
+                          />
+                      </View>
+                  )}
 
 
              <RenderPicker
@@ -377,14 +425,65 @@ export const NovaBenfeitoria=()=>{
               options={optionsLocomocao}
              />
 
+             
+             <RenderPicker
+                  label="Existem linhas de ônibus locais?"
+                  selectedValue={linhaOnibus}
+                  onValueChange={(value) => {
+                    setLinhaOnibus(value ?? ''); 
+                    if (value !== 'SIM') {
+                      SetQual('');
+                    }
+                  }}
+                  options={['SIM', 'NÃO']}
+                 />
+                    {linhaOnibus.includes('SIM') && (
+                      <View style={{ marginTop: 10 }}>
+                      <Input
+                      value={qual}
+                      onChangeText={SetQual}
+                      placeholder="Separe as informações por vírgula"
+                      margin="15px 10px 30px 5px"
+                      title="Qual?"
+                       />
+                      </View>
+                      )}
 
+
+              
+              <CheckboxSelector
+                options={optionsInformativoPredominante}
+                selectedValues={meioInofrmativo}
+                label="Qual o meio de informação mais usado?"
+                onSave={(selectedValues) => {
+                    setMeioInformativo(selectedValues);
+                    if (!selectedValues.includes('Outros')) {
+                        SetOutrosMeioInformativos('');
+                    }
+                }}
+              />
+                  {meioInofrmativo.includes('Outros') && (
+                      <View style={{ marginTop: 10 }}>
+                          <Input
+                              value={outrosMeioInformativos}
+                              onChangeText={SetOutrosMeioInformativos}
+                              placeholder="Separe as informações por vírgula"
+                              margin="15px 10px 30px 5px"
+                              title="Qual?"
+                          />
+                      </View>
+                  )}
             
            
 
               
-          <View style={{ marginTop:40 }}>
-          <Button title="enviar"  onPress={console.log} />
-          </View>
+            <View style={{ marginTop: 40 }}>
+              {loading ? (
+                <ActivityIndicator size="large" color="#ff4500" /> 
+              ) : (
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+              )}
+            </View>
     
         </BenfeitoriaContainer>
     </ScrollView>

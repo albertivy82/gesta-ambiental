@@ -52,18 +52,57 @@ export const salvarBenfeitorias = (benfeitorias: BenfeitoriaType[]) =>{
 
 };
 
-export const salvarBenfeitoriaQueue = (benfeitoria:BenfeitoriaInput)=>{
-   
-   return new Promise<void>((resolve, reject)=>{
 
+export const salvarBenfeitoria = (benfeitoria: BenfeitoriaType): Promise<BenfeitoriaType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let benfeitoriaSalva;
+            realmInstance.write(() => {
+                const benfeitoriaExistente = realmInstance
+                    .objects<BenfeitoriaType>("Benfeitoria")
+                    .filtered(`id == ${benfeitoria.id}`)[0];
+
+                const benfeitoriaPadrao = {
+                    ...benfeitoria,
+                    imovel: benfeitoria.imovel.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (benfeitoria.sincronizado && benfeitoriaExistente && benfeitoria.idLocal === '') {
+                    benfeitoriaSalva = realmInstance.create("Benfeitoria", benfeitoriaPadrao, true);
+                } else {
+                    benfeitoriaSalva = realmInstance.create("Benfeitoria", benfeitoriaPadrao, true);
+                }
+            });
+    if (benfeitoriaSalva) {
+        const cleanBenfeitoria = JSON.parse(JSON.stringify(benfeitoriaSalva))
+        resolve(cleanBenfeitoria as BenfeitoriaType);
+    } else {
+    throw new Error("Erro ao recuperar a benfeitoria salva.");
+    }
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+
+export const salvarBenfeitoriaQueue = (benfeitoria:BenfeitoriaInput): Promise<BenfeitoriaType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
             return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
         
+        
                 try{
-
+                    let benfeitoriaSalva;
+                    
                         realmInstance.write(() => {
                         console.log('ERRO QUEUE');
                         const benfeitoriaPadrao = {
@@ -72,11 +111,16 @@ export const salvarBenfeitoriaQueue = (benfeitoria:BenfeitoriaInput)=>{
                            imovel: benfeitoria.imovel!.id,
                         };
             
-                        realmInstance.create('Benfeitoria', benfeitoriaPadrao, true);
-                        console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        benfeitoriaSalva = realmInstance.create('Benfeitoria', benfeitoriaPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
                     });
 
-                    resolve()
+                    if (benfeitoriaSalva) {
+                        const cleanBenfeitoria = JSON.parse(JSON.stringify(benfeitoriaSalva))
+                        resolve(cleanBenfeitoria as BenfeitoriaType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
                 } catch(error){
                     reject(error)
                 }

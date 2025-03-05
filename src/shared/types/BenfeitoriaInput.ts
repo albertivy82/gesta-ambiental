@@ -1,11 +1,5 @@
-﻿import { Efluentes } from "../../enums/Efluentes.enum";
-import { EnergiaAlimentos } from "../../enums/EnergiaAlimentos.enum";
-import { FonteEnergia } from "../../enums/FonteEnergia.enum";
-import { Funcao } from "../../enums/Funcao.enum";
-import { InformativoPredominante } from "../../enums/InformativoPredominante.enum";
-import { NivelAlagamento } from "../../enums/NivelAlagamento.enum";
+﻿import { Funcao } from "../../enums/Funcao.enum";
 import { origemMaterialConstrucao } from "../../enums/OrigemMaterialConstrucao.enum";
-import { Residuos } from "../../enums/Residuos.enum";
 import { TipoBenfeitoria } from "../../enums/TipoBenfeitoria.enum";
 import { TipoCobertura } from "../../enums/TipoCobertura.enum";
 import { TipoConstrucao } from "../../enums/TipoConstrucao.enum";
@@ -30,13 +24,13 @@ export interface BenfeitoriaInput {
     origemAreiaDaConstrucao: origemMaterialConstrucao | "" | null;
     alagamentos: string;
     epocaOcorrencia: string;
-    efluentes: Efluentes | "" | null;
-    residuos: Residuos | "" | null;
-    fonteEnergia: FonteEnergia | "" | null;
-    energiaAlimentos: EnergiaAlimentos | "" | null;
+    efluentes: string;
+    residuos: string;
+    fonteEnergia: string;
+    energiaAlimentos: string;
     meiosLocomocao: transporteEnum | "" | null;
     linhasOnibus: string;
-    informativoPredominante: InformativoPredominante | "" | null;
+    informativoPredominante: string;
     imovel: {
         id: number;
     };

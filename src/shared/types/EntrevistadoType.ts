@@ -43,7 +43,7 @@ contatoIndicadoConsultaPublica: string;
 localidade: {
     id: number;
 };
-sincronizado: boolean;
+sincronizado?: boolean;
 idLocal?: string;
 }
 

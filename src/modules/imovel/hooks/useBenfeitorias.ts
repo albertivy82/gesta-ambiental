@@ -3,21 +3,15 @@ import { useEffect, useState } from "react";
 import { setIdBenfeitoriaFromApiOnAguas } from "../../../realm/services/aguasService";
 import { setIdBenfeitoriaFromApiOnAlimentacao } from "../../../realm/services/alimentacaoService";
 import { setIdBenfeitoriaFromApiOnAtvProd } from "../../../realm/services/atividadeProdutivaService";
-import { setIdBenfeitoriaFromApiOnAves } from "../../../realm/services/avesService";
 import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
 import { setIdBenfeitoriaFromApiCompras } from "../../../realm/services/comprasService";
 import { setIdBenfeitoriaFromApiCredito } from "../../../realm/services/creditoService";
 import { setIdBenfeitoriaFromApiOnDependencias } from "../../../realm/services/dependenciaService";
 import { setIdBenfeitoriaFromApiOnFauna } from "../../../realm/services/faunaService";
 import { setIdBenfeitoriaFromApiOnIstConheci } from "../../../realm/services/instituicaoConhecidaService";
-import { setIdBenfeitoriaFromApiOnMamiferos } from "../../../realm/services/mamiferosService";
 import { setIdBenfeitoriaFromApiOnMorador } from "../../../realm/services/moradorService";
-import { setIdBenfeitoriaFromApiOnPeixes } from "../../../realm/services/peixesService";
-import { setIdBenfeitoriaFromApiOnPesca } from "../../../realm/services/pescaService";
 import { setIdBenfeitoriaFromApiOnRendasOF } from "../../../realm/services/rendaOutrasFontes";
 import { setIdBenfeitoriaFromApiOnCS } from "../../../realm/services/servicosComunicacaoService";
-import { setIdBenfeitoriaFromApiOnVegetacao } from "../../../realm/services/vegetacaoService";
-import { setIdBenfeitoriaFromApiOnViolencia } from "../../../realm/services/violenciaService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
@@ -28,26 +22,28 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
     const benfeitoriaInput: BenfeitoriaInput ={
         tipoBenfeitoria: benfeitoria.tipoBenfeitoria,
         funcao: benfeitoria.funcao,
-        tipoSolo: benfeitoria.tipoSolo,
+        afastamentoDaPrincipal: benfeitoria.afastamentoDaPrincipal,
+        impermeabilizacaoSolo: benfeitoria.impermeabilizacaoSolol,
+        limites: benfeitoria.limites,
         areaBenfeitoria: benfeitoria.areaBenfeitoria,
         pavimentos: benfeitoria.pavimentos,
-        tipoConstrucao: benfeitoria.tipoConstrucao,
-        origemMaterialConstrucao: benfeitoria.origemMaterialConstrucao, 
+        paredes: benfeitoria.paredes,
         tipoCobertura: benfeitoria.tipoCobertura,
         tipoEsquadrias: benfeitoria.tipoEsquadrias,
+        origemMadeiraDaConstrucao: benfeitoria.origemMadeiraDaConstrucao,
+        origemPedraDaConstrucao: benfeitoria.origemPedraDaConstrucao,
+        origemAreiaDaConstrucao: benfeitoria.origemAreiaDaConstrucao,
         alagamentos: benfeitoria.alagamentos,
-        nivelAlagamentos: benfeitoria.nivelAlagamentos,
+        epocaOcorrencia: benfeitoria.epocaOcorrencia,
         efluentes: benfeitoria.efluentes,
         residuos: benfeitoria.residuos,
         fonteEnergia: benfeitoria.fonteEnergia,
         energiaAlimentos: benfeitoria.energiaAlimentos,
+        meiosLocomocao: benfeitoria.meiosLocomocao,
+        linhasOnibus: benfeitoria.linhasOnibus,
         informativoPredominante: benfeitoria.informativoPredominante,
-        importanciaDeProtegerFauna: benfeitoria.importanciaDeProtegerFauna,
-        importanciaDeProtegerAmbiente: benfeitoria.importanciaDeProtegerAmbiente,
-        qualEspacoPrecisaSerPreservado: benfeitoria.qualEspacoPrecisaSerPreservado,
-        problemasRelacionadosAoAmbiente: benfeitoria.problemasRelacionadosAoAmbiente,
         imovel: {
-            id: benfeitoria.imovel,
+            id: benfeitoria.imovel, 
         },
     }
    
@@ -83,19 +79,13 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                                     setIdBenfeitoriaFromApiCompras(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnDependencias(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAves(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnFauna(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnIstConheci(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnMamiferos(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnMorador(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnPeixes(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnPesca(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnCS(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnVegetacao(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnViolencia(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     apagarBenfeitiaQueue(benfeitoria.idLocal!)
                                     console.log("benfeitpria. ponto de sisncronização 6", )
                                 }

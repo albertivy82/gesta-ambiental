@@ -1,8 +1,9 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
-import { Alert, Button, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
+import { AtendimentoSaude } from "../../../enums/AtendimentoSaude.enum";
 import { Compras } from "../../../enums/Compras.enum";
 import { Escolaridade } from "../../../enums/Escolaridade";
 import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
@@ -16,12 +17,6 @@ import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
-import { Icon } from "../../../shared/components/icon/Icon";
-import Text from "../../../shared/components/text/Text";
-import { Icones } from "../../entrevistadoDetails/styles/EntrevistadoDetails.style";
-import { textTypes } from "../../../shared/components/text/textTypes";
-import { theme } from "../../../shared/themes/theme";
-import { AtendimentoSaude } from "../../../enums/AtendimentoSaude.enum";
 
 export interface localidadeParam {
    localidadeId: number,
