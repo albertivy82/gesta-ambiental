@@ -4,7 +4,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { DependenciaType } from '../../../shared/types/DependenciasType';
-import { Row } from '../styles/depndencia.style';
+import { Row } from '../styles/peixe.style';
 import { UseDeletarRegistro } from '../hooks/useInputPeixe';
 
 

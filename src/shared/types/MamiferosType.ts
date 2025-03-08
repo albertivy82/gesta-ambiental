@@ -11,7 +11,7 @@ export interface MamiferosType {
     problemasRelacionados: string;
     alimentacao: string;
     desricaoEspontanea: string;
-    benfeitoria: {
+    entrevistado: {
         id: number;
     };
     sincronizado?: boolean;

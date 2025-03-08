@@ -5,6 +5,8 @@ import { FaunaInput } from "../../../shared/types/FaunaInput";
 import { salvarFaunaQueue } from "../../../realm/services/faunaService";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   especie: '',
@@ -15,14 +17,14 @@ export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   ocorreQuintal: null,
   outrasOcorrencias: null,
   frequenciaAtual: '',
-  frequenciaPassada: null,
+  frequenciaPassada: '',
   tempoQueNaoVe: null,
-  benfeitoria: {
+  entrevistado: {
     id: 0,
   },
 };
 
-export const useNovaFauna = (benfeitoriaId: number, idBenfeitoriaLocal : string|undefined, sincronizado: boolean) => {
+export const useNovaFauna = (entrevistado: EntrevistadoType) => {
   const [novaFauna, setNovaFauna] = useState<FaunaInput>(DEFAULT_FAUNA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -39,62 +41,96 @@ export const useNovaFauna = (benfeitoriaId: number, idBenfeitoriaLocal : string|
       novaFauna.frequenciaAtual !== '' &&
       novaFauna.frequenciaPassada !== null &&
       novaFauna.tempoQueNaoVe !== null
-    ) {
+    ) 
       setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
+    
   }, [novaFauna]);
 
   const objetoFila = () => {
     const faunaData: FaunaInput = {
       ...novaFauna,
       sincronizado: false,
-      idLocal: uuidv4(), // Cria um ID único para o registro de fauna
+      idLocal: uuidv4(),
     };
-  
-    if (benfeitoriaId > 0) {
-      // Caso a benfeitoria tenha um ID oficial
-      faunaData.benfeitoria = { id: benfeitoriaId };
+
+    if (entrevistado.id > 0) {
+      faunaData.entrevistado!.id = entrevistado.id;
       faunaData.idFather = "";
+    } else if (entrevistado.idLocal) {
+      faunaData.idFather = entrevistado.idLocal;
+      faunaData.entrevistado!.id = entrevistado.id;
     } else {
-      if (idBenfeitoriaLocal) {
-        // Caso a benfeitoria esteja offline, usa o ID local
-        faunaData.idFather = idBenfeitoriaLocal;
-        faunaData.benfeitoria = { id: benfeitoriaId };
-      } else {
-        console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
-      }
+      console.warn("ID local do entrevistado não encontrado. Verifique se está sendo passado corretamente.");
     }
-  
+
     return faunaData;
   };
 
-  const enviarRegistro = async () => {
-    if (!sincronizado && benfeitoriaId <= 0) {
-      // Benfeitoria offline
+  const inputFaunaApi = async () => {
+    if (!entrevistado.sincronizado && entrevistado.id <= 0) {
       const faunaDataQueue = objetoFila();
+      console.log("useInputFauna_a", novaFauna);
       salvarFaunaQueue(faunaDataQueue);
-      console.log("Fauna case: benfeitoria offline");
     } else {
-      novaFauna.benfeitoria = { id: benfeitoriaId };
+      novaFauna.entrevistado = { id: entrevistado.id };
+      console.log(novaFauna.entrevistado.id, "se não estiver correto, devo obedecer o modo do de proceder do hook");
       const netInfoState = await NetInfo.fetch();
       const isConnected = await testConnection();
-  
+      console.log("useInputFauna_b", novaFauna);
+
       if (netInfoState.isConnected && isConnected) {
+        console.log("useInputFauna_c", novaFauna);
         try {
           await connectionAPIPost('http://192.168.100.28:8080/fauna', novaFauna);
+          console.log("useInputFauna_d", novaFauna);
         } catch (error) {
           const faunaDataQueue = objetoFila();
           salvarFaunaQueue(faunaDataQueue);
+          console.log("useInputFauna_e", novaFauna);
         }
       } else {
         const faunaDataQueue = objetoFila();
         salvarFaunaQueue(faunaDataQueue);
+        console.log("useInputFauna_f", novaFauna);
       }
     }
   };
-  
-  
 
-}
+  const handleOnChangeInput = (
+        value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+        name: string
+      ) => {
+        // Verifica se "value" é um evento ou uma string diretamente
+        const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+      
+        setNovaFauna((current) => ({
+          ...current,
+          [name]: newValue,
+        }));
+      };
+  
+    const handleEnumChange = (field: keyof FaunaInput, value: any) => {
+      setNovaFauna((current) => ({
+             ...current,
+             [field]: value,
+           }));
+    };
+
+    const handleArrayFieldChange = (field: keyof FaunaInput, values: string[]) => {
+                 const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+                 setNovaFauna((currentState) => ({
+                   ...currentState,
+                   [field]: concatenatedValues,
+                 }));
+  };
+  
+   
+  
+    return {
+      novaFauna,
+      handleOnChangeInput,
+      handleEnumChange,  
+      handleArrayFieldChange,   
+      disabled,
+  };
+};

@@ -15,7 +15,7 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
                     //essa duplicação de código foi feita para controlar atualizações de todas os registros
                     //a primeira condição entram apenas atualizações
                     //no segundo novos registros
-                    const entrevistadoRealm = realmInstance.objects('Imovel').filtered(`id == ${entrevistado.id}`)[0];
+                    const entrevistadoRealm = realmInstance.objects('Localidade').filtered(`id == ${entrevistado.id}`)[0];
                     //console.log('Imóvel recuperado do Realm:', entrevistadoRealm);
                     if(entrevistado.sincronizado && entrevistadoRealm && entrevistado.idLocal==''){
                        // console.log('Atualizando imóvel existente:', entrevistado);
@@ -34,12 +34,9 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
 
                         realmInstance.create('Entrevistado', entrevistadoPadrao, true);
                     }
-                   
-                
+                           
                 });
-
-
-               
+              
             });
 
             resolve();
@@ -47,18 +44,56 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
         }catch(error){
             reject(error)
         }
-    
-    
-    
+        
     });
 
 };
   
+export const salvarEntrevistado = (entrevistado: EntrevistadoType): Promise<EntrevistadoType> =>{
 
-export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput) =>{
+    return new Promise((resolve, reject)=>{
+           
+        try{
+            let entrevistadoSalvo;
+            realmInstance.write(()=>{
+              const entrevistadoRealm = realmInstance.objects('Localidade')
+              .filtered(`id == ${entrevistado.id}`)[0];
+                    
+                    if(entrevistado.sincronizado && entrevistadoRealm && entrevistado.idLocal==''){
+                     
+                        const entrevistadoPadrao ={
+                         ...entrevistado,
+                        localidade: entrevistado.localidade.id,
+                        };
+                        entrevistadoSalvo =  realmInstance.create('Entrevistado', entrevistadoPadrao, true);
+                    }else{
+                        const entrevistadoPadrao ={
+                            ...entrevistado,
+                           localidade: entrevistado.localidade.id,
+                        };
+                        entrevistadoSalvo =  realmInstance.create('Entrevistado', entrevistadoPadrao, true);
+                    }
+            });
+            if(entrevistadoSalvo){
+                const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistadoSalvo));
+                resolve(cleanEntrevistado);
+            }else{
+                throw new Error("Erro ao recuperar o entrevistado Salvo.");
+            }
+            
+
+        }catch(error){
+            reject(error)
+        }
+        
+    });
+
+};
+
+export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput): Promise<EntrevistadoType> =>{
     
 
-        return new Promise<void>((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             // Função para gerar um ID aleatório
             const Id = () => {
                 const min = Math.ceil(0);
@@ -67,6 +102,7 @@ export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput) =>{
             };
                    
             try {
+                let entrevistadoSalvo;
                 realmInstance.write(() => {
                    
                     const entrevistadoPadrao = {
@@ -75,11 +111,16 @@ export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput) =>{
                         localidade: entrevistado.localidade.id,
                     };
                     //console.log('salvarImovelqueue', entrevistadoPadrao)
-                    realmInstance.create('Entrevistado', entrevistadoPadrao, true);
+                    entrevistadoSalvo = realmInstance.create('Entrevistado', entrevistadoPadrao, true);
                     //console.log('salvarImovelQueue - Ok!')
                 });
-        
-                resolve();
+                if(entrevistadoSalvo){
+                    const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistadoSalvo));
+                    resolve(cleanEntrevistado);
+                }else{
+                throw new Error("Erro ao recuperar o entrevistado Salvo.");
+                }
+                
             } catch (error) {
                 reject(error);
             }

@@ -136,7 +136,7 @@ const enviarRegistro = async () =>{
                         
                     if (response && response.id) {
                           return fetchBefeitoriaAPI(response.id);
-                        }
+                    }
 
                   } catch (error) {
                       const benfeitoriaDataQueue = objetoFila();
@@ -172,7 +172,7 @@ const enviarRegistro = async () =>{
         } catch (error) {
                 //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
         }
-    };
+  };
 
 
   const handleEnumChange = (field: keyof BenfeitoriaInput, value: any) => {

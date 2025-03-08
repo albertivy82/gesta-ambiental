@@ -2,11 +2,12 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarEntrevistadoQueue } from "../../../realm/services/entrevistado";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarEntrevistado, salvarEntrevistadoQueue } from "../../../realm/services/entrevistado";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatDateForApi } from "../../../shared/functions/data";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
 
@@ -107,7 +108,7 @@ export const useNovoEntrevistado = (id:number) => {
           idLocal: uuidv4(), 
       };
       
-      salvarEntrevistadoQueue(entrevistadoData);
+      return salvarEntrevistadoQueue(entrevistadoData);
       
     };
 
@@ -120,17 +121,40 @@ export const useNovoEntrevistado = (id:number) => {
       if (netInfoState.isConnected && isConnected) {
           try {
             console.log("useInputEntrevistado.ts...enviando api...", novoEntrevistado);
-            await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado);
-            console.log("useInputEntrevistado.ts...enviando api...");
+            const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado) as EntrevistadoType;
+            if (response && response.id) {
+              return fetchEntrevistadoAPI(response.id);
+             }
+        console.log("useInputEntrevistado.ts...enviando api...");
           } catch (error) {
             objetoFila();
           }
       } else {
           console.log("seInputEntrevistado.ts-enviarEntrevistado, deveria salava na fila, mas se perdeu");
-          objetoFila();
+          return objetoFila();
                   
       }
       
+    };
+
+    const fetchEntrevistadoAPI = async(id:number) =>{
+    
+            try{
+                const response = await connectionAPIGet<EntrevistadoType>(`http://192.168.100.28:8080/entrevistado/${id}`);
+                if (response) {
+                  const bftData = {
+                      ...response,
+                      sincronizado: true,
+                      idLocal: '',
+                      idFather: '',
+                  };
+                     return await salvarEntrevistado(bftData);
+                }else{
+                        throw new Error('Dados de benfeitoria Inválidos'); 
+                    }
+            } catch (error) {
+                    //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+            }
     };
     
 

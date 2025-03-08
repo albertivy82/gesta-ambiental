@@ -5,6 +5,8 @@ import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
 import { salvarVegetacaoQueue } from "../../../realm/services/vegetacaoService";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
   usoMedicinal: null,
@@ -26,14 +28,14 @@ export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
   quemEnsinouUso: '',
   repassaConhecimento: '',
   observacoesEspontaneas: '',
-  benfeitoria: {
+  entrevistado: {
     id: 0,
   },
 };
 
-export const useNovaVegetacao = (benfeitoriaId: number, idBenfeitoriaLocal : string|undefined, sincronizado: boolean) => {
+export const useNovaVegetacao = (entrevistado:EntrevistadoType) => {
   const [novaVegetacao, setNovaVegetacao] = useState<VegetacaoInput>(DEFAULT_VEGETACAO_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     console.log(novaVegetacao);
@@ -58,61 +60,99 @@ export const useNovaVegetacao = (benfeitoriaId: number, idBenfeitoriaLocal : str
       novaVegetacao.repassaConhecimento !== '' &&
       novaVegetacao.observacoesEspontaneas !== ''
     ) {
-      setDisabled(true);
-    } else {
       setDisabled(false);
-    }
-  }, [novaVegetacao]);
+  }
+}, [novaVegetacao]);
 
-  const objetoFila = () => {
-    const vegetacaoData: VegetacaoInput = {
-      ...novaVegetacao,
-      sincronizado: false,
-      idLocal: uuidv4(), // Cria um ID único para o registro de vegetação
+  
+const objetoFila = () => {
+      const vegetacaoData: VegetacaoInput = {
+          ...novaVegetacao, 
+          sincronizado: false,  
+          idLocal: uuidv4(),
     };
-  
-    if (benfeitoriaId > 0) {
-      // Caso a benfeitoria tenha um ID oficial
-      vegetacaoData.benfeitoria = { id: benfeitoriaId };
-      vegetacaoData.idFather = "";
-    } else {
-      if (idBenfeitoriaLocal) {
-        // Caso a benfeitoria esteja offline, usa o ID local
-        vegetacaoData.idFather = idBenfeitoriaLocal;
-        vegetacaoData.benfeitoria = { id: benfeitoriaId };
+    
+      if (entrevistado.id > 0) {
+        vegetacaoData.entrevistado!.id = entrevistado.id;
+        vegetacaoData.idFather = "";
+      } else if (entrevistado.idLocal) {
+        vegetacaoData.idFather = entrevistado.idLocal;
+        vegetacaoData.entrevistado!.id = entrevistado.id;
       } else {
-        console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
+          console.warn("ID local do entrevistado não encontrado. Verifique se está sendo passado corretamente.");
       }
-    }
-  
-    return vegetacaoData;
-  };
+    
+      return vegetacaoData;
+    };
 
-  const enviarRegistro = async () => {
-    if (!sincronizado && benfeitoriaId <= 0) {
-      // Benfeitoria offline
-      const vegetacaoDataQueue = objetoFila();
-      salvarVegetacaoQueue(vegetacaoDataQueue);
-      console.log("Vegetação case: benfeitoria offline");
-    } else {
-      novaVegetacao.benfeitoria = { id: benfeitoriaId };
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-  
-      if (netInfoState.isConnected && isConnected) {
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/vegetacao', novaVegetacao);
-        } catch (error) {
+
+    const inputVegetacaoApi = async () => {
+    
+      if (!entrevistado.sincronizado && entrevistado.id <= 0) {
           const vegetacaoDataQueue = objetoFila();
+          console.log("useInputVegetacao_a", novaVegetacao)
           salvarVegetacaoQueue(vegetacaoDataQueue);
-        }
       } else {
-        const vegetacaoDataQueue = objetoFila();
-        salvarVegetacaoQueue(vegetacaoDataQueue);
+          novaVegetacao.entrevistado = { id: entrevistado.id };
+          console.log(novaVegetacao.entrevistado.id, "se não estiver correto, devo obedecer o modo do de proceder do hook")
+          const netInfoState = await NetInfo.fetch();
+          const isConnected = await testConnection();
+          console.log("useInputVegetacao_b", novaVegetacao)
+    
+          if (netInfoState.isConnected && isConnected) {
+            console.log("useInputVegetacao_c", novaVegetacao)
+              try {
+                  await connectionAPIPost('http://192.168.100.28:8080/vegetacao', novaVegetacao);
+                  console.log("useInputVegetacao_d", novaVegetacao)
+              } catch (error) {
+                  const vegetacaoDataQueue = objetoFila();
+                  salvarVegetacaoQueue(vegetacaoDataQueue);
+                  console.log("useInputVegetacao_e", novaVegetacao)
+              }
+          } else {
+              const vegetacaoDataQueue = objetoFila();
+              salvarVegetacaoQueue(vegetacaoDataQueue);
+              console.log("useInputVegetacao_f", novaVegetacao)
+          }
       }
-    }
-  };
-  
-  
+    };
+
+    const handleOnChangeInput = (
+          value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+          name: string
+        ) => {
+          // Verifica se "value" é um evento ou uma string diretamente
+          const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+        
+          setNovaVegetacao((current) => ({
+            ...current,
+            [name]: newValue,
+          }));
+        };
+    
+      const handleEnumChange = (field: keyof VegetacaoInput, value: any) => {
+        setNovaVegetacao((current) => ({
+               ...current,
+               [field]: value,
+             }));
+      };
+    
+      const handleArrayFieldChange = (field: keyof VegetacaoInput, values: string[]) => {
+                 const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+                 setNovaVegetacao((currentState) => ({
+                   ...currentState,
+                   [field]: concatenatedValues,
+                 }));
+      };
+    
+    
+      return {
+        novaVegetacao,
+        handleOnChangeInput,
+        handleEnumChange,
+        handleArrayFieldChange,
+        disabled,
+    };
+    
 
 }

@@ -4,7 +4,7 @@ import Slider from '@react-native-community/slider';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { MinMaxLabels, MinMaxText, ProgressBarContainer, ValueText } from '../styles/depndencia.style';
+import { MinMaxLabels, MinMaxText, ProgressBarContainer, ValueText } from '../styles/peixe.style';
 
 
 // Definindo os tipos das props esperadas pelo componente

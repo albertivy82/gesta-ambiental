@@ -1,20 +1,20 @@
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+import { SimNao } from "../../enums/simNao.enum";
 
 export interface AvesInput {
     
-    especie: String;
-    useCosumo: SimNaoTalvez|null|'';
-    usoComercio: SimNaoTalvez|null|'';
-    usoCriacao: SimNaoTalvez|null|'';
-    usoRemedio: SimNaoTalvez|null|'';
-    usoOutros: SimNaoTalvez|null|'';
+    especie: string;
+    useCosumo: SimNao|null|'';
+    usoComercio: SimNao|null|'';
+    usoCriacao: SimNao|null|'';
+    usoRemedio: SimNao|null|'';
+    usoOutros: string;
     problemasRelacionados: string;
     ameacaSofrida: string;
     localDeAglomeracao: string;
 	qualImpotanciaDaEespecie: string;
 	alimentacao: string;
-	desricaoEspontanea: string;
-    benfeitoria?: {
+	descricaoEspontanea: string;
+    entrevistado: {
         id: number;
     };
     sincronizado?: boolean;

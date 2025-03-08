@@ -75,7 +75,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType) => {
         ...novoImovel, 
         sincronizado: false,  
         idLocal: uuidv4(),
-    };
+  };
   
     if (entrevistado.id > 0) {
         imovelData.entrevistado!.id = entrevistado.id;

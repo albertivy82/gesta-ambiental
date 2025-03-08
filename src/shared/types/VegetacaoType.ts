@@ -1,27 +1,28 @@
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+import { SimNao } from "../../enums/simNao.enum";
 
 export interface VegetacaoType {
     id: number;
-    usoMedicinal: SimNaoTalvez | null | '';
-    usoAlimentacao: SimNaoTalvez | null | '';
-    usoOrnamental: SimNaoTalvez | null | '';
-    usoComercial: SimNaoTalvez | null | '';
-    usaFlor: SimNaoTalvez | null | '';
-    usaFolha: SimNaoTalvez | null | '';
-    usaSemente: SimNaoTalvez | null | '';
-    usaFruto: SimNaoTalvez | null | '';
-    usaCasca: SimNaoTalvez | null | '';
-    usaRaiz: SimNaoTalvez | null | '';
-    usoLeiteLatex: SimNaoTalvez | null | '';
-    outrosUsos: SimNaoTalvez | null | '';
-    coletaLocalPublico: SimNaoTalvez | null | '';
-    coletaCultivo: SimNaoTalvez | null | '';
-    coletaCompra: SimNaoTalvez | null | '';
-    coletaAmbienteEspecifica: SimNaoTalvez | null | '';
+    especie:string;
+    usoMedicinal: SimNao | null | '';
+    usoAlimentacao: SimNao | null | '';
+    usoOrnamental: SimNao | null | '';
+    usoComercial: SimNao | null | '';
+    usaFlor: SimNao | null | '';
+    usaFolha: SimNao | null | '';
+    usaSemente: SimNao | null | '';
+    usaFruto: SimNao | null | '';
+    usaCasca: SimNao | null | '';
+    usaRaiz: SimNao | null | '';
+    usoLeiteLatex: SimNao | null | '';
+    outrosUsos: SimNao | null | '';
+    coletaLocalPublico: SimNao | null | '';
+    coletaCultivo: SimNao | null | '';
+    coletaCompra: SimNao | null | '';
+    coletaAmbienteEspecifica: SimNao | null | '';
     quemEnsinouUso: string;
     repassaConhecimento: string;
     observacoesEspontaneas: string;
-    benfeitoria: {
+    entrevistado: {
         id: number;
     };
     sincronizado?: boolean;

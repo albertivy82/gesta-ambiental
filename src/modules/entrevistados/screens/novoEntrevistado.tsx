@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
@@ -17,14 +17,19 @@ import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 export interface localidadeParam {
    localidadeId: number,
 }
 
+export const detalharEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType)=>{
+    navigate('EntrevistadoDetails', {entrevistado})
+}
+
 export const NovoEntrevistado = ()=>{
   const { params } = useRoute<RouteProp<Record<string, localidadeParam>>>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false); 
   const { novoEntrevistado,
           enviarEntrevistado,
@@ -139,21 +144,22 @@ export const NovoEntrevistado = ()=>{
        
     
     const handleEnviar = async () => {
-
-       setLoading(true); 
-        
-            try {
-              await enviarEntrevistado(); 
-              navigation.goBack; 
-             
-            } catch (error) {
-              console.error('Erro no envio:', error);
-              Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-            } finally {
-              setLoading(false); 
-            }
+         setLoading(true);
        
-           
+         try {
+           const entrevistadoSalvo = await enviarEntrevistado(); 
+               if (entrevistadoSalvo){
+                 detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
+               } else {
+                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+                 navigation.goBack();
+               }
+         } catch (error) {
+           console.error("Erro no envio:", error);
+           Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+         } finally {
+           setLoading(false);
+         }
     };
     
 

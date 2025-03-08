@@ -1,5 +1,5 @@
-export interface RepteisType {
-    id: number;
+export interface RepteisInput {
+    
     especie: string;
     local: string;
     periodo: string;

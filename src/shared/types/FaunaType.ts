@@ -1,20 +1,19 @@
-import { Ocorrencia } from "../../enums/Ocorrencia.enum";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+import { SimNao } from "../../enums/simNao.enum";
 import { TempoQueNaoAvistaEnum } from "../../enums/TempoQueNaoAvista.enum";
 
 export interface FaunaType {
     id: number;
     especie: string;
-    ocorreMata: SimNaoTalvez |null|'';
-    ocorreRio: SimNaoTalvez |null|'';
-    ocorreLago: SimNaoTalvez |null|'';
-    ocorreRua: SimNaoTalvez |null|'';
-    ocorreQuintal: SimNaoTalvez |null|'';
-    outrasOcorrencias: SimNaoTalvez |null|'';
+    ocorreMata: SimNao |null|'';
+    ocorreRio: SimNao |null|'';
+    ocorreLago: SimNao |null|'';
+    ocorreRua: SimNao |null|'';
+    ocorreQuintal: SimNao |null|'';
+    outrasOcorrencias: SimNao |null|'';
     frequenciaAtual: string;
-    frequenciaPassada: Ocorrencia|null|'';
+    frequenciaPassada: string|'';
     tempoQueNaoVe: TempoQueNaoAvistaEnum|null|'';
-    benfeitoria: {
+    entrevistado: {
         id: number;
     };
     sincronizado?: boolean;

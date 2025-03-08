@@ -1,45 +1,46 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
-import { getAves } from '../../../realm/services/avesService';
+/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { getImoveis } from '../../../realm/services/imovelService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { AvesType } from '../../../shared/types/AvesType';
-import { AveDetailContainer } from '../styles/ave.style';
-
-
+import { imovelBody } from '../../../shared/types/imovelType';
+import { ImovelContainer } from '../styles/Imovel.style';
+import RenderItemImovel from '../ui-components/listaImoveis';
+import { useImoveis } from '../../localidade/hooks/useImoveis';
 
 export interface ImoveisParam {
-  ave: AvesType;
+  localidadeId: number;
 }
 
-export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovoImovel', { entrevistadoId });
+export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
+  navigate('NovoImovel', { localidadeId });
 }
 
-const Aves = () => {
+const Vegetacoes = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { ave } = route.params;
-  //const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const { localidadeId } = route.params;
+  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
   const flatListRef = useRef<FlatList>(null);
-  const [aves, setAves] = useState<AvesType[]>([]);
+  const [imovel, setImovel] = useState<imovelBody[]>([]);
   
 
   // Carrega a lista inicial de imóveis
-  const fetchAves = useCallback(async () => {
-    if (ave.entrevistado.id) {
-      const imovelRealm = getAves(ave.entrevistado.id);
-      setAves(imovelRealm);
+  const fetchImoveis = useCallback(async () => {
+    
+    if (localidadeId) {
+      const imovelRealm = getImoveis(localidadeId);
+      setImovel(imovelRealm);
     }
    
-  }, [ave]);
+  }, [localidadeId]);
 
   useEffect(() => {
-    fetchAves();
-  }, [fetchAves]);
+    fetchImoveis();
+  }, [fetchImoveis]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -48,16 +49,16 @@ const Aves = () => {
 
   // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchAves();
+    fetchImoveis();
     handleScrollToEnd();
   };
 
-  const handleNovaAve = () => {
-    novaAve(navigation.navigate, ave.entrevistado.id);
+  const handleNovoImovel = () => {
+    novoImovel(navigation.navigate, localidadeId);
   };
 
   return (
-    <AveDetailContainer>
+    <ImovelContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -72,7 +73,7 @@ const Aves = () => {
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          LISTA DE AVES DO ENTREVISTADO
+          LISTA DE IMÓVEIS
         </Text>
       </View>
 
@@ -84,7 +85,7 @@ const Aves = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-       
+        
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -94,7 +95,7 @@ const Aves = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        
+     
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
@@ -103,7 +104,7 @@ const Aves = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
        
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaAve}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
             Add Imóvel
@@ -116,14 +117,15 @@ const Aves = () => {
       ) : (
         <FlatList
           ref={flatListRef}
-          data={aves}
-          extraData={aves} 
+          data={imovel}
+          extraData={imovel} 
           renderItem={({ item }) => <RenderItemImovel item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       )}
-    </AveDetailContainer>
+    </ImovelContainer>
   );
 }
 
-export default Aves;
+export default Vegetacoes;
+ */
