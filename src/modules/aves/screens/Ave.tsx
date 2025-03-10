@@ -1,6 +1,6 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getAves } from '../../../realm/services/avesService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
@@ -8,6 +8,7 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { AvesType } from '../../../shared/types/AvesType';
 import { AveDetailContainer } from '../styles/ave.style';
+import RenderItemAve from '../ui-components/listaAves';
 
 
 
@@ -23,19 +24,18 @@ const Aves = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
   const { ave } = route.params;
-  //const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
   const flatListRef = useRef<FlatList>(null);
   const [aves, setAves] = useState<AvesType[]>([]);
   
 
   // Carrega a lista inicial de imóveis
-  const fetchAves = useCallback(async () => {
+  const fetchAves = async () => {
     if (ave.entrevistado.id) {
       const imovelRealm = getAves(ave.entrevistado.id);
       setAves(imovelRealm);
     }
    
-  }, [ave]);
+  };
 
   useEffect(() => {
     fetchAves();
@@ -95,7 +95,7 @@ const Aves = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
@@ -106,22 +106,20 @@ const Aves = () => {
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaAve}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
+            Add Ave
           </Text>
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
+    
         <FlatList
           ref={flatListRef}
           data={aves}
           extraData={aves} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
+          renderItem={({ item }) => <RenderItemAve item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
-      )}
+      
     </AveDetailContainer>
   );
 }
