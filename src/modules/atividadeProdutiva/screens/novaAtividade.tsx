@@ -5,30 +5,29 @@ import { ActivityIndicator } from "react-native-paper";
 import { SimNao } from "../../../enums/simNao.enum";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-import { useNovoMorador } from "../hooks/useInputMorador";
-import { MoradorDetailContainer } from "../styles/morador.style";
-
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { useNovaAtvProd } from "../hooks/useInputAtvProd";
+import { AtividadeDetailContainer } from "../styles/ativdade.style";
 
 
 
 
 export interface idParam {
-  Benfeitoria: BenfeitoriaType;
+  entrevistado: EntrevistadoType;
 }
 
-export const NovoMorador = ()=>{
+export const NovaAtividade = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const [loading, setLoading] = useState(false); 
    const [outrosUsos, setOutrosUsos] = useState<string>('');     
    const [qual, SetQual] = useState<string>('');
-   const {  novoMorador,
+   const {  novaAtividade,
             handleOnChangeInput,
             handleEnumChange,
             handleArrayFieldChange,
             disabled
-          } = useNovoMorador(params.Benfeitoria);
+          } = useNovaAtvProd(params.entrevistado);
 
 
   useEffect(() => {
@@ -46,16 +45,16 @@ export const NovoMorador = ()=>{
          setLoading(true);
        
          try {
-           const moradorSalva = true//await enviarRegistro(); 
-               if (moradorSalva){
+           const aveSalva = true//await enviarRegistro(); 
+               if (aveSalva){
                  //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
                } else {
-                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novomente.");
+                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
                  navigation.goBack();
                }
          } catch (error) {
            console.error("Erro no envio:", error);
-           Alert.alert("Erro ao enviar", "Tente novomente mais tarde.");
+           Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
          } finally {
            setLoading(false);
          }
@@ -63,40 +62,40 @@ export const NovoMorador = ()=>{
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
-        <MoradorDetailContainer>
+        <AtividadeDetailContainer>
           
         <Input 
-              value={novoMorador.ondeEstuda} 
+              value={novaAtividade.especie} 
               onChange={(event)=> handleOnChangeInput(event, 'especie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de morador:"
+              title="Informe  a espécie de ave:"
         />
 
             <RenderPicker
-               label="Consome a morador em casa?"
-               selectedValue={novoMorador.useCosumo}
+               label="Consome a ave em casa?"
+               selectedValue={novaAtividade.useCosumo}
                onValueChange={(value) => handleEnumChange('useCosumo', value)}
                options={simNaoOptions}
             />
 
               <RenderPicker
-               label="comercializa a morador?"
-               selectedValue={novoMorador.usoComercio}
+               label="comercializa a ave?"
+               selectedValue={novaAtividade.usoComercio}
                onValueChange={(value) => handleEnumChange('usoComercio', value)}
                options={simNaoOptions}
             />
 
               <RenderPicker
-               label="Faz a criação da morador?"
-               selectedValue={novoMorador.usoCriacao}
+               label="Faz a criação da ave?"
+               selectedValue={novaAtividade.usoCriacao}
                onValueChange={(value) => handleEnumChange('usoCriacao', value)}
                options={simNaoOptions}
             />
 
               <RenderPicker
-               label="Faz algum uso medicinal da morador?"
-               selectedValue={novoMorador.usoRemedio}
+               label="Faz algum uso medicinal da ave?"
+               selectedValue={novaAtividade.usoRemedio}
                onValueChange={(value) => handleEnumChange('usoRemedio', value)}
                options={simNaoOptions}
               />
@@ -125,15 +124,15 @@ export const NovoMorador = ()=>{
             )}
 
              <Input 
-              value={novoMorador.problemasRelacionados} 
+              value={novaAtividade.problemasRelacionados} 
               onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionados')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Quai problemas relacionados a morador:"
+              title="Quai problemas relacionados a ave:"
               />
 
               <Input 
-              value={novoMorador.ameacaSofrida} 
+              value={novaAtividade.ameacaSofrida} 
               onChange={(event)=> handleOnChangeInput(event, 'ameacaSofrida')}
               placeholder="..."
               margin="15px 10px 30px 5px"
@@ -142,7 +141,7 @@ export const NovoMorador = ()=>{
 
 
               <Input 
-              value={novoMorador.localDeAglomeracao} 
+              value={novaAtividade.localDeAglomeracao} 
               onChange={(event)=> handleOnChangeInput(event, 'localDeAglomeracao')}
               placeholder="..."
               margin="15px 10px 30px 5px"
@@ -150,7 +149,7 @@ export const NovoMorador = ()=>{
               />
 
               <Input 
-              value={novoMorador.qualImpotanciaDaEespecie} 
+              value={novaAtividade.qualImpotanciaDaEespecie} 
               onChange={(event)=> handleOnChangeInput(event, 'qualImpotanciaDaEespecie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
@@ -159,7 +158,7 @@ export const NovoMorador = ()=>{
 
 
               <Input 
-              value={novoMorador.alimentacao} 
+              value={novaAtividade.alimentacao} 
               onChange={(event)=> handleOnChangeInput(event, 'alimentacao')}
               placeholder="..."
               margin="15px 10px 30px 5px"
@@ -167,7 +166,7 @@ export const NovoMorador = ()=>{
                 />
 
               <Input 
-              value={novoMorador.descricaoEspontanea} 
+              value={novaAtividade.descricaoEspontanea} 
               onChange={(event)=> handleOnChangeInput(event, 'descricaoEspontanea')}
               placeholder="..."
               margin="15px 10px 30px 5px"
@@ -184,7 +183,7 @@ export const NovoMorador = ()=>{
             </View>
       
 
-        </MoradorDetailContainer>
+        </AtividadeDetailContainer>
         </ScrollView>
     )
 } 

@@ -1,46 +1,45 @@
-/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { MoradorType } from '../../../shared/types/MoradorType';
+import RenderItemAve from '../ui-components/listaMoradores';
+import { getMoradores } from '../../../realm/services/moradorService';
+import { MoradorDetailContainer } from '../styles/morador.style';
 
-export interface ImoveisParam {
-  localidadeId: number;
+
+
+export interface MoradorParams {
+  morador: MoradorType;
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
+  navigate('NovoImovel', { benfeitoriaId });
 }
 
-const Moradores = () => {
+const Morador = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const route = useRoute<RouteProp<Record<string, MoradorParams>, 'Imovel'>>();
+  const { morador } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
+  const [moradors, setMorador] = useState<MoradorType[]>([]);
   
 
   // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
-    
-    if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+  const fetchMorador = async () => {
+    if (morador.benfeitoria.id) {
+      const imovelRealm = getMoradores(morador.benfeitoria.id);
+      setMorador(imovelRealm);
     }
    
-  }, [localidadeId]);
+  };
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchMorador();
+  }, [fetchMorador]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -49,16 +48,16 @@ const Moradores = () => {
 
   // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchMorador();
     handleScrollToEnd();
   };
 
-  const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+  const handleNovoMorador = () => {
+    novaAve(navigation.navigate, morador.benfeitoria.id);
   };
 
   return (
-    <ImovelContainer>
+    <MoradorDetailContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -73,7 +72,7 @@ const Moradores = () => {
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          LISTA DE IMÓVEIS
+          LISTA DE MORADORES DA BENFEITORIA
         </Text>
       </View>
 
@@ -85,7 +84,7 @@ const Moradores = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-        
+       
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -96,7 +95,7 @@ const Moradores = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
@@ -104,28 +103,25 @@ const Moradores = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
        
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoMorador}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
+            Add Ave
           </Text>
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
+    
         <FlatList
           ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
+          data={moradors}
+          extraData={moradors} 
+          renderItem={({ item }) => <RenderItemAve item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
-      )}
-    </ImovelContainer>
+      
+    </MoradorDetailContainer>
   );
 }
 
-export default Moradores;
- */
+export default Morador;

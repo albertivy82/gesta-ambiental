@@ -1,10 +1,12 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
 import { salvarMoradorQueue } from "../../../realm/services/moradorService";
-import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 
 export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   dataNascimento: '',
@@ -16,15 +18,15 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   ondeEstuda: '',
   trabalho: null,
   religiao: '',
+  doencas: '',
   benfeitoria: {
     id: 0,
   },
 };
 
-// Hook para manipular um novo registro de `Morador`
-export const useNovoMorador = (benfeitoriaId: number, idBenfeitoriaLocal : string|undefined, sincronizado: boolean) => {
-  const [novoMorador, setNovoMorador] = useState<MoradorInput>(DEFAULT_MORADOR_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+export const useNovoMorador = (benfeitoria:BenfeitoriaType)  => {
+  const [novoMorador, setNovaMorador] = useState<MoradorInput>(DEFAULT_MORADOR_INPUT);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     console.log(novoMorador);
@@ -36,63 +38,102 @@ export const useNovoMorador = (benfeitoriaId: number, idBenfeitoriaLocal : strin
       novoMorador.estadoCivil !== null &&
       novoMorador.escolaridade !== null &&
       novoMorador.trabalho != null &&
-      novoMorador.religiao !== ''
+      novoMorador.religiao !== '' &&
+      novoMorador.doencas !== ''
     ) {
-      setDisabled(true);
-    } else {
       setDisabled(false);
     }
   }, [novoMorador]);
 
   const objetoFila = () => {
     const moradorData: MoradorInput = {
-      ...novoMorador,
-      sincronizado: false,
-      idLocal: uuidv4(), // Cria um ID único para o registro
-    };
+        ...novoMorador, 
+        sincronizado: false,  
+        idLocal: uuidv4(),
+  };
   
-    if (benfeitoriaId > 0) {
-      // Caso a benfeitoria tenha um ID oficial
-      moradorData.benfeitoria = { id: benfeitoriaId };
-      moradorData.idFather = "";
+    if (benfeitoria.id > 0) {
+        moradorData.benfeitoria!.id = benfeitoria.id;
+        moradorData.idFather = "";
+    } else if (benfeitoria.idLocal) {
+        moradorData.idFather = benfeitoria.idLocal;
+        moradorData.benfeitoria!.id = benfeitoria.id;
     } else {
-      if (idBenfeitoriaLocal) {
-        // Caso a benfeitoria esteja offline, usa o ID local
-        moradorData.idFather = idBenfeitoriaLocal;
-        moradorData.benfeitoria = { id: benfeitoriaId };
-      } else {
-        console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
-      }
+        console.warn("ID local do benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
     }
   
     return moradorData;
   };
-
-  const enviarRegistro = async () => {
-    if (!sincronizado && benfeitoriaId <= 0) {
-      // Benfeitoria offline
-      const moradorDataQueue = objetoFila();
-      salvarMoradorQueue(moradorDataQueue);
-      console.log("Morador case: benfeitoria offline");
-    } else {
-      novoMorador.benfeitoria = { id: benfeitoriaId };
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
   
-      if (netInfoState.isConnected && isConnected) {
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador);
-        } catch (error) {
-          const moradorDataQueue = objetoFila();
-          salvarMoradorQueue(moradorDataQueue);
-        }
-      } else {
+
+  const inputMoradorApi = async () => {
+    
+    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
         const moradorDataQueue = objetoFila();
+        console.log("useInputMorador_a", novoMorador)
         salvarMoradorQueue(moradorDataQueue);
-      }
+    } else {
+      novoMorador.benfeitoria = { id: benfeitoria.id };
+        const netInfoState = await NetInfo.fetch();
+        const isConnected = await testConnection();
+        console.log("useInputMorador_b", novoMorador)
+  
+        if (netInfoState.isConnected && isConnected) {
+          console.log("useInputMorador_c", novoMorador)
+            try {
+                await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador);
+                console.log("useInputMorador_d", novoMorador)
+            } catch (error) {
+                const moradorDataQueue = objetoFila();
+                salvarMoradorQueue(moradorDataQueue);
+                console.log("useInputMorador_e", novoMorador)
+            }
+        } else {
+            const moradorDataQueue = objetoFila();
+            salvarMoradorQueue(moradorDataQueue);
+            console.log("useInputMorador_f", novoMorador)
+        }
     }
   };
-  
+
+
+   const handleOnChangeInput = (
+      value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+      name: string
+    ) => {
+      // Verifica se "value" é um evento ou uma string diretamente
+      const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+    
+      setNovaMorador((current) => ({
+        ...current,
+        [name]: newValue,
+      }));
+    };
+
+  const handleEnumChange = (field: keyof MoradorInput, value: any) => {
+    setNovaMorador((current) => ({
+           ...current,
+           [field]: value,
+         }));
+  };
+
+  const handleArrayFieldChange = (field: keyof MoradorInput, values: string[]) => {
+             const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+             setNovaMorador((currentState) => ({
+               ...currentState,
+               [field]: concatenatedValues,
+             }));
+  };
+
+
+  return {
+    novoMorador,
+    handleOnChangeInput,
+    handleEnumChange,
+    handleArrayFieldChange,
+    disabled,
+};
   
 
-}
+
+}  

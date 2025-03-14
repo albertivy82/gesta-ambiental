@@ -1,6 +1,5 @@
-import { styled } from "styled-components/native";
-
-export const ImovelContainer = styled.View`
+import { styled } from "styled-components/native"; 
+export const AtividadeDetailContainer = styled.View`
 
     height: 100%;
     width: 100%;
@@ -10,6 +9,3 @@ export const ImovelContainer = styled.View`
     padding: 16px;
 
 `
-
-
-

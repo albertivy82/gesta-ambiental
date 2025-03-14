@@ -1,29 +1,30 @@
+import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
-import { imovelBody } from "../../../shared/types/imovelType";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
-import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { MoradorType } from "../../../shared/types/MoradorType";
 
 
-export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody)=>{
-    navigate('ImovelDetail', {imovel})
+
+export const detalharMorador = (navigate: NavigationProp<ParamListBase>['navigate'], morador: MoradorType)=>{
+    navigate('MoradorDetails', {morador})
   }
   
 
 
 
-const RenderItemImovel = ({ item }: { item: imovelBody}) => {
+const RenderItemMorador = ({ item }: { item: MoradorType}) => {
 const navigation = useNavigation<NavigationProp<ParamListBase>>();
 
-    const  handleGoToImovelDetail =  (imovel: imovelBody) =>{
-        detalharImovel(navigation.navigate, imovel );
+    const  handleGoToMoradorDetail =  (morador: MoradorType) =>{
+      detalharMorador(navigation.navigate, morador );
      
    }
 
 
     return (
-      <TouchableOpacity onPress={() => handleGoToImovelDetail(item)}>
+      <TouchableOpacity onPress={() => handleGoToMoradorDetail(item)}>
          <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
               
              <Text
@@ -37,7 +38,7 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
                 type={textTypes.BUTTON_REGULAR}
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
-                Rua: {item.rua}
+                Espécie: {item.especie}
               </Text>
               
               <Text
@@ -45,41 +46,19 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
                
-                Número: {item.numero}
+                Uso para consumo: {item.useCosumo}
                
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
-               Bairro: {item.bairro}
+               Uso para comércio: {item.usoComercio}
               </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
-              >
-               Referencial: {item.referencial}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
-              >
-               Latitude: {item.latitude}
-              </Text>
-
-              <Text
-                type={textTypes.BUTTON_REGULAR}
-                color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
-              >
-               longitude: {item.longitude}
-              </Text>
-
               
         </View>
       </TouchableOpacity>
     );
   };
   
-  export default RenderItemImovel;
+  export default RenderItemMorador;

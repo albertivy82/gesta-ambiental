@@ -1,64 +1,59 @@
-/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
+import { ServicoComunicacaoDetailContainer } from '../styles/servicoComunicacao.style';
+import { getServicosComunicacao } from '../../../realm/services/servicosComunicacaoService';
+import { ServicosComunicacaoType } from '../../../shared/types/ComunicacaoType';
+import RenderItemServicoComunicacao from '../ui-components/listaServicoComunicacao';
 
-export interface ImoveisParam {
-  localidadeId: number;
+export interface ServicosComunicacaoParams {
+  servicoComunicacao: ServicosComunicacaoType;
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const novoServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
+  navigate('NovoImovel', { benfeitoriaId });
 }
 
 const ServicosComunicacao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const route = useRoute<RouteProp<Record<string, ServicosComunicacaoParams>, 'Imovel'>>();
+  const { servicoComunicacao } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
-  
+  const [servicosComunicacao, setServicosComunicacao] = useState<ServicosComunicacaoType[]>([]);
 
-  // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
-    
-    if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+  // Carrega a lista inicial de serviços de comunicação
+  const fetchServicosComunicacao = async () => {
+    if (servicoComunicacao.benfeitoria.id) {
+      const servicosRealm = getServicosComunicacao(servicoComunicacao.benfeitoria.id);
+      setServicosComunicacao(servicosRealm);
     }
-   
-  }, [localidadeId]);
+  };
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchServicosComunicacao();
+  }, [fetchServicosComunicacao]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
+  // Atualiza a lista de serviços de comunicação
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchServicosComunicacao();
     handleScrollToEnd();
   };
 
-  const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+  const handleNovoServicoComunicacao = () => {
+    novoServicoComunicacao(navigation.navigate, servicoComunicacao.benfeitoria.id);
   };
 
   return (
-    <ImovelContainer>
+    <ServicoComunicacaoDetailContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -73,7 +68,7 @@ const ServicosComunicacao = () => {
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          LISTA DE IMÓVEIS
+          SERVIÇOS DE COMUNICAÇÃO
         </Text>
       </View>
 
@@ -85,8 +80,7 @@ const ServicosComunicacao = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-        
-        
+       
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -96,38 +90,31 @@ const ServicosComunicacao = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        
-        
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoServicoComunicacao}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
+            Add Serviço
           </Text>
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
-          keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
-        />
-      )}
-    </ImovelContainer>
+      <FlatList
+        ref={flatListRef}
+        data={servicosComunicacao}
+        extraData={servicosComunicacao} 
+        renderItem={({ item }) => <RenderItemServicoComunicacao item={item} />}
+        keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
+      />
+      
+    </ServicoComunicacaoDetailContainer>
   );
 }
 
 export default ServicosComunicacao;
- */

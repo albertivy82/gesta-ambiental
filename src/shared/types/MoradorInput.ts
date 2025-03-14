@@ -15,6 +15,7 @@ export interface MoradorInput{
     ondeEstuda?: string;
     trabalho: SimNaoTalvez|null|''; 
     religiao: string;
+    doencas:string;
     benfeitoria?: {
         id: number;
     };
