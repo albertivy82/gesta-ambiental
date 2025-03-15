@@ -39,6 +39,7 @@ export const NovoEntrevistado = ()=>{
           handleEnumChange,
           handleNumberChange,
           disabled} = useNovoEntrevistado(params.localidadeId);
+         
     
     
    
@@ -133,7 +134,7 @@ export const NovoEntrevistado = ()=>{
 
     useEffect(() => {
       const consolidaDados = conheceInstituicao === 'SIM' 
-        ? (quaisConhece ? [`COMO: ${quaisConhece}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+        ? (quaisConhece ? [`Instituições Conhecidas: ${quaisConhece}`] : [])  // Se for "SIM", adiciona sobreUso se houver
         : ['NÃO']; // Se não for "SIM", mantém apenas "NÃO"
     
       handleArrayFieldChange('instituicaoConhecida', consolidaDados);
@@ -411,8 +412,8 @@ export const NovoEntrevistado = ()=>{
                   selectedValue={conheceInstituicao}
                   onValueChange={(value) => {
                     setConheceInstituicao(value ?? ''); 
-                    if (value !== 'SIM') {
-                      SetOutrosCuidados('');
+                    if (value !== '') {
+                      SetQuaisConhece('SIM');
                     }
                   }}
                   options={['SIM', 'NÃO']}
@@ -421,7 +422,7 @@ export const NovoEntrevistado = ()=>{
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={sobreUso}
-                        onChangeText={SetOutrosCuidados}
+                        onChangeText={SetQuaisConhece}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
                         title="Qual(is) a(s) instituição(ões) e que tipo de trabalho desenvolve?"
@@ -539,7 +540,7 @@ export const NovoEntrevistado = ()=>{
       {loading ? (
         <ActivityIndicator size="large" color="#ff4500" /> 
       ) : (
-        <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+        <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled || loading} />
       )}
     </View>
  

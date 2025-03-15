@@ -95,6 +95,7 @@ export const useNovoEntrevistado = (id:number) => {
         
           setDisabled(false);
       }
+      console.log("Valor do disabled após o set:", disabled);
   }, [novoEntrevistado]);
   
 

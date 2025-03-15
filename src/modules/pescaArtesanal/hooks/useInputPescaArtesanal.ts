@@ -1,16 +1,11 @@
 import NetInfo from "@react-native-community/netinfo";
-import { DependenciaInput } from "../../../shared/types/DependenciaIput"
-import { connectionAPIDelete, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI"
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { ServicosComunicacaoInput } from "../../../shared/types/ComunicacaoInput";
-import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
-import { PeixesInput } from "../../../shared/types/PeixesInput";
-import { MamiferosType } from "../../../shared/types/MamiferosType";
-import { MamiferosInput } from "../../../shared/types/MamiferosInput";
-import { PescaArtesanalInput } from "../../../shared/types/PescaArtesanalInput";
 import { salvarPescaArtesanalQueue } from "../../../realm/services/pescaService";
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { PescaArtesanalInput } from "../../../shared/types/PescaArtesanalInput";
 
 export const DEFAULT_PESCA_ARTESANAL_INPUT: PescaArtesanalInput = {
   freqPescaSemanal: 0,
@@ -18,8 +13,8 @@ export const DEFAULT_PESCA_ARTESANAL_INPUT: PescaArtesanalInput = {
   localDaPesca: '',
   horarioPrefencialPesca: '',
   descartePorPescaria: 0,
-  conservacaoPeixe: [],
-  custeio: [],
+  conservacaoPeixe: '',
+  custeio: '',
   geloPorPescaria: 0,
   custoGeloPorPescaria: 0,
   composicaoRancho: '',
@@ -39,10 +34,9 @@ export const DEFAULT_PESCA_ARTESANAL_INPUT: PescaArtesanalInput = {
   },
 };
 
-// Hook para manipular um novo registro de `PescaArtesanal`
-export const useNovaPescaArtesanal = (benfeitoriaId: number, idBenfeitoriaLocal : string|undefined, sincronizado: boolean) => {
+export const useInputPescaArtesanal = (benfeitoria: BenfeitoriaType) => {
   const [novaPescaArtesanal, setNovaPescaArtesanal] = useState<PescaArtesanalInput>(DEFAULT_PESCA_ARTESANAL_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     console.log(novaPescaArtesanal);
@@ -52,8 +46,8 @@ export const useNovaPescaArtesanal = (benfeitoriaId: number, idBenfeitoriaLocal 
       novaPescaArtesanal.localDaPesca !== '' &&
       novaPescaArtesanal.horarioPrefencialPesca !== '' &&
       novaPescaArtesanal.descartePorPescaria >= 0 &&
-      novaPescaArtesanal.conservacaoPeixe.length > 0 &&
-      novaPescaArtesanal.custeio.length > 0 &&
+      novaPescaArtesanal.conservacaoPeixe !=='' &&
+      novaPescaArtesanal.custeio !== '' &&
       novaPescaArtesanal.geloPorPescaria > 0 &&
       novaPescaArtesanal.custoGeloPorPescaria >= 0 &&
       novaPescaArtesanal.composicaoRancho !== '' &&
@@ -70,61 +64,66 @@ export const useNovaPescaArtesanal = (benfeitoriaId: number, idBenfeitoriaLocal 
       novaPescaArtesanal.recebeDefeso != null
     ) {
       setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
+    } 
   }, [novaPescaArtesanal]);
+
+
 
   const objetoFila = () => {
     const pescaArtesanalData: PescaArtesanalInput = {
       ...novaPescaArtesanal,
       sincronizado: false,
-      idLocal: uuidv4(), // Cria um ID único para o registro
+      idLocal: uuidv4(),
     };
-  
-    if (benfeitoriaId > 0) {
-      // Caso a benfeitoria tenha um ID oficial
-      pescaArtesanalData.benfeitoria = { id: benfeitoriaId };
+
+    if (benfeitoria.id > 0) {
+      pescaArtesanalData.benfeitoria!.id = benfeitoria.id;
       pescaArtesanalData.idFather = "";
+    } else if (benfeitoria.idLocal) {
+      pescaArtesanalData.idFather = benfeitoria.idLocal;
+      pescaArtesanalData.benfeitoria!.id = benfeitoria.id;
     } else {
-      if (idBenfeitoriaLocal) {
-        // Caso a benfeitoria esteja offline, usa o ID local
-        pescaArtesanalData.idFather = idBenfeitoriaLocal;
-        pescaArtesanalData.benfeitoria = { id: benfeitoriaId };
-      } else {
-        console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
-      }
+      console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
     }
-  
+
     return pescaArtesanalData;
   };
 
-  const enviarRegistro = async () => {
-    if (!sincronizado && benfeitoriaId <= 0) {
-      // Benfeitoria offline
+  const inputPescaArtesanalApi = async () => {
+    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
       const pescaArtesanalDataQueue = objetoFila();
+      console.log("useInputPescaArtesanal_a", novaPescaArtesanal);
       salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
-      console.log("Pesca Artesanal case: benfeitoria offline");
     } else {
-      novaPescaArtesanal.benfeitoria = { id: benfeitoriaId };
+      novaPescaArtesanal.benfeitoria = { id: benfeitoria.id };
+      console.log(novaPescaArtesanal.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
       const netInfoState = await NetInfo.fetch();
       const isConnected = await testConnection();
-  
+      console.log("useInputPescaArtesanal_b", novaPescaArtesanal);
+
       if (netInfoState.isConnected && isConnected) {
+        console.log("useInputPescaArtesanal_c", novaPescaArtesanal);
         try {
           await connectionAPIPost('http://192.168.100.28:8080/pesca-artesanal', novaPescaArtesanal);
+          console.log("useInputPescaArtesanal_d", novaPescaArtesanal);
         } catch (error) {
           const pescaArtesanalDataQueue = objetoFila();
           salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
+          console.log("useInputPescaArtesanal_e", novaPescaArtesanal);
         }
       } else {
         const pescaArtesanalDataQueue = objetoFila();
         salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
+        console.log("useInputPescaArtesanal_f", novaPescaArtesanal);
       }
     }
   };
-  
-  
+
+  return {
+    novaPescaArtesanal,
+    inputPescaArtesanalApi,
+    disabled,
+  };
 
 
 }

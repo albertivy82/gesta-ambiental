@@ -1,6 +1,6 @@
 import { realmInstance } from './databaseService';
 import { RendaOutrasFontesInput } from '../../shared/types/RendaOutrasFontesInput';
-import { RendaOutrasFontesType } from '../../shared/types/rendaOutrasFontes';
+import { RendaOutrasFontesType } from '../../shared/types/rendaOutrasFontesType';
 
 
 export const salvarRendaOutrasFontes = (rendas: RendaOutrasFontesType[]) => {

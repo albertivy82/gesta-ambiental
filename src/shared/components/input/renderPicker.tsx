@@ -20,16 +20,26 @@ export function RenderPicker<T extends string | number>({ label, selectedValue, 
       <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
         <Text margin="0px 0px 4px 8px"
               color={theme.colors.whiteTheme.white}
-              type={textTypes.SUB_TITLE_BOLD}>
+              type={textTypes.SUB_TITLE_BOLD} style={{ 
+                textAlign: "justify", // Tenta justificar o texto
+                flexWrap: "wrap", // Permite quebra de linha
+                //width: "100%" // Garante que ocupe toda a largura
+              }}>
         {label}
         </Text>
         </View>
       
       <View style={{ borderBottomWidth: 1, borderBottomColor: theme.colors.whiteTheme.white }}>
-        <Picker selectedValue={selectedValue} onValueChange={(value) => onValueChange(value as T | null)}>
-          <Picker.Item label={`Selecione uma opção...`} color="black" value={null} />
-          {options.map((option) => (
-            <Picker.Item key={option?.toString()} label={option?.toString() || ""} value={option} />
+        <Picker 
+           selectedValue={selectedValue} 
+           onValueChange={(value) => onValueChange(value as T | null)}
+           style={{ color: theme.colors.mainTheme.black }} >
+              <Picker.Item 
+               label={`Selecione uma opção...`} 
+               color="black" 
+               value={null} />
+              {options.map((option) => (
+              <Picker.Item key={option?.toString()} label={option?.toString() || ""} value={option} />
           ))}
         </Picker>
       </View>

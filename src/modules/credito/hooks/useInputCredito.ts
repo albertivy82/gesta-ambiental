@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { CreditoInput } from "../../../shared/types/CreditoInput";
 import { salvarCreditoQueue } from "../../../realm/services/creditoService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   nome: '',
@@ -13,21 +13,18 @@ export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   benfeitoria: {
     id: 0,
   },
-  sincronizado: false,
-  idLocal: undefined,
-  idFather: undefined,
 };
 
-// Hook para manipular um novo registro de `Credito`
-export const useNovoCredito = (benfeitoriaId: number, idBenfeitoriaLocal : string|undefined, sincronizado: boolean) => {
+export const useNovoCredito = (benfeitoria: EntrevistadoType) => {
   const [novoCredito, setNovoCredito] = useState<CreditoInput>(DEFAULT_CREDITO_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     console.log(novoCredito);
-    if (novoCredito.nome !== '' && novoCredito.valor > 0) {
-      setDisabled(true);
-    } else {
+    if (
+      novoCredito.nome !== null &&
+      novoCredito.valor == 0
+    ) {
       setDisabled(false);
     }
   }, [novoCredito]);
@@ -36,50 +33,55 @@ export const useNovoCredito = (benfeitoriaId: number, idBenfeitoriaLocal : strin
     const creditoData: CreditoInput = {
       ...novoCredito,
       sincronizado: false,
-      idLocal: uuidv4(), // Cria um ID único para o registro de crédito
+      idLocal: uuidv4(),
     };
-  
-    if (benfeitoriaId > 0) {
-      // Caso a benfeitoria tenha um ID oficial
-      creditoData.benfeitoria = { id: benfeitoriaId };
+
+    if (benfeitoria.id > 0) {
+      creditoData.benfeitoria!.id = benfeitoria.id;
       creditoData.idFather = "";
+    } else if (benfeitoria.idLocal) {
+      creditoData.idFather = benfeitoria.idLocal;
+      creditoData.benfeitoria!.id = benfeitoria.id;
     } else {
-      if (idBenfeitoriaLocal) {
-        // Caso a benfeitoria esteja offline, usa o ID local
-        creditoData.idFather = idBenfeitoriaLocal;
-        creditoData.benfeitoria = { id: benfeitoriaId };
-      } else {
-        console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
-      }
+      console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
     }
-  
+
     return creditoData;
   };
 
-  const enviarRegistro = async () => {
-    if (!sincronizado && benfeitoriaId <= 0) {
-      // Benfeitoria offline
+  const inputCreditoApi = async () => {
+    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
       const creditoDataQueue = objetoFila();
+      console.log("useInputCredito_a", novoCredito);
       salvarCreditoQueue(creditoDataQueue);
-      console.log("Crédito case: benfeitoria offline");
     } else {
-      novoCredito.benfeitoria = { id: benfeitoriaId };
+      novoCredito.benfeitoria = { id: benfeitoria.id };
+      console.log(novoCredito.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
       const netInfoState = await NetInfo.fetch();
       const isConnected = await testConnection();
-  
+      console.log("useInputCredito_b", novoCredito);
+
       if (netInfoState.isConnected && isConnected) {
+        console.log("useInputCredito_c", novoCredito);
         try {
           await connectionAPIPost('http://192.168.100.28:8080/credito', novoCredito);
+          console.log("useInputCredito_d", novoCredito);
         } catch (error) {
           const creditoDataQueue = objetoFila();
           salvarCreditoQueue(creditoDataQueue);
+          console.log("useInputCredito_e", novoCredito);
         }
       } else {
         const creditoDataQueue = objetoFila();
         salvarCreditoQueue(creditoDataQueue);
+        console.log("useInputCredito_f", novoCredito);
       }
     }
   };
-  
-  
-}
+
+  return {
+    novoCredito,
+    inputCreditoApi,
+    disabled,
+  };
+};

@@ -9,8 +9,8 @@ export interface PescaArtesanalInput {
     localDaPesca: string;
     horarioPrefencialPesca: string;
     descartePorPescaria: number;
-    conservacaoPeixe: conservacaoGelo[]|null|''; 
-    custeio: PescariaCusteio[]|null|'';
+    conservacaoPeixe: string; 
+    custeio: string;
     geloPorPescaria: number;
     custoGeloPorPescaria: number;
     composicaoRancho: string;

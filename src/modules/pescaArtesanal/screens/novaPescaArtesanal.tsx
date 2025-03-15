@@ -1,284 +1,119 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { useRef, useState } from "react";
-import { Alert, Button, ScrollView, TextInput, View } from "react-native";
-import { Vizinhos } from "../../../enums/Vizinhos";
-import { documentacao } from "../../../enums/documentacao.enum";
-import { esporteLazerEnum } from "../../../enums/esporteLazer.enum";
-import { limitesTerrenoEnum } from "../../../enums/limitesTerreno.enum";
-import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
-import { situacaoFundiaria } from "../../../enums/situacaoFundiaria.enum";
-import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
-import { transporteEnum } from "../../../enums/transporte.enum";
-import DateSelector from "../../../shared/components/input/DateSelector";
-import LocationInput from "../../../shared/components/input/LocationInput";
-import Input from "../../../shared/components/input/input";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { useNovoImovel } from "../hooks/useInputImovel";
-import { ImovelContainer } from "../styles/Imovel.style";
-import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator } from "react-native-paper";
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Icon } from '../../../shared/components/icon/Icon';
+import Text from '../../../shared/components/text/Text';
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { theme } from '../../../shared/themes/theme';
+import { PescaArtesanalDetailContainer } from '../styles/pescaArtesanal.style';
+import RenderItemPescaArtesanal from '../ui-components/listaPescaArtesanal';
+import { PescaArtesanalType } from '../../../shared/types/PescaArtesanal';
 
-
-export interface idParam {
-localidadeId: number;
+export interface PescaArtesanalParams {
+  pescaArtesanal: PescaArtesanalType;
 }
 
-export const NovaPescaArtesal = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState(false); 
-   
-  
-  const { novoImovel,
-           handleOnChangeInput,
-           inputImovelApi,
-           handleDocumentacaoChange,
-           handleTransporteChange,
-           handleLazerChange,
-           handleSoloChange,
-           handleSimNaoChange,
-           handleLimitesChange,
-           handleFundiarioChange,
-           handleVizinhosChange,
-           handleOnChangeData,
-           handleIluminacaoChange,
-           handleOnChangeAreaImovel,
-           disabled} = useNovoImovel(params.localidadeId);
-    
-    
-    const fundiarioOptions = Object.values(situacaoFundiaria);
-    const documentacaoOptions = Object.values(documentacao);
-    const limitesOptions = Object.values(limitesTerrenoEnum);
-    const transporteOptions = Object.values(transporteEnum);
-    const soloOptions = Object.values(tipoSoloEnum);
-    const lazerOptions = Object.values(esporteLazerEnum);
-    const simNaoOptions =  Object.values(SimNaoTalvez);
-    const vizinhoOptions =  Object.values(Vizinhos);
-    const ruaInput = useRef<TextInput>(null);
-    const numeroInput = useRef<TextInput>(null);
-    const bairroInput = useRef<TextInput>(null);
-    const referencialInput = useRef<TextInput>(null);
-    const areaImovelInput = useRef<TextInput>(null);
-    const motivoMudancaInput = useRef<TextInput>(null);
-    const relacaoAreaInput = useRef<TextInput>(null);
-    const relacaoVizinhoInput = useRef<TextInput>(null);
-    const linhaBarcoInput = useRef<TextInput>(null);
-    const inraestruturaInput = useRef<TextInput>(null);
-    
-    
-    
-    
-    const handleEnviar = async () => {
-      setLoading(true); 
-  
-      try {
-        await inputImovelApi(); 
-        navigation.goBack(); 
-      } catch (error) {
-        console.error('Erro no envio:', error);
-        Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-      } finally {
-        setLoading(false); 
-      }
-    };
+export const novaPescaArtesanal = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
+  navigate('NovaPescaArtesanal', { benfeitoriaId });
+}
 
-    console.log(disabled, loading)
+const PescaArtesanal = () => {
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const route = useRoute<RouteProp<Record<string, PescaArtesanalParams>, 'Imovel'>>();
+  const { pescaArtesanal } = route.params;
+  const flatListRef = useRef<FlatList>(null);
+  const [pescasArtesanais, setPescasArtesanais] = useState<PescaArtesanalType[]>([]);
 
-    return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
-        <ImovelContainer>
-           <Input 
-              value={novoImovel.rua} 
-              onChange={(event)=> handleOnChangeInput(event, 'rua')}
-              placeholder="Informe a rua do imóvel"
-              margin="15px 10px 30px 5px"
-              title="Rua:"
-              onSubmitEditing={()=>numeroInput.current?.focus()}
-              ref={ruaInput}/>
+  // Carrega a lista inicial de registros de pesca artesanal
+  const fetchPescasArtesanais = async () => {
+    if (pescaArtesanal.benfeitoria.id) {
+      // const pescaRealm = getPescasArtesanais(pescaArtesanal.benfeitoria.id);
+      // setPescasArtesanais(pescaRealm);
+    }
+  };
 
-           <Input 
-              value={novoImovel.numero} 
-              onChange={(event)=> handleOnChangeInput(event, 'numero')}
-              placeholder="Imforme o número do Imóvel"
-              margin="15px 10px 30px 5px"
-              title="Número:"
-              onSubmitEditing={()=>bairroInput.current?.focus()}
-              ref={numeroInput}/>
+  useEffect(() => {
+    fetchPescasArtesanais();
+  }, [fetchPescasArtesanais]);
 
-           <Input 
-              value={novoImovel.bairro} 
-              onChange={(event)=> handleOnChangeInput(event, 'bairro')}
-              placeholder="Informe o bairro imóvel"
-              margin="15px 10px 30px 5px"
-              title="Bairro:"
-              onSubmitEditing={()=>referencialInput.current?.focus()}
-              ref={bairroInput}
-              />
-             
+  // Rola até o final da lista
+  const handleScrollToEnd = () => {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  };
 
-            <Input 
-              value={novoImovel.referencial} 
-              onChange={(event)=> handleOnChangeInput(event, 'referencial')}
-              placeholder="Informe uma referência para o imóvel"
-              margin="15px 10px 30px 5px"
-              title="Referencial:"
-              onSubmitEditing={()=>areaImovelInput.current?.focus()}
-              ref={referencialInput}/>
+  // Atualiza a lista de registros de pesca artesanal
+  const handleRefresh = () => {
+    fetchPescasArtesanais();
+    handleScrollToEnd();
+  };
 
-    
+  const handleNovaPescaArtesanal = () => {
+    novaPescaArtesanal(navigation.navigate, pescaArtesanal.benfeitoria.id);
+  };
 
-              <LocationInput
-                onLocationChange={(lat, lon) => {
-                  handleOnChangeInput(lat, 'latitude');
-                  handleOnChangeInput(lon, 'longitude');
-                }}
-              />
+  return (
+    <PescaArtesanalDetailContainer>
+      <View style={{  
+        alignItems: 'center', 
+        flexDirection: 'row',
+        borderBottomWidth: 3, 
+        borderColor: theme.colors.grayTheme.gray100, 
+        marginBottom: 10, 
+        backgroundColor: '#505050' 
+      }}>
+        <Icon size={30} name='stack' color='#fefeff'/>
+        <Text 
+          type={textTypes.TITLE_BOLD} 
+          color={theme.colors.whiteTheme.white}
+          margin="0px 0px 0px 30px"
+        >
+          LISTA DE REGISTROS DE PESCA ARTESANAL
+        </Text>
+      </View>
 
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 1,
+        borderBottomWidth: 3,
+        borderColor: theme.colors.grayTheme.gray100,
+        backgroundColor: '#ff4500'
+      }}>
+       
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
+          <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
+            Fim da Página
+          </Text>
+        </TouchableOpacity>
 
+        <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-            <Input
-              value={novoImovel.areaImovel?.toFixed(2) || ''}
-              onChange={handleOnChangeAreaImovel}
-              keyboardType='numeric'
-              placeholder="Área em m²"
-              margin="15px 10px 30px 5px"
-              title="Área do Imóvel (m²)"
-              ref={areaImovelInput}
-           />
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
+          <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
+        </TouchableOpacity>
 
+        <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-            <RenderPicker
-              label="Possui vizinhos?"
-              selectedValue={novoImovel.vizinhos}
-               onValueChange={handleVizinhosChange}
-               options={vizinhoOptions}
-            />
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaPescaArtesanal}>
+          <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
+            Adicionar Registro de Pesca
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-             <RenderPicker
-              label="Situação Fundiária"
-              selectedValue={novoImovel.situacaoFundiaria}
-               onValueChange={handleFundiarioChange}
-               options={fundiarioOptions}
-            />
-
-
-             <RenderPicker
-              label="Possui documentação?"
-              selectedValue={novoImovel.documentacaoImovel}
-               onValueChange={handleDocumentacaoChange}
-               options={documentacaoOptions}
-             />
-
-
-              <DateSelector
-                label="Data de Chegada no Local"
-                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataChegada')}
-              />
-            
-
-              <RenderPicker
-                  label="Pretente mudar?"
-                  selectedValue={novoImovel.pretendeMudar}
-                  onValueChange={handleSimNaoChange}
-                  options={simNaoOptions}
-                />
-          
-              <Input 
-                  value={novoImovel.motivoVontadeMudanca} 
-                  onChange={(event)=> handleOnChangeInput(event, 'motivoVontadeMudanca')}
-                  placeholder="Informe um motivo"
-                  margin="15px 10px 30px 5px"
-                  title="Por que pretende mudar?"
-                  onSubmitEditing={()=>relacaoAreaInput.current?.focus()}
-                  ref={motivoMudancaInput}
-                  />
-
-              <Input 
-                    value={novoImovel.relacaoArea} 
-                    onChange={(event)=> handleOnChangeInput(event, 'relacaoArea')}
-                    placeholder="Relação do entrevistado com a área do imóvel"
-                    margin="15px 10px 30px 5px"
-                    title="Relação com a área"
-                    onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
-                    ref={relacaoAreaInput}
-                    />
-
-            <Input 
-                  value={novoImovel.relacaoVizinhos} 
-                  onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
-                  placeholder="Relação do entrevistado com a vizinhança"
-                  margin="15px 10px 30px 5px"
-                  title="Relação com a vizinhança"
-                  ref={relacaoVizinhoInput}
-                  />
-
-          <RenderPicker
-              label="Tipo de limites do imóvel"
-              selectedValue={novoImovel.limites}
-               onValueChange={handleLimitesChange}
-               options={limitesOptions}
-            />
-              
-           <RenderPicker
-              label="Ilumincao pública?"
-              selectedValue={novoImovel.iluminacaoPublica}
-               onValueChange={handleIluminacaoChange}
-               options={simNaoOptions}
-            />
-
-          <RenderPicker
-              label="Qual o tipo de transporte utilizado?"
-              selectedValue={novoImovel.transporte}
-               onValueChange={handleTransporteChange}
-               options={transporteOptions}
-            />
-
-           <Input 
-              value={novoImovel.programaInfraSaneamento} 
-              onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
-              placeholder="área do programaInfraSaneamento"
-              margin="15px 10px 30px 5px"
-              title="programa InfraSaneamento:"
-              onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
-              ref={inraestruturaInput}
-              />
-
-           <Input 
-              value={novoImovel.linhasDeBarco} 
-              onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
-              placeholder="Se houver, informe as linhas de barco do local"
-              margin="15px 10px 30px 5px"
-              title="Há linhas de barco no local?"
-              ref={linhaBarcoInput}
-              />
-
-         <RenderPicker
-              label="Qual o tipo de solo no imóvel?"
-              selectedValue={novoImovel.tipoSolo}
-               onValueChange={handleSoloChange}
-               options={soloOptions}
-            />
-         
-           <RenderPicker
-              label="Esporte e lazer no local:"
-              selectedValue={novoImovel.esporteLazer}
-               onValueChange={handleLazerChange}
-               options={lazerOptions}
-            />
-
-          
-<View style={{ marginTop: 40 }}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#ff4500" /> // Exibe o spinner enquanto está carregando
-      ) : (
-        <Button title="Enviar" onPress={handleEnviar} color='#ff4500' disabled={disabled || loading} />
-      )}
-    </View>
- 
-    
+      <FlatList
+        ref={flatListRef}
+        data={pescasArtesanais}
+        extraData={pescasArtesanais} 
+        renderItem={({ item }) => <RenderItemPescaArtesanal item={item} />}
+        keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
+      />
       
-
-        </ImovelContainer>
-        </ScrollView>
-    )
+    </PescaArtesanalDetailContainer>
+  );
 }
+
+export default PescaArtesanal;

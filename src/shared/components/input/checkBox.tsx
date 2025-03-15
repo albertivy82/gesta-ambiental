@@ -31,35 +31,54 @@ const CheckboxSelector: React.FC<CheckboxSelectorProps> = ({
     };
 
     return (
-         <DisplayFlexColumn customMargin={"15px 10px 30px 5px"}>
-        <View>
-            {label && (
-            <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
-                <Text
-                    margin="0px 0px 4px 8px"
-                    color={theme.colors.whiteTheme.white}
-                    type={textTypes.SUB_TITLE_BOLD}
-                >
-                    {label}
-                </Text>
-            </View>
-             )}
-            {options.map((option) => (
-                <View key={option} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <CheckBox
-                        value={selectedOptions.includes(option)}
-                        onValueChange={() => toggleOption(option)}
-                    />
-                    <Text
-                        margin="0px 0px 4px 8px"
-                        color={theme.colors.mainTheme.black}
-                        type={textTypes.SUB_TITLE_REGULAR}
+        <DisplayFlexColumn customMargin={"15px 10px 30px 5px"}>
+            <View>
+                {label && (
+                    <View style={{ backgroundColor: '#808080', padding: 4, borderRadius: 4 }}>
+                        <Text
+                            margin="0px 0px 4px 8px"
+                            color={theme.colors.whiteTheme.white}
+                            type={textTypes.SUB_TITLE_BOLD}
+                            style={{ 
+                                textAlign: "justify", // Tenta justificar o texto
+                                flexWrap: "wrap", // Permite quebra de linha
+                                //width: "100%" // Garante que ocupe toda a largura
+                              }}
                         >
-                        {option}
-                    </Text>
-                </View>
-            ))}
-        </View>
+                            {label}
+                        </Text>
+                    </View>
+                )}
+                {options.map((option) => (
+                    <View 
+                        key={option} 
+                        style={{ 
+                            flexDirection: 'row', 
+                            alignItems: 'center',
+                            flexWrap: 'wrap', // Permite que o texto quebre em várias linhas
+                            width: '100%', // Ocupa toda a largura disponível
+                            paddingVertical: 4 // Espaçamento para evitar sobreposição
+                        }}
+                    >
+                        <CheckBox
+                            value={selectedOptions.includes(option)}
+                            onValueChange={() => toggleOption(option)}
+                        />
+                        <Text
+                            margin="0px 0px 4px 8px"
+                            color={theme.colors.mainTheme.black}
+                            type={textTypes.SUB_TITLE_REGULAR}
+                            style={{
+                                flexShrink: 1, // Permite que o texto reduza se necessário
+                                flexWrap: 'wrap', // Quebra o texto automaticamente
+                                width: '85%', // Define a largura máxima do texto
+                            }}
+                        >
+                            {option.replace(/_/g, ' ')} {/* Substitui underscores por espaços para melhor legibilidade */}
+                        </Text>
+                    </View>
+                ))}
+            </View>
         </DisplayFlexColumn>
     );
 };

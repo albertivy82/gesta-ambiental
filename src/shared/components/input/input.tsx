@@ -62,6 +62,12 @@ const Input = forwardRef<TextInput, InputProps>(
               margin="0px 0px 4px 8px"
               color={theme.colors.whiteTheme.white}
               type={textTypes.SUB_TITLE_BOLD}
+              style={{ 
+                textAlign: "justify", // Tenta justificar o texto
+                flexWrap: "wrap", // Permite quebra de linha
+                //width: "100%" // Garante que ocupe toda a largura
+              }}
+              
             >
               {title}
             </Text>
