@@ -14,6 +14,9 @@ export const AvesSchema = {
         saborAguaPoco: 'string',
         cheiroAguaPoco: 'string',
         tratamentoAgua: 'string',
-        benfeitoria: 'int'
+        entrevistado: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

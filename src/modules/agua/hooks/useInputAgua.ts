@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { AguaInput } from "../../../shared/types/AguaIput";
+import { AguaInput } from "../../../shared/types/AguaInput";
 import { salvarAguaQueue } from "../../../realm/services/aguasService";
 
 export const DEFAULT_AGUA_INPUT: AguaInput = {

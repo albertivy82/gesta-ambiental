@@ -11,6 +11,9 @@ export const RepteisSchema = {
         problemasRelacionados: 'string',
         cacado: 'string',
         descricaoEspontanea: 'string',
-        benfeitoria: 'int'
+        entrevistado: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

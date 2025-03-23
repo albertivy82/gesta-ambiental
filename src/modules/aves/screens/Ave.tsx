@@ -13,7 +13,7 @@ import RenderItemAve from '../ui-components/listaAves';
 
 
 export interface ImoveisParam {
-  ave: AvesType;
+  ave: AvesType[];
 }
 
 export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
@@ -30,16 +30,22 @@ const Aves = () => {
 
   // Carrega a lista inicial de imóveis
   const fetchAves = async () => {
-    if (ave.entrevistado.id) {
-      const imovelRealm = getAves(ave.entrevistado.id);
-      setAves(imovelRealm);
+    if (ave.length && ave[0].entrevistado.id) {
+      const novasAves = getAves(ave[0].entrevistado.id);
+  
+      const avesUnicas = [...aves, ...novasAves].reduce((acc, curr) => {
+        if (!acc.find(item => item.id === curr.id)) {
+          acc.push(curr);
+        }
+        return acc;
+      }, [] as AvesType[]);
+  
+      setAves(avesUnicas);
     }
-   
   };
+  
 
-  useEffect(() => {
-    fetchAves();
-  }, [fetchAves]);
+
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -53,7 +59,7 @@ const Aves = () => {
   };
 
   const handleNovaAve = () => {
-    novaAve(navigation.navigate, ave.entrevistado.id);
+    novaAve(navigation.navigate, ave[0].entrevistado.id);
   };
 
   return (

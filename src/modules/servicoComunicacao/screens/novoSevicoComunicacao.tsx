@@ -8,9 +8,10 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoServicoComunicacao } from "../hooks/useInputServCom";
 import { ServicoComunicacaoDetailContainer } from "../styles/servicoComunicacao.style";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 export interface idParam {
-  entrevistado: EntrevistadoType;
+  entrevistado: BenfeitoriaType;
 }
 
 export const NovoServicoComunicacao = () => {

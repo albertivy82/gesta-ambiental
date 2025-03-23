@@ -11,13 +11,13 @@ export const salvarAves = (aves: AvesType[]) => {
           if (ave.sincronizado && aveRealm && ave.idLocal == '') {
             const avePadrao = {
               ...ave,
-              benfeitoria: ave.benfeitoria.id,
+              entrevistado: ave.entrevistado.id,
             };
             realmInstance.create('Aves', avePadrao, true);
           } else {
             const avePadrao = {
               ...ave,
-              benfeitoria: ave.benfeitoria.id,
+              entrevistado: ave.entrevistado.id,
             };
             realmInstance.create('Aves', avePadrao, true);
           }
@@ -42,7 +42,7 @@ export const salvarAveQueue = (ave: AvesInput) => {
         const avePadrao = {
           ...ave,
           id: Id(),
-          benfeitoria: ave.benfeitoria?.id,
+          entrevistado: ave.entrevistado?.id,
         };
         realmInstance.create('Aves', avePadrao, true);
       });
@@ -53,27 +53,27 @@ export const salvarAveQueue = (ave: AvesInput) => {
   });
 };
 
-export const getAves = (benfeitoriaId: number): AvesType[] => {
-  const query = `benfeitoria == ${benfeitoriaId}`;
+export const getAves = (entrevistadoId: number): AvesType[] => {
+  const query = `entrevistado == ${entrevistadoId}`;
   const aves = realmInstance.objects<AvesType>('Aves').filtered(query).slice();
   return JSON.parse(JSON.stringify(aves)) as AvesType[];
 };
 
-export const getAvesDessincronizadas = (benfeitoriaId: number): AvesType[] => {
-  const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+export const getAvesDessincronizadas = (entrevistadoId: number): AvesType[] => {
+  const query = `entrevistado == "${entrevistadoId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const avesQueue = realmInstance.objects<AvesType>('Aves').filtered(query).slice();
   return JSON.parse(JSON.stringify(avesQueue)) as AvesType[];
 };
 
-export const setIdBenfeitoriaFromApiOnAves = (idBenfeitoriaApi: number, benfeitoriaIdLocal: string) => {
+export const setIdBenfeitoriaFromApiOnAves = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
   try {
-    const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
+    const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
     const avesQueue = realmInstance.objects('Aves').filtered(query);
 
     if (avesQueue.length > 0) {
       realmInstance.write(() => {
         avesQueue.forEach(aveOrfan => {
-          aveOrfan.benfeitoria = idBenfeitoriaApi;
+          aveOrfan.entrevistado = idBenfeitoriaApi;
           aveOrfan.idFather = '';
         });
       });

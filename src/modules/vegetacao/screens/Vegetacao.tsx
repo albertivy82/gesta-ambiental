@@ -1,79 +1,76 @@
-/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getVegetacoes } from '../../../realm/services/vegetacaoService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { VegetacaoType } from '../../../shared/types/VegetacaoType';
+import { VegetacaoDetailContainer } from '../styles/vegetacao.style';
+import RenderItemVegetacao from '../ui-components/listaVegetacao';
 
-export interface ImoveisParam {
-  localidadeId: number;
+
+export interface VegetacaoParam {
+  vegetacao: VegetacaoType[];
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const novaVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('NovaVegetacao', { entrevistadoId });
 }
 
-const Vegetacoes = () => {
+const Vegetacao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const route = useRoute<RouteProp<Record<string, VegetacaoParam>, 'Vegetacao'>>();
+  const { vegetacao } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
-  
+  const [vegetacoes, setVegetacoes] = useState<VegetacaoType[]>(vegetacao);
 
-  // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
-    
-    if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+  const fetchVegetacoes = async () => {
+    const entrevistadoId = vegetacao[0]?.entrevistado.id;
+    if (entrevistadoId) {
+      const novas = getVegetacoes(entrevistadoId);
+      const filtradas = novas.filter(nova =>
+        !vegetacoes.some(v => (v.id && nova.id && v.id === nova.id) || (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal))
+      );
+      setVegetacoes(prev => [...prev, ...filtradas]);
     }
-   
-  }, [localidadeId]);
+  };
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchVegetacoes();
+  }, []);
 
-  // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchVegetacoes();
     handleScrollToEnd();
   };
 
-  const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+  const handleNovaVegetacao = () => {
+    novaVegetacao(navigation.navigate, vegetacao[0]?.entrevistado.id);
   };
 
   return (
-    <ImovelContainer>
-      <View style={{  
-        alignItems: 'center', 
+    <VegetacaoDetailContainer>
+      <View style={{
+        alignItems: 'center',
         flexDirection: 'row',
-        borderBottomWidth: 3, 
-        borderColor: theme.colors.grayTheme.gray100, 
-        marginBottom: 10, 
-        backgroundColor: '#505050' 
+        borderBottomWidth: 3,
+        borderColor: theme.colors.grayTheme.gray100,
+        marginBottom: 10,
+        backgroundColor: '#505050'
       }}>
-        <Icon size={30} name='stack' color='#fefeff'/>
-        <Text 
-          type={textTypes.TITLE_BOLD} 
+        <Icon size={30} name='leaf' color='#fefeff' />
+        <Text
+          type={textTypes.TITLE_BOLD}
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          LISTA DE IMÓVEIS
+          LISTA DE VEGETAÇÃO DO ENTREVISTADO
         </Text>
       </View>
 
@@ -85,47 +82,42 @@ const Vegetacoes = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-        
+
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>
             Fim da Página
           </Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-     
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>
+            Atualizar
+          </Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaVegetacao}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>
+            Add Vegetação
           </Text>
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
-          keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
-        />
-      )}
-    </ImovelContainer>
+      <FlatList
+        ref={flatListRef}
+        data={vegetacoes}
+        extraData={vegetacoes}
+        renderItem={({ item }) => <RenderItemVegetacao item={item} />}
+        keyExtractor={(item) => item.id?.toString() ?? item.idLocal ?? 'sem-id'}
+      />
+    </VegetacaoDetailContainer>
   );
-}
+};
 
-export default Vegetacoes;
- */
+export default Vegetacao;

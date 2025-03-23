@@ -6,6 +6,7 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { Alert } from "react-native";
 
 export const convertToImovelInput = (imovel: any): imovelInput => {
   const imovelInput: imovelInput = {
@@ -59,7 +60,7 @@ export const useImovel = (idEntrevistado: number) => {
                 fetchImovelRealm();
               }
             } catch (error) {
-              console.error('Erro na sincronização do imóvel:', error);
+              Alert.alert('Há imóveis com problemas de sincronização com a API: '+ error);
             }
           }
         }
@@ -95,7 +96,7 @@ export const useImovel = (idEntrevistado: number) => {
           throw new Error('Dados de imóvel inválidos');
         }
       } catch (error) {
-        console.error('Erro ao buscar imóvel:', error);
+        Alert.alert('Não foi possível recuperar Imóveis da Apí: '+ error);
       }
     };
   

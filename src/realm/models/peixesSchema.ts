@@ -8,6 +8,9 @@ export const PeixesSchema = {
         locaisEspecificosAlimentacao: 'string',
         usoAlimnetacao: 'string',
         usoComercio: 'string',
-        benfeitoria: 'int'
+        entrevistado: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

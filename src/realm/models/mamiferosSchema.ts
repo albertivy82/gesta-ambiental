@@ -12,6 +12,9 @@ export const MamiferosSchema = {
         priblemasRelacionados: 'string',
         alimentacao: 'string',
         desricaoEspontanea: 'string',
-        benfeitoria: 'int'
+        entrevistado: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

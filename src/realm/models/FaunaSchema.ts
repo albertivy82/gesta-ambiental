@@ -13,6 +13,9 @@ export const FaunaSchema = {
         frequenciaAtual: 'string',
         frequenciaPassada: 'string',
         tempoQueNaoVe: 'string',
-        benfeitoria: 'int'
+        entrevistado: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

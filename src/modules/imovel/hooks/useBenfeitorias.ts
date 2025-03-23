@@ -53,7 +53,7 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
 
  export const useBenfeitorias = (imovelId:number)=>{
 
-    const [contagemBenfeitoria, setcontagemBenfeitoria] = useState<number>(0);
+    const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>([]);
 
    const sinconizeBenfeitoriaQueue = async () => {
    
@@ -103,16 +103,12 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
     };
  
 
-    const fetchBenfeitoriasRealm = ()=>{
-
-        const benfeitoriasRealm = getBenfeitorias(imovelId);
-
-            if(benfeitoriasRealm.length>0){
-                const benfeitoriasContagem = benfeitoriasRealm.length;
-                setcontagemBenfeitoria(benfeitoriasContagem);
-                              
+     const fetchBenfeitoriasRealm = () => {
+            const benfeitoriaRealm = getBenfeitorias(imovelId);
+            if (benfeitoriaRealm.length > 0) {
+               setBenfeitoria((prevBenf) => [...prevBenf, ...benfeitoriaRealm]); // Aqui usamos benfeitoriaRealm
             }
-    }
+        };
 
     const fetchBefeitoriasAPI = async() =>{
 
@@ -127,9 +123,8 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                 }))
                 console.log("benfeitpria. circuito da API")    
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
-                    await salvarBenfeitorias(bftData);
-                    const constagem = bftData.length;
-                    setcontagemBenfeitoria(constagem);
+                      await salvarBenfeitorias(bftData);
+                       setBenfeitoria((prevBenf) => [...prevBenf, ...bftData]);
                 }else{
                     throw new Error('Dados de benfeitoria Inválidos'); 
                 }
@@ -144,5 +139,5 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
         sinconizeBenfeitoriaQueue();
     }, []);
 
-    return {contagemBenfeitoria};
+    return {benfeitoria};
 }

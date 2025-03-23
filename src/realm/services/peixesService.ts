@@ -11,13 +11,13 @@ export const salvarPeixes = (peixes: PeixesType[]) => {
                     if (peixe.sincronizado && peixeRealm && peixe.idLocal == '') {
                         const peixePadrao = {
                             ...peixe,
-                            benfeitoria: peixe.benfeitoria.id,
+                            entrevistado: peixe.entrevistado.id,
                         };
                         realmInstance.create('Peixes', peixePadrao, true);
                     } else {
                         const peixePadrao = {
                             ...peixe,
-                            benfeitoria: peixe.benfeitoria.id,
+                            entrevistado: peixe.entrevistado.id,
                         };
                         realmInstance.create('Peixes', peixePadrao, true);
                     }
@@ -42,7 +42,7 @@ export const salvarPeixeQueue = (peixe: PeixesInput) => {
                 const peixePadrao = {
                     ...peixe,
                     id: Id(),
-                    benfeitoria: peixe.benfeitoria?.id,
+                    entrevistado: peixe.entrevistado?.id,
                 };
                 realmInstance.create('Peixes', peixePadrao, true);
             });
@@ -53,27 +53,27 @@ export const salvarPeixeQueue = (peixe: PeixesInput) => {
     });
 };
 
-export const getPeixes = (benfeitoriaId: number): PeixesType[] => {
-    const query = `benfeitoria == ${benfeitoriaId}`;
+export const getPeixes = (entrevistadoId: number): PeixesType[] => {
+    const query = `entrevistado == ${entrevistadoId}`;
     const peixes = realmInstance.objects<PeixesType>('Peixes').filtered(query).slice();
     return JSON.parse(JSON.stringify(peixes)) as PeixesType[];
 };
 
-export const getPeixesDessincronizados = (benfeitoriaId: number): PeixesType[] => {
-    const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+export const getPeixesDessincronizados = (entrevistadoId: number): PeixesType[] => {
+    const query = `entrevistado == "${entrevistadoId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const peixesQueue = realmInstance.objects<PeixesType>('Peixes').filtered(query).slice();
     return JSON.parse(JSON.stringify(peixesQueue)) as PeixesType[];
 };
 
-export const setIdBenfeitoriaFromApiOnPeixes = (idBenfeitoriaApi: number, benfeitoriaIdLocal: string) => {
+export const setIdBenfeitoriaFromApiOnPeixes = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
     try {
-        const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
+        const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
         const peixesQueue = realmInstance.objects('Peixes').filtered(query);
 
         if (peixesQueue.length > 0) {
             realmInstance.write(() => {
                 peixesQueue.forEach(peixeOrfan => {
-                    peixeOrfan.benfeitoria = idBenfeitoriaApi;
+                    peixeOrfan.entrevistado = idBenfeitoriaApi;
                     peixeOrfan.idFather = '';
                 });
             });

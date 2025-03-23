@@ -1,131 +1,98 @@
-/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+// Fauna.tsx
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getFauna } from '../../../realm/services/faunaService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { FaunaType } from '../../../shared/types/FaunaType';
+import { FaunaDetailContainer } from '../styles/fauna.style';
+import RenderItemFauna from '../ui-components/listaFauna';
 
-export interface ImoveisParam {
-  localidadeId: number;
+
+export interface FaunaParam {
+  fauna: FaunaType[];
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
+export const novaFauna = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('NovaFauna', { entrevistadoId });
 }
 
-const Faunas = () => {
+const Fauna = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const route = useRoute<RouteProp<Record<string, FaunaParam>, 'Imovel'>>();
+  const { fauna } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
-  
+  const [faunaList, setFaunaList] = useState<FaunaType[]>(fauna);
 
-  // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
-    
-    if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+  const fetchFauna = async () => {
+    const entrevistadoId = fauna[0]?.entrevistado.id;
+    if (entrevistadoId) {
+      const faunaRealm = getFauna(entrevistadoId);
+      const novos = faunaRealm.filter(f => !faunaList.some(existing => existing.id === f.id || existing.idLocal === f.idLocal));
+      setFaunaList(prev => [...prev, ...novos]);
     }
-   
-  }, [localidadeId]);
+  };
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchFauna();
+  }, []);
 
-  // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchFauna();
     handleScrollToEnd();
   };
 
-  const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+  const handleNovaFauna = () => {
+    const entrevistadoId = fauna[0]?.entrevistado.id;
+    if (entrevistadoId) novaFauna(navigation.navigate, entrevistadoId);
   };
 
   return (
-    <ImovelContainer>
-      <View style={{  
-        alignItems: 'center', 
-        flexDirection: 'row',
-        borderBottomWidth: 3, 
-        borderColor: theme.colors.grayTheme.gray100, 
-        marginBottom: 10, 
-        backgroundColor: '#505050' 
-      }}>
+    <FaunaDetailContainer>
+      <View style={{ alignItems: 'center', flexDirection: 'row', borderBottomWidth: 3, borderColor: theme.colors.grayTheme.gray100, marginBottom: 10, backgroundColor: '#505050' }}>
         <Icon size={30} name='stack' color='#fefeff'/>
-        <Text 
-          type={textTypes.TITLE_BOLD} 
-          color={theme.colors.whiteTheme.white}
-          margin="0px 0px 0px 30px"
-        >
-          LISTA DE IMÓVEIS
+        <Text type={textTypes.TITLE_BOLD} color={theme.colors.whiteTheme.white} margin="0px 0px 0px 30px">
+          LISTA DE FAUNA DO ENTREVISTADO
         </Text>
       </View>
 
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 1,
-        borderBottomWidth: 3,
-        borderColor: theme.colors.grayTheme.gray100,
-        backgroundColor: '#ff4500'
-      }}>
-        
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 1, borderBottomWidth: 3, borderColor: theme.colors.grayTheme.gray100, backgroundColor: '#ff4500' }}>
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Fim da Página
-          </Text>
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Fim da Página</Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-  
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaFauna}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
-          </Text>
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Add Fauna</Text>
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
-          keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
-        />
-      )}
-    </ImovelContainer>
+      <FlatList
+        ref={flatListRef}
+        data={faunaList}
+        extraData={faunaList}
+        renderItem={({ item }) => <RenderItemFauna item={item} />}
+        keyExtractor={(item) => item.id?.toString() ?? item.idLocal ?? 'SemId'}
+      />
+    </FaunaDetailContainer>
   );
-}
+};
 
-export default Faunas;
- */
+export default Fauna;

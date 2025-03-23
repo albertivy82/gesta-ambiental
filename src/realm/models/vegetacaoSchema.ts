@@ -22,6 +22,9 @@ export const VegetacaoSchema = {
         quemEnsinouUso: 'string',
         repassaConhecimento: 'string',
         observacoesEspontaneas: 'string',
-        benfeitoria: 'int'
+        entrevistado: 'int?', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

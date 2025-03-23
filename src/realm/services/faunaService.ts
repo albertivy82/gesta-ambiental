@@ -11,13 +11,13 @@ export const salvarFauna = (fauna: FaunaType[]) => {
                     if (faunaItem.sincronizado && faunaRealm && faunaItem.idLocal == '') {
                         const faunaPadrao = {
                             ...faunaItem,
-                            benfeitoria: faunaItem.benfeitoria.id,
+                            entrevistado: faunaItem.entrevistado.id,
                         };
                         realmInstance.create('Fauna', faunaPadrao, true);
                     } else {
                         const faunaPadrao = {
                             ...faunaItem,
-                            benfeitoria: faunaItem.benfeitoria.id,
+                            entrevistado: faunaItem.entrevistado.id,
                         };
                         realmInstance.create('Fauna', faunaPadrao, true);
                     }
@@ -42,7 +42,7 @@ export const salvarFaunaQueue = (fauna: FaunaInput) => {
                 const faunaPadrao = {
                     ...fauna,
                     id: Id(),
-                    benfeitoria: fauna.benfeitoria?.id,
+                    entrevistado: fauna.entrevistado?.id,
                 };
                 realmInstance.create('Fauna', faunaPadrao, true);
             });
@@ -53,27 +53,27 @@ export const salvarFaunaQueue = (fauna: FaunaInput) => {
     });
 };
 
-export const getFauna = (benfeitoriaId: number): FaunaType[] => {
-    const query = `benfeitoria == ${benfeitoriaId}`;
+export const getFauna = (entrevistadoId: number): FaunaType[] => {
+    const query = `entrevistado == ${entrevistadoId}`;
     const fauna = realmInstance.objects<FaunaType>('Fauna').filtered(query).slice();
     return JSON.parse(JSON.stringify(fauna)) as FaunaType[];
 };
 
-export const getFaunaDessincronizadas = (benfeitoriaId: number): FaunaType[] => {
-    const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+export const getFaunaDessincronizadas = (entrevistadoId: number): FaunaType[] => {
+    const query = `entrevistado == "${entrevistadoId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const faunaQueue = realmInstance.objects<FaunaType>('Fauna').filtered(query).slice();
     return JSON.parse(JSON.stringify(faunaQueue)) as FaunaType[];
 };
 
-export const setIdBenfeitoriaFromApiOnFauna = (idBenfeitoriaApi: number, benfeitoriaIdLocal: string) => {
+export const setIdBenfeitoriaFromApiOnFauna = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
     try {
-        const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
+        const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
         const faunaQueue = realmInstance.objects('Fauna').filtered(query);
 
         if (faunaQueue.length > 0) {
             realmInstance.write(() => {
                 faunaQueue.forEach(faunaOrfan => {
-                    faunaOrfan.benfeitoria = idBenfeitoriaApi;
+                    faunaOrfan.entrevistado = idBenfeitoriaApi;
                     faunaOrfan.idFather = '';
                 });
             });

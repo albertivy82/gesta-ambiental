@@ -1,6 +1,6 @@
 import { realmInstance } from './databaseService';
 import { AguaType } from '../../shared/types/AguaType';
-import { AguaInput } from '../../shared/types/AguaIput';
+import { AguaInput } from '../../shared/types/AguaInput';
 
 
 export const salvarAgua = (aguas: AguaType[]) => {

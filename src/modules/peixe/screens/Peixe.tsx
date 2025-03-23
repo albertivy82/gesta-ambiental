@@ -1,131 +1,94 @@
-/* import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { getImoveis } from '../../../realm/services/imovelService';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { getPeixes } from '../../../realm/services/peixesService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { imovelBody } from '../../../shared/types/imovelType';
-import { ImovelContainer } from '../styles/Imovel.style';
-import RenderItemImovel from '../ui-components/listaImoveis';
-import { useImoveis } from '../../localidade/hooks/useImoveis';
+import { PeixeDetailContainer } from '../styles/peixe.style';
+import { PeixesType } from '../../../shared/types/PeixesType';
+import RenderItemPeixe from '../ui-components/listaPeixe';
 
-export interface ImoveisParam {
-  localidadeId: number;
+export interface PeixeParam {
+  peixe: PeixesType[];
 }
 
-export const novoImovel = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number) => {
-  navigate('NovoImovel', { localidadeId });
-}
+export const novoPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('NovoPeixe', { entrevistadoId });
+};
 
 const Peixes = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
-  const { contagemImoveis, isLoading, refreshImoveis } = useImoveis(localidadeId);
+  const route = useRoute<RouteProp<Record<string, PeixeParam>, string>>();
+  const { peixe } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [imovel, setImovel] = useState<imovelBody[]>([]);
-  
+  const [peixes, setPeixes] = useState<PeixesType[]>(peixe);
 
-  // Carrega a lista inicial de imóveis
-  const fetchImoveis = useCallback(async () => {
-    
-    if (localidadeId) {
-      const imovelRealm = getImoveis(localidadeId);
-      setImovel(imovelRealm);
+  const fetchPeixes = async () => {
+    if (peixe[0]?.entrevistado?.id) {
+      const novos = getPeixes(peixe[0].entrevistado.id);
+      const unicos = novos.filter((novo) =>
+        !peixes.some((existente) => existente.id === novo.id || existente.idLocal === novo.idLocal)
+      );
+      setPeixes((prev) => [...prev, ...unicos]);
     }
-   
-  }, [localidadeId]);
+  };
 
   useEffect(() => {
-    fetchImoveis();
-  }, [fetchImoveis]);
+    fetchPeixes();
+  }, []);
 
-  // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
   const handleRefresh = () => {
-    fetchImoveis();
+    fetchPeixes();
     handleScrollToEnd();
   };
 
-  const handleNovoImovel = () => {
-    novoImovel(navigation.navigate, localidadeId);
+  const handleNovoPeixe = () => {
+    novoPeixe(navigation.navigate, peixe[0].entrevistado.id);
   };
 
   return (
-    <ImovelContainer>
-      <View style={{  
-        alignItems: 'center', 
-        flexDirection: 'row',
-        borderBottomWidth: 3, 
-        borderColor: theme.colors.grayTheme.gray100, 
-        marginBottom: 10, 
-        backgroundColor: '#505050' 
-      }}>
-        <Icon size={30} name='stack' color='#fefeff'/>
-        <Text 
-          type={textTypes.TITLE_BOLD} 
-          color={theme.colors.whiteTheme.white}
-          margin="0px 0px 0px 30px"
-        >
-          LISTA DE IMÓVEIS
-        </Text>
+    <PeixeDetailContainer>
+      <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#505050', marginBottom: 10, borderBottomWidth: 3, borderColor: theme.colors.grayTheme.gray100 }}>
+        <Icon size={30} name='fish' color='#fff' />
+        <Text type={textTypes.TITLE_BOLD} color={theme.colors.whiteTheme.white} margin="0px 0px 0px 30px">LISTA DE PEIXES</Text>
       </View>
 
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 1,
-        borderBottomWidth: 3,
-        borderColor: theme.colors.grayTheme.gray100,
-        backgroundColor: '#ff4500'
-      }}>
-     
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderBottomWidth: 3, borderColor: theme.colors.grayTheme.gray100, backgroundColor: '#ff4500' }}>
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
-          <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Fim da Página
-          </Text>
+          <Icon size={20} name='point-down' color="#fff" />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#fff">Fim da Página</Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshImoveis} disabled={isLoading}>
-          <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
+          <Icon size={20} name='spinner11' color="#fff" />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#fff">Atualizar</Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
-          <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Imóvel
-          </Text>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoPeixe}>
+          <Icon size={20} name='plus' color="#fff" />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#fff">Add Peixe</Text>
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
-      ) : (
-        <FlatList
-          ref={flatListRef}
-          data={imovel}
-          extraData={imovel} 
-          renderItem={({ item }) => <RenderItemImovel item={item} />}
-          keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
-        />
-      )}
-    </ImovelContainer>
+      <FlatList
+        ref={flatListRef}
+        data={peixes}
+        extraData={peixes}
+        renderItem={({ item }) => <RenderItemPeixe item={item} />}
+        keyExtractor={(item) => item.id?.toString() || item.idLocal || 'sem-id'}
+      />
+    </PeixeDetailContainer>
   );
-}
+};
 
 export default Peixes;
- */

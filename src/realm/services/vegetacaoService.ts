@@ -11,13 +11,13 @@ export const salvarVegetacoes = (vegetacoes: VegetacaoType[]) => {
           if (vegetacao.sincronizado && vegetacaoRealm && vegetacao.idLocal == '') {
             const vegetacaoPadrao = {
               ...vegetacao,
-              benfeitoria: vegetacao.benfeitoria.id,
+              entrevistado: vegetacao.entrevistado.id,
             };
             realmInstance.create('Vegetacao', vegetacaoPadrao, true);
           } else {
             const vegetacaoPadrao = {
               ...vegetacao,
-              benfeitoria: vegetacao.benfeitoria.id,
+              entrevistado: vegetacao.entrevistado.id,
             };
             realmInstance.create('Vegetacao', vegetacaoPadrao, true);
           }
@@ -42,7 +42,7 @@ export const salvarVegetacaoQueue = (vegetacao: VegetacaoInput) => {
         const vegetacaoPadrao = {
           ...vegetacao,
           id: Id(),
-          benfeitoria: vegetacao.benfeitoria?.id,
+          entrevistado: vegetacao.entrevistado?.id,
         };
         realmInstance.create('Vegetacao', vegetacaoPadrao, true);
       });
@@ -53,8 +53,8 @@ export const salvarVegetacaoQueue = (vegetacao: VegetacaoInput) => {
   });
 };
 
-export const getVegetacoes = (benfeitoriaId: number): VegetacaoType[] => {
-  const query = `benfeitoria == ${benfeitoriaId}`;
+export const getVegetacoes = (entrevistadoId: number): VegetacaoType[] => {
+  const query = `entrevistado == ${entrevistadoId}`;
   const vegetacoes = realmInstance
     .objects<VegetacaoType>('Vegetacao')
     .filtered(query)
@@ -62,8 +62,8 @@ export const getVegetacoes = (benfeitoriaId: number): VegetacaoType[] => {
   return JSON.parse(JSON.stringify(vegetacoes)) as VegetacaoType[];
 };
 
-export const getVegetacoesDessincronizadas = (benfeitoriaId: number): VegetacaoType[] => {
-  const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+export const getVegetacoesDessincronizadas = (entrevistadoId: number): VegetacaoType[] => {
+  const query = `entrevistado == "${entrevistadoId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const vegetacoesQueue = realmInstance
     .objects<VegetacaoType>('Vegetacao')
     .filtered(query)
@@ -71,15 +71,15 @@ export const getVegetacoesDessincronizadas = (benfeitoriaId: number): VegetacaoT
   return JSON.parse(JSON.stringify(vegetacoesQueue)) as VegetacaoType[];
 };
 
-export const setIdBenfeitoriaFromApiOnVegetacao = (idBenfeitoriaApi: number, benfeitoriaIdLocal: string) => {
+export const setIdBenfeitoriaFromApiOnVegetacao = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
   try {
-    const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
+    const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
     const vegetacoesQueue = realmInstance.objects('Vegetacao').filtered(query);
 
     if (vegetacoesQueue.length > 0) {
       realmInstance.write(() => {
         vegetacoesQueue.forEach(vegetacaoOrfan => {
-          vegetacaoOrfan.benfeitoria = idBenfeitoriaApi;
+          vegetacaoOrfan.entrevistado = idBenfeitoriaApi;
           vegetacaoOrfan.idFather = '';
         });
       });

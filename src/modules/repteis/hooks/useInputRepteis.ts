@@ -1,13 +1,12 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { RepteisType } from "../../../shared/types/RepteisType";
 import { salvarReptilQueue } from "../../../realm/services/repteisService";
-import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { RepteisInput } from "../../../shared/types/RepteisInput";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_REPTEIS_INPUT: RepteisType = {
   id: 0,
@@ -41,8 +40,7 @@ export const useNovoReptil = (entrevistado: EntrevistadoType) => {
       novoReptil.descricaoEspontanea !== ''
     ) {
       setDisabled(true);
-    } else {
-      setDisabled(false);
+    
     }
   }, [novoReptil]);
 

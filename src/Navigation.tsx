@@ -9,8 +9,6 @@ import admUsers from "./modules/admUsers/screens/AdmUsers";
 import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
 import { NovaBenfeitoria } from "./modules/benfeitorias/screens/novaBenfeitoria";
-import Consumo from "./modules/consumo/screens/Consumo";
-import ConsumoItens from "./modules/consumo/screens/ConsumoItens";
 import Coordenadas from "./modules/coordenadas";
 //import Dependencias from "./modules/dependencias/screens/Dependencia";
 import EditUser from "./modules/editUser";
@@ -35,6 +33,8 @@ import { NovoEntrevistado } from "./modules/entrevistados/screens/novoEntrevista
 import EntrevistadoDetails from "./modules/entrevistadoDetails/screens/EntrevistadoDetails";
 import { NovoImovel } from "./modules/imovel/screens/novoImovel";
 import ImovelDetails from "./modules/imovel/screens/imovelDetails";
+import { NovaAve } from "./modules/aves/screens/novaAve";
+import Aves from "./modules/aves/screens/Ave";
 
 
 
@@ -139,13 +139,13 @@ const Navigation =() =>{
           <Stack.Screen name="ImovelDetail" component={ImovelDetails} options={{title: 'Imóvel'}} />
           <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
           <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
-          <Stack.Screen name="Consumo" component={Consumo} options={{title: 'Dados de Consumo'}} />
-          <Stack.Screen name="ConsumoItens" component={ConsumoItens} options={{title: 'Dados de Consumo'}} />
           <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
           <Stack.Screen name="Postos" component={Postos} options={{title: 'Postos'}} />
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
           <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Ecolas'}} />
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
+          <Stack.Screen name="NovaAve" component={NovaAve} options={{title: 'Cadastro de Aves'}} />
+          <Stack.Screen name="AvesLista" component={Aves} options={{title: 'Registro de Aves'}} />
          
          </Stack.Navigator>
       </NavigationContainer>
