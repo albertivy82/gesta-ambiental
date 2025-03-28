@@ -8,6 +8,13 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
+import DateSelector from "../../../shared/components/input/DateSelector";
+import { Perfil } from "../../../enums/Perfil";
+import { Sexo } from "../../../enums/Sexo";
+import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
+import { Escolaridade } from "../../../enums/Escolaridade";
+import CheckboxSelector from "../../../shared/components/input/checkBox";
+import { Molestias } from "../../../enums/molestias.enum";
 
 
 
@@ -21,26 +28,61 @@ export const NovoMorador = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const [loading, setLoading] = useState(false); 
-   const [outrosUsos, setOutrosUsos] = useState<string>('');     
-   const [qual, SetQual] = useState<string>('');
+   const [estuda, setEstuda] = useState<string>('');     
+   const [ondeEstuda, SetOndeEstuda] = useState<string>('');
+   const [trabalha, setTrabalha] = useState<string>('');     
+   const [ondeTrabalha, SetOndeTrabalha] = useState<string>('');
+   const [religiao, setReligiao] = useState<string>('');     
+   const [qualReligiao, SetQualReligiao] = useState<string>('');
+   const [doencaInformada, setDoencaInformada] = useState<string[]>([]);  
    const {  novoMorador,
             handleOnChangeInput,
             handleEnumChange,
             handleArrayFieldChange,
+            handleOnChangeData,
             disabled
           } = useNovoMorador(params.Benfeitoria);
 
 
   useEffect(() => {
-        const consolidaDados = outrosUsos === 'SIM' 
-          ? (qual ? [`ocorrencia: ${qual}`] : [])  
+        const consolidaDados = estuda === 'SIM' 
+          ? (ondeEstuda ? [`onde estuda: ${ondeEstuda}`] : [])  
           : ['NÃO']; 
       
-        handleArrayFieldChange('usoOutros', consolidaDados);
+        handleArrayFieldChange('ondeEstuda', consolidaDados);
       
-  }, [outrosUsos, qual]);
+  }, [estuda, ondeEstuda]);
+
+  useEffect(() => {
+    const consolidaDados = trabalha === 'SIM' 
+      ? (ondeTrabalha ? [`onde trabalha: ${ondeTrabalha}`] : [])  
+      : ['NÃO']; 
+  
+    handleArrayFieldChange('trabalho', consolidaDados);
+  
+   }, [trabalha, ondeEstuda]);
+
+  useEffect(() => {
+    const consolidaDados = religiao === 'SIM' 
+      ? (qualReligiao ? [`Qual: ${qualReligiao}`] : [])  
+      : ['NÃO']; 
+
+    handleArrayFieldChange('religiao', consolidaDados);
+
+  }, [religiao, qualReligiao]);
+
+  useEffect(()=>{
    
-  const simNaoOptions =  Object.values(SimNao);
+    handleArrayFieldChange('doencas', doencaInformada);
+  
+  },[doencaInformada])
+   
+  
+  const perfilOptions =  Object.values(Perfil);
+  const sexoOptions =  Object.values(Sexo);
+  const estadoCivilOptions =  Object.values(EstadoCivil);
+  const escolaridadeOptions =  Object.values(Escolaridade);
+  const molestiasOptions =  Object.values(Molestias);
     
     const handleEnviar = async () => {
          setLoading(true);
@@ -65,115 +107,144 @@ export const NovoMorador = ()=>{
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
         <MoradorDetailContainer>
           
-        <Input 
-              value={novoMorador.ondeEstuda} 
-              onChange={(event)=> handleOnChangeInput(event, 'especie')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Informe  a espécie de morador:"
-        />
+      
+             <DateSelector   
+                label="Data de nascimento"
+                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataNascimento')}
+              />
 
-            <RenderPicker
-               label="Consome a morador em casa?"
-               selectedValue={novoMorador.useCosumo}
-               onValueChange={(value) => handleEnumChange('useCosumo', value)}
-               options={simNaoOptions}
+
+              <RenderPicker
+               label="Selecione o perfil do morador"
+               selectedValue={novoMorador.perfil}
+               onValueChange={(value) => handleEnumChange('perfil', value)}
+               options={perfilOptions}
+              />
+
+
+              <RenderPicker
+               label="Qual o sexo do morador"
+               selectedValue={novoMorador.sexo}
+               onValueChange={(value) => handleEnumChange('sexo', value)}
+               options={sexoOptions}
+              />
+
+              <RenderPicker
+               label="Informe o estado civil do morador?"
+               selectedValue={novoMorador.estadoCivil}
+               onValueChange={(value) => handleEnumChange('estadoCivil', value)}
+               options={estadoCivilOptions}
             />
 
               <RenderPicker
-               label="comercializa a morador?"
-               selectedValue={novoMorador.usoComercio}
-               onValueChange={(value) => handleEnumChange('usoComercio', value)}
-               options={simNaoOptions}
-            />
-
-              <RenderPicker
-               label="Faz a criação da morador?"
-               selectedValue={novoMorador.usoCriacao}
-               onValueChange={(value) => handleEnumChange('usoCriacao', value)}
-               options={simNaoOptions}
-            />
-
-              <RenderPicker
-               label="Faz algum uso medicinal da morador?"
-               selectedValue={novoMorador.usoRemedio}
-               onValueChange={(value) => handleEnumChange('usoRemedio', value)}
-               options={simNaoOptions}
+               label="Qual o nível de escolaridade do morador?"
+               selectedValue={novoMorador.escolaridade}
+               onValueChange={(value) => handleEnumChange('escolaridade', value)}
+               options={escolaridadeOptions}
               />
 
              <RenderPicker
-                  label="Faz outro uso?"
-                  selectedValue={outrosUsos}
+                  label="Estuda?"
+                  selectedValue={estuda}
                   onValueChange={(value) => {
-                    setOutrosUsos(value ?? ''); 
+                    setEstuda(value ?? ''); 
                     if (value !== 'SIM') {
-                      SetQual('');
+                      SetOndeEstuda('');
                     }
                   }}
                   options={['SIM', 'NÃO']}
                  />
-                    {outrosUsos.includes('SIM') && (
+                    {estuda.includes('SIM') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
-                      value={qual}
-                      onChangeText={SetQual}
-                      placeholder="Separe as informações por vírgula"
+                      value={ondeEstuda}
+                      onChangeText={SetOndeEstuda}
+                      placeholder="..."
+                      margin="15px 10px 30px 5px"
+                      title="Onde Etuda?"
+                       />
+                      </View>
+                 )}
+
+                <RenderPicker
+                  label="Trabalha?"
+                  selectedValue={trabalha}
+                  onValueChange={(value) => {
+                    setTrabalha(value ?? ''); 
+                    if (value !== 'SIM') {
+                      SetOndeTrabalha('');
+                    }
+                  }}
+                  options={['SIM', 'NÃO']}
+                 />
+                    {trabalha.includes('SIM') && (
+                      <View style={{ marginTop: 10 }}>
+                      <Input
+                      value={ondeTrabalha}
+                      onChangeText={SetOndeTrabalha}
+                      placeholder="..."
+                      margin="15px 10px 30px 5px"
+                      title="Onde trabalha?"
+                       />
+                      </View>
+                 )}
+
+                  <RenderPicker
+                  label="Trabalha?"
+                  selectedValue={trabalha}
+                  onValueChange={(value) => {
+                    setTrabalha(value ?? ''); 
+                    if (value !== 'SIM') {
+                      SetOndeTrabalha('');
+                    }
+                  }}
+                  options={['SIM', 'NÃO']}
+                 />
+                    {trabalha.includes('SIM') && (
+                      <View style={{ marginTop: 10 }}>
+                      <Input
+                      value={ondeTrabalha}
+                      onChangeText={SetOndeTrabalha}
+                      placeholder="..."
+                      margin="15px 10px 30px 5px"
+                      title="Onde trabalha?"
+                       />
+                      </View>
+                 )}
+               
+               <RenderPicker
+                  label="O morador possui religião?"
+                  selectedValue={religiao}
+                  onValueChange={(value) => {
+                    setReligiao(value ?? ''); 
+                    if (value !== 'SIM') {
+                      SetQualReligiao('');
+                    }
+                  }}
+                  options={['SIM', 'NÃO']}
+                 />
+                    {religiao.includes('SIM') && (
+                      <View style={{ marginTop: 10 }}>
+                      <Input
+                      value={qualReligiao}
+                      onChangeText={SetQualReligiao}
+                      placeholder="..."
                       margin="15px 10px 30px 5px"
                       title="Qual?"
                        />
                       </View>
-            )}
+                 )}
 
-             <Input 
-              value={novoMorador.problemasRelacionados} 
-              onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionados')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Quai problemas relacionados a morador:"
-              />
-
-              <Input 
-              value={novoMorador.ameacaSofrida} 
-              onChange={(event)=> handleOnChangeInput(event, 'ameacaSofrida')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Qual tipo de ameaça ele sofre:"
-              />
-
-
-              <Input 
-              value={novoMorador.localDeAglomeracao} 
-              onChange={(event)=> handleOnChangeInput(event, 'localDeAglomeracao')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Onde ocorre a reunião da espécie:"
-              />
-
-              <Input 
-              value={novoMorador.qualImpotanciaDaEespecie} 
-              onChange={(event)=> handleOnChangeInput(event, 'qualImpotanciaDaEespecie')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Qual é a importância da espécie:"
-              />
-
-
-              <Input 
-              value={novoMorador.alimentacao} 
-              onChange={(event)=> handleOnChangeInput(event, 'alimentacao')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="A espécie se elimenta de que?:"
+                <CheckboxSelector
+                options={molestiasOptions}
+                selectedValues={doencaInformada}
+                label="Selecione as opções de Alimentação"
+                onSave={(selectedValues) => {
+                    setDoencaInformada(selectedValues);
+                }}
                 />
 
-              <Input 
-              value={novoMorador.descricaoEspontanea} 
-              onChange={(event)=> handleOnChangeInput(event, 'descricaoEspontanea')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Deseja acrescentar mais informações sobre a espécie:"
-             />
-
+             
           
              <View style={{ marginTop: 40 }}>
               {loading ? (

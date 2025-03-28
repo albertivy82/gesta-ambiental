@@ -7,6 +7,7 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
 import { salvarMoradorQueue } from "../../../realm/services/moradorService";
+import { formatDateForApi } from "../../../shared/functions/data";
 
 export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   dataNascimento: '',
@@ -27,6 +28,8 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
 export const useNovoMorador = (benfeitoria:BenfeitoriaType)  => {
   const [novoMorador, setNovaMorador] = useState<MoradorInput>(DEFAULT_MORADOR_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
+  const [dataNascimento, setDataNascimento] = useState<Date | null>(null);
+  
 
   useEffect(() => {
     console.log(novoMorador);
@@ -44,6 +47,23 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType)  => {
       setDisabled(false);
     }
   }, [novoMorador]);
+
+  useEffect(() => {
+    if (dataNascimento) {
+      const hoje = new Date();
+      let anos = hoje.getFullYear() - dataNascimento.getFullYear();
+      const m = hoje.getMonth() - dataNascimento.getMonth();
+      if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
+        anos--;
+      }
+  
+      setNovaMorador((current) => ({
+        ...current,
+        idade: anos,
+      }));
+    }
+  }, [dataNascimento]); // Agora o efeito escuta a data correta
+  
 
   const objetoFila = () => {
     const moradorData: MoradorInput = {
@@ -125,12 +145,22 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType)  => {
              }));
   };
 
+  const handleOnChangeData = (selectedDate: Date, name: string) => {
+              setDataNascimento(selectedDate);
+              const dataFormatada = formatDateForApi(selectedDate);
+              setNovaMorador((currentUser) => ({
+                  ...currentUser,
+                  [name]: dataFormatada,
+              }));
+  };
+
 
   return {
     novoMorador,
     handleOnChangeInput,
     handleEnumChange,
     handleArrayFieldChange,
+    handleOnChangeData,
     disabled,
 };
   
