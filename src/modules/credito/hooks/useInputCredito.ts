@@ -6,6 +6,8 @@ import { salvarCreditoQueue } from "../../../realm/services/creditoService";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   nome: '',
@@ -15,7 +17,7 @@ export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   },
 };
 
-export const useNovoCredito = (benfeitoria: EntrevistadoType) => {
+export const useNovoCredito = (benfeitoria: BenfeitoriaType) => {
   const [novoCredito, setNovoCredito] = useState<CreditoInput>(DEFAULT_CREDITO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -79,9 +81,44 @@ export const useNovoCredito = (benfeitoria: EntrevistadoType) => {
     }
   };
 
+  const handleOnChangeRendimentoMensal = (
+          event: NativeSyntheticEvent<TextInputChangeEventData>
+        ) => {
+          let value = event.nativeEvent.text;
+        
+          // Remove qualquer caractere não numérico
+          value = value.replace(/\D/g, '');
+        
+          // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+          const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+        
+          // Atualiza o estado com o valor formatado como número
+          setNovoCredito((current) => ({
+            ...current,
+            valor: parseFloat(formattedValue), // Salva como número para enviar à API
+          }));
+  };
+
+  
+  const handleOnChangeInput = (
+    value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+    name: string
+  ) => {
+    // Verifica se "value" é um evento ou uma string diretamente
+    const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+  
+    setNovoCredito((current) => ({
+      ...current,
+      [name]: newValue,
+    }));
+  };
+
+
   return {
     novoCredito,
     inputCreditoApi,
+    handleOnChangeRendimentoMensal,
+    handleOnChangeInput,
     disabled,
   };
 };

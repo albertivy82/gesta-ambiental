@@ -1,11 +1,14 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
+import { salvarServicoComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoInput } from "../../../shared/types/ComunicacaoInput";
+import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
+import { novaAve } from "../../aves/screens/Ave";
 
 
 export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
@@ -16,7 +19,7 @@ export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
   },
 };
 
-export const useNovoServicoComunicacao = (benfeitoria: EntrevistadoType) => {
+export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
   const [novoServicoComunicacao, setNovoServicoComunicacao] = useState<ServicosComunicacaoInput>(DEFAULT_SERVICOS_COMUNICACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -31,54 +34,75 @@ export const useNovoServicoComunicacao = (benfeitoria: EntrevistadoType) => {
   }, [novoServicoComunicacao]);
 
   const objetoFila = () => {
-    const servicosComunicacaoData: ServicosComunicacaoInput = {
-      ...novoServicoComunicacao,
-      sincronizado: false,
-      idLocal: uuidv4(),
+   
+  
+    const servicoComunicacaoData: ServicosComunicacaoInput = {
+        ...novoServicoComunicacao, 
+        sincronizado: false,  
+        idLocal: uuidv4(), 
     };
-
-    if (benfeitoria.id > 0) {
-      servicosComunicacaoData.benfeitoria!.id = benfeitoria.id;
-      servicosComunicacaoData.idFather = "";
-    } else if (benfeitoria.idLocal) {
-      servicosComunicacaoData.idFather = benfeitoria.idLocal;
-      servicosComunicacaoData.benfeitoria!.id = benfeitoria.id;
+   
+    if (benfeitoria.id>0) {
+        servicoComunicacaoData.benfeitoria!.id = benfeitoria.id;
+        servicoComunicacaoData.idFather = "";
+      
     } else {
-      console.warn("ID local da benfeitoria não encontrado. Verifique se está sendo passado corretamente.");
-    }
-
-    return servicosComunicacaoData;
-  };
-
-  const inputServicoComunicacaoApi = async () => {
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-      const servicosComunicacaoDataQueue = objetoFila();
-      console.log("useInputServicoComunicacao_a", novoServicoComunicacao);
-      salvarServicosComunicacaoQueuem(servicosComunicacaoDataQueue);
-    } else {
-      novoServicoComunicacao.benfeitoria = { id: benfeitoria.id };
-      console.log(novoServicoComunicacao.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputServicoComunicacao_b", novoServicoComunicacao);
-
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputServicoComunicacao_c", novoServicoComunicacao);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/servicos-comunicacao', novoServicoComunicacao);
-          console.log("useInputServicoComunicacao_d", novoServicoComunicacao);
-        } catch (error) {
-          const servicosComunicacaoDataQueue = objetoFila();
-          salvarServicosComunicacaoQueue(servicosComunicacaoDataQueue);
-          console.log("useInputServicoComunicacao_e", novoServicoComunicacao);
+       if (benfeitoria.idLocal) {
+           servicoComunicacaoData.idFather = benfeitoria.idLocal;
+           servicoComunicacaoData.benfeitoria!.id = benfeitoria.id;
+        } else {
+            console.warn("ID local do imóvel não encontrado. Verifique se está sendo passado corretamente.");
         }
-      } else {
-        const servicosComunicacaoDataQueue = objetoFila();
-        salvarServicosComunicacaoQueue(servicosComunicacaoDataQueue);
-        console.log("useInputServicoComunicacao_f", novoServicoComunicacao);
-      }
+  
+      
     }
+  
+    //console.log("Objeto servicoComunicacaoData final:", servicoComunicacaoData);
+    return servicoComunicacaoData;
   };
+  
+  
+  const enviarRegistro = async () =>{
+  
+   
+  
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+         
+          const servicoComunicacaoDataQueue = objetoFila();
+          const servicoComunicacaoQueue = await salvarServicoComunicacaoQueue(servicoComunicacaoDataQueue);
+          return servicoComunicacaoQueue;
+         
+  
+        }else{
+            novoServicoComunicacao.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                    await connectionAPIPost('http://192.168.100.28:8080/servicoComunicacao', novaAve) as ServicosComunicacaoType;
+                          
+                  
+                    } catch (error) {
+                        const servicoComunicacaoDataQueue = objetoFila();
+                        const servicoComunicacaoQueue = await salvarServicoComunicacaoQueue(servicoComunicacaoDataQueue);
+                        return servicoComunicacaoQueue;
+                       
+                    }
+                  }else{
+                    const servicoComunicacaoDataQueue = objetoFila();
+                    const servicoComunicacaoQueue = await salvarServicoComunicacaoQueue(servicoComunicacaoDataQueue);
+                    return servicoComunicacaoQueue;
+                       
+                    
+                  }
+        }
+  }
+  
+ 
+  
 
   const handleOnChangeInput = (
     value: NativeSyntheticEvent<TextInputChangeEventData> | string,

@@ -1,12 +1,12 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
+import { salvarAtividadeProdutivaQueue } from "../../../realm/services/atividadeProdutivaService";
 import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { AtividadeProdutivaInput } from "../../../shared/types/AtividadeProdutivaInput";
-import { salvarAtividadeProdutivaQueue } from "../../../realm/services/atividadeProdutivaService";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   atividade: null,
@@ -17,7 +17,7 @@ export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   },
 };
 
-export const useNovaAtvProd = (benfeitoria:EntrevistadoType)  => {
+export const useNovaAtvProd = (benfeitoria:BenfeitoriaType)  => {
   const [novaAtividade, setNovaAtvProd] = useState<AtividadeProdutivaInput>(DEFAULT_ATIVIDADE_PRODUTIVA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -84,19 +84,7 @@ export const useNovaAtvProd = (benfeitoria:EntrevistadoType)  => {
   };
 
 
-   const handleOnChangeInput = (
-      value: NativeSyntheticEvent<TextInputChangeEventData> | string,
-      name: string
-    ) => {
-      // Verifica se "value" é um evento ou uma string diretamente
-      const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
-    
-      setNovaAtvProd((current) => ({
-        ...current,
-        [name]: newValue,
-      }));
-    };
-
+   
   const handleEnumChange = (field: keyof AtividadeProdutivaInput, value: any) => {
     setNovaAtvProd((current) => ({
            ...current,
@@ -104,20 +92,43 @@ export const useNovaAtvProd = (benfeitoria:EntrevistadoType)  => {
          }));
   };
 
-  const handleArrayFieldChange = (field: keyof AtividadeProdutivaInput, values: string[]) => {
-             const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
-             setNovaAtvProd((currentState) => ({
-               ...currentState,
-               [field]: concatenatedValues,
-             }));
+ 
+  const handleNumberChange = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>, 
+    field: keyof AtividadeProdutivaInput
+  ) => {
+    let value = event.nativeEvent.text.replace(/\D/g, ''); // Remove caracteres não numéricos
+  
+    setNovaAtvProd((current) => ({
+      ...current,
+      [field]: value ? parseInt(value, 10) : 0, // Garante que seja um número inteiro
+    }));
+  };
+
+  const handleOnChangeRendimentoMensal = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    let value = event.nativeEvent.text;
+  
+    // Remove qualquer caractere não numérico
+    value = value.replace(/\D/g, '');
+  
+    // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+    const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+  
+    // Atualiza o estado com o valor formatado como número
+    setNovaAtvProd((current) => ({
+      ...current,
+      faturamentoAtividadeMesTotal: parseFloat(formattedValue), // Salva como número para enviar à API
+    }));
   };
 
 
   return {
     novaAtividade,
-    handleOnChangeInput,
     handleEnumChange,
-    handleArrayFieldChange,
+    handleNumberChange,
+    handleOnChangeRendimentoMensal,
     disabled,
 };
   

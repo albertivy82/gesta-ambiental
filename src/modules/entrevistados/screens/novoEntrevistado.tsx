@@ -394,7 +394,7 @@ export const NovoEntrevistado = ()=>{
               value={novoEntrevistado.presenciouAssalto?.toString() || ''}
               onChange={(event)=> handleNumberChange(event, 'presenciouAssalto')}
               keyboardType='numeric'
-              placeholder="Área em m²"
+              placeholder="Quantas vezes?"
               margin="15px 10px 30px 5px"
               title="Já presenciou Assaltos nesse local"
             />
@@ -421,7 +421,7 @@ export const NovoEntrevistado = ()=>{
                {conheceInstituicao.includes('SIM') && (
                 <View style={{ marginTop: 10 }}>
                    <Input
-                        value={sobreUso}
+                        value={quaisConhece}
                         onChangeText={SetQuaisConhece}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"

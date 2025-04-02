@@ -3,17 +3,13 @@ export const AguaSchema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
-        possuiForneceimentoPublico: 'string',
-        qualidadeFornecimentoPublico: 'string',
-        corAguaForncimentoPublico: 'string',
-        saborAguaFornecimentoPublico: 'string',
-        cheiroAguaFornecimentoPublico: 'string',
-        poco: 'string',
-        profundidadePoco: 'double',
-        corAguaPoco: 'string',
-        saborAguaPoco: 'string',
-        cheiroAguaPoco: 'string',
-        tratamentoAgua: 'string',
-        benfeitoria: 'int'
+        tipoDeFornecimento: 'string',
+        qualidadeDaAgua: 'string',
+        metodoTratamento: 'string',
+        organopletica: 'string',
+        benfeitoria: 'int?',
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

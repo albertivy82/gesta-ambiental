@@ -2,31 +2,66 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SimNao } from "../../../enums/simNao.enum";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAgua } from "../hooks/useInputAgua";
 import { AguaDetailContainer } from "../styles/agua.style";
+import { QualidadeAguaEnum } from "../../../enums/qualidadeAgua.enum";
+import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
+import CheckboxSelector from "../../../shared/components/input/checkBox";
 
 
 export interface idParam {
-  entrevistado: EntrevistadoType;
+ benfeitoria: BenfeitoriaType;
 }
 
 export const NovaAgua = () => {
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false);
+  const [fornecimentoAgua, setFornecimentoAgua] = useState<string>('');     
+  const [outroFornecimento, SetOutroFornecimento] = useState<string>('');
+  const [tratamentoAgua, setTratamentoAgua] = useState<string[]>([]);  
+  const [outrosTratamentos, setOutrosTratamentos] = useState<string>('');
   
   const {  
     novaAgua,
-    handleOnChangeInput,
+    handleArrayFieldChange,
     handleEnumChange,
     disabled
-  } = useNovaAgua(params.entrevistado);
+  } = useNovaAgua(params.benfeitoria);
 
-  const simNaoOptions = Object.values(SimNao);
+  const abastecimentoOptions = Object.values([
+    'ABASTECIMENTO PUBLICO', 'POÇO AMAZONAS',
+    'POÇO ARTESIANO',
+    'OUTRO'
+  ]);
+
+  const corOptions = Object.values(['INCOLOR (CRISTALINA)', 'COR']);
+  const cheiroOptions = Object.values(['NÃO POSSUI CHEIRO', 'CHEIRO']);
+  const saborOptions = Object.values(['NÃO POSSUI SABOR', 'SABOR']);
+  const qualidadeOptions = Object.values(QualidadeAguaEnum);
+  const tratamentoOptions = Object.values(MetodoTratamentoAgua);
+
+
+  useEffect(() => {
+    const fornecimentoInformado = fornecimentoAgua === 'OUTRO' 
+    ? (outroFornecimento ? [`OUTRO: ${outroFornecimento}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+    : [fornecimentoAgua];
+
+    handleArrayFieldChange('tipoDeFornecimento', fornecimentoInformado);
+  }, [fornecimentoAgua, outroFornecimento]);
+
+  useEffect(()=>{
+    const consolidaDados = [
+      ...tratamentoAgua.filter((item) => item !== 'OUTROS'),
+      ...(outrosTratamentos ? [`Outros ${outrosTratamentos}`] : []),
+    ];
+
+    handleArrayFieldChange('metodoTratamento', consolidaDados);
+  
+  },[tratamentoAgua, outrosTratamentos ])
 
   const handleEnviar = async () => {
     setLoading(true);
@@ -50,20 +85,93 @@ export const NovaAgua = () => {
     <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
       <AguaDetailContainer>
 
-        <Input 
-          value={novoAgua.tipoFonteAgua} 
-          onChange={(event) => handleOnChangeInput(event, 'tipoFonteAgua')}
-          placeholder="..."
-          margin="15px 10px 30px 5px"
-          title="Informe o tipo de fonte de água:"
-        />
+       
+      <RenderPicker
+       label="Escolha o tipo de fornecimento de água?"
+       selectedValue={fornecimentoAgua}
+       onValueChange={(value) => {
+       setFornecimentoAgua(value ?? ''); 
+          if (value !== '') {
+           SetOutroFornecimento('OUTRO:');
+           }
+        }}
+        options={abastecimentoOptions}
+              />
+               {fornecimentoAgua.includes('OUTRO') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={outroFornecimento}
+                        onChangeText={SetOutroFornecimento}
+                        placeholder="Separe por vírgulas"
+                        margin="15px 10px 30px 5px"
+                        title="Qual(is) a(s) instituição(ões) e que tipo de trabalho desenvolve?"
+                    />
+                </View>
+       )}
 
-        <RenderPicker
-          label="Qualidade da água?"
-          selectedValue={novoAgua.qualidadeAgua}
-          onValueChange={(value) => handleEnumChange('qualidadeAgua', value)}
-          options={simNaoOptions}
-        />
+             <RenderPicker
+              label="Qualidade da água"
+              selectedValue={novaAgua.qualidadeDaAgua}
+               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
+               options={qualidadeOptions}
+              />
+
+             <RenderPicker
+              label="Cor da água"
+              selectedValue={novaAgua.corDagua}
+               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
+               options={corOptions}
+              />
+              
+              <RenderPicker
+              label="Cheiro da água"
+              selectedValue={novaAgua.cheiroDagua}
+               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
+               options={cheiroOptions}
+              />
+              
+              <RenderPicker
+              label="Sabor da água"
+              selectedValue={novaAgua.saborDagua}
+               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
+               options={saborOptions}
+              />
+
+            <CheckboxSelector
+                options={tratamentoOptions}
+                selectedValues={tratamentoAgua}
+                label="Qual o método utilizado para tratamento da água"
+                onSave={(selectedValues) => {
+                    setTratamentoAgua(selectedValues);
+                    if (!selectedValues.includes('OUTRO')) {
+                        setOutrosTratamentos('');
+                    }
+                }}
+            />
+            {tratamentoAgua.includes('OUTRO') && (
+                <View style={{ marginTop: 10 }}>
+                    <Input
+                        value={outrosTratamentos}
+                        onChangeText={setOutrosTratamentos}
+                        placeholder="..."
+                        margin="15px 10px 30px 5px"
+                        title="Informe qual:"
+                    />
+                </View>
+            )}
+
+            {fornecimentoAgua.includes('POÇO AMAZONAS') 
+            ||fornecimentoAgua.includes('POÇO ARTESIANO') &&
+            ( <View style={{ marginTop: 10 }}>
+              <Input
+                  value={outrosTratamentos}
+                  onChangeText={setOutrosTratamentos}
+                  placeholder="..."
+                  margin="15px 10px 30px 5px"
+                  title="Informe qual:"
+              />
+             </View>)
+            }
 
         <View style={{ marginTop: 40 }}>
           {loading ? (

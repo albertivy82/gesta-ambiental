@@ -1,47 +1,39 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { AguaInput } from "../../../shared/types/AguaInput";
 import { salvarAguaQueue } from "../../../realm/services/aguasService";
+import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { AguaInput } from "../../../shared/types/AguaInput";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 export const DEFAULT_AGUA_INPUT: AguaInput = {
-  possuiForneceimentoPublico: null,
-  qualidadeFornecimentoPublico: null,
-  corAguaForncimentoPublico: '',
-  saborAguaFornecimentoPublico: '',
-  cheiroAguaFornecimentoPublico: '',
-  poco: null,
+  tipoDeFornecimento: '',
+  qualidadeDaAgua: '',
+  metodoTratamento: '',
+  corDagua: '',
+  cheiroDagua: '',
+  saborDagua: '',
   profundidadePoco: 0,
-  corAguaPoco: '',
-  saborAguaPoco: '',
-  cheiroAguaPoco: '',
-  tratamentoAgua: null,
   benfeitoria: {
     id: 0,
   },
 };
 
-export const useNovaAgua = (benfeitoria: EntrevistadoType) => {
+export const useNovaAgua = (benfeitoria: BenfeitoriaType) => {
   const [novaAgua, setNovaAgua] = useState<AguaInput>(DEFAULT_AGUA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     console.log(novaAgua);
     if (
-      novaAgua.possuiForneceimentoPublico !== null &&
-      novaAgua.qualidadeFornecimentoPublico !== null &&
-      novaAgua.corAguaForncimentoPublico !== '' &&
-      novaAgua.saborAguaFornecimentoPublico !== '' &&
-      novaAgua.cheiroAguaFornecimentoPublico !== '' &&
-      novaAgua.poco !== null &&
-      novaAgua.profundidadePoco > 0 &&
-      novaAgua.corAguaPoco !== '' &&
-      novaAgua.saborAguaPoco !== '' &&
-      novaAgua.cheiroAguaPoco !== '' &&
-      novaAgua.tratamentoAgua !== null
+      novaAgua.tipoDeFornecimento !== '' &&
+      novaAgua.qualidadeDaAgua !== '' &&
+      novaAgua.metodoTratamento !== '' &&
+      novaAgua.corDagua !== '' &&
+       novaAgua.cheiroDagua !== ''&&
+        novaAgua.saborDagua !== ''
+      
     ) {
       setDisabled(false);
     }
@@ -97,9 +89,26 @@ export const useNovaAgua = (benfeitoria: EntrevistadoType) => {
     }
   };
 
+  const handleArrayFieldChange = (field: keyof AguaInput, values: string[]) => {
+          const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+          setNovaAgua((currentState) => ({
+            ...currentState,
+            [field]: concatenatedValues,
+          }));
+        };
+
+  const handleEnumChange = (field: keyof AguaInput, value: any) => {
+          setNovaAgua((current) => ({
+            ...current,
+            [field]: value,
+          }));
+  };
+
   return {
     novaAgua,
     inputAguaApi,
+    handleArrayFieldChange,
+    handleEnumChange,
     disabled,
   };
 };

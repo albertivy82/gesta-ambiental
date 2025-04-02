@@ -8,38 +8,28 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovaAtvProd } from "../hooks/useInputAtvProd";
 import { AtividadeDetailContainer } from "../styles/ativdade.style";
+import { AtividadesProdutivas } from "../../../enums/AtividadesProdutivas.enum";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 
 
 
 export interface idParam {
-  entrevistado: EntrevistadoType;
+  benfeitoria: BenfeitoriaType;
 }
 
 export const NovaAtividade = ()=>{
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
-   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-   const [loading, setLoading] = useState(false); 
-   const [outrosUsos, setOutrosUsos] = useState<string>('');     
-   const [qual, SetQual] = useState<string>('');
-   const {  novaAtividade,
-            handleOnChangeInput,
-            handleEnumChange,
-            handleArrayFieldChange,
-            disabled
-          } = useNovaAtvProd(params.entrevistado);
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [loading, setLoading] = useState(false); 
+  const { novaAtividade,
+          handleEnumChange,
+          handleNumberChange,
+          handleOnChangeRendimentoMensal,
+          disabled
+          } = useNovaAtvProd(params.benfeitoria);
 
-
-  useEffect(() => {
-        const consolidaDados = outrosUsos === 'SIM' 
-          ? (qual ? [`ocorrencia: ${qual}`] : [])  
-          : ['NÃO']; 
-      
-        handleArrayFieldChange('usoOutros', consolidaDados);
-      
-  }, [outrosUsos, qual]);
-   
-  const simNaoOptions =  Object.values(SimNao);
+const atividadeOptions =  Object.values(AtividadesProdutivas);
     
     const handleEnviar = async () => {
          setLoading(true);
@@ -64,116 +54,38 @@ export const NovaAtividade = ()=>{
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
         <AtividadeDetailContainer>
           
-        <Input 
-              value={novaAtividade.especie} 
-              onChange={(event)=> handleOnChangeInput(event, 'especie')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
-        />
+     
 
             <RenderPicker
                label="Consome a ave em casa?"
-               selectedValue={novaAtividade.useCosumo}
-               onValueChange={(value) => handleEnumChange('useCosumo', value)}
-               options={simNaoOptions}
+               selectedValue={novaAtividade.atividade}
+               onValueChange={(value) => handleEnumChange('atividade', value)}
+               options={atividadeOptions}
             />
 
-              <RenderPicker
-               label="comercializa a ave?"
-               selectedValue={novaAtividade.usoComercio}
-               onValueChange={(value) => handleEnumChange('usoComercio', value)}
-               options={simNaoOptions}
-            />
 
-              <RenderPicker
-               label="Faz a criação da ave?"
-               selectedValue={novaAtividade.usoCriacao}
-               onValueChange={(value) => handleEnumChange('usoCriacao', value)}
-               options={simNaoOptions}
-            />
 
-              <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novaAtividade.usoRemedio}
-               onValueChange={(value) => handleEnumChange('usoRemedio', value)}
-               options={simNaoOptions}
-              />
-
-             <RenderPicker
-                  label="Faz outro uso?"
-                  selectedValue={outrosUsos}
-                  onValueChange={(value) => {
-                    setOutrosUsos(value ?? ''); 
-                    if (value !== 'SIM') {
-                      SetQual('');
-                    }
-                  }}
-                  options={['SIM', 'NÃO']}
-                 />
-                    {outrosUsos.includes('SIM') && (
-                      <View style={{ marginTop: 10 }}>
-                      <Input
-                      value={qual}
-                      onChangeText={SetQual}
-                      placeholder="Separe as informações por vírgula"
-                      margin="15px 10px 30px 5px"
-                      title="Qual?"
-                       />
-                      </View>
-            )}
-
-             <Input 
-              value={novaAtividade.problemasRelacionados} 
-              onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionados')}
+            <Input
+              value={novaAtividade.pessoasEnvolvidas?.toString() || ''}
+              onChange={(event)=> handleNumberChange(event, 'pessoasEnvolvidas')}
+              keyboardType='numeric'
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Quai problemas relacionados a ave:"
-              />
-
-              <Input 
-              value={novaAtividade.ameacaSofrida} 
-              onChange={(event)=> handleOnChangeInput(event, 'ameacaSofrida')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Qual tipo de ameaça ele sofre:"
-              />
-
-
-              <Input 
-              value={novaAtividade.localDeAglomeracao} 
-              onChange={(event)=> handleOnChangeInput(event, 'localDeAglomeracao')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Onde ocorre a reunião da espécie:"
-              />
-
-              <Input 
-              value={novaAtividade.qualImpotanciaDaEespecie} 
-              onChange={(event)=> handleOnChangeInput(event, 'qualImpotanciaDaEespecie')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Qual é a importância da espécie:"
-              />
-
-
-              <Input 
-              value={novaAtividade.alimentacao} 
-              onChange={(event)=> handleOnChangeInput(event, 'alimentacao')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="A espécie se elimenta de que?:"
-                />
-
-              <Input 
-              value={novaAtividade.descricaoEspontanea} 
-              onChange={(event)=> handleOnChangeInput(event, 'descricaoEspontanea')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Deseja acrescentar mais informações sobre a espécie:"
+              title="Quantas pessoas de sua residência estão envolvidas na atividade?"
              />
 
-          
+             
+            <Input
+              value={novaAtividade.faturamentoAtividadeMesTotal?.toFixed(2) || ''}
+              onChange={handleOnChangeRendimentoMensal}
+              keyboardType='numeric'
+              placeholder="R$"
+              margin="15px 10px 30px 5px"
+              title="Informe o rendimento mensal aproximado da atividade"
+            />
+
+              
+         
              <View style={{ marginTop: 40 }}>
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 

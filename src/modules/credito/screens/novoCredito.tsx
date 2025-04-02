@@ -23,21 +23,14 @@ export const NovoCredito = () => {
 
   const {  
     novoCredito,
+    handleOnChangeRendimentoMensal,
     handleOnChangeInput,
-    handleEnumChange,
-    handleArrayFieldChange,
     disabled
   } = useNovoCredito(params.benfeitoria);
 
-  useEffect(() => {
-    const consolidaDados = outrosUsos === 'SIM' 
-      ? (qual ? [`ocorrencia: ${qual}`] : [])  
-      : ['NÃO']; 
+ 
 
-    handleArrayFieldChange('usoOutros', consolidaDados);
-  }, [outrosUsos, qual]);
-
-  const simNaoOptions = Object.values(SimNao);
+  
     
   const handleEnviar = async () => {
     setLoading(true);
@@ -62,34 +55,21 @@ export const NovoCredito = () => {
       <CreditoDetailContainer>
         
         <Input 
-          value={novoCredito.tipoCredito} 
+          value={novoCredito.nome} 
           onChange={(event) => handleOnChangeInput(event, 'tipoCredito')}
           placeholder="..."
           margin="15px 10px 30px 5px"
-          title="Informe o tipo de crédito:"
+          title="Linha crédito acessada:"
         />
-
-        <Input 
-          value={novoCredito.valorCredito} 
-          onChange={(event) => handleOnChangeInput(event, 'valorCredito')}
-          placeholder="..."
-          margin="15px 10px 30px 5px"
-          title="Informe o valor do crédito:"
-        />
-
-        <RenderPicker
-          label="O crédito foi utilizado para investimentos?"
-          selectedValue={novoCredito.usoInvestimento}
-          onValueChange={(value) => handleEnumChange('usoInvestimento', value)}
-          options={simNaoOptions}
-        />
-
-        <RenderPicker
-          label="Possui empréstimos em aberto?"
-          selectedValue={novoCredito.emprestimosAbertos}
-          onValueChange={(value) => handleEnumChange('emprestimosAbertos', value)}
-          options={simNaoOptions}
-        />
+        
+         <Input
+              value={novoCredito.valor?.toFixed(2) || ''}
+              onChange={handleOnChangeRendimentoMensal}
+              keyboardType='numeric'
+              placeholder="R$"
+              margin="15px 10px 30px 5px"
+              title="Valor"
+            />
 
         <View style={{ marginTop: 40 }}>
           {loading ? (

@@ -1,14 +1,14 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getMoradores } from '../../../realm/services/moradorService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { MoradorType } from '../../../shared/types/MoradorType';
-import RenderItemAve from '../ui-components/listaMoradores';
-import { getMoradores } from '../../../realm/services/moradorService';
 import { MoradorDetailContainer } from '../styles/morador.style';
+import RenderItemMorador from '../ui-components/listaMoradores';
 
 
 
@@ -116,7 +116,7 @@ const Morador = () => {
           ref={flatListRef}
           data={moradors}
           extraData={moradors} 
-          renderItem={({ item }) => <RenderItemAve item={item} />}
+          renderItem={({ item }) => <RenderItemMorador item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       

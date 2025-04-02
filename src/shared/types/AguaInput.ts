@@ -5,18 +5,14 @@ import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface AguaInput {
     
-    possuiForneceimentoPublico: SimNaoTalvez|null|'';
-    qualidadeFornecimentoPublico: QualidadeAguaEnum|null|'';
-    corAguaForncimentoPublico: string;
-    saborAguaFornecimentoPublico: string;
-    cheiroAguaFornecimentoPublico: string;
-    poco: PocoEnum|null|'';
-    profundidadePoco: number;
-    corAguaPoco: string;
-    saborAguaPoco: string;
-    cheiroAguaPoco: string;
-    tratamentoAgua: MetodoTratamentoAgua|null|'';
-    benfeitoria?: {
+    tipoDeFornecimento: string;
+    qualidadeDaAgua: string;
+    metodoTratamento: string;
+    corDagua: string;
+    cheiroDagua: string;
+    saborDagua: string;
+    profundidadePoco?: number;
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

@@ -8,6 +8,7 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
+import { FontesRenda } from "../../../enums/fontesRenda.enum";
 
 export interface idParam {
   benfeitoria: BenfeitoriaType;
@@ -16,13 +17,26 @@ export interface idParam {
 export const NovaRendaOutrasFontes = () => {
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [fonteRenda, setFonteRenda] = useState<string>('');     
+  const [outraFonte, SetOutraFonte] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  
-
   const {  
     novaRendaOutrasFontes,
+    handleArrayFieldChange,
+    handleNumberChange,
+    handleOnChangeRendimentoMensal,
     disabled
   } = useNovaRendaOutrasFontes(params.benfeitoria);
+  
+  const fontesOptions = Object.values(FontesRenda);
+  
+  useEffect(() => {
+    const fonteInformada = fonteRenda === 'OUTROS' 
+    ? (outraFonte ? [`QUAIS: ${outraFonte}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+    : [fonteRenda];
+
+    handleArrayFieldChange('fonte', fonteInformada);
+  }, [fonteRenda, outraFonte]);
 
   
     
@@ -49,12 +63,48 @@ export const NovaRendaOutrasFontes = () => {
       <RendaOutrasFontesDetailContainer>
         
        
-        <RenderPicker
-          label="Essa renda é fixa?"
-          selectedValue={novaRendaOutrasFontes.fonte}
-          onValueChange={(value) => handleEnumChange('fonte', value)}
-          options={[?]}
-        />
+      <RenderPicker
+       label="Escolha o tipo de fornecimento de água?"
+       selectedValue={fonteRenda}
+       onValueChange={(value) => {
+       setFonteRenda(value ?? ''); 
+          if (value !== '') {
+           SetOutraFonte('');
+           }
+        }}
+        options={fontesOptions}
+              />
+               {fonteRenda.includes('OUTROS') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={outraFonte}
+                        onChangeText={SetOutraFonte}
+                        placeholder="Separe por vírgulas"
+                        margin="15px 10px 30px 5px"
+                        title="Informe qual ou quais?"
+                    />
+                </View>
+       )}
+
+       
+       <Input
+              value={novaRendaOutrasFontes.beneficiarios?.toString() || ''}
+              onChange={(event)=> handleNumberChange(event, 'beneficiarios')}
+              keyboardType='numeric'
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Quantos beneficiários dessa fonte?"
+       />
+
+             
+      <Input
+              value={novaRendaOutrasFontes.rendaMesTotal?.toFixed(2) || ''}
+              onChange={handleOnChangeRendimentoMensal}
+              keyboardType='numeric'
+              placeholder="R$"
+              margin="15px 10px 30px 5px"
+              title="Total mensal dessa renda"
+      />
 
       
 

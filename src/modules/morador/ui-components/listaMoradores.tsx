@@ -38,7 +38,7 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
                 type={textTypes.BUTTON_REGULAR}
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
-                Espécie: {item.especie}
+                Espécie: {item.idade}
               </Text>
               
               <Text
@@ -46,14 +46,14 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
                
-                Uso para consumo: {item.useCosumo}
+                Uso para consumo: {item.perfil}
                
               </Text>
               <Text
                 type={textTypes.BUTTON_REGULAR}
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
-               Uso para comércio: {item.usoComercio}
+               Uso para comércio: {item.escolaridade}
               </Text>
               
         </View>

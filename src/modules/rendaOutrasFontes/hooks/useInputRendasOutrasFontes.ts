@@ -6,6 +6,7 @@ import { connectionAPIPost } from "../../../shared/functions/connection/connecti
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesInput";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 
 export const DEFAULT_RENDA_OUTRAS_FONTES_INPUT: RendaOutrasFontesInput = {
@@ -84,9 +85,51 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType) => {
     }
   };
 
+
+  const handleArrayFieldChange = (field: keyof RendaOutrasFontesInput, values: string[]) => {
+             const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+             setNovaRendaOutrasFontes((currentState) => ({
+               ...currentState,
+               [field]: concatenatedValues,
+             }));
+    };
+
+     const handleOnChangeRendimentoMensal = (
+        event: NativeSyntheticEvent<TextInputChangeEventData>
+      ) => {
+        let value = event.nativeEvent.text;
+      
+        // Remove qualquer caractere não numérico
+        value = value.replace(/\D/g, '');
+      
+        // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+        const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+      
+        // Atualiza o estado com o valor formatado como número
+        setNovaRendaOutrasFontes((current) => ({
+          ...current,
+          rendaMesTotal: parseFloat(formattedValue), // Salva como número para enviar à API
+        }));
+      };
+
+      const handleNumberChange = (
+          event: NativeSyntheticEvent<TextInputChangeEventData>, 
+          field: keyof RendaOutrasFontesInput
+        ) => {
+          let value = event.nativeEvent.text.replace(/\D/g, ''); // Remove caracteres não numéricos
+        
+          setNovaRendaOutrasFontes((current) => ({
+            ...current,
+            [field]: value ? parseInt(value, 10) : 0, // Garante que seja um número inteiro
+          }));
+        };
+
   return {
     novaRendaOutrasFontes,
     inputRendaOutrasFontesApi,
+    handleArrayFieldChange,
+    handleOnChangeRendimentoMensal,
+    handleNumberChange,
     disabled,
   };
 };
