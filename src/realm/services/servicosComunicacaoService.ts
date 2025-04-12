@@ -31,27 +31,77 @@ export const salvarServicosComunicacao = (servicosComunicacao: ServicosComunicac
   });
 };
 
-export const salvarServicoComunicacaoQueue = (servicoComunicacao: ServicosComunicacaoInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const servicoPadrao = {
-          ...servicoComunicacao,
-          id: Id(),
-          benfeitoria: servicoComunicacao.benfeitoria?.id,
+export const salvarservicosComunicacaoQueue = (servicosComunicacao:ServicosComunicacaoInput): Promise<ServicosComunicacaoType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('ServicosComunicacao', servicoPadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let servicosComunicacaoSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const servicosComunicacaoPadrao = {
+                            ...servicosComunicacao,
+                            id: Id(), 
+                           benfeitoria: servicosComunicacao.benfeitoria!.id,
+                        };
+            
+                        servicosComunicacaoSalvo = realmInstance.create('ServicosComunicacao', servicosComunicacaoPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (servicosComunicacaoSalvo) {
+                        const cleanservicosComunicacao = JSON.parse(JSON.stringify(servicosComunicacaoSalvo))
+                        resolve(cleanservicosComunicacao as ServicosComunicacaoType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarservicosComunicacao= (servicosComunicacao:ServicosComunicacaoType): Promise<ServicosComunicacaoType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let servicosComunicacaoSalvo;
+            realmInstance.write(() => {
+                const servicosComunicacaoExistente = realmInstance
+                    .objects<ServicosComunicacaoType>("ServicosComunicacao")
+                    .filtered(`id == ${servicosComunicacao.id}`)[0];
+
+                const servicosComunicacaoPadrao = {
+                    ...servicosComunicacao,
+                    benfeitoria: servicosComunicacao.benfeitoria.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (servicosComunicacao.sincronizado && servicosComunicacaoExistente && servicosComunicacao.idLocal === '') {
+                    servicosComunicacaoSalvo = realmInstance.create("ServicosComunicacao", servicosComunicacaoPadrao, true);
+                } else {
+                    servicosComunicacaoSalvo = realmInstance.create("ServicosComunicacao", servicosComunicacaoPadrao, true);
+                }
+            });
+    if (servicosComunicacaoSalvo) {
+        const cleanservicosComunicacao = JSON.parse(JSON.stringify(servicosComunicacaoSalvo))
+        resolve(cleanservicosComunicacao as ServicosComunicacaoType);
+    } else {
+    throw new Error("Erro ao recuperar a servicosComunicacao salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getServicosComunicacao = (benfeitoriaId: number): ServicosComunicacaoType[] => {

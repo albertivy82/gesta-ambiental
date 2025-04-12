@@ -30,27 +30,77 @@ export const salvarRepteis = (reptils: RepteisType[]) => {
   });
 };
 
-export const salvarReptilQueue = (reptil: RepteisInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const reptilPadrao = {
-          ...reptil,
-          id: Id(),
-          entrevistado: reptil.entrevistado?.id,
+export const salvarReptilQueue = (reptil:RepteisInput): Promise<RepteisType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('Repteis', reptilPadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let reptilSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const reptilPadrao = {
+                            ...reptil,
+                            id: Id(), 
+                           entrevistado: reptil.entrevistado!.id,
+                        };
+            
+                        reptilSalvo = realmInstance.create('Repteis', reptilPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (reptilSalvo) {
+                        const cleanReptil = JSON.parse(JSON.stringify(reptilSalvo))
+                        resolve(cleanReptil as RepteisType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarReptil= (reptil:RepteisType): Promise<RepteisType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let reptilSalvo;
+            realmInstance.write(() => {
+                const reptilExistente = realmInstance
+                    .objects<RepteisType>("Repteis")
+                    .filtered(`id == ${reptil.id}`)[0];
+
+                const reptilPadrao = {
+                    ...reptil,
+                    entrevistado: reptil.entrevistado.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (reptil.sincronizado && reptilExistente && reptil.idLocal === '') {
+                    reptilSalvo = realmInstance.create("Repteis", reptilPadrao, true);
+                } else {
+                    reptilSalvo = realmInstance.create("Repteis", reptilPadrao, true);
+                }
+            });
+    if (reptilSalvo) {
+        const cleanReptil = JSON.parse(JSON.stringify(reptilSalvo))
+        resolve(cleanReptil as RepteisType);
+    } else {
+    throw new Error("Erro ao recuperar a reptil salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getRepteis = (entrevistadoId: number): RepteisType[] => {

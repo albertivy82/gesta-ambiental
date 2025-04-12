@@ -2,11 +2,12 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { MamiferosInput } from "../../../shared/types/MamiferosInput";
-import { salvarMamiferoQueue } from "../../../realm/services/mamiferosService";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { salvarMamifero, salvarMamiferosQueue } from "../../../realm/services/mamiferosService";
+import { MamiferosType } from "../../../shared/types/MamiferosType";
 
 export const DEFAULT_MAMIFEROS_INPUT: MamiferosInput = {
   
@@ -66,36 +67,69 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType) => {
   };
   
 
-  const inputMamiferoApi = async () => {
-    
-    if (!entrevistado.sincronizado && entrevistado.id <= 0) {
-        const mamiferoDataQueue = objetoFila();
-        console.log("useInputMamifero_a", novoMamifero)
-        salvarMamiferoQueue(mamiferoDataQueue);
-    } else {
-        novoMamifero.entrevistado = { id: entrevistado.id };
-        const netInfoState = await NetInfo.fetch();
-        const isConnected = await testConnection();
-        console.log("useInputMamifero_b", novoMamifero)
+  const enviarRegistro = async () =>{
+
+ 
+    //entrevistado offline
+        if(!entrevistado.sincronizado && entrevistado.id<=0){
+          //entrevistado offline
+          const mamiferoDataQueue = objetoFila();
+          const mamiferoQueue = await salvarMamiferosQueue(mamiferoDataQueue);
+          return mamiferoQueue;
+         
   
-        if (netInfoState.isConnected && isConnected) {
-          console.log("useInputMamifero_c", novoMamifero)
-            try {
-                await connectionAPIPost('http://192.168.100.28:8080/mamifero', novoMamifero);
-                console.log("useInputMamifero_d", novoMamifero)
-            } catch (error) {
-                const mamiferoDataQueue = objetoFila();
-                salvarMamiferoQueue(mamiferoDataQueue);
-                console.log("useInputMamifero_e", novoMamifero)
-            }
-        } else {
-            const mamiferoDataQueue = objetoFila();
-            salvarMamiferoQueue(mamiferoDataQueue);
-            console.log("useInputMamifero_f", novoMamifero)
+        }else{
+            novoMamifero.entrevistado = {id:entrevistado.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/mamifero', novoMamifero) as MamiferosType;
+                          
+                      if (response && response.id) {
+                            return fetchMamiferoAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const mamiferoDataQueue = objetoFila();
+                        const mamiferoQueue = await salvarMamiferosQueue(mamiferoDataQueue);
+                        return mamiferoQueue;
+                       
+                    }
+                  }else{
+                    const mamiferoDataQueue = objetoFila();
+                    const mamiferoQueue = await salvarMamiferosQueue(mamiferoDataQueue);
+                    return mamiferoQueue;
+                       
+                    
+                  }
         }
-    }
-  };
+  }
   
+   const fetchMamiferoAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<MamiferosType>(`http://192.168.100.28:8080/mamifero/${id}`);
+              if (response) {
+                const mamiferoData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarMamifero(mamiferoData);
+              }else{
+                      throw new Error('Dados de mamifero Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+
+    
   const handleOnChangeInput = (
         value: NativeSyntheticEvent<TextInputChangeEventData> | string,
         name: string
@@ -127,6 +161,7 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType) => {
   
     return {
       novoMamifero,
+      enviarRegistro,
       handleOnChangeInput,
       handleEnumChange,
       handleArrayFieldChange,

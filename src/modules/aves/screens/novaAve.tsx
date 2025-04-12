@@ -8,12 +8,17 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovaAves } from "../hooks/useInputAve";
 import { AveDetailContainer } from "../styles/ave.style";
+import { AvesType } from "../../../shared/types/AvesType";
 
 
 
 
 export interface idParam {
   entrevistado: EntrevistadoType;
+}
+
+export const detalharAves = (navigate: NavigationProp<ParamListBase>['navigate'], ave: AvesType)=>{
+    navigate('AveDetails', {ave})
 }
 
 export const NovaAve = ()=>{
@@ -23,6 +28,7 @@ export const NovaAve = ()=>{
    const [outrosUsos, setOutrosUsos] = useState<string>('');     
    const [qual, SetQual] = useState<string>('');
    const {  novaAve,
+            enviarRegistro,
             handleOnChangeInput,
             handleEnumChange,
             handleArrayFieldChange,
@@ -45,11 +51,11 @@ export const NovaAve = ()=>{
          setLoading(true);
        
          try {
-           const aveSalva = true//await enviarRegistro(); 
+           const aveSalva = await enviarRegistro(); 
                if (aveSalva){
-                 //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+                 detalharAves(navigation.navigate, aveSalva);
                } else {
-                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+                 Alert.alert("Erro", "Não foi possível salvar a aves. Tente novamente.");
                  navigation.goBack();
                }
          } catch (error) {

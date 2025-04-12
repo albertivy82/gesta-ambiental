@@ -4,21 +4,17 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { AguaType } from "../../../shared/types/AguaType";
 import { AguaInput } from "../../../shared/types/AguaInput";
-import {apagarAguaQueue, getAguaDessincronizadas, getAguas, salvarAgua} from "../../../realm/services/aguasService"
+import {apagarAguaQueue, getAguaDessincronizadas, getAguas, salvarAguas} from "../../../realm/services/aguasService"
 
 export const convertToAguaInput = (agua: any): AguaInput => {
   return {
-    possuiForneceimentoPublico: agua.possuiForneceimentoPublico,
-    qualidadeFornecimentoPublico: agua.qualidadeFornecimentoPublico,
-    corAguaForncimentoPublico: agua.corAguaForncimentoPublico,
-    saborAguaFornecimentoPublico: agua.saborAguaFornecimentoPublico,
-    cheiroAguaFornecimentoPublico: agua.cheiroAguaFornecimentoPublico,
-    poco: agua.poco,
+    tipoDeFornecimento: agua.tipoDeFornecimento,
+    qualidadeDaAgua: agua.qualidadeDaAgua,
+    metodoTratamento: agua.metodoTratamento,
+    corDagua: agua.corDagua,
+    cheiroDagua: agua.cheiroDagua,
+    saborDagua: agua.saborDagua,
     profundidadePoco: agua.profundidadePoco,
-    corAguaPoco: agua.corAguaPoco,
-    saborAguaPoco: agua.saborAguaPoco,
-    cheiroAguaPoco: agua.cheiroAguaPoco,
-    tratamentoAgua: agua.tratamentoAgua,
     benfeitoria: {
       id: agua.benfeitoria.id,
     },
@@ -64,7 +60,7 @@ export const useAguas = (benfeitoriaId: number) => {
         idFather: '',
       }));
       if (dados.length > 0) {
-        await salvarAgua(dados);
+        await salvarAguas(dados);
         setAguas(prev => [...prev, ...dados]);
       }
     } catch (error) {

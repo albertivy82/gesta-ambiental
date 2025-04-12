@@ -2,11 +2,11 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { RepteisType } from "../../../shared/types/RepteisType";
-import { salvarReptilQueue } from "../../../realm/services/repteisService";
+import { salvarReptil, salvarReptilQueue } from "../../../realm/services/repteisService";
 
 export const DEFAULT_REPTEIS_INPUT: RepteisType = {
   id: 0,
@@ -65,35 +65,67 @@ export const useNovoReptil = (entrevistado: EntrevistadoType) => {
     return reptilData;
   };
 
-  const inputReptilApi = async () => {
-    if (!entrevistado.sincronizado && entrevistado.id <= 0) {
-      const reptilDataQueue = objetoFila();
-      console.log("useInputReptil_a", novoReptil);
-      salvarReptilQueue(reptilDataQueue);
-    } else {
-      novoReptil.entrevistado = { id: entrevistado.id };
-      console.log(novoReptil.entrevistado.id, "se não estiver correto, devo obedecer o modo do de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputReptil_b", novoReptil);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputReptil_c", novoReptil);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/repteis', novoReptil);
-          console.log("useInputReptil_d", novoReptil);
-        } catch (error) {
-          const reptilDataQueue = objetoFila();
-          salvarReptilQueue(reptilDataQueue);
-          console.log("useInputReptil_e", novoReptil);
+ 
+    //entrevistado offline
+        if(!entrevistado.sincronizado && entrevistado.id<=0){
+          //entrevistado offline
+          const repteisDataQueue = objetoFila();
+          const repteisQueue = await salvarReptilQueue(repteisDataQueue);
+          return repteisQueue;
+         
+  
+        }else{
+            novoReptil.entrevistado = {id:entrevistado.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/repteis', novoReptil) as RepteisType;
+                          
+                      if (response && response.id) {
+                            return fetchRepteisAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const repteisDataQueue = objetoFila();
+                        const repteisQueue = await salvarReptilQueue(repteisDataQueue);
+                        return repteisQueue;
+                       
+                    }
+                  }else{
+                    const repteisDataQueue = objetoFila();
+                    const repteisQueue = await salvarReptilQueue(repteisDataQueue);
+                    return repteisQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const reptilDataQueue = objetoFila();
-        salvarReptilQueue(reptilDataQueue);
-        console.log("useInputReptil_f", novoReptil);
-      }
-    }
-  };
+  }
+  
+   const fetchRepteisAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<RepteisType>(`http://192.168.100.28:8080/repteis/${id}`);
+              if (response) {
+                const repteisData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarReptil(repteisData);
+              }else{
+                      throw new Error('Dados de repteis Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
 
   const handleOnChangeInput = (
         value: NativeSyntheticEvent<TextInputChangeEventData> | string,
@@ -113,6 +145,7 @@ export const useNovoReptil = (entrevistado: EntrevistadoType) => {
   
     return {
       novoReptil,
+      enviarRegistro,
       handleOnChangeInput,
       disabled,
   };

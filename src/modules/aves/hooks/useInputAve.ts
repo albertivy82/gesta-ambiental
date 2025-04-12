@@ -1,12 +1,13 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarAveQueue } from "../../../realm/services/avesService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarAve, salvarAveQueue } from "../../../realm/services/avesService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { AvesInput } from "../../../shared/types/AvesInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { AvesType } from "../../../shared/types/AvesType";
 
 export const DEFAULT_AVES_INPUT: AvesInput = {
   especie: '',
@@ -71,35 +72,67 @@ export const useNovaAves = (entrevistado:EntrevistadoType)  => {
   };
   
 
-  const inputAveApi = async () => {
-    
-    if (!entrevistado.sincronizado && entrevistado.id <= 0) {
-        const aveDataQueue = objetoFila();
-        console.log("useInputAve_a", novaAve)
-        salvarAveQueue(aveDataQueue);
-    } else {
-      novaAve.entrevistado = { id: entrevistado.id };
-        const netInfoState = await NetInfo.fetch();
-        const isConnected = await testConnection();
-        console.log("useInputAve_b", novaAve)
+  const enviarRegistro = async () =>{
+
+ 
+    //entrevistado offline
+        if(!entrevistado.sincronizado && entrevistado.id<=0){
+          //entrevistado offline
+          const avesDataQueue = objetoFila();
+          const avesQueue = await salvarAveQueue(avesDataQueue);
+          return avesQueue;
+         
   
-        if (netInfoState.isConnected && isConnected) {
-          console.log("useInputAve_c", novaAve)
-            try {
-                await connectionAPIPost('http://192.168.100.28:8080/ave', novaAve);
-                console.log("useInputAve_d", novaAve)
-            } catch (error) {
-                const aveDataQueue = objetoFila();
-                salvarAveQueue(aveDataQueue);
-                console.log("useInputAve_e", novaAve)
-            }
-        } else {
-            const aveDataQueue = objetoFila();
-            salvarAveQueue(aveDataQueue);
-            console.log("useInputAve_f", novaAve)
+        }else{
+            novaAve.entrevistado = {id:entrevistado.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/aves', novaAve) as AvesType;
+                          
+                      if (response && response.id) {
+                            return fetchAvesAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const avesDataQueue = objetoFila();
+                        const avesQueue = await salvarAveQueue(avesDataQueue);
+                        return avesQueue;
+                       
+                    }
+                  }else{
+                    const avesDataQueue = objetoFila();
+                    const avesQueue = await salvarAveQueue(avesDataQueue);
+                    return avesQueue;
+                       
+                    
+                  }
         }
-    }
-  };
+  }
+  
+   const fetchAvesAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<AvesType>(`http://192.168.100.28:8080/aves/${id}`);
+              if (response) {
+                const avesData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarAve(avesData);
+              }else{
+                      throw new Error('Dados de aves Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
 
 
    const handleOnChangeInput = (
@@ -133,6 +166,7 @@ export const useNovaAves = (entrevistado:EntrevistadoType)  => {
 
   return {
     novaAve,
+    enviarRegistro,
     handleOnChangeInput,
     handleEnumChange,
     handleArrayFieldChange,

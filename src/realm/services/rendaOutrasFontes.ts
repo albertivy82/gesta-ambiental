@@ -31,23 +31,73 @@ export const salvarRendaOutrasFontes = (rendas: RendaOutrasFontesType[]) => {
     });
 };
 
-export const salvarRendaOutrasFontesQueue = (renda: RendaOutrasFontesInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarRendaQueue = (renda:RendaOutrasFontesInput): Promise<RendaOutrasFontesType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let rendaSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const rendaPadrao = {
+                            ...renda,
+                            id: Id(), 
+                           benfeitoria: renda.benfeitoria!.id,
+                        };
+            
+                        rendaSalvo = realmInstance.create('RendaOutrasFontes', rendaPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (rendaSalvo) {
+                        const cleanRenda = JSON.parse(JSON.stringify(rendaSalvo))
+                        resolve(cleanRenda as RendaOutrasFontesType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarRenda= (renda:RendaOutrasFontesType): Promise<RendaOutrasFontesType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let rendaSalvo;
             realmInstance.write(() => {
+                const rendaExistente = realmInstance
+                    .objects<RendaOutrasFontesType>("RendaOutrasFontes")
+                    .filtered(`id == ${renda.id}`)[0];
+
                 const rendaPadrao = {
                     ...renda,
-                    id: Id(),
-                    benfeitoria: renda.benfeitoria?.id,
+                    benfeitoria: renda.benfeitoria.id,
                 };
-                realmInstance.create('RendaOutrasFontes', rendaPadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (renda.sincronizado && rendaExistente && renda.idLocal === '') {
+                    rendaSalvo = realmInstance.create("RendaOutrasFontes", rendaPadrao, true);
+                } else {
+                    rendaSalvo = realmInstance.create("RendaOutrasFontes", rendaPadrao, true);
+                }
             });
-            resolve();
+    if (rendaSalvo) {
+        const cleanRenda = JSON.parse(JSON.stringify(rendaSalvo))
+        resolve(cleanRenda as RendaOutrasFontesType);
+    } else {
+    throw new Error("Erro ao recuperar a renda salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }

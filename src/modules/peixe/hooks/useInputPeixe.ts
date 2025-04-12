@@ -2,11 +2,12 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { PeixesInput } from "../../../shared/types/PeixesInput";
-import { salvarPeixeQueue } from "../../../realm/services/peixesService";
+import { salvarPeixe, salvarPeixeQueue } from "../../../realm/services/peixesService";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { PeixesType } from "../../../shared/types/PeixesType";
 
 export const DEFAULT_PEIXES_INPUT: PeixesInput = {
   especie: '',
@@ -56,35 +57,67 @@ export const useNovoPeixe = (entrevistado: EntrevistadoType) => {
     return peixeData;
   };
 
-  const inputPeixeApi = async () => {
-    if (!entrevistado.sincronizado && entrevistado.id <= 0) {
-      const peixeDataQueue = objetoFila();
-      console.log("useInputPeixe_a", novoPeixe);
-      salvarPeixeQueue(peixeDataQueue);
-    } else {
-      novoPeixe.entrevistado = { id: entrevistado.id };
-      console.log(novoPeixe.entrevistado.id, "se não estiver correto, devo obedecer o modo do de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputPeixe_b", novoPeixe);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputPeixe_c", novoPeixe);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/peixe', novoPeixe);
-          console.log("useInputPeixe_d", novoPeixe);
-        } catch (error) {
+ 
+    //entrevistado offline
+        if(!entrevistado.sincronizado && entrevistado.id<=0){
+          //entrevistado offline
           const peixeDataQueue = objetoFila();
-          salvarPeixeQueue(peixeDataQueue);
-          console.log("useInputPeixe_e", novoPeixe);
+          const peixeQueue = await salvarPeixeQueue(peixeDataQueue);
+          return peixeQueue;
+         
+  
+        }else{
+            novoPeixe.entrevistado = {id:entrevistado.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/peixe', novoPeixe) as PeixesType;
+                          
+                      if (response && response.id) {
+                            return fetchPeixesAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const peixeDataQueue = objetoFila();
+                        const peixeQueue = await salvarPeixeQueue(peixeDataQueue);
+                        return peixeQueue;
+                       
+                    }
+                  }else{
+                    const peixeDataQueue = objetoFila();
+                    const peixeQueue = await salvarPeixeQueue(peixeDataQueue);
+                    return peixeQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const peixeDataQueue = objetoFila();
-        salvarPeixeQueue(peixeDataQueue);
-        console.log("useInputPeixe_f", novoPeixe);
-      }
-    }
-  };
+  }
+  
+   const fetchPeixesAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<PeixesType>(`http://192.168.100.28:8080/peixe/${id}`);
+              if (response) {
+                const peixeData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarPeixe(peixeData);
+              }else{
+                      throw new Error('Dados de peixe Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
 
   const handleOnChangeInput = (
         value: NativeSyntheticEvent<TextInputChangeEventData> | string,
@@ -110,6 +143,7 @@ export const useNovoPeixe = (entrevistado: EntrevistadoType) => {
   
     return {
       novoPeixe,
+      enviarRegistro,
       handleOnChangeInput,
       handleEnumChange,
       disabled,

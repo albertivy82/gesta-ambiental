@@ -1,11 +1,12 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarAguaQueue } from "../../../realm/services/aguasService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarAgua, salvarAguaQueue } from "../../../realm/services/aguasService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { AguaInput } from "../../../shared/types/AguaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { AguaType } from "../../../shared/types/AguaType";
 
 export const DEFAULT_AGUA_INPUT: AguaInput = {
   tipoDeFornecimento: '',
@@ -59,35 +60,68 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType) => {
     return aguaData;
   };
 
-  const inputAguaApi = async () => {
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-      const aguaDataQueue = objetoFila();
-      console.log("useInputAgua_a", novaAgua);
-      salvarAguaQueue(aguaDataQueue);
-    } else {
-      novaAgua.benfeitoria = { id: benfeitoria.id };
-      console.log(novaAgua.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputAgua_b", novaAgua);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputAgua_c", novaAgua);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/agua', novaAgua);
-          console.log("useInputAgua_d", novaAgua);
-        } catch (error) {
+ 
+    //benfeitoria offline
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+          //benfeitoria offline
           const aguaDataQueue = objetoFila();
-          salvarAguaQueue(aguaDataQueue);
-          console.log("useInputAgua_e", novaAgua);
+          const aguaQueue = await salvarAguaQueue(aguaDataQueue);
+          return aguaQueue;
+         
+  
+        }else{
+            novaAgua.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/agua', novaAgua) as AguaType;
+                          
+                      if (response && response.id) {
+                            return fetchAguaAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const aguaDataQueue = objetoFila();
+                        const aguaQueue = await salvarAguaQueue(aguaDataQueue);
+                        return aguaQueue;
+                       
+                    }
+                  }else{
+                    const aguaDataQueue = objetoFila();
+                    const aguaQueue = await salvarAguaQueue(aguaDataQueue);
+                    return aguaQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const aguaDataQueue = objetoFila();
-        salvarAguaQueue(aguaDataQueue);
-        console.log("useInputAgua_f", novaAgua);
-      }
-    }
-  };
+  }
+  
+   const fetchAguaAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<AguaType>(`http://192.168.100.28:8080/agua/${id}`);
+              if (response) {
+                const aguaData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarAgua(aguaData);
+              }else{
+                      throw new Error('Dados de agua Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
 
   const handleArrayFieldChange = (field: keyof AguaInput, values: string[]) => {
           const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
@@ -106,7 +140,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType) => {
 
   return {
     novaAgua,
-    inputAguaApi,
+    enviarRegistro,
     handleArrayFieldChange,
     handleEnumChange,
     disabled,

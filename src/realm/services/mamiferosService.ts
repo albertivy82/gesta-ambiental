@@ -30,28 +30,79 @@ export const salvarMamiferos = (mamiferos: MamiferosType[]) => {
     });
 };
 
-export const salvarMamiferoQueue = (mamifero: MamiferosInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarMamiferosQueue = (mamiferos:MamiferosInput): Promise<MamiferosType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let mamiferosSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const mamiferosPadrao = {
+                            ...mamiferos,
+                            id: Id(), 
+                           entrevistado: mamiferos.entrevistado!.id,
+                        };
+            
+                        mamiferosSalvo = realmInstance.create('Mamiferos', mamiferosPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (mamiferosSalvo) {
+                        const cleanMamiferos = JSON.parse(JSON.stringify(mamiferosSalvo))
+                        resolve(cleanMamiferos as MamiferosType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarMamifero= (mamiferos:MamiferosType): Promise<MamiferosType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let mamiferosSalvo;
             realmInstance.write(() => {
-                const mamiferoPadrao = {
-                    ...mamifero,
-                    id: Id(),
-                    entrevistado: mamifero.entrevistado?.id,
+                const mamiferosExistente = realmInstance
+                    .objects<MamiferosType>("Mamiferos")
+                    .filtered(`id == ${mamiferos.id}`)[0];
+
+                const mamiferosPadrao = {
+                    ...mamiferos,
+                    entrevistado: mamiferos.entrevistado.id,
                 };
-                realmInstance.create('Mamiferos', mamiferoPadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (mamiferos.sincronizado && mamiferosExistente && mamiferos.idLocal === '') {
+                    mamiferosSalvo = realmInstance.create("Mamiferos", mamiferosPadrao, true);
+                } else {
+                    mamiferosSalvo = realmInstance.create("Mamiferos", mamiferosPadrao, true);
+                }
             });
-            resolve();
+    if (mamiferosSalvo) {
+        const cleanMamiferos = JSON.parse(JSON.stringify(mamiferosSalvo))
+        resolve(cleanMamiferos as MamiferosType);
+    } else {
+    throw new Error("Erro ao recuperar a mamiferos salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }
     });
 };
+
 
 export const getMamiferos = (entrevistadoId: number): MamiferosType[] => {
     const query = `entrevistado == ${entrevistadoId}`;

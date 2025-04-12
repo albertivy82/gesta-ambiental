@@ -2,11 +2,12 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { FaunaInput } from "../../../shared/types/FaunaInput";
-import { salvarFaunaQueue } from "../../../realm/services/faunaService";
+import { salvarFauna, salvarFaunaQueue } from "../../../realm/services/faunaService";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { FaunaType } from "../../../shared/types/FaunaType";
 
 export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   especie: '',
@@ -66,36 +67,68 @@ export const useNovaFauna = (entrevistado: EntrevistadoType) => {
     return faunaData;
   };
 
-  const inputFaunaApi = async () => {
-    if (!entrevistado.sincronizado && entrevistado.id <= 0) {
-      const faunaDataQueue = objetoFila();
-      console.log("useInputFauna_a", novaFauna);
-      salvarFaunaQueue(faunaDataQueue);
-    } else {
-      novaFauna.entrevistado = { id: entrevistado.id };
-      console.log(novaFauna.entrevistado.id, "se não estiver correto, devo obedecer o modo do de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputFauna_b", novaFauna);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputFauna_c", novaFauna);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/fauna', novaFauna);
-          console.log("useInputFauna_d", novaFauna);
-        } catch (error) {
+ 
+    //entrevistado offline
+        if(!entrevistado.sincronizado && entrevistado.id<=0){
+          //entrevistado offline
           const faunaDataQueue = objetoFila();
-          salvarFaunaQueue(faunaDataQueue);
-          console.log("useInputFauna_e", novaFauna);
+          const faunaQueue = await salvarFaunaQueue(faunaDataQueue);
+          return faunaQueue;
+         
+  
+        }else{
+            novaFauna.entrevistado = {id:entrevistado.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/fauna', novaFauna) as FaunaType;
+                          
+                      if (response && response.id) {
+                            return fetchFaunaAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const faunaDataQueue = objetoFila();
+                        const faunaQueue = await salvarFaunaQueue(faunaDataQueue);
+                        return faunaQueue;
+                       
+                    }
+                  }else{
+                    const faunaDataQueue = objetoFila();
+                    const faunaQueue = await salvarFaunaQueue(faunaDataQueue);
+                    return faunaQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const faunaDataQueue = objetoFila();
-        salvarFaunaQueue(faunaDataQueue);
-        console.log("useInputFauna_f", novaFauna);
-      }
-    }
-  };
-
+  }
+  
+   const fetchFaunaAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<FaunaType>(`http://192.168.100.28:8080/fauna/${id}`);
+              if (response) {
+                const faunaData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarFauna(faunaData);
+              }else{
+                      throw new Error('Dados de fauna Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
   const handleOnChangeInput = (
         value: NativeSyntheticEvent<TextInputChangeEventData> | string,
         name: string
@@ -128,6 +161,7 @@ export const useNovaFauna = (entrevistado: EntrevistadoType) => {
   
     return {
       novaFauna,
+      enviarRegistro,
       handleOnChangeInput,
       handleEnumChange,  
       handleArrayFieldChange,   

@@ -10,10 +10,15 @@ import { AguaDetailContainer } from "../styles/agua.style";
 import { QualidadeAguaEnum } from "../../../enums/qualidadeAgua.enum";
 import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
+import { AguaType } from "../../../shared/types/AguaType";
 
 
 export interface idParam {
  benfeitoria: BenfeitoriaType;
+}
+
+export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate'], agua: AguaType)=>{
+  navigate('AguaDetails', {agua})
 }
 
 export const NovaAgua = () => {
@@ -27,6 +32,7 @@ export const NovaAgua = () => {
   
   const {  
     novaAgua,
+    enviarRegistro,
     handleArrayFieldChange,
     handleEnumChange,
     disabled
@@ -66,9 +72,9 @@ export const NovaAgua = () => {
   const handleEnviar = async () => {
     setLoading(true);
     try {
-      const aguaSalva = true; //await enviarRegistro();
+      const aguaSalva = await enviarRegistro();
       if (aguaSalva) {
-        //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+        detalharAgua(navigation.navigate, aguaSalva);
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

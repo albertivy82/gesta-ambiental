@@ -8,9 +8,14 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovoServicoComunicacao } from "../hooks/useInputServCom";
 import { ServicoComunicacaoDetailContainer } from "../styles/servicoComunicacao.style";
+import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 
 export interface idParam {
   benfeitoria: BenfeitoriaType;
+}
+
+export const detalharServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], servicoComunicacao: ServicosComunicacaoType)=>{
+  navigate('ServicoComunicacaoDetails', {servicoComunicacao})
 }
 
 export const NovoServicoComunicacao = () => {
@@ -19,6 +24,7 @@ export const NovoServicoComunicacao = () => {
   const [loading, setLoading] = useState(false); 
   const {  
     novoServicoComunicacao,
+    enviarRegistro,
     handleEnumChange,
     disabled
   } = useNovoServicoComunicacao(params.benfeitoria);
@@ -28,11 +34,11 @@ export const NovoServicoComunicacao = () => {
   const handleEnviar = async () => {
     setLoading(true);
     try {
-      const servicoComunicacaoSalvo = true; //await enviarRegistro(); 
+      const servicoComunicacaoSalvo = await enviarRegistro(); 
       if (servicoComunicacaoSalvo) {
-        //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+        detalharServicoComunicacao(navigation.navigate, servicoComunicacaoSalvo);
       } else {
-        Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+        Alert.alert("Erro", "Não foi possível salvar serviço de comunicação. Tente novamente.");
         navigation.goBack();
       }
     } catch (error) {

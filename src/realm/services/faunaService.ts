@@ -2,7 +2,7 @@ import { realmInstance } from './databaseService';
 import { FaunaInput } from '../../shared/types/FaunaInput';
 import { FaunaType } from '../../shared/types/FaunaType';
 
-export const salvarFauna = (fauna: FaunaType[]) => {
+export const salvarFaunas = (fauna: FaunaType[]) => {
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
@@ -30,23 +30,73 @@ export const salvarFauna = (fauna: FaunaType[]) => {
     });
 };
 
-export const salvarFaunaQueue = (fauna: FaunaInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarFaunaQueue = (fauna:FaunaInput): Promise<FaunaType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let faunaSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const faunaPadrao = {
+                            ...fauna,
+                            id: Id(), 
+                           entrevistado: fauna.entrevistado!.id,
+                        };
+            
+                        faunaSalvo = realmInstance.create('Fauna', faunaPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (faunaSalvo) {
+                        const cleanFauna = JSON.parse(JSON.stringify(faunaSalvo))
+                        resolve(cleanFauna as FaunaType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarFauna= (fauna:FaunaType): Promise<FaunaType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let faunaSalvo;
             realmInstance.write(() => {
+                const faunaExistente = realmInstance
+                    .objects<FaunaType>("Fauna")
+                    .filtered(`id == ${fauna.id}`)[0];
+
                 const faunaPadrao = {
                     ...fauna,
-                    id: Id(),
-                    entrevistado: fauna.entrevistado?.id,
+                    entrevistado: fauna.entrevistado.id,
                 };
-                realmInstance.create('Fauna', faunaPadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (fauna.sincronizado && faunaExistente && fauna.idLocal === '') {
+                    faunaSalvo = realmInstance.create("Fauna", faunaPadrao, true);
+                } else {
+                    faunaSalvo = realmInstance.create("Fauna", faunaPadrao, true);
+                }
             });
-            resolve();
+    if (faunaSalvo) {
+        const cleanFauna = JSON.parse(JSON.stringify(faunaSalvo))
+        resolve(cleanFauna as FaunaType);
+    } else {
+    throw new Error("Erro ao recuperar a fauna salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }

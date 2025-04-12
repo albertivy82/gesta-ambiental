@@ -3,7 +3,7 @@ import { PescaArtesanalInput } from '../../shared/types/PescaArtesanalInput';
 import { PescaArtesanalType } from '../../shared/types/PescaArtesanal';
 
 
-export const salvarPescaArtesanal = (pescas: PescaArtesanalType[]) => {
+export const salvarPescasArtesanais = (pescas: PescaArtesanalType[]) => {
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
@@ -31,23 +31,73 @@ export const salvarPescaArtesanal = (pescas: PescaArtesanalType[]) => {
     });
 };
 
-export const salvarPescaArtesanalQueue = (pesca: PescaArtesanalInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarPescaArtesanalQueue = (morador:PescaArtesanalInput): Promise<PescaArtesanalType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let moradorSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const moradorPadrao = {
+                            ...morador,
+                            id: Id(), 
+                           benfeitoria: morador.benfeitoria!.id,
+                        };
+            
+                        moradorSalvo = realmInstance.create('PescaArtesanal', moradorPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (moradorSalvo) {
+                        const cleanPescaArtesanal = JSON.parse(JSON.stringify(moradorSalvo))
+                        resolve(cleanPescaArtesanal as PescaArtesanalType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarPescaArtesanal= (morador:PescaArtesanalType): Promise<PescaArtesanalType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let moradorSalvo;
             realmInstance.write(() => {
-                const pescaPadrao = {
-                    ...pesca,
-                    id: Id(),
-                    benfeitoria: pesca.benfeitoria?.id,
+                const moradorExistente = realmInstance
+                    .objects<PescaArtesanalType>("PescaArtesanal")
+                    .filtered(`id == ${morador.id}`)[0];
+
+                const moradorPadrao = {
+                    ...morador,
+                    benfeitoria: morador.benfeitoria.id,
                 };
-                realmInstance.create('PescaArtesanal', pescaPadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (morador.sincronizado && moradorExistente && morador.idLocal === '') {
+                    moradorSalvo = realmInstance.create("PescaArtesanal", moradorPadrao, true);
+                } else {
+                    moradorSalvo = realmInstance.create("PescaArtesanal", moradorPadrao, true);
+                }
             });
-            resolve();
+    if (moradorSalvo) {
+        const cleanPescaArtesanal = JSON.parse(JSON.stringify(moradorSalvo))
+        resolve(cleanPescaArtesanal as PescaArtesanalType);
+    } else {
+    throw new Error("Erro ao recuperar a morador salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }

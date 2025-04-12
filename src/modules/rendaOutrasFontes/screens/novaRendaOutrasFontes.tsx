@@ -9,9 +9,14 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
 import { FontesRenda } from "../../../enums/fontesRenda.enum";
+import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 
 export interface idParam {
   benfeitoria: BenfeitoriaType;
+}
+
+export const detalharRenda = (navigate: NavigationProp<ParamListBase>['navigate'], renda: RendaOutrasFontesType)=>{
+  navigate('RendaDetails', {renda})
 }
 
 export const NovaRendaOutrasFontes = () => {
@@ -22,6 +27,7 @@ export const NovaRendaOutrasFontes = () => {
   const [loading, setLoading] = useState(false);
   const {  
     novaRendaOutrasFontes,
+    enviarRegistro,
     handleArrayFieldChange,
     handleNumberChange,
     handleOnChangeRendimentoMensal,
@@ -43,9 +49,9 @@ export const NovaRendaOutrasFontes = () => {
   const handleEnviar = async () => {
     setLoading(true);
     try {
-      const rendaSalva = true; // await enviarRegistro(); 
+      const rendaSalva = await enviarRegistro(); 
       if (rendaSalva) {
-        // detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+        detalharRenda(navigation.navigate, rendaSalva);
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

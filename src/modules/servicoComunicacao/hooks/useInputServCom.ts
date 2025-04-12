@@ -2,13 +2,13 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarServicoComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoInput } from "../../../shared/types/ComunicacaoInput";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 import { novaAve } from "../../aves/screens/Ave";
+import { salvarservicosComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
 
 
 export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
@@ -63,18 +63,18 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
   
   
   const enviarRegistro = async () =>{
-  
-   
-  
+
+ 
+    //benfeitoria offline
         if(!benfeitoria.sincronizado && benfeitoria.id<=0){
-         
-          const servicoComunicacaoDataQueue = objetoFila();
-          const servicoComunicacaoQueue = await salvarServicoComunicacaoQueue(servicoComunicacaoDataQueue);
-          return servicoComunicacaoQueue;
+          //benfeitoria offline
+          const servComDataQueue = objetoFila();
+          const servComQueue = await salvarservicosComunicacaoQueue(servComDataQueue);
+          return servComQueue;
          
   
         }else{
-            novoServicoComunicacao.benfeitoria = {id:benfeitoria.id};
+          novoServicoComunicacao.benfeitoria = {id:benfeitoria.id};
             const netInfoState = await NetInfo.fetch();
             const isConnected = await testConnection();
           
@@ -82,26 +82,48 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
                     
                     try{
                        
-                    await connectionAPIPost('http://192.168.100.28:8080/servicoComunicacao', novaAve) as ServicosComunicacaoType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/servCom', novoServicoComunicacao) as ServicosComunicacaoType;
                           
-                  
+                      if (response && response.id) {
+                            return fetchMoradorAPI(response.id);
+                      }
+  
                     } catch (error) {
-                        const servicoComunicacaoDataQueue = objetoFila();
-                        const servicoComunicacaoQueue = await salvarServicoComunicacaoQueue(servicoComunicacaoDataQueue);
-                        return servicoComunicacaoQueue;
+                        const servComDataQueue = objetoFila();
+                        const servComQueue = await salvarservicosComunicacaoQueue(servComDataQueue);
+                        return servComQueue;
                        
                     }
                   }else{
-                    const servicoComunicacaoDataQueue = objetoFila();
-                    const servicoComunicacaoQueue = await salvarServicoComunicacaoQueue(servicoComunicacaoDataQueue);
-                    return servicoComunicacaoQueue;
+                    const servComDataQueue = objetoFila();
+                    const servComQueue = await salvarservicosComunicacaoQueue(servComDataQueue);
+                    return servComQueue;
                        
                     
                   }
         }
   }
   
- 
+   const fetchMoradorAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<ServicosComunicacaoType>(`http://192.168.100.28:8080/servCom/${id}`);
+              if (response) {
+                const servComData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarservicosComunicacaoQueue(servComData);
+              }else{
+                      throw new Error('Dados de servCom Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
   
 
   const handleOnChangeInput = (
@@ -133,6 +155,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
 
   return {
     novoServicoComunicacao,
+    enviarRegistro,
     handleOnChangeInput,
     handleEnumChange,
     handleArrayFieldChange,

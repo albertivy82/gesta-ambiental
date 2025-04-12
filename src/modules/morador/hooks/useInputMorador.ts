@@ -1,13 +1,14 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
-import { salvarMoradorQueue } from "../../../realm/services/moradorService";
+import { salvarMorador, salvarMoradorQueue } from "../../../realm/services/moradorService";
 import { formatDateForApi } from "../../../shared/functions/data";
+import { MoradorType } from "../../../shared/types/MoradorType";
 
 export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   dataNascimento: '',
@@ -86,35 +87,68 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType)  => {
   };
   
 
-  const inputMoradorApi = async () => {
-    
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-        const moradorDataQueue = objetoFila();
-        console.log("useInputMorador_a", novoMorador)
-        salvarMoradorQueue(moradorDataQueue);
-    } else {
-      novoMorador.benfeitoria = { id: benfeitoria.id };
-        const netInfoState = await NetInfo.fetch();
-        const isConnected = await testConnection();
-        console.log("useInputMorador_b", novoMorador)
+  const enviarRegistro = async () =>{
+
+ 
+    //benfeitoria offline
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+          //benfeitoria offline
+          const moradorDataQueue = objetoFila();
+          const moradorQueue = await salvarMoradorQueue(moradorDataQueue);
+          return moradorQueue;
+         
   
-        if (netInfoState.isConnected && isConnected) {
-          console.log("useInputMorador_c", novoMorador)
-            try {
-                await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador);
-                console.log("useInputMorador_d", novoMorador)
-            } catch (error) {
-                const moradorDataQueue = objetoFila();
-                salvarMoradorQueue(moradorDataQueue);
-                console.log("useInputMorador_e", novoMorador)
-            }
-        } else {
-            const moradorDataQueue = objetoFila();
-            salvarMoradorQueue(moradorDataQueue);
-            console.log("useInputMorador_f", novoMorador)
+        }else{
+            novoMorador.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador) as MoradorType;
+                          
+                      if (response && response.id) {
+                            return fetchMoradorAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const moradorDataQueue = objetoFila();
+                        const moradorQueue = await salvarMoradorQueue(moradorDataQueue);
+                        return moradorQueue;
+                       
+                    }
+                  }else{
+                    const moradorDataQueue = objetoFila();
+                    const moradorQueue = await salvarMoradorQueue(moradorDataQueue);
+                    return moradorQueue;
+                       
+                    
+                  }
         }
-    }
-  };
+  }
+  
+   const fetchMoradorAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<MoradorType>(`http://192.168.100.28:8080/morador/${id}`);
+              if (response) {
+                const moradorData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarMorador(moradorData);
+              }else{
+                      throw new Error('Dados de morador Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
 
 
    const handleOnChangeInput = (
@@ -161,6 +195,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType)  => {
     handleEnumChange,
     handleArrayFieldChange,
     handleOnChangeData,
+    enviarRegistro,
     disabled,
 };
   

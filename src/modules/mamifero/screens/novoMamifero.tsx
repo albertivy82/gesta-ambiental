@@ -8,12 +8,17 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoMamifero } from "../hooks/useInputMamifero";
 import { MamiferoDetailContainer } from "../styles/Mamifero.style";
+import { MamiferosType } from "../../../shared/types/MamiferosType";
 
 
 
 
 export interface idParam {
   entrevistado: EntrevistadoType;
+}
+
+export const detalharMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], mamifero: MamiferosType)=>{
+    navigate('MamiferoDetails', {mamifero})
 }
 
 export const NovoMamifero = ()=>{
@@ -23,6 +28,7 @@ export const NovoMamifero = ()=>{
      const [outrosUsos, setOutrosUsos] = useState<string>('');     
      const [qual, SetQual] = useState<string>('');
      const {  novoMamifero,
+              enviarRegistro,
               handleOnChangeInput,
               handleEnumChange,
               handleArrayFieldChange,
@@ -44,11 +50,11 @@ export const NovoMamifero = ()=>{
       setLoading(true);
     
       try {
-        const mamiferoSalva = true//await enviarRegistro(); 
-            if (mamiferoSalva){
-              //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+        const mamiferoSalvo = await enviarRegistro(); 
+            if (mamiferoSalvo){
+              detalharMamifero(navigation.navigate, mamiferoSalvo);
             } else {
-              Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+              Alert.alert("Erro", "Não foi possível salvar a mamifero. Tente novamente.");
               navigation.goBack();
             }
       } catch (error) {

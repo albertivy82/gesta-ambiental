@@ -3,7 +3,7 @@ import { AguaType } from '../../shared/types/AguaType';
 import { AguaInput } from '../../shared/types/AguaInput';
 
 
-export const salvarAgua = (aguas: AguaType[]) => {
+export const salvarAguas = (aguas: AguaType[]) => {
   return new Promise<void>((resolve, reject) => {
     try {
       realmInstance.write(() => {
@@ -31,27 +31,77 @@ export const salvarAgua = (aguas: AguaType[]) => {
   });
 };
 
-export const salvarAguaQueue = (agua: AguaInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const aguaPadrao = {
-          ...agua,
-          id: Id(),
-          benfeitoria: agua.benfeitoria!.id,
+export const salvarAguaQueue = (agua:AguaInput): Promise<AguaType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('Agua', aguaPadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let aguaSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const aguaPadrao = {
+                            ...agua,
+                            id: Id(), 
+                           benfeitoria: agua.benfeitoria!.id,
+                        };
+            
+                        aguaSalvo = realmInstance.create('Agua', aguaPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (aguaSalvo) {
+                        const cleanAgua = JSON.parse(JSON.stringify(aguaSalvo))
+                        resolve(cleanAgua as AguaType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarAgua= (agua:AguaType): Promise<AguaType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let aguaSalvo;
+            realmInstance.write(() => {
+                const aguaExistente = realmInstance
+                    .objects<AguaType>("Agua")
+                    .filtered(`id == ${agua.id}`)[0];
+
+                const aguaPadrao = {
+                    ...agua,
+                    benfeitoria: agua.benfeitoria.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (agua.sincronizado && aguaExistente && agua.idLocal === '') {
+                    aguaSalvo = realmInstance.create("Agua", aguaPadrao, true);
+                } else {
+                    aguaSalvo = realmInstance.create("Agua", aguaPadrao, true);
+                }
+            });
+    if (aguaSalvo) {
+        const cleanAgua = JSON.parse(JSON.stringify(aguaSalvo))
+        resolve(cleanAgua as AguaType);
+    } else {
+    throw new Error("Erro ao recuperar a agua salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getAguas = (benfeitoriaId: number): AguaType[] => {

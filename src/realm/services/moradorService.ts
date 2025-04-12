@@ -30,28 +30,79 @@ export const salvarMoradores = (moradores: MoradorType[]) => {
     });
 };
 
-export const salvarMoradorQueue = (morador: MoradorInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarMoradorQueue = (morador:MoradorInput): Promise<MoradorType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let moradorSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const moradorPadrao = {
+                            ...morador,
+                            id: Id(), 
+                           benfeitoria: morador.benfeitoria!.id,
+                        };
+            
+                        moradorSalvo = realmInstance.create('Morador', moradorPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (moradorSalvo) {
+                        const cleanMorador = JSON.parse(JSON.stringify(moradorSalvo))
+                        resolve(cleanMorador as MoradorType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarMorador= (morador:MoradorType): Promise<MoradorType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let moradorSalvo;
             realmInstance.write(() => {
+                const moradorExistente = realmInstance
+                    .objects<MoradorType>("Morador")
+                    .filtered(`id == ${morador.id}`)[0];
+
                 const moradorPadrao = {
                     ...morador,
-                    id: Id(),
-                    benfeitoria: morador.benfeitoria?.id,
+                    benfeitoria: morador.benfeitoria.id,
                 };
-                realmInstance.create('Morador', moradorPadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (morador.sincronizado && moradorExistente && morador.idLocal === '') {
+                    moradorSalvo = realmInstance.create("Morador", moradorPadrao, true);
+                } else {
+                    moradorSalvo = realmInstance.create("Morador", moradorPadrao, true);
+                }
             });
-            resolve();
+    if (moradorSalvo) {
+        const cleanMorador = JSON.parse(JSON.stringify(moradorSalvo))
+        resolve(cleanMorador as MoradorType);
+    } else {
+    throw new Error("Erro ao recuperar a morador salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }
     });
 };
+
 
 export const getMoradores = (benfeitoriaId: number): MoradorType[] => {
     const query = `benfeitoria == ${benfeitoriaId}`;

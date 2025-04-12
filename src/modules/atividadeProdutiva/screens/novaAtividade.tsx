@@ -9,13 +9,16 @@ import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovaAtvProd } from "../hooks/useInputAtvProd";
 import { AtividadeDetailContainer } from "../styles/ativdade.style";
 import { AtividadesProdutivas } from "../../../enums/AtividadesProdutivas.enum";
+import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-
-
 
 
 export interface idParam {
   benfeitoria: BenfeitoriaType;
+}
+
+export const detalharAtividadeProdutiva = (navigate: NavigationProp<ParamListBase>['navigate'], atividadeProdutiva: AtividadeProdutivaType)=>{
+  navigate('AtividadeProdutivaDetails', {atividadeProdutiva})
 }
 
 export const NovaAtividade = ()=>{
@@ -23,6 +26,7 @@ export const NovaAtividade = ()=>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false); 
   const { novaAtividade,
+    enviarRegistro,
           handleEnumChange,
           handleNumberChange,
           handleOnChangeRendimentoMensal,
@@ -35,11 +39,11 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
          setLoading(true);
        
          try {
-           const aveSalva = true//await enviarRegistro(); 
-               if (aveSalva){
-                 //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+           const atividadeSalva = await enviarRegistro(); 
+               if (atividadeSalva){
+                 detalharAtividadeProdutiva(navigation.navigate, atividadeSalva);
                } else {
-                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+                 Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
                  navigation.goBack();
                }
          } catch (error) {

@@ -5,18 +5,16 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import RenderItemAve from '../ui-components/listaAtvProdutivas';
+import RenderItemAtividade from '../ui-components/listaAtvProdutivas';
 import { AtividadeProdutivaType } from '../../../shared/types/AtividadeProdutiva';
 import { AtividadeDetailContainer } from '../styles/ativdade.style';
 import { getAtividadesProdutivas } from '../../../realm/services/atividadeProdutivaService';
-
-
 
 export interface AtividadesParams {
   atividade: AtividadeProdutivaType;
 }
 
-export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
+export const novaAtividade = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
   navigate('NovoImovel', { benfeitoriaId });
 }
 
@@ -26,53 +24,48 @@ const Atividades = () => {
   const { atividade } = route.params;
   const flatListRef = useRef<FlatList>(null);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
-  
 
-  // Carrega a lista inicial de imóveis
   const fetchAtividades = async () => {
     if (atividade.benfeitoria.id) {
       const imovelRealm = getAtividadesProdutivas(atividade.benfeitoria.id);
       setAtividades(imovelRealm);
     }
-   
   };
 
   useEffect(() => {
     fetchAtividades();
   }, [fetchAtividades]);
 
-  // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
   const handleRefresh = () => {
     fetchAtividades();
     handleScrollToEnd();
   };
 
-  const handleNovaAve = () => {
-    novaAve(navigation.navigate, atividade.benfeitoria.id);
+  const handleNovaAtividade = () => {
+    novaAtividade(navigation.navigate, atividade.benfeitoria.id);
   };
 
   return (
     <AtividadeDetailContainer>
-      <View style={{  
-        alignItems: 'center', 
+      <View style={{
+        alignItems: 'center',
         flexDirection: 'row',
-        borderBottomWidth: 3, 
-        borderColor: theme.colors.grayTheme.gray100, 
-        marginBottom: 10, 
-        backgroundColor: '#505050' 
+        borderBottomWidth: 3,
+        borderColor: theme.colors.grayTheme.gray100,
+        marginBottom: 10,
+        backgroundColor: '#505050'
       }}>
-        <Icon size={30} name='stack' color='#fefeff'/>
-        <Text 
-          type={textTypes.TITLE_BOLD} 
+        <Icon size={30} name='stack' color='#fefeff' />
+        <Text
+          type={textTypes.TITLE_BOLD}
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >
-          ATIDADES PRODUTIVAS
+          ATIVIDADES PRODUTIVAS
         </Text>
       </View>
 
@@ -84,7 +77,6 @@ const Atividades = () => {
         borderColor: theme.colors.grayTheme.gray100,
         backgroundColor: '#ff4500'
       }}>
-       
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
           <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
@@ -94,32 +86,30 @@ const Atividades = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
+          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>
+            Atualizar
+          </Text>
         </TouchableOpacity>
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaAve}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaAtividade}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Ave
+            Add Atividade
           </Text>
         </TouchableOpacity>
       </View>
 
-    
-        <FlatList
-          ref={flatListRef}
-          data={atividades}
-          extraData={atividades} 
-          renderItem={({ item }) => <RenderItemAve item={item} />}
-          keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
-        />
-      
+      <FlatList
+        ref={flatListRef}
+        data={atividades}
+        extraData={atividades}
+        renderItem={({ item }) => <RenderItemAtividade item={item} />}
+        keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
+      />
     </AtividadeDetailContainer>
   );
 }

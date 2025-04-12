@@ -2,13 +2,15 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
-import { salvarVegetacaoQueue } from "../../../realm/services/vegetacaoService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarVegetacao, salvarVegetacaoQueue } from "../../../realm/services/vegetacaoService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { VegetacaoType } from "../../../shared/types/VegetacaoType";
 
 export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
+  especie: '',
   usoMedicinal: null,
   usoAlimentacao: null,
   usoOrnamental: null,
@@ -40,6 +42,7 @@ export const useNovaVegetacao = (entrevistado:EntrevistadoType) => {
   useEffect(() => {
     console.log(novaVegetacao);
     if (
+      novaVegetacao.especie !== '' &&
       novaVegetacao.usoMedicinal !== null &&
       novaVegetacao.usoAlimentacao !== null &&
       novaVegetacao.usoOrnamental !== null &&
@@ -86,36 +89,67 @@ const objetoFila = () => {
     };
 
 
-    const inputVegetacaoApi = async () => {
+    const enviarRegistro = async () =>{
+
+ 
+      //entrevistado offline
+          if(!entrevistado.sincronizado && entrevistado.id<=0){
+            //entrevistado offline
+            const vegetacaoDataQueue = objetoFila();
+            const vegetacaoQueue = await salvarVegetacaoQueue(vegetacaoDataQueue);
+            return vegetacaoQueue;
+           
     
-      if (!entrevistado.sincronizado && entrevistado.id <= 0) {
-          const vegetacaoDataQueue = objetoFila();
-          console.log("useInputVegetacao_a", novaVegetacao)
-          salvarVegetacaoQueue(vegetacaoDataQueue);
-      } else {
-          novaVegetacao.entrevistado = { id: entrevistado.id };
-          console.log(novaVegetacao.entrevistado.id, "se não estiver correto, devo obedecer o modo do de proceder do hook")
-          const netInfoState = await NetInfo.fetch();
-          const isConnected = await testConnection();
-          console.log("useInputVegetacao_b", novaVegetacao)
+          }else{
+              novaVegetacao.entrevistado = {id:entrevistado.id};
+              const netInfoState = await NetInfo.fetch();
+              const isConnected = await testConnection();
+            
+                    if(netInfoState.isConnected && isConnected){
+                      
+                      try{
+                         
+                        const response = await connectionAPIPost('http://192.168.100.28:8080/vegetacao', novaVegetacao) as VegetacaoType;
+                            
+                        if (response && response.id) {
+                              return fetchVegetacaoAPI(response.id);
+                        }
     
-          if (netInfoState.isConnected && isConnected) {
-            console.log("useInputVegetacao_c", novaVegetacao)
-              try {
-                  await connectionAPIPost('http://192.168.100.28:8080/vegetacao', novaVegetacao);
-                  console.log("useInputVegetacao_d", novaVegetacao)
-              } catch (error) {
-                  const vegetacaoDataQueue = objetoFila();
-                  salvarVegetacaoQueue(vegetacaoDataQueue);
-                  console.log("useInputVegetacao_e", novaVegetacao)
-              }
-          } else {
-              const vegetacaoDataQueue = objetoFila();
-              salvarVegetacaoQueue(vegetacaoDataQueue);
-              console.log("useInputVegetacao_f", novaVegetacao)
+                      } catch (error) {
+                          const vegetacaoDataQueue = objetoFila();
+                          const vegetacaoQueue = await salvarVegetacaoQueue(vegetacaoDataQueue);
+                          return vegetacaoQueue;
+                         
+                      }
+                    }else{
+                      const vegetacaoDataQueue = objetoFila();
+                      const vegetacaoQueue = await salvarVegetacaoQueue(vegetacaoDataQueue);
+                      return vegetacaoQueue;
+                         
+                      
+                    }
           }
-      }
-    };
+    }
+    
+     const fetchVegetacaoAPI = async(id:number) =>{
+    
+            try{
+                const response = await connectionAPIGet<VegetacaoType>(`http://192.168.100.28:8080/vegetacao/${id}`);
+                if (response) {
+                  const vegetacaoData = {
+                      ...response,
+                      sincronizado: true,
+                      idLocal: '',
+                      idFather: '',
+                  };
+                     return await salvarVegetacao(vegetacaoData);
+                }else{
+                        throw new Error('Dados de vegetacao Inválidos'); 
+                    }
+            } catch (error) {
+                    //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+            }
+      };
 
     const handleOnChangeInput = (
           value: NativeSyntheticEvent<TextInputChangeEventData> | string,
@@ -148,6 +182,7 @@ const objetoFila = () => {
     
       return {
         novaVegetacao,
+        enviarRegistro,
         handleOnChangeInput,
         handleEnumChange,
         handleArrayFieldChange,

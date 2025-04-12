@@ -1,16 +1,24 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, View } from "react-native";
+import { Alert, Button, ScrollView, View } from "react-native";
 import { SimNao } from "../../../enums/simNao.enum";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovaVegetacao } from "../hooks/useInputVegetacao";
 import { VegetacaoDetailContainer } from "../styles/Vegetacao.style";
+import { ActivityIndicator } from "react-native-paper";
+import { VegetacaoType } from "../../../shared/types/VegetacaoType";
+
 
 export interface idParam {
   entrevistado: EntrevistadoType;
 }
+
+export const detalharVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], vegetacao: VegetacaoType)=>{
+    navigate('VegetacaoDetails', {vegetacao})
+}
+
 export const NovaVegetacao = ()=>{
    const { params } = useRoute<RouteProp<Record<string, idParam>>>();
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -18,6 +26,7 @@ export const NovaVegetacao = ()=>{
    const [outrosUsos, setOutrosUsos] = useState<string>('');     
    const [qual, SetQual] = useState<string>('');
    const {  novaVegetacao,
+            enviarRegistro,
             handleOnChangeInput,
             handleEnumChange,
             handleArrayFieldChange,
@@ -40,11 +49,11 @@ export const NovaVegetacao = ()=>{
          setLoading(true);
        
          try {
-           const aveSalva = true//await enviarRegistro(); 
-               if (aveSalva){
-                 //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+           const vegetacaoSalva = await enviarRegistro(); 
+               if (vegetacaoSalva){
+                 detalharVegetacao(navigation.navigate, vegetacaoSalva);
                } else {
-                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+                 Alert.alert("Erro", "Não foi possível salvar a vegetacao. Tente novamente.");
                  navigation.goBack();
                }
          } catch (error) {
@@ -220,6 +229,15 @@ export const NovaVegetacao = ()=>{
               margin="15px 10px 30px 5px"
               title="Deseja acrescentar alguma observação sobre o tema?"
            />
+
+
+           <View style={{ marginTop: 40 }}>
+                         {loading ? (
+                           <ActivityIndicator size="large" color="#ff4500" /> 
+                         ) : (
+                           <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                         )}
+            </View>
     
       
 

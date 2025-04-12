@@ -30,27 +30,77 @@ export const salvarCreditos = (creditos: CreditoType[]) => {
   });
 };
 
-export const salvarCreditoQueue = (credito: CreditoInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const creditoPadrao = {
-          ...credito,
-          id: Id(),
-          benfeitoria: credito.benfeitoria?.id,
+export const salvarCreditoQueue = (credito:CreditoInput): Promise<CreditoType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('Credito', creditoPadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let creditoSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const creditoPadrao = {
+                            ...credito,
+                            id: Id(), 
+                           benfeitoria: credito.benfeitoria!.id,
+                        };
+            
+                        creditoSalvo = realmInstance.create('Credito', creditoPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (creditoSalvo) {
+                        const cleanCredito = JSON.parse(JSON.stringify(creditoSalvo))
+                        resolve(cleanCredito as CreditoType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarCredito= (credito:CreditoType): Promise<CreditoType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let creditoSalvo;
+            realmInstance.write(() => {
+                const creditoExistente = realmInstance
+                    .objects<CreditoType>("Credito")
+                    .filtered(`id == ${credito.id}`)[0];
+
+                const creditoPadrao = {
+                    ...credito,
+                    benfeitoria: credito.benfeitoria.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (credito.sincronizado && creditoExistente && credito.idLocal === '') {
+                    creditoSalvo = realmInstance.create("Credito", creditoPadrao, true);
+                } else {
+                    creditoSalvo = realmInstance.create("Credito", creditoPadrao, true);
+                }
+            });
+    if (creditoSalvo) {
+        const cleanCredito = JSON.parse(JSON.stringify(creditoSalvo))
+        resolve(cleanCredito as CreditoType);
+    } else {
+    throw new Error("Erro ao recuperar a credito salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getCreditos = (benfeitoriaId: number): CreditoType[] => {

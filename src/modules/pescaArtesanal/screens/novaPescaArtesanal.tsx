@@ -1,119 +1,131 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Icon } from '../../../shared/components/icon/Icon';
-import Text from '../../../shared/components/text/Text';
-import { textTypes } from '../../../shared/components/text/textTypes';
-import { theme } from '../../../shared/themes/theme';
-import { PescaArtesanalDetailContainer } from '../styles/pescaArtesanal.style';
-import RenderItemPescaArtesanal from '../ui-components/listaPescaArtesanal';
-import { PescaArtesanalType } from '../../../shared/types/PescaArtesanal';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { Alert, Button, ScrollView, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { FontesRenda } from "../../../enums/fontesRenda.enum";
+import Input from "../../../shared/components/input/input";
+import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { useInputPescaArtesanal } from "../hooks/useInputPescaArtesanal";
+import { PescaArtesanalDetailContainer } from "../styles/pescaArtesanal.style";
+import { PescaArtesanalType } from "../../../shared/types/PescaArtesanal";
 
-export interface PescaArtesanalParams {
-  pescaArtesanal: PescaArtesanalType;
+
+export interface idParam {
+  benfeitoria: BenfeitoriaType;
 }
 
-export const novaPescaArtesanal = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovaPescaArtesanal', { benfeitoriaId });
+export const detalharPescaArtesanal = (navigate: NavigationProp<ParamListBase>['navigate'], pescaArtesanal: PescaArtesanalType)=>{
+  navigate('PescaArtesanalDetails', {pescaArtesanal})
 }
 
-const PescaArtesanal = () => {
+export const NovaPescaArtesanal = () => {
+  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, PescaArtesanalParams>, 'Imovel'>>();
-  const { pescaArtesanal } = route.params;
-  const flatListRef = useRef<FlatList>(null);
-  const [pescasArtesanais, setPescasArtesanais] = useState<PescaArtesanalType[]>([]);
-
-  // Carrega a lista inicial de registros de pesca artesanal
-  const fetchPescasArtesanais = async () => {
-    if (pescaArtesanal.benfeitoria.id) {
-      // const pescaRealm = getPescasArtesanais(pescaArtesanal.benfeitoria.id);
-      // setPescasArtesanais(pescaRealm);
-    }
-  };
-
+  const [fonteRenda, setFonteRenda] = useState<string>('');     
+  const [outraFonte, SetOutraFonte] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const {  
+    novaPescaArtesanal,
+    enviarRegistro,
+    handleNumberChange,
+    handleArrayFieldChange,
+    disabled
+  } = useInputPescaArtesanal(params.benfeitoria);
+  
+  const fontesOptions = Object.values(FontesRenda);
+  
   useEffect(() => {
-    fetchPescasArtesanais();
-  }, [fetchPescasArtesanais]);
+    const fonteInformada = fonteRenda === 'OUTROS' 
+    ? (outraFonte ? [`QUAIS: ${outraFonte}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+    : [fonteRenda];
 
-  // Rola até o final da lista
-  const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
+    handleArrayFieldChange('fonte', fonteInformada);
+  }, [fonteRenda, outraFonte]);
 
-  // Atualiza a lista de registros de pesca artesanal
-  const handleRefresh = () => {
-    fetchPescasArtesanais();
-    handleScrollToEnd();
-  };
-
-  const handleNovaPescaArtesanal = () => {
-    novaPescaArtesanal(navigation.navigate, pescaArtesanal.benfeitoria.id);
-  };
+  
+    
+  const handleEnviar = async () => {
+           setLoading(true);
+         
+           try {
+             const pescaArtesanalSalvo = await enviarRegistro(); 
+                 if (pescaArtesanalSalvo){
+                   detalharPescaArtesanal(navigation.navigate, pescaArtesanalSalvo);
+                 } else {
+                   Alert.alert("Erro", "Não foi possível salvar a pescaArtesanal. Tente novomente.");
+                   navigation.goBack();
+                 }
+           } catch (error) {
+             console.error("Erro no envio:", error);
+             Alert.alert("Erro ao enviar", "Tente novomente mais tarde.");
+           } finally {
+             setLoading(false);
+           }
+         };
 
   return (
-    <PescaArtesanalDetailContainer>
-      <View style={{  
-        alignItems: 'center', 
-        flexDirection: 'row',
-        borderBottomWidth: 3, 
-        borderColor: theme.colors.grayTheme.gray100, 
-        marginBottom: 10, 
-        backgroundColor: '#505050' 
-      }}>
-        <Icon size={30} name='stack' color='#fefeff'/>
-        <Text 
-          type={textTypes.TITLE_BOLD} 
-          color={theme.colors.whiteTheme.white}
-          margin="0px 0px 0px 30px"
-        >
-          LISTA DE REGISTROS DE PESCA ARTESANAL
-        </Text>
-      </View>
+    <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+      <PescaArtesanalDetailContainer>
+        
 
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 1,
-        borderBottomWidth: 3,
-        borderColor: theme.colors.grayTheme.gray100,
-        backgroundColor: '#ff4500'
-      }}>
-       
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
-          <Icon size={20} name='point-down' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Fim da Página
-          </Text>
-        </TouchableOpacity>
+      <Input
+              value={novaPescaArtesanal.concordaDefeso?.toString() || ''}
+              onChange={(event)=> handleNumberChange(event, 'beneficiarios')}
+              keyboardType='numeric'
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Quantos beneficiários dessa fonte?"
+       />
 
-        <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
-
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh}>
-          <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
-        </TouchableOpacity>
-
-        <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
-
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaPescaArtesanal}>
-          <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Adicionar Registro de Pesca
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        ref={flatListRef}
-        data={pescasArtesanais}
-        extraData={pescasArtesanais} 
-        renderItem={({ item }) => <RenderItemPescaArtesanal item={item} />}
-        keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
+             
+      <Input
+              value={novaPescaArtesanal.combustivelPorViagem?.toFixed(2) || ''}
+              onChange={handleOnChangeRendimentoMensal}
+              keyboardType='numeric'
+              placeholder="R$"
+              margin="15px 10px 30px 5px"
+              title="Total mensal dessa renda"
       />
-      
-    </PescaArtesanalDetailContainer>
-  );
-}
 
-export default PescaArtesanal;
+       
+      <RenderPicker
+       label="Escolha o tipo de fornecimento de água?"
+       selectedValue={fonteRenda}
+       onValueChange={(value) => {
+       setFonteRenda(value ?? ''); 
+          if (value !== '') {
+           SetOutraFonte('');
+           }
+        }}
+        options={fontesOptions}
+              />
+               {fonteRenda.includes('OUTROS') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={outraFonte}
+                        onChangeText={SetOutraFonte}
+                        placeholder="Separe por vírgulas"
+                        margin="15px 10px 30px 5px"
+                        title="Informe qual ou quais?"
+                    />
+                </View>
+       )}
+
+       
+    
+
+      
+
+        <View style={{ marginTop: 40 }}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#ff4500" /> 
+          ) : (
+            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+          )}
+        </View>
+
+      </PescaArtesanalDetailContainer>
+    </ScrollView>
+  );
+};

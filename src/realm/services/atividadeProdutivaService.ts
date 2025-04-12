@@ -31,27 +31,77 @@ export const salvarAtividadesProdutivas = (atividades: AtividadeProdutivaType[])
   });
 };
 
-export const salvarAtividadeProdutivaQueue = (atividade: AtividadeProdutivaInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const atividadePadrao = {
-          ...atividade,
-          id: Id(),
-          benfeitoria: atividade.benfeitoria!.id,
+export const salvarAtividadeQueue = (atividade:AtividadeProdutivaInput): Promise<AtividadeProdutivaType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('AtividadeProdutiva', atividadePadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let atividadeSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const atividadePadrao = {
+                            ...atividade,
+                            id: Id(), 
+                           benfeitoria: atividade.benfeitoria!.id,
+                        };
+            
+                        atividadeSalvo = realmInstance.create('AtividadeProdutiva', atividadePadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (atividadeSalvo) {
+                        const cleanAtividade = JSON.parse(JSON.stringify(atividadeSalvo))
+                        resolve(cleanAtividade as AtividadeProdutivaType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarAtividade= (atividade:AtividadeProdutivaType): Promise<AtividadeProdutivaType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let atividadeSalvo;
+            realmInstance.write(() => {
+                const atividadeExistente = realmInstance
+                    .objects<AtividadeProdutivaType>("AtividadeProdutiva")
+                    .filtered(`id == ${atividade.id}`)[0];
+
+                const atividadePadrao = {
+                    ...atividade,
+                    benfeitoria: atividade.benfeitoria.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (atividade.sincronizado && atividadeExistente && atividade.idLocal === '') {
+                    atividadeSalvo = realmInstance.create("AtividadeProdutiva", atividadePadrao, true);
+                } else {
+                    atividadeSalvo = realmInstance.create("AtividadeProdutiva", atividadePadrao, true);
+                }
+            });
+    if (atividadeSalvo) {
+        const cleanAtividade = JSON.parse(JSON.stringify(atividadeSalvo))
+        resolve(cleanAtividade as AtividadeProdutivaType);
+    } else {
+    throw new Error("Erro ao recuperar a atividade salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getAtividadesProdutivas = (benfeitoriaId: number): AtividadeProdutivaType[] => {

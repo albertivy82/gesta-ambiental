@@ -2,11 +2,12 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarAtividadeProdutivaQueue } from "../../../realm/services/atividadeProdutivaService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { AtividadeProdutivaInput } from "../../../shared/types/AtividadeProdutivaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
+import { salvarAtividade, salvarAtividadeQueue } from "../../../realm/services/atividadeProdutivaService";
 
 export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   atividade: null,
@@ -53,35 +54,68 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType)  => {
   };
   
 
-  const inputAtvProdApi = async () => {
-    
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-        const atvProdDataQueue = objetoFila();
-        console.log("useInputAtvProd_a", novaAtividade)
-        salvarAtividadeProdutivaQueue(atvProdDataQueue);
-    } else {
-      novaAtividade.benfeitoria = { id: benfeitoria.id };
-        const netInfoState = await NetInfo.fetch();
-        const isConnected = await testConnection();
-        console.log("useInputAtvProd_b", novaAtividade)
+  const enviarRegistro = async () =>{
+
+ 
+    //benfeitoria offline
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+          //benfeitoria offline
+          const atividadeDataQueue = objetoFila();
+          const atividadeQueue = await salvarAtividadeQueue(atividadeDataQueue);
+          return atividadeQueue;
+         
   
-        if (netInfoState.isConnected && isConnected) {
-          console.log("useInputAtvProd_c", novaAtividade)
-            try {
-                await connectionAPIPost('http://192.168.100.28:8080/atividade-produtiva', novaAtividade);
-                console.log("useInputAtvProd_d", novaAtividade)
-            } catch (error) {
-                const atvProdDataQueue = objetoFila();
-                salvarAtividadeProdutivaQueue(atvProdDataQueue);
-                console.log("useInputAtvProd_e", novaAtividade)
-            }
-        } else {
-            const atvProdDataQueue = objetoFila();
-            salvarAtividadeProdutivaQueue(atvProdDataQueue);
-            console.log("useInputAtvProd_f", novaAtividade)
+        }else{
+          novaAtividade.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/atividade', novaAtividade) as AtividadeProdutivaType;
+                          
+                      if (response && response.id) {
+                            return fetchMoradorAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const atividadeDataQueue = objetoFila();
+                        const atividadeQueue = await salvarAtividadeQueue(atividadeDataQueue);
+                        return atividadeQueue;
+                       
+                    }
+                  }else{
+                    const atividadeDataQueue = objetoFila();
+                    const atividadeQueue = await salvarAtividadeQueue(atividadeDataQueue);
+                    return atividadeQueue;
+                       
+                    
+                  }
         }
-    }
-  };
+  }
+  
+   const fetchMoradorAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<AtividadeProdutivaType>(`http://192.168.100.28:8080/atividade/${id}`);
+              if (response) {
+                const atividadeData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarAtividade(atividadeData);
+              }else{
+                      throw new Error('Dados de atividade Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
 
 
    
@@ -128,6 +162,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType)  => {
     novaAtividade,
     handleEnumChange,
     handleNumberChange,
+    enviarRegistro,
     handleOnChangeRendimentoMensal,
     disabled,
 };

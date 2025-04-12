@@ -1,9 +1,9 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { apagarFaunaQueue, getFauna, getFaunaDessincronizadas, salvarFaunas } from "../../../realm/services/faunaService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { FaunaInput } from "../../../shared/types/FaunaInput";
-import { apagarFaunaQueue, getFauna, getFaunaDessincronizadas, salvarFauna } from "../../../realm/services/faunaService";
 import { FaunaType } from "../../../shared/types/FaunaType";
 
 export const convertToFaunaInput = (fauna: any) => {
@@ -74,7 +74,7 @@ export const useFauna = (entrevistadoId: number) => {
             }));
             
             if (faunaData && Array.isArray(faunaData) && faunaData.length > 0) {
-                await salvarFauna(faunaData);
+                await salvarFaunas(faunaData);
                 setFauna((prevFauna) => [...prevFauna, ...faunaData]);
             } else {
                 throw new Error('Dados de fauna inválidos');

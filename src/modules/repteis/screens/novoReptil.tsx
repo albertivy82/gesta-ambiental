@@ -6,10 +6,15 @@ import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoReptil } from "../hooks/useInputRepteis";
 import { ReptilDetailContainer } from "../styles/Reptil.style";
 import { ActivityIndicator } from "react-native-paper";
+import { RepteisType } from "../../../shared/types/RepteisType";
 
 
 export interface idParam {
   entrevistado: EntrevistadoType;
+}
+
+export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], fauna: RepteisType)=>{
+    navigate('ReptilDetails', {fauna})
 }
 
 
@@ -18,6 +23,7 @@ export const NovaVegetacao = ()=>{
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 
      const {  novoReptil,
+              enviarRegistro,
               handleOnChangeInput,
               disabled
             } = useNovoReptil(params.entrevistado);
@@ -28,9 +34,9 @@ export const NovaVegetacao = ()=>{
            setLoading(true);
          
            try {
-             const aveSalva = true//await enviarRegistro(); 
-                 if (aveSalva){
-                   //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+             const reptilSalvo = await enviarRegistro(); 
+                 if (reptilSalvo){
+                  detalharReptil(navigation.navigate, reptilSalvo);
                  } else {
                    Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
                    navigation.goBack();

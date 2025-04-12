@@ -1,12 +1,13 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarRendaOutrasFontesQueue } from "../../../realm/services/rendaOutrasFontes";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarRenda, salvarRendaQueue } from "../../../realm/services/rendaOutrasFontes";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesInput";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 
 
 export const DEFAULT_RENDA_OUTRAS_FONTES_INPUT: RendaOutrasFontesInput = {
@@ -55,36 +56,68 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType) => {
     return rendaOutrasFontesData;
   };
 
-  const inputRendaOutrasFontesApi = async () => {
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-      const rendaOutrasFontesDataQueue = objetoFila();
-      console.log("useInputRendaOutrasFontes_a", novaRendaOutrasFontes);
-      salvarRendaOutrasFontesQueue(rendaOutrasFontesDataQueue);
-    } else {
-      novaRendaOutrasFontes.benfeitoria = { id: benfeitoria.id };
-      console.log(novaRendaOutrasFontes.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputRendaOutrasFontes_b", novaRendaOutrasFontes);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputRendaOutrasFontes_c", novaRendaOutrasFontes);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/renda-outras-fontes', novaRendaOutrasFontes);
-          console.log("useInputRendaOutrasFontes_d", novaRendaOutrasFontes);
-        } catch (error) {
+ 
+    //benfeitoria offline
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+          //benfeitoria offline
           const rendaOutrasFontesDataQueue = objetoFila();
-          salvarRendaOutrasFontesQueue(rendaOutrasFontesDataQueue);
-          console.log("useInputRendaOutrasFontes_e", novaRendaOutrasFontes);
+          const rendaOutrasFontesQueue = await salvarRendaQueue(rendaOutrasFontesDataQueue);
+          return rendaOutrasFontesQueue;
+         
+  
+        }else{
+            novaRendaOutrasFontes.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/rendaOutrasFontes', novaRendaOutrasFontes) as RendaOutrasFontesType;
+                          
+                      if (response && response.id) {
+                            return fetchRendaOutrasFontesAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const rendaOutrasFontesDataQueue = objetoFila();
+                        const rendaOutrasFontesQueue = await salvarRendaQueue(rendaOutrasFontesDataQueue);
+                        return rendaOutrasFontesQueue;
+                       
+                    }
+                  }else{
+                    const rendaOutrasFontesDataQueue = objetoFila();
+                    const rendaOutrasFontesQueue = await salvarRendaQueue(rendaOutrasFontesDataQueue);
+                    return rendaOutrasFontesQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const rendaOutrasFontesDataQueue = objetoFila();
-        salvarRendaOutrasFontesQueue(rendaOutrasFontesDataQueue);
-        console.log("useInputRendaOutrasFontes_f", novaRendaOutrasFontes);
-      }
-    }
-  };
-
+  }
+  
+   const fetchRendaOutrasFontesAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://192.168.100.28:8080/rendaOutrasFontes/${id}`);
+              if (response) {
+                const rendaOutrasFontesData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarRenda(rendaOutrasFontesData);
+              }else{
+                      throw new Error('Dados de rendaOutrasFontes Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
 
   const handleArrayFieldChange = (field: keyof RendaOutrasFontesInput, values: string[]) => {
              const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
@@ -126,7 +159,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType) => {
 
   return {
     novaRendaOutrasFontes,
-    inputRendaOutrasFontesApi,
+    enviarRegistro,
     handleArrayFieldChange,
     handleOnChangeRendimentoMensal,
     handleNumberChange,

@@ -15,6 +15,7 @@ import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
 import { Escolaridade } from "../../../enums/Escolaridade";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import { Molestias } from "../../../enums/molestias.enum";
+import { MoradorType } from "../../../shared/types/MoradorType";
 
 
 
@@ -22,6 +23,10 @@ import { Molestias } from "../../../enums/molestias.enum";
 
 export interface idParam {
   Benfeitoria: BenfeitoriaType;
+}
+
+export const detalharMorador = (navigate: NavigationProp<ParamListBase>['navigate'], morador: MoradorType)=>{
+  navigate('MoradorDetails', {morador})
 }
 
 export const NovoMorador = ()=>{
@@ -36,10 +41,10 @@ export const NovoMorador = ()=>{
    const [qualReligiao, SetQualReligiao] = useState<string>('');
    const [doencaInformada, setDoencaInformada] = useState<string[]>([]);  
    const {  novoMorador,
-            handleOnChangeInput,
             handleEnumChange,
             handleArrayFieldChange,
             handleOnChangeData,
+            enviarRegistro,
             disabled
           } = useNovoMorador(params.Benfeitoria);
 
@@ -88,11 +93,11 @@ export const NovoMorador = ()=>{
          setLoading(true);
        
          try {
-           const moradorSalva = true//await enviarRegistro(); 
-               if (moradorSalva){
-                 //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+           const moradorSalvo = await enviarRegistro(); 
+               if (moradorSalvo){
+                 detalharMorador(navigation.navigate, moradorSalvo);
                } else {
-                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novomente.");
+                 Alert.alert("Erro", "Não foi possível salvar a morador. Tente novomente.");
                  navigation.goBack();
                }
          } catch (error) {

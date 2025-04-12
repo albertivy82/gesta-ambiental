@@ -1,11 +1,13 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarPescaArtesanalQueue } from "../../../realm/services/pescaService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarPescaArtesanal, salvarPescaArtesanalQueue } from "../../../realm/services/pescaService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { PescaArtesanalInput } from "../../../shared/types/PescaArtesanalInput";
+import { PescaArtesanalType } from "../../../shared/types/PescaArtesanal";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_PESCA_ARTESANAL_INPUT: PescaArtesanalInput = {
   freqPescaSemanal: 0,
@@ -89,39 +91,94 @@ export const useInputPescaArtesanal = (benfeitoria: BenfeitoriaType) => {
     return pescaArtesanalData;
   };
 
-  const inputPescaArtesanalApi = async () => {
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-      const pescaArtesanalDataQueue = objetoFila();
-      console.log("useInputPescaArtesanal_a", novaPescaArtesanal);
-      salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
-    } else {
-      novaPescaArtesanal.benfeitoria = { id: benfeitoria.id };
-      console.log(novaPescaArtesanal.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputPescaArtesanal_b", novaPescaArtesanal);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputPescaArtesanal_c", novaPescaArtesanal);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/pesca-artesanal', novaPescaArtesanal);
-          console.log("useInputPescaArtesanal_d", novaPescaArtesanal);
-        } catch (error) {
+ 
+    //benfeitoria offline
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+          //benfeitoria offline
           const pescaArtesanalDataQueue = objetoFila();
-          salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
-          console.log("useInputPescaArtesanal_e", novaPescaArtesanal);
+          const pescaArtesanalQueue = await salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
+          return pescaArtesanalQueue;
+         
+  
+        }else{
+            novaPescaArtesanal.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/pescaArtesanal', novaPescaArtesanal) as PescaArtesanalType;
+                          
+                      if (response && response.id) {
+                            return fetchPescaArtesanalAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const pescaArtesanalDataQueue = objetoFila();
+                        const pescaArtesanalQueue = await salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
+                        return pescaArtesanalQueue;
+                       
+                    }
+                  }else{
+                    const pescaArtesanalDataQueue = objetoFila();
+                    const pescaArtesanalQueue = await salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
+                    return pescaArtesanalQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const pescaArtesanalDataQueue = objetoFila();
-        salvarPescaArtesanalQueue(pescaArtesanalDataQueue);
-        console.log("useInputPescaArtesanal_f", novaPescaArtesanal);
-      }
-    }
-  };
+  }
+  
+   const fetchPescaArtesanalAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<PescaArtesanalType>(`http://192.168.100.28:8080/pescaArtesanal/${id}`);
+              if (response) {
+                const pescaArtesanalData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarPescaArtesanal(pescaArtesanalData);
+              }else{
+                      throw new Error('Dados de pescaArtesanal Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+
+     const handleNumberChange = (
+        event: NativeSyntheticEvent<TextInputChangeEventData>, 
+        field: keyof PescaArtesanalInput
+      ) => {
+        let value = event.nativeEvent.text.replace(/\D/g, ''); // Remove caracteres não numéricos
+      
+        setNovaPescaArtesanal((current) => ({
+          ...current,
+          [field]: value ? parseInt(value, 10) : 0, // Garante que seja um número inteiro
+        }));
+      };
+
+      const handleArrayFieldChange = (field: keyof PescaArtesanalInput, values: string[]) => {
+                 const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
+                 setNovaPescaArtesanal((currentState) => ({
+                   ...currentState,
+                   [field]: concatenatedValues,
+                 }));
+         };
+  
 
   return {
     novaPescaArtesanal,
-    inputPescaArtesanalApi,
+    handleNumberChange,
+    handleArrayFieldChange,
+    enviarRegistro,
     disabled,
   };
 

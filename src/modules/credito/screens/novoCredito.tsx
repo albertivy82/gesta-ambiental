@@ -18,8 +18,7 @@ export const NovoCredito = () => {
   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false);
-  const [outrosUsos, setOutrosUsos] = useState<string>('');     
-  const [qual, SetQual] = useState<string>('');
+  
 
   const {  
     novoCredito,

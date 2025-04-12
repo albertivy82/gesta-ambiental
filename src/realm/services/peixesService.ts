@@ -30,23 +30,73 @@ export const salvarPeixes = (peixes: PeixesType[]) => {
     });
 };
 
-export const salvarPeixeQueue = (peixe: PeixesInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarPeixeQueue = (peixe:PeixesInput): Promise<PeixesType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let peixeSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const peixePadrao = {
+                            ...peixe,
+                            id: Id(), 
+                           entrevistado: peixe.entrevistado!.id,
+                        };
+            
+                        peixeSalvo = realmInstance.create('Peixes', peixePadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (peixeSalvo) {
+                        const cleanPeixe = JSON.parse(JSON.stringify(peixeSalvo))
+                        resolve(cleanPeixe as PeixesType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarPeixe= (peixe:PeixesType): Promise<PeixesType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let peixeSalvo;
             realmInstance.write(() => {
+                const peixeExistente = realmInstance
+                    .objects<PeixesType>("Peixes")
+                    .filtered(`id == ${peixe.id}`)[0];
+
                 const peixePadrao = {
                     ...peixe,
-                    id: Id(),
-                    entrevistado: peixe.entrevistado?.id,
+                    entrevistado: peixe.entrevistado.id,
                 };
-                realmInstance.create('Peixes', peixePadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (peixe.sincronizado && peixeExistente && peixe.idLocal === '') {
+                    peixeSalvo = realmInstance.create("Peixes", peixePadrao, true);
+                } else {
+                    peixeSalvo = realmInstance.create("Peixes", peixePadrao, true);
+                }
             });
-            resolve();
+    if (peixeSalvo) {
+        const cleanPeixe = JSON.parse(JSON.stringify(peixeSalvo))
+        resolve(cleanPeixe as PeixesType);
+    } else {
+    throw new Error("Erro ao recuperar a peixe salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }

@@ -1,23 +1,30 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useState } from "react";
-import { Alert, ScrollView } from "react-native";
+import { ActivityIndicator, Alert, Button, ScrollView, View } from "react-native";
 import { SimNao } from "../../../enums/simNao.enum";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoPeixe } from "../hooks/useInputPeixe";
 import { PeixeDetailContainer } from "../styles/peixe.style";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { PeixesType } from "../../../shared/types/PeixesType";
 
 
 export interface idParam {
   entrevistado: EntrevistadoType;
 }
 
+export const detalharPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], peixe: PeixesType)=>{
+    navigate('PexeDetails', {peixe})
+}
+
+
 export const NovoPeixe = ()=>{
     const { params } = useRoute<RouteProp<Record<string, idParam>>>();
     const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const [loading, setLoading] = useState(false); 
      const {  novoPeixe,
+             enviarRegistro,
              handleOnChangeInput,
              handleEnumChange,
              disabled
@@ -31,9 +38,9 @@ export const NovoPeixe = ()=>{
           setLoading(true);
         
           try {
-            const peixeSalvo = true//await enviarRegistro(); 
+            const peixeSalvo = await enviarRegistro(); 
                 if (peixeSalvo){
-                  //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+                  detalharPeixe(navigation.navigate, peixeSalvo);
                 } else {
                   Alert.alert("Erro", "Não foi possível salvar o peixe. Tente novamente.");
                   navigation.goBack();
@@ -87,6 +94,14 @@ export const NovoPeixe = ()=>{
            />
         
     
+          <View style={{ marginTop: 40 }}>
+              {loading ? (
+                <ActivityIndicator size="large" color="#ff4500" /> 
+              ) : (
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+              )}
+            </View>
+ 
       
 
         </PeixeDetailContainer>

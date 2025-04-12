@@ -30,27 +30,77 @@ export const salvarVegetacoes = (vegetacoes: VegetacaoType[]) => {
   });
 };
 
-export const salvarVegetacaoQueue = (vegetacao: VegetacaoInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const vegetacaoPadrao = {
-          ...vegetacao,
-          id: Id(),
-          entrevistado: vegetacao.entrevistado?.id,
+export const salvarVegetacaoQueue = (vegetacao:VegetacaoInput): Promise<VegetacaoType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('Vegetacao', vegetacaoPadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let vegetacaoSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const vegetacaoPadrao = {
+                            ...vegetacao,
+                            id: Id(), 
+                           entrevistado: vegetacao.entrevistado!.id,
+                        };
+            
+                        vegetacaoSalvo = realmInstance.create('Vegetacao', vegetacaoPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (vegetacaoSalvo) {
+                        const cleanVegetacao = JSON.parse(JSON.stringify(vegetacaoSalvo))
+                        resolve(cleanVegetacao as VegetacaoType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarVegetacao= (vegetacao:VegetacaoType): Promise<VegetacaoType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let vegetacaoSalvo;
+            realmInstance.write(() => {
+                const vegetacaoExistente = realmInstance
+                    .objects<VegetacaoType>("Vegetacao")
+                    .filtered(`id == ${vegetacao.id}`)[0];
+
+                const vegetacaoPadrao = {
+                    ...vegetacao,
+                    entrevistado: vegetacao.entrevistado.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (vegetacao.sincronizado && vegetacaoExistente && vegetacao.idLocal === '') {
+                    vegetacaoSalvo = realmInstance.create("Vegetacao", vegetacaoPadrao, true);
+                } else {
+                    vegetacaoSalvo = realmInstance.create("Vegetacao", vegetacaoPadrao, true);
+                }
+            });
+    if (vegetacaoSalvo) {
+        const cleanVegetacao = JSON.parse(JSON.stringify(vegetacaoSalvo))
+        resolve(cleanVegetacao as VegetacaoType);
+    } else {
+    throw new Error("Erro ao recuperar a vegetacao salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getVegetacoes = (entrevistadoId: number): VegetacaoType[] => {

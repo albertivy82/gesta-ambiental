@@ -30,27 +30,77 @@ export const salvarAves = (aves: AvesType[]) => {
   });
 };
 
-export const salvarAveQueue = (ave: AvesInput) => {
-  return new Promise<void>((resolve, reject) => {
-    const Id = () => {
-      const min = Math.ceil(0);
-      const max = Math.floor(1000);
-      return -Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    try {
-      realmInstance.write(() => {
-        const avePadrao = {
-          ...ave,
-          id: Id(),
-          entrevistado: ave.entrevistado?.id,
+export const salvarAveQueue = (ave:AvesInput): Promise<AvesType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
+        const Id = () => {
+            const min = Math.ceil(0);
+            const max = Math.floor(1000);
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
-        realmInstance.create('Aves', avePadrao, true);
-      });
-      resolve();
-    } catch (error) {
-      reject(error);
+        
+        
+                try{
+                    let aveSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const avePadrao = {
+                            ...ave,
+                            id: Id(), 
+                           entrevistado: ave.entrevistado!.id,
+                        };
+            
+                        aveSalvo = realmInstance.create('Aves', avePadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                    });
+
+                    if (aveSalvo) {
+                        const cleanAve = JSON.parse(JSON.stringify(aveSalvo))
+                        resolve(cleanAve as AvesType);
+                    } else {
+                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarAve= (ave:AvesType): Promise<AvesType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let aveSalvo;
+            realmInstance.write(() => {
+                const aveExistente = realmInstance
+                    .objects<AvesType>("Ave")
+                    .filtered(`id == ${ave.id}`)[0];
+
+                const avePadrao = {
+                    ...ave,
+                    entrevistado: ave.entrevistado.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (ave.sincronizado && aveExistente && ave.idLocal === '') {
+                    aveSalvo = realmInstance.create("Aves", avePadrao, true);
+                } else {
+                    aveSalvo = realmInstance.create("Aves", avePadrao, true);
+                }
+            });
+    if (aveSalvo) {
+        const cleanAve = JSON.parse(JSON.stringify(aveSalvo))
+        resolve(cleanAve as AvesType);
+    } else {
+    throw new Error("Erro ao recuperar a ave salvo.");
     }
-  });
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getAves = (entrevistadoId: number): AvesType[] => {

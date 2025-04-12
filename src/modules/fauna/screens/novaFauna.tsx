@@ -9,10 +9,15 @@ import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { View } from "react-native-reanimated/lib/typescript/Animated";
 import { ActivityIndicator } from "react-native-paper";
+import { FaunaType } from "../../../shared/types/FaunaType";
 
 
 export interface idParam {
   entrevistado: EntrevistadoType;
+}
+
+export const detalharFauna = (navigate: NavigationProp<ParamListBase>['navigate'], fauna: FaunaType)=>{
+    navigate('FaunaDetails', {fauna})
 }
 
 export const NovaFauna = ()=>{
@@ -20,6 +25,7 @@ export const NovaFauna = ()=>{
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 
      const {  novaFauna,
+              enviarRegistro,
               handleOnChangeInput,
               handleEnumChange,
               handleArrayFieldChange,
@@ -61,9 +67,9 @@ export const NovaFauna = ()=>{
            setLoading(true);
          
            try {
-             const faunaSalva = true//await enviarRegistro(); 
+             const faunaSalva = await enviarRegistro(); 
                  if (faunaSalva){
-                   //detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+                   detalharFauna(navigation.navigate, faunaSalva);
                  } else {
                    Alert.alert("Erro", "Não foi possível salvar a espécie. Tente novamente.");
                    navigation.goBack();

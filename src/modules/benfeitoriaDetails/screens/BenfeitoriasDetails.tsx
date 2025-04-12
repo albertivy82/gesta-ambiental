@@ -6,7 +6,6 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
-import { renderField } from '../ui-components/renderField';
 import { useMoradores } from '../hooks/useMorador';
 import { useAtividadesProdutivas } from '../hooks/useAtividadeProdutiva';
 import { useServicosComunicacao } from '../hooks/useSevicoComunicacao';
@@ -14,6 +13,7 @@ import { useAguas } from '../hooks/useAgua';
 import { useCreditos } from '../hooks/useCredito';
 import { useRendasOutrasFontes } from '../hooks/useRendaOutrasfontes';
 import { usePescaArtesanal } from '../hooks/usePescaArtesanal';
+import { renderField } from '../../../shared/components/input/renderFilds';
 
 
 export const handleNavigation = <T,>(

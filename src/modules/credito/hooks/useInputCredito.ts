@@ -1,13 +1,13 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
-import { CreditoInput } from "../../../shared/types/CreditoInput";
-import { salvarCreditoQueue } from "../../../realm/services/creditoService";
-import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { v4 as uuidv4 } from 'uuid';
+import { salvarCredito, salvarCreditoQueue } from "../../../realm/services/creditoService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { CreditoInput } from "../../../shared/types/CreditoInput";
+import { CreditoType } from "../../../shared/types/CreditoType";
 
 export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   nome: '',
@@ -51,35 +51,68 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType) => {
     return creditoData;
   };
 
-  const inputCreditoApi = async () => {
-    if (!benfeitoria.sincronizado && benfeitoria.id <= 0) {
-      const creditoDataQueue = objetoFila();
-      console.log("useInputCredito_a", novoCredito);
-      salvarCreditoQueue(creditoDataQueue);
-    } else {
-      novoCredito.benfeitoria = { id: benfeitoria.id };
-      console.log(novoCredito.benfeitoria.id, "se não estiver correto, devo obedecer o modo de proceder do hook");
-      const netInfoState = await NetInfo.fetch();
-      const isConnected = await testConnection();
-      console.log("useInputCredito_b", novoCredito);
+  const enviarRegistro = async () =>{
 
-      if (netInfoState.isConnected && isConnected) {
-        console.log("useInputCredito_c", novoCredito);
-        try {
-          await connectionAPIPost('http://192.168.100.28:8080/credito', novoCredito);
-          console.log("useInputCredito_d", novoCredito);
-        } catch (error) {
+ 
+    //benfeitoria offline
+        if(!benfeitoria.sincronizado && benfeitoria.id<=0){
+          //benfeitoria offline
           const creditoDataQueue = objetoFila();
-          salvarCreditoQueue(creditoDataQueue);
-          console.log("useInputCredito_e", novoCredito);
+          const creditoQueue = await salvarCreditoQueue(creditoDataQueue);
+          return creditoQueue;
+         
+  
+        }else{
+            novoCredito.benfeitoria = {id:benfeitoria.id};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/credito', novoCredito) as CreditoType;
+                          
+                      if (response && response.id) {
+                            return fetchCreditoAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const creditoDataQueue = objetoFila();
+                        const creditoQueue = await salvarCreditoQueue(creditoDataQueue);
+                        return creditoQueue;
+                       
+                    }
+                  }else{
+                    const creditoDataQueue = objetoFila();
+                    const creditoQueue = await salvarCreditoQueue(creditoDataQueue);
+                    return creditoQueue;
+                       
+                    
+                  }
         }
-      } else {
-        const creditoDataQueue = objetoFila();
-        salvarCreditoQueue(creditoDataQueue);
-        console.log("useInputCredito_f", novoCredito);
-      }
-    }
-  };
+  }
+  
+   const fetchCreditoAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<CreditoType>(`http://192.168.100.28:8080/credito/${id}`);
+              if (response) {
+                const creditoData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+                    idFather: '',
+                };
+                   return await salvarCredito(creditoData);
+              }else{
+                      throw new Error('Dados de credito Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
+  
 
   const handleOnChangeRendimentoMensal = (
           event: NativeSyntheticEvent<TextInputChangeEventData>
@@ -116,7 +149,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType) => {
 
   return {
     novoCredito,
-    inputCreditoApi,
+    enviarRegistro,
     handleOnChangeRendimentoMensal,
     handleOnChangeInput,
     disabled,
