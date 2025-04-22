@@ -2,7 +2,7 @@ import { SimNao } from "../../enums/simNao.enum";
 
 export interface AvesType {
     id: number;
-    especie: String;
+    especie: string;
     useCosumo: SimNao|null|'';
     usoComercio: SimNao|null|'';
     usoCriacao: SimNao|null|'';

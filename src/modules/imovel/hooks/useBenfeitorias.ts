@@ -1,14 +1,9 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { setIdBenfeitoriaFromApiOnAguas } from "../../../realm/services/aguasService";
-import { setIdBenfeitoriaFromApiOnAlimentacao } from "../../../realm/services/alimentacaoService";
 import { setIdBenfeitoriaFromApiOnAtvProd } from "../../../realm/services/atividadeProdutivaService";
 import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
-import { setIdBenfeitoriaFromApiCompras } from "../../../realm/services/comprasService";
 import { setIdBenfeitoriaFromApiCredito } from "../../../realm/services/creditoService";
-import { setIdBenfeitoriaFromApiOnDependencias } from "../../../realm/services/dependenciaService";
-import { setIdBenfeitoriaFromApiOnFauna } from "../../../realm/services/faunaService";
-import { setIdBenfeitoriaFromApiOnIstConheci } from "../../../realm/services/instituicaoConhecidaService";
 import { setIdBenfeitoriaFromApiOnMorador } from "../../../realm/services/moradorService";
 import { setIdBenfeitoriaFromApiOnRendasOF } from "../../../realm/services/rendaOutrasFontes";
 import { setIdBenfeitoriaFromApiOnCS } from "../../../realm/services/servicosComunicacaoService";
@@ -16,6 +11,7 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { setIdBenfeitoriaFromApiOnPesca } from "../../../realm/services/pescaService";
 
 export const convertToBenfeitoriaInput=(benfeitoria: any) => {
 
@@ -75,17 +71,13 @@ export const convertToBenfeitoriaInput=(benfeitoria: any) => {
                             const benfeitoriaAPI = response as BenfeitoriaType;
                            
                                 if(benfeitoriaAPI.id){
-                                    setIdBenfeitoriaFromApiOnAlimentacao(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiCompras(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnDependencias(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnFauna(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnIstConheci(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnMorador(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnCS(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    setIdBenfeitoriaFromApiOnPesca(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     apagarBenfeitiaQueue(benfeitoria.idLocal!)
                                     console.log("benfeitpria. ponto de sisncronização 6", )
                                 }

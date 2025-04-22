@@ -6,6 +6,9 @@ export const EmbarcacaoSchema = {
         numeracao: 'string',
         tipoBarco: 'string', 
         tipoCasco: 'string', 
-        pescaArtesanal: 'int' 
+        pescaArtesanal: 'int', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?' 
     }
 }

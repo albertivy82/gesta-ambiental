@@ -53,7 +53,7 @@ export const salvarPeixeQueue = (peixe:PeixesInput): Promise<PeixesType>=>{
                         };
             
                         peixeSalvo = realmInstance.create('Peixes', peixePadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        //console.log("salvarEntrevistadoQueue", benfeitoriaPadrao)
                     });
 
                     if (peixeSalvo) {
@@ -115,7 +115,7 @@ export const getPeixesDessincronizados = (entrevistadoId: number): PeixesType[] 
     return JSON.parse(JSON.stringify(peixesQueue)) as PeixesType[];
 };
 
-export const setIdBenfeitoriaFromApiOnPeixes = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
+export const setIdEntrevistadoFromApiOnPeixes = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
     try {
         const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
         const peixesQueue = realmInstance.objects('Peixes').filtered(query);
@@ -123,7 +123,7 @@ export const setIdBenfeitoriaFromApiOnPeixes = (idBenfeitoriaApi: number, entrev
         if (peixesQueue.length > 0) {
             realmInstance.write(() => {
                 peixesQueue.forEach(peixeOrfan => {
-                    peixeOrfan.entrevistado = idBenfeitoriaApi;
+                    peixeOrfan.entrevistado = idEntrevistadoApi;
                     peixeOrfan.idFather = '';
                 });
             });

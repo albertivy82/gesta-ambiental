@@ -4,8 +4,8 @@ import { SimNao } from "../../enums/simNao.enum";
 
 
 
-export interface DestinoPescaType {
-    id: number;
+export interface DestinoPescaInput {
+    
     finalidadePesca: FinalidadePesca; 
     quantidade: number;
     destino: DestinoPesca; 

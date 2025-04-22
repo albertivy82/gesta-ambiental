@@ -11,6 +11,9 @@ export const EspecieSchema = {
         precoVendaMedioKg: 'double',
         importancia: 'string',
         mesesMaiorOcorrencia: 'string',
-        pescaArtesanal: 'int' 
+        pescaArtesanal: 'int', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?' 
     }
 }

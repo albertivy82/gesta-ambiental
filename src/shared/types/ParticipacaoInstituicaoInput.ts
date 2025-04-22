@@ -3,8 +3,7 @@
 import { Instituicao } from "../../enums/Instituicao.enum";
 
 
-export interface ParticipacaoInstituicaoType {
-    id: number;
+export interface ParticipacaoInstituicaoInput {
     instituicao: Instituicao;
     tipoDeRgistro: string;
     Registro: string;

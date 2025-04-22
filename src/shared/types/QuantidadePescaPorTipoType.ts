@@ -7,4 +7,8 @@ export interface QuantidadePescaPorTipoType {
     pescaArtesanal: {
         id: number; 
     }
+    sincronizado?: boolean;
+    idLocal?: string;
+    idFather?:string;
+    
 }

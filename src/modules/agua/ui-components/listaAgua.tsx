@@ -31,14 +31,14 @@ const RenderItemAgua = ({ item }: { item: AguaType }) => {
           type={textTypes.BUTTON_REGULAR}
           color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
         >
-          Fonte de Água: {item.tipoFonteAgua}
+          Fonte de Água: {item.tipoDeFornecimento}
         </Text>
 
         <Text
           type={textTypes.BUTTON_REGULAR}
           color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
         >
-          Qualidade da Água: {item.qualidadeAgua}
+          Qualidade da Água: {item.qualidadeDaAgua}
         </Text>
       </View>
     </TouchableOpacity>

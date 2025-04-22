@@ -8,6 +8,9 @@ export const DestinoPescaSchema = {
         destino: 'string', 
         destinoFixo: 'string', 
         paraQuantos: 'int',
-        pescaArtesanal: 'int' 
+        pescaArtesanal: 'int', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

@@ -53,14 +53,14 @@ export const salvarVegetacaoQueue = (vegetacao:VegetacaoInput): Promise<Vegetaca
                         };
             
                         vegetacaoSalvo = realmInstance.create('Vegetacao', vegetacaoPadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        //console.log("salvarEntrevistadoQueue", benfeitoriaPadrao)
                     });
 
                     if (vegetacaoSalvo) {
                         const cleanVegetacao = JSON.parse(JSON.stringify(vegetacaoSalvo))
                         resolve(cleanVegetacao as VegetacaoType);
                     } else {
-                    throw new Error("Erro ao recuperar a benfeitoria salva.");
+                    throw new Error("Erro ao recuperar a vegetacao salva.");
                     }
                 } catch(error){
                     reject(error)
@@ -121,7 +121,7 @@ export const getVegetacoesDessincronizadas = (entrevistadoId: number): Vegetacao
   return JSON.parse(JSON.stringify(vegetacoesQueue)) as VegetacaoType[];
 };
 
-export const setIdBenfeitoriaFromApiOnVegetacao = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
+export const setIdEntrevitadoFromApiOnVegetacao = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
   try {
     const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
     const vegetacoesQueue = realmInstance.objects('Vegetacao').filtered(query);
@@ -129,7 +129,7 @@ export const setIdBenfeitoriaFromApiOnVegetacao = (idBenfeitoriaApi: number, ent
     if (vegetacoesQueue.length > 0) {
       realmInstance.write(() => {
         vegetacoesQueue.forEach(vegetacaoOrfan => {
-          vegetacaoOrfan.entrevistado = idBenfeitoriaApi;
+          vegetacaoOrfan.entrevistado = idEntrevistadoApi;
           vegetacaoOrfan.idFather = '';
         });
       });

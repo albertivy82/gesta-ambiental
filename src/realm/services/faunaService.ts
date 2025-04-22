@@ -53,7 +53,7 @@ export const salvarFaunaQueue = (fauna:FaunaInput): Promise<FaunaType>=>{
                         };
             
                         faunaSalvo = realmInstance.create('Fauna', faunaPadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        //console.log("salvarEntrevistadoQueue", benfeitoriaPadrao)
                     });
 
                     if (faunaSalvo) {
@@ -115,7 +115,7 @@ export const getFaunaDessincronizadas = (entrevistadoId: number): FaunaType[] =>
     return JSON.parse(JSON.stringify(faunaQueue)) as FaunaType[];
 };
 
-export const setIdBenfeitoriaFromApiOnFauna = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
+export const setIdEntrevistadoFromApiOnFauna = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
     try {
         const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
         const faunaQueue = realmInstance.objects('Fauna').filtered(query);
@@ -123,7 +123,7 @@ export const setIdBenfeitoriaFromApiOnFauna = (idBenfeitoriaApi: number, entrevi
         if (faunaQueue.length > 0) {
             realmInstance.write(() => {
                 faunaQueue.forEach(faunaOrfan => {
-                    faunaOrfan.entrevistado = idBenfeitoriaApi;
+                    faunaOrfan.entrevistado = idEntrevistadoApi;
                     faunaOrfan.idFather = '';
                 });
             });

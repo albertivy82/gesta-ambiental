@@ -1,16 +1,14 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SimNao } from "../../../enums/simNao.enum";
+import { AtividadesProdutivas } from "../../../enums/AtividadesProdutivas.enum";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { useNovaAtvProd } from "../hooks/useInputAtvProd";
-import { AtividadeDetailContainer } from "../styles/ativdade.style";
-import { AtividadesProdutivas } from "../../../enums/AtividadesProdutivas.enum";
 import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { useNovaAtvProd } from "../hooks/useInputAtvProd";
+import { AtividadeDetailContainer } from "../styles/ativdade.style";
 
 
 export interface idParam {

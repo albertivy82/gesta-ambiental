@@ -20,7 +20,7 @@ export const novaAtividade = (navigate: NavigationProp<ParamListBase>['navigate'
 
 const Atividades = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, AtividadesParams>, 'Imovel'>>();
+  const route = useRoute<RouteProp<Record<string, AtividadesParams>>>();
   const { atividade } = route.params;
   const flatListRef = useRef<FlatList>(null);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);

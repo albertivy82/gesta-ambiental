@@ -53,7 +53,7 @@ export const salvarReptilQueue = (reptil:RepteisInput): Promise<RepteisType>=>{
                         };
             
                         reptilSalvo = realmInstance.create('Repteis', reptilPadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        //console.log("salvarEntrevistadoQueue", benfeitoriaPadrao)
                     });
 
                     if (reptilSalvo) {
@@ -115,7 +115,7 @@ export const getRepteisDessincronizadas = (entrevistadoId: number): RepteisType[
   return JSON.parse(JSON.stringify(reptilsQueue)) as RepteisType[];
 };
 
-export const setIdBenfeitoriaFromApiOnRepteis = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
+export const setIdEntrevistadoFromApiOnRepteis = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
   try {
     const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
     const reptilsQueue = realmInstance.objects('Repteis').filtered(query);
@@ -123,7 +123,7 @@ export const setIdBenfeitoriaFromApiOnRepteis = (idBenfeitoriaApi: number, entre
     if (reptilsQueue.length > 0) {
       realmInstance.write(() => {
         reptilsQueue.forEach(reptilOrfan => {
-          reptilOrfan.entrevistado = idBenfeitoriaApi;
+          reptilOrfan.entrevistado = idEntrevistadoApi;
           reptilOrfan.idFather = '';
         });
       });

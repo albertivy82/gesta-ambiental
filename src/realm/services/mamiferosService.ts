@@ -53,7 +53,7 @@ export const salvarMamiferosQueue = (mamiferos:MamiferosInput): Promise<Mamifero
                         };
             
                         mamiferosSalvo = realmInstance.create('Mamiferos', mamiferosPadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        //console.log("salvarEntrevistadoQueue", benfeitoriaPadrao)
                     });
 
                     if (mamiferosSalvo) {
@@ -116,7 +116,7 @@ export const getMamiferosDessincronizados = (entrevistadoId: number): MamiferosT
     return JSON.parse(JSON.stringify(mamiferosQueue)) as MamiferosType[];
 };
 
-export const setIdBenfeitoriaFromApiOnMamiferos = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
+export const setIdEntrevistadoFromApiOnMamiferos = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
     try {
         const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
         const mamiferosQueue = realmInstance.objects('Mamiferos').filtered(query);
@@ -124,7 +124,7 @@ export const setIdBenfeitoriaFromApiOnMamiferos = (idBenfeitoriaApi: number, ent
         if (mamiferosQueue.length > 0) {
             realmInstance.write(() => {
                 mamiferosQueue.forEach(mamiferoOrfan => {
-                    mamiferoOrfan.entrevistado = idBenfeitoriaApi;
+                    mamiferoOrfan.entrevistado = idEntrevistadoApi;
                     mamiferoOrfan.idFather = '';
                 });
             });

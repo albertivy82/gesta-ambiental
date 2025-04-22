@@ -1,8 +1,7 @@
 import { Exploracao } from "../../enums/Exploracao.enum";
 import { TamanhoPesca } from "../../enums/tamanhoPesca.enum";
 
-export interface EspecieType {
-    id: number;
+export interface EspecieInput {
     especie: string;
     quantidadePescada: number;
     quantidadeDaPesca: TamanhoPesca;

@@ -4,7 +4,7 @@ import { connectionAPIDelete, connectionAPIPost } from "../../../shared/function
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { InstituicaoConhecidaInput } from "../../../shared/types/instituicaoConhecidaInput";
-import { salvarInstituicaoConhecidaQueue } from "../../../realm/services/instituicaoConhecidaService";
+import { salvarInstituicaoConhecidaQueue } from "../../../realm/services/apagar";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 
 // Valor padrão para `InstituicaoConhecidaInput`

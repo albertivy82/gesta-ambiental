@@ -6,6 +6,8 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { CreditoType } from '../../../shared/types/CreditoType';
+import { RendaOutrasFontesDetailContainer } from '../styles/rendaOutrasFontes.style';
+import RenderItemRendaOutrasFontes from '../ui-components/listaRendasOutrasFontes';
 
 
 export interface CreditoParams {
@@ -16,7 +18,7 @@ export const novoCredito = (navigate: NavigationProp<ParamListBase>['navigate'],
   navigate('NovoCredito', { benfeitoriaId });
 }
 
-const Credito = () => {
+const RendaOutrasFontes = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, CreditoParams>, 'Imovel'>>();
   const { credito } = route.params;
@@ -51,7 +53,7 @@ const Credito = () => {
   };
 
   return (
-    <CreditoDetailContainer>
+    <RendaOutrasFontesDetailContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -107,12 +109,12 @@ const Credito = () => {
         ref={flatListRef}
         data={creditos}
         extraData={creditos} 
-        renderItem={({ item }) => <RenderItemCredito item={item} />}
+        renderItem={({ item }) => <RenderItemRendaOutrasFontes item={item} />}
         keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
       />
       
-    </CreditoDetailContainer>
+    </RendaOutrasFontesDetailContainer>
   );
 }
 
-export default Credito;
+export default RendaOutrasFontes;

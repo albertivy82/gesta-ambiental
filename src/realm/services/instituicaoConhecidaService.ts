@@ -1,25 +1,25 @@
 import { realmInstance } from './databaseService';
-import { InstituicaoConhecidaInput } from '../../shared/types/InstituicaoConhecidaInput';
-import { InstituicaoConhecidaType } from '../../shared/types/InstituicaoConhecidaType';
+import { ParticipacaoInstituicaoInput } from '../../shared/types/ParticipacaoInstituicaoInput';
+import { ParticipacaoInstituicaoType } from '../../shared/types/ParticipacaoInstituicaoType';
 
-export const salvarInstituicoesConhecidas = (instituicoes: InstituicaoConhecidaType[]) => {
+export const salvarInstituicoes = (instituicoes: ParticipacaoInstituicaoType[]) => {
     return new Promise<void>((resolve, reject) => {
         try {
             realmInstance.write(() => {
                 instituicoes.forEach(instituicao => {
-                    const instituicaoRealm = realmInstance.objects('InstituicoesConhecidas').filtered(`id == ${instituicao.id}`)[0];
+                    const instituicaoRealm = realmInstance.objects('ParticipacaoInstituicao').filtered(`id == ${instituicao.id}`)[0];
                     if (instituicao.sincronizado && instituicaoRealm && instituicao.idLocal == '') {
                         const instituicaoPadrao = {
                             ...instituicao,
-                            benfeitoria: instituicao.benfeitoria.id,
+                            morador: instituicao.morador.id,
                         };
-                        realmInstance.create('InstituicoesConhecidas', instituicaoPadrao, true);
+                        realmInstance.create('ParticipacaoInstituicao', instituicaoPadrao, true);
                     } else {
                         const instituicaoPadrao = {
                             ...instituicao,
-                            benfeitoria: instituicao.benfeitoria.id,
+                            morador: instituicao.morador.id,
                         };
-                        realmInstance.create('InstituicoesConhecidas', instituicaoPadrao, true);
+                        realmInstance.create('ParticipacaoInstituicao', instituicaoPadrao, true);
                     }
                 });
             });
@@ -30,69 +30,120 @@ export const salvarInstituicoesConhecidas = (instituicoes: InstituicaoConhecidaT
     });
 };
 
-export const salvarInstituicaoConhecidaQueue = (instituicao: InstituicaoConhecidaInput) => {
-    return new Promise<void>((resolve, reject) => {
+export const salvarInstituicaoQueue = (instituicao:ParticipacaoInstituicaoInput): Promise<ParticipacaoInstituicaoType>=>{
+   
+   return new Promise((resolve, reject)=>{
+   
         const Id = () => {
             const min = Math.ceil(0);
             const max = Math.floor(1000);
-            return -Math.floor(Math.random() * (max - min + 1)) + min;
+            return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
+        
+        
+                try{
+                    let instituicaoSalvo;
+                    
+                        realmInstance.write(() => {
+                        console.log('ERRO QUEUE');
+                        const instituicaoPadrao = {
+                            ...instituicao,
+                            id: Id(), 
+                           morador: instituicao.morador!.id,
+                        };
+            
+                        instituicaoSalvo = realmInstance.create('ParticipacaoInstituicao', instituicaoPadrao, true);
+                        //console.log("salvarBenfeitoriaQueue", moradorPadrao)
+                    });
+
+                    if (instituicaoSalvo) {
+                        const cleanInstituicao = JSON.parse(JSON.stringify(instituicaoSalvo))
+                        resolve(cleanInstituicao as ParticipacaoInstituicaoType);
+                    } else {
+                    throw new Error("Erro ao recuperar a morador salva.");
+                    }
+                } catch(error){
+                    reject(error)
+                }
+    })
+};
+
+export const salvarInstituicao= (instituicao:ParticipacaoInstituicaoType): Promise<ParticipacaoInstituicaoType> => {
+    return new Promise((resolve, reject) => {
+
         try {
+            let instituicaoSalvo;
             realmInstance.write(() => {
+                const instituicaoExistente = realmInstance
+                    .objects<ParticipacaoInstituicaoType>("ParticipacaoInstituicao")
+                    .filtered(`id == ${instituicao.id}`)[0];
+
                 const instituicaoPadrao = {
                     ...instituicao,
-                    id: Id(),
-                    benfeitoria: instituicao.benfeitoria?.id,
+                    morador: instituicao.morador.id,
                 };
-                realmInstance.create('InstituicoesConhecidas', instituicaoPadrao, true);
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (instituicao.sincronizado && instituicaoExistente && instituicao.idLocal === '') {
+                    instituicaoSalvo = realmInstance.create("ParticipacaoInstituicao", instituicaoPadrao, true);
+                } else {
+                    instituicaoSalvo = realmInstance.create("ParticipacaoInstituicao", instituicaoPadrao, true);
+                }
             });
-            resolve();
+    if (instituicaoSalvo) {
+        const cleanInstituicao = JSON.parse(JSON.stringify(instituicaoSalvo))
+        resolve(cleanInstituicao as ParticipacaoInstituicaoType);
+    } else {
+    throw new Error("Erro ao recuperar a instituicao salvo.");
+    }
+           
         } catch (error) {
             reject(error);
         }
     });
 };
 
-export const getInstituicoesConhecidas = (benfeitoriaId: number): InstituicaoConhecidaType[] => {
-    const query = `benfeitoria == ${benfeitoriaId}`;
-    const instituicoes = realmInstance.objects<InstituicaoConhecidaType>('InstituicoesConhecidas').filtered(query).slice();
-    return JSON.parse(JSON.stringify(instituicoes)) as InstituicaoConhecidaType[];
+
+export const getInstituicoes = (moradorId: number): ParticipacaoInstituicaoType[] => {
+    const query = `morador == ${moradorId}`;
+    const instituicoes = realmInstance.objects<ParticipacaoInstituicaoType>('ParticipacaoInstituicao').filtered(query).slice();
+    return JSON.parse(JSON.stringify(instituicoes)) as ParticipacaoInstituicaoType[];
 };
 
-export const getInstituicoesConhecidasDessincronizadas = (benfeitoriaId: number): InstituicaoConhecidaType[] => {
-    const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
-    const instituicoesQueue = realmInstance.objects<InstituicaoConhecidaType>('InstituicoesConhecidas').filtered(query).slice();
-    return JSON.parse(JSON.stringify(instituicoesQueue)) as InstituicaoConhecidaType[];
+export const getInstituicoesDessincronizados = (moradorId: number): ParticipacaoInstituicaoType[] => {
+    const query = `morador == "${moradorId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+    const instituicaoQueue = realmInstance.objects<ParticipacaoInstituicaoType>('ParticipacaoInstituicao').filtered(query).slice();
+    return JSON.parse(JSON.stringify(instituicaoQueue)) as ParticipacaoInstituicaoType[];
 };
 
-export const setIdBenfeitoriaFromApiOnIstConheci = (idBenfeitoriaApi: number, benfeitoriaIdLocal: string) => {
+export const setIdMoradorFromApiOnInstituicao = (idMoradoriaApi: number, moradorIdLocal: string) => {
     try {
-        const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
-        const instituicoesQueue = realmInstance.objects('InstituicoesConhecidas').filtered(query);
+        const query = `idFather == "${moradorIdLocal}" AND sincronizado == false`;
+        const instituicaoQueue = realmInstance.objects('ParticipacaoInstituicao').filtered(query);
 
-        if (instituicoesQueue.length > 0) {
+        if (instituicaoQueue.length > 0) {
             realmInstance.write(() => {
-                instituicoesQueue.forEach(instituicaoOrfan => {
-                    instituicaoOrfan.benfeitoria = idBenfeitoriaApi;
+                instituicaoQueue.forEach(instituicaoOrfan => {
+                    instituicaoOrfan.morador = idMoradoriaApi;
                     instituicaoOrfan.idFather = '';
                 });
             });
         }
     } catch (error) {
-        console.error('Erro ao atualizar instituições conhecidas:', error);
+        console.error('Erro ao atualizar registros de instituicoes:', error);
     }
 };
 
-export const apagarInstituicaoConhecidaQueue = (idLocal: string) => {
+export const apagarInstituicaoQueue = (idLocal: string) => {
     try {
         realmInstance.write(() => {
             const query = `idLocal == "${idLocal}"`;
-            const instituicaoExcluir = realmInstance.objects<InstituicaoConhecidaType>('InstituicoesConhecidas').filtered(query);
+            const instituicaoExcluir = realmInstance.objects<ParticipacaoInstituicaoType>('ParticipacaoInstituicao').filtered(query);
             if (instituicaoExcluir.length > 0) {
                 realmInstance.delete(instituicaoExcluir);
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir instituição conhecida da fila:', error);
+        console.error('Erro ao excluir instituicao da fila:', error);
     }
 };

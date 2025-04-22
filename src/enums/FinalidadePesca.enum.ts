@@ -1,4 +1,4 @@
-export enum DestinacaoPesca {
+export enum FinalidadePesca {
     Consumo = 'Consumo',
     Venda = 'Venda',
     Doacao = 'Doacao',

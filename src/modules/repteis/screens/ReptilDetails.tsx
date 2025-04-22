@@ -5,33 +5,34 @@ import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { AtividadeProdutivaType } from '../../../shared/types/AtividadeProdutiva';
-import { AtividadeDetailContainer } from '../styles/ativdade.style';
+import { RepteisType } from '../../../shared/types/RepteisType';
+import { ReptilDetailContainer } from '../styles/Reptil.style';
 
 
-
-export interface AtividadeParam {
-  atividade: AtividadeProdutivaType;
+export interface RepteisParam {
+  reptil: RepteisType;
 }
 
-const AtividadeDetails = () => {
+const RepteisDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const { params } = useRoute<RouteProp<Record<string, AtividadeParam>>>();
-  
-  
+  const { params } = useRoute<RouteProp<Record<string, RepteisParam>>>();
 
   return (
     <ScrollView style={{ flex: 1 }}>
-      <AtividadeDetailContainer>
+      <ReptilDetailContainer>
         <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
-          {renderField('Atividade', params.atividade.atividade || 'Não informado')}
-          {renderField('Pessoas Envolvidas', params.atividade.pessoasEnvolvidas?.toString() || '0')}
-          {renderField('Faturamento Mensal', `R$ ${params.atividade.faturamentoAtividadeMesTotal?.toFixed(2)}`)}
-          {renderField('Benfeitoria ID', params.atividade.benfeitoria.id?.toString() || 'Não informado')}
-          {renderField('Status de Sincronização', params.atividade.sincronizado ? 'Sincronizado' : 'Não sincronizado')}
+          {renderField('Espécie', params.reptil.especie || 'Não informado')}
+          {renderField('Local', params.reptil.local || 'Não informado')}
+          {renderField('Período', params.reptil.periodo || 'Não informado')}
+          {renderField('Uso', params.reptil.uso || 'Não informado')}
+          {renderField('Ameaçado', params.reptil.ameacado || 'Não informado')}
+          {renderField('Problemas Relacionados', params.reptil.problemasRelacionados || 'Não informado')}
+          {renderField('Caçado', params.reptil.cacado || 'Não informado')}
+          {renderField('Descrição Espontânea', params.reptil.descricaoEspontanea || 'Não informado')}
+          {renderField('Entrevistado ID', params.reptil.entrevistado.id?.toString() || 'Não informado')}
+          {renderField('Status de Sincronização', params.reptil.sincronizado ? 'Sincronizado' : 'Não sincronizado')}
         </View>
 
-      
         <View style={{
           flexDirection: 'row',
           justifyContent: 'space-around',
@@ -42,7 +43,7 @@ const AtividadeDetails = () => {
           <TouchableOpacity onPress={() => null}>
             <View style={{ alignItems: 'center' }}>
               <Icon size={40} name='bin' color='red' />
-              <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Apagar Atividade</Text>
+              <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Apagar Registro</Text>
             </View>
           </TouchableOpacity>
 
@@ -51,14 +52,13 @@ const AtividadeDetails = () => {
           <TouchableOpacity onPress={() => null}>
             <View style={{ alignItems: 'center' }}>
               <Icon size={40} name='pencil2' color='blue' />
-              <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Editar Atividade</Text>
+              <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Editar Registro</Text>
             </View>
           </TouchableOpacity>
         </View>
-
-      </AtividadeDetailContainer>
+      </ReptilDetailContainer>
     </ScrollView>
   );
 }
 
-export default AtividadeDetails;
+export default RepteisDetails;

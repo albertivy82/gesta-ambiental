@@ -53,7 +53,7 @@ export const salvarAveQueue = (ave:AvesInput): Promise<AvesType>=>{
                         };
             
                         aveSalvo = realmInstance.create('Aves', avePadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        //console.log("salvarEntrevistadoQueue", benfeitoriaPadrao)
                     });
 
                     if (aveSalvo) {
@@ -115,7 +115,7 @@ export const getAvesDessincronizadas = (entrevistadoId: number): AvesType[] => {
   return JSON.parse(JSON.stringify(avesQueue)) as AvesType[];
 };
 
-export const setIdBenfeitoriaFromApiOnAves = (idBenfeitoriaApi: number, entrevistadoIdLocal: string) => {
+export const setIdEntrevistadoFromApiOnAves = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
   try {
     const query = `idFather == "${entrevistadoIdLocal}" AND sincronizado == false`;
     const avesQueue = realmInstance.objects('Aves').filtered(query);
@@ -123,7 +123,7 @@ export const setIdBenfeitoriaFromApiOnAves = (idBenfeitoriaApi: number, entrevis
     if (avesQueue.length > 0) {
       realmInstance.write(() => {
         avesQueue.forEach(aveOrfan => {
-          aveOrfan.entrevistado = idBenfeitoriaApi;
+          aveOrfan.entrevistado = idEntrevistadoApi;
           aveOrfan.idFather = '';
         });
       });

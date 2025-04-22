@@ -18,7 +18,7 @@ export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate
 }
 
 
-export const NovaVegetacao = ()=>{
+export const NovoReptil = ()=>{
      const { params } = useRoute<RouteProp<Record<string, idParam>>>();
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 

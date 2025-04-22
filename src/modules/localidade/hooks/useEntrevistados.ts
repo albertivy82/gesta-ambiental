@@ -6,46 +6,54 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/entrevistado";
+import { setIdEntrevitadoFromApiOnVegetacao } from "../../../realm/services/vegetacaoService";
+import { setIdEntrevistadoFromApiOnFauna } from "../../../realm/services/faunaService";
+import { setIdEntrevistadoFromApiOnPeixes } from "../../../realm/services/peixesService";
+import { setIdEntrevistadoFromApiOnRepteis } from "../../../realm/services/repteisService";
+import { setIdEntrevistadoFromApiOnMamiferos } from "../../../realm/services/mamiferosService";
+import { setIdEntrevistadoFromApiOnAves } from "../../../realm/services/avesService";
 
-export const convertToEntrevistadoInput=(entrevistado:any) => {
-
-    const entrevistadoInput: EntrevistadoInput ={
+export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput => {
+  return {
        
-        nome: entrevistado.nome,
-        naturalidade: entrevistado.naturalidade,
-        nascimentoData: entrevistado.nascimentoData,
-        sexo: entrevistado.sexo,
-        apelido: entrevistado.apelido,
-        escolaridade: entrevistado.escolaridade,
-        estadoCivil: entrevistado.estadoCivil,
-        religiao: entrevistado.religiao,
-        morador: entrevistado.morador,
-        dataChegada: entrevistado.dataChegada,
-        pretendeMudar: entrevistado.pretendeMudar,
-        motivoVontadeMudanca: entrevistado.motivoVontadeMudanca,
-        relacaoAreaImovel: entrevistado.relacaoAreaImovel,
-        relacaoVizinhos: entrevistado.relacaoVizinhos,
-        tipoAlimentacao: entrevistado.tipoAlimentacao,
-        localCompras: entrevistado.localCompras,
-        servicosDeficitarios: entrevistado.servicosDeficitarios,
-        sofreuAssaltos: entrevistado.sofreuAssaltos,
-        presenciouAssalto: entrevistado.presenciouAssalto,
-        problemasDeViolenciaLocal: entrevistado.problemasDeViolenciaLocal,
-        conheceUcs: entrevistado.conheceUcs,
-        conheceUcProposta: entrevistado.conheceUcProposta,
-        conheceAreaUc: entrevistado.conheceAreaUc,
-        utilizaAreaUc: entrevistado.utilizaAreaUc,
-        propostaMelhorarArea: entrevistado.propostaMelhorarArea,
-        indicadoConsultaPublica: entrevistado.indicadoConsultaPublica,
-        contatoIndicadoConsultaPublica: entrevistado.entrevistado,
+    nome: entrevistado.nome,
+    naturalidade: entrevistado.naturalidade,
+    nascimentoData: entrevistado.nascimentoData,
+    sexo: entrevistado.sexo,
+    apelido: entrevistado.apelido,
+    escolaridade: entrevistado.escolaridade,
+    estadoCivil: entrevistado.estadoCivil,
+    religiao: entrevistado.religiao,
+    morador: entrevistado.morador,
+    dataChegada: entrevistado.dataChegada,
+    pretendeMudar: entrevistado.pretendeMudar,
+    motivoVontadeMudanca: entrevistado.motivoVontadeMudanca,
+    relacaoAreaImovel: entrevistado.relacaoAreaImovel,
+    relacaoVizinhos: entrevistado.relacaoVizinhos,
+    tipoAlimentacao: entrevistado.tipoAlimentacao,
+    localCompras: entrevistado.localCompras,
+    comoCuidaSaudeFamilia: entrevistado.comoCuidaSaudeFamilia,
+    servicosDeficitarios: entrevistado.servicosDeficitarios,
+    sofreuAssaltos: entrevistado.sofreuAssaltos,
+    presenciouAssalto: entrevistado.presenciouAssalto,
+    problemasDeViolenciaLocal: entrevistado.problemasDeViolenciaLocal,
+    instituicaoConhecida: entrevistado.instituicaoConhecida,
+    importanciaDeProtegerAmbiente: entrevistado.importanciaDeProtegerAmbiente,
+    importanciaDeProtegerFauna: entrevistado.importanciaDeProtegerFauna,
+    qualEspacoPrecisaSerPreservado: entrevistado.qualEspacoPrecisaSerPreservado,
+    problemasRelacionadosAoAmbiente: entrevistado.problemasRelacionadosAoAmbiente,
+    conheceUcs: entrevistado.conheceUcs,
+    conheceUcProposta: entrevistado.conheceUcProposta,
+    conheceAreaUc: entrevistado.conheceAreaUc,
+    utilizaAreaUc: entrevistado.utilizaAreaUc,
+    propostaMelhorarArea: entrevistado.propostaMelhorarArea,
+    indicadoConsultaPublica: entrevistado.indicadoConsultaPublica,
+    contatoIndicadoConsultaPublica: entrevistado.contatoIndicadoConsultaPublica,
         localidade: {
-            id: entrevistado.localidade
-        }
-
-    }
-   
-        return entrevistadoInput
+            id: entrevistado.localidade.id,
+        },
     };
+  };
 
 
 
@@ -81,6 +89,12 @@ export const useEntrevistados = (localidadeId: number) =>{
                        
                         if (EntrevistadoAPI.id) {
                             setIdEntrevistadoFromApiOnImovel(EntrevistadoAPI.id, entrevistado.idLocal!);
+                            setIdEntrevitadoFromApiOnVegetacao(EntrevistadoAPI.id, entrevistado.idLocal!);
+                            setIdEntrevistadoFromApiOnFauna(EntrevistadoAPI.id, entrevistado.idLocal!);
+                            setIdEntrevistadoFromApiOnPeixes(EntrevistadoAPI.id, entrevistado.idLocal!);
+                            setIdEntrevistadoFromApiOnMamiferos(EntrevistadoAPI.id, entrevistado.idLocal!);
+                            setIdEntrevistadoFromApiOnAves(EntrevistadoAPI.id, entrevistado.idLocal!);
+                            setIdEntrevistadoFromApiOnRepteis(EntrevistadoAPI.id, entrevistado.idLocal!);
                            
                             apagarEntrevistadoQueue(entrevistado.idLocal!);
                         }

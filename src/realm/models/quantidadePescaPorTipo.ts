@@ -3,8 +3,11 @@ export const QuantidadePescaPorTipoSchema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
-        quantidadePesca: 'double',
         tipoPesca: 'string',
-        pescaArtesanal: 'int' 
+        quantidadePesca: 'double',
+        pescaArtesanal: 'int', 
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
 }
 }
