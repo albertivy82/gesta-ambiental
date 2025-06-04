@@ -36,7 +36,7 @@ export const NovoPosto = ()=>{
            handleAmbulatorialChange,
            handleUrgenciaEmergenciaChange,
            handleMedicosPorTurnoChange,
-          disabled,} = useNovoPosto(localidadeId!);
+          disabled,} = useNovoPosto(localidadeId!, posto);
     
           useEffect(() => {
             if (posto) {

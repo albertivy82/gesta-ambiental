@@ -15,6 +15,7 @@ const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
 
 
   const handleAcaoPosto = (posto: PostoType) => {
+   
     Alert.alert(
       'Ação sobre o posto',
       `O que você deseja fazer com "${posto.nome}"?`,

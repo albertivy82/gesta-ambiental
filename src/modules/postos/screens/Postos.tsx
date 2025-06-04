@@ -54,8 +54,7 @@ const Postos = () => {
   };
 
   const handleNovoImovel = () => {
-    console.log("a", localidadeId);
-    novoPosto(navigation.navigate, localidadeId);
+     novoPosto(navigation.navigate, localidadeId);
   };
 
   return (

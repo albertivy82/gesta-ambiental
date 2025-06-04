@@ -1,10 +1,10 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { SimNao } from "../../../enums/simNao.enum";
 import { salvarPosto, salvarPostoSaudeQueue } from "../../../realm/services/postoService";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { postoSaudeInput } from "../../../shared/types/postoSaudeInput";
 import { PostoType } from "../../../shared/types/postoTypes";
@@ -19,10 +19,10 @@ export const DEFAULT_POSTO_INPUT: postoSaudeInput = {
   },
 };
 
-export const useNovoPosto = (localidadeId: number) => {
+export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
   const [novoPosto, setNovoPosto] = useState<postoSaudeInput>(DEFAULT_POSTO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
-
+  
   // Habilitar o botão apenas se todos os campos obrigatórios estiverem preenchidos
   useEffect(() => {
     const camposPreenchidos =
@@ -46,34 +46,96 @@ export const useNovoPosto = (localidadeId: number) => {
   };
 
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (posto) {
+      return await enviaPostoEdicao();
+    } else {
+      return await enviaPostNovo();
+    }
+  };
+  
+  const enviaPostNovo = async () =>{
 
     novoPosto.localidade = {id:localidadeId};
-            const netInfoState = await NetInfo.fetch();
-            const isConnected = await testConnection();
-          
-                  if(netInfoState.isConnected && isConnected){
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+        
+      if(netInfoState.isConnected && isConnected){
                     
-                    try{
-                       
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/posto-de-saude', novoPosto) as PostoType;
-                          
-                      if (response && response.id) {
-                            return fetchPostoAPI(response.id);
+            try{
+
+               const response = await connectionAPIPost('http://192.168.100.28:8080/posto-de-saude', novoPosto) as PostoType;
+                    if (response && response.id) {
+                        return fetchPostoAPI(response.id);
                       }
   
-                    } catch (error) {
+            } catch (error) {
                         const postoDataQueue = objetoFila();
                         const postoQueue = await salvarPostoSaudeQueue(postoDataQueue);
                         return postoQueue;
                        
-                    }
-                  }else{
+            }
+                  
+      }else{
                     const postoDataQueue = objetoFila();
                     const postoQueue = await salvarPostoSaudeQueue(postoDataQueue);
                     return postoQueue;
-                  }
+      }
   }
+
+  const enviaPostoEdicao= async () =>{
+    const postoCorrigido = {
+      ...novoPosto,
+      localidade: { id: typeof posto!.localidade === 'number' ? posto!.localidade : posto!.localidade.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/posto-de-saude/${posto!.id}`, postoCorrigido) as PostoType;
+              if (response && response.id) {
+                return fetchPostoAPI(response.id);
+              }
+              } catch (error) {
+                
+                Alert.alert(
+                  "Erro ao editar",
+                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                );
+                return null;
+               
+            }
+          
+          } else {
+            if (!posto!.sincronizado && posto!.idLocal) {
+              console.log(novoPosto, posto)
+              //Objeto ainda não sincronizado → atualizar no Realm
+              const postoAtualizado: PostoType = {
+                ...posto!,
+                nome: novoPosto.nome,
+                ambulatorial: novoPosto.ambulatorial ?? "",
+                urgenciaEmergencia: novoPosto.urgenciaEmergencia ?? "",
+                medicosPorTurno: novoPosto.medicosPorTurno,
+              };
+              
+              const postoQueue = await salvarPosto(postoAtualizado);
+              return postoQueue;
+            } else {
+              // Objeto sincronizado → não permitir edição offline
+              Alert.alert(
+                "Sem conexão",
+                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+              );
+              return null;
+            }
+          }
+          
+  }
+
+  
   
    const fetchPostoAPI = async(id:number) =>{
   

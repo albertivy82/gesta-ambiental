@@ -55,8 +55,8 @@ export const salvarPostos = (postos: PostoType[]) =>{
 
 };
 // Adicionar posto de saúde à fila de sincronização
-export const salvarPostoSaudeQueue = (posto: postoSaudeInput) => {
-  return new Promise<void>((resolve, reject) => {
+export const salvarPostoSaudeQueue = (posto: postoSaudeInput): Promise<PostoType> => {
+  return new Promise((resolve, reject) => {
     const Id = () => {
       const min = Math.ceil(0);
       const max = -Math.floor(1000);
@@ -64,16 +64,18 @@ export const salvarPostoSaudeQueue = (posto: postoSaudeInput) => {
     };
 
     try {
+      let postoSalvo;
       realmInstance.write(() => {
         const postoPadrao = {
           ...posto,
           id: Id(), // Gera ID temporário negativo
           localidade: posto.localidade.id,
         };
-        realmInstance.create("Posto", postoPadrao, true);
+        postoSalvo = realmInstance.create("Posto", postoPadrao, true);
       });
-
-      resolve();
+      const cleanPosto = JSON.parse(JSON.stringify(postoSalvo))
+      resolve(cleanPosto as PostoType);
+      
     } catch (error) {
       reject(error);
     }
