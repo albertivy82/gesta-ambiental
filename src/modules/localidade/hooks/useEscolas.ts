@@ -58,8 +58,8 @@ export const useEscolas= (localidadeId:number)=>{
               }
     }
 
-/*
-    const fetchEscolasromAPI = async () => {
+
+   const fetchEscolasromAPI = async () => {
 
         const netInfoState = await NetInfo.fetch();
         if (netInfoState.isConnected) {
@@ -67,31 +67,33 @@ export const useEscolas= (localidadeId:number)=>{
             if (isConnected) {
           try {
               const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://192.168.100.28:8080/escola/localidade-escola/${localidadeId}`);
-             
-              const EscData = escolasAPI.map(escola => ({
-                  ...escola,
-                  sincronizado: true, 
-                  idLocal: '',         
+              
+              const EscData: EscolaType[] = escolasAPI.map(escola => ({
+                ...escola,
+                localidade: { id: escola.localidade.id }, // ajusta a estrutura
+                sincronizado: true,
+                idLocal: '', 
               }));
-             
-              if(EscData && Array.isArray(EscData) && EscData.length> 0){
+              
+
+             if(EscData && Array.isArray(EscData) && EscData.length> 0){
                    await salvarEscolas(EscData)
                    const contagem = EscData.length;
                    setContagemescolas(contagem);
               } else {
-                    throw new Error('Dados de imóveis Inválidos');
+                    throw new Error('Dados de escolas Inválidos');
               }
     
           } catch (error) {
-            console.log("CONTAGEM DE IMOVEIS-ERRO!!!:", error);
+            console.log("CONTAGEM DE ESCOLAS-ERRO!!!:", error);
           }
         }}
           
-        };*/
+        };
 
         useEffect(()=>{
             sinconizeQueue()
-            //fetchEscolasromAPI();
+            fetchEscolasromAPI();
             fetchEscolasFromLocalDb();
           }, []);
         

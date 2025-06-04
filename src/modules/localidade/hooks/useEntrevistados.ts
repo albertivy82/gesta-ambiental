@@ -115,19 +115,19 @@ const fetchEntrevistadosFromAPI = async () => {
         if (isConnected) {
             console.log("here")
       try {
-          const imoveisAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`);
-         const ImData = imoveisAPI.map(Entrevistado => ({
-              ...Entrevistado,
-              sincronizado: true, 
-              idLocal: '',         
-          }));
-
-          console.log("nunca se concretiza, por que?", ImData)
+          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`);
+           
+          const entrevistadoData: EntrevistadoType[] = entrevistadoAPI.map(entrevistado => ({
+                         ...entrevistado,
+                         localidade: { id: entrevistado.localidade.id }, // ajusta a estrutura
+                         sincronizado: true,
+                         idLocal: '', 
+                       }));
          
-          if(ImData && Array.isArray(ImData) && ImData.length> 0){
-               await salvarEntrevistados(ImData)
-             
-               const contagem = ImData.length;
+          
+                if(entrevistadoData && Array.isArray(entrevistadoData) && entrevistadoData.length> 0){
+               await salvarEntrevistados(entrevistadoData)
+               const contagem = entrevistadoData.length;
                 setContagemEntrevistados(contagem);
           } else {
                 throw new Error('Dados de entrevistados Inválidos');

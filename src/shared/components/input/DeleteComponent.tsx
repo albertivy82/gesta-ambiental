@@ -1,3 +1,5 @@
+import NetInfo from "@react-native-community/netinfo";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
@@ -6,6 +8,7 @@ import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
 import { apagarImovelQueue, apagarImovelSyncronizado } from '../../../realm/services/imovelService';
+import { apagarPostoQueue, apagarPostoSaudeSyncronizado } from '../../../realm/services/postoService';
 
 interface DeleteConfirmationProps {
   id: number;
@@ -22,34 +25,54 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
   const handleConfirmDelete = async () => {
     setLoading(true);
     try {
-      if(idLocal && id<0){
-        
+      if (idLocal && id < 0) {
         switch (deleteEndpoint) {
           case "imovel":
             apagarImovelQueue(idLocal);
             break;
-        }
-              
-      }else{
-        //verificar se tem rede
-        await await connectionAPIDelete(`http://192.168.100.28:8080/${deleteEndpoint}/${id}`);
-       
-        switch (deleteEndpoint) {
-          case "imovel":
-            apagarImovelSyncronizado(id);
+          case "posto-de-saude":
+            apagarPostoQueue(idLocal);
             break;
         }
-              
+  
+        setModalVisible(false);
+        onDeleteSuccess();
+        navigation.goBack();
+  
+      } else {
+        const netInfoState = await NetInfo.fetch();
+        const isConnected = await testConnection();
+  
+        if (netInfoState.isConnected && isConnected) {
+          await connectionAPIDelete(`http://192.168.100.28:8080/${deleteEndpoint}/${id}`);
+  
+          switch (deleteEndpoint) {
+            case "imovel":
+              apagarImovelSyncronizado(id);
+              break;
+            case "posto-de-saude":
+              apagarPostoSaudeSyncronizado(id);
+              break;
+          }
+  
+          setModalVisible(false);
+          onDeleteSuccess();
+          navigation.goBack();
+  
+        } else {
+          Alert.alert(
+            "Sem conexão",
+            "Este item já foi sincronizado. Para excluir, conecte-se à internet."
+          );
+        }
       }
-      setModalVisible(false);
-      onDeleteSuccess();
-      navigation.goBack();
     } catch (error) {
       Alert.alert("Erro ao excluir", "Tente novamente mais tarde.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <>

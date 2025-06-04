@@ -7,7 +7,8 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { CreditoType } from '../../../shared/types/CreditoType';
 import { CreditoDetailContainer } from '../styles/credito.style';
-import RenderItemCredito from '../ui-components/listaCreditos';
+import RenderItemCredito from '../ui-components/listaCredito';
+
 
 export interface CreditoParams {
   credito: CreditoType;

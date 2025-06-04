@@ -4,7 +4,7 @@ import { realmInstance } from "./databaseService";
 
 
 // Salvar Postos de Saúde no banco de dados local
-export const salvarImoveis = (postos: PostoType[]) =>{
+export const salvarPostos = (postos: PostoType[]) =>{
 
     return new Promise<void>((resolve, reject)=>{
            
@@ -25,7 +25,7 @@ export const salvarImoveis = (postos: PostoType[]) =>{
                                     localidade: posto.localidade.id,
                                 };
 
-                                realmInstance.create('Imovel', postoPadrao, true);
+                                realmInstance.create('Posto', postoPadrao, true);
                     }else{
                        // console.log('Inserindo novo imóvel ou atualizando imóvel com condições diferentes:', imovel);
                         const imovelPadrao ={
@@ -33,7 +33,7 @@ export const salvarImoveis = (postos: PostoType[]) =>{
                            localidade: posto.localidade.id,
                         };
 
-                        realmInstance.create('Imovel', imovelPadrao, true);
+                        realmInstance.create('Posto', imovelPadrao, true);
                     }
                    
                 
@@ -70,7 +70,7 @@ export const salvarPostoSaudeQueue = (posto: postoSaudeInput) => {
           id: Id(), // Gera ID temporário negativo
           localidade: posto.localidade.id,
         };
-        realmInstance.create("PostoSaude", postoPadrao, true);
+        realmInstance.create("Posto", postoPadrao, true);
       });
 
       resolve();
@@ -78,6 +78,41 @@ export const salvarPostoSaudeQueue = (posto: postoSaudeInput) => {
       reject(error);
     }
   });
+};
+
+export const salvarPosto= (posto:PostoType): Promise<PostoType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let postoSalvo;
+            realmInstance.write(() => {
+                const postoExistente = realmInstance
+                    .objects<PostoType>("Posto")
+                    .filtered(`id == ${posto.id}`)[0];
+
+                const postoPadrao = {
+                    ...posto,
+                    localidade: posto.localidade.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (posto.sincronizado && postoExistente && posto.idLocal === '') {
+                    postoSalvo = realmInstance.create("Posto", postoPadrao, true);
+                } else {
+                    postoSalvo = realmInstance.create("Posto", postoPadrao, true);
+                }
+            });
+    if (postoSalvo) {
+        const cleanPosto = JSON.parse(JSON.stringify(postoSalvo))
+        resolve(cleanPosto as PostoType);
+    } else {
+    throw new Error("Erro ao recuperar a posto salva.");
+    }
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 export const getPostos=(localidade:number): PostoType[] =>{
@@ -119,7 +154,7 @@ export const apagarPostoSaudeSyncronizado = (postoId: number) => {
   try {
     realmInstance.write(() => {
       const query = `id == ${postoId}`;
-      const postoAExcluir = realmInstance.objects<PostoType>("PostoSaude").filtered(query);
+      const postoAExcluir = realmInstance.objects<PostoType>("Posto").filtered(query);
       if (postoAExcluir.length > 0) {
         realmInstance.delete(postoAExcluir);
       }

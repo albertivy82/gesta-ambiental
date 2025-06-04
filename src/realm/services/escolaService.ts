@@ -3,21 +3,21 @@ import { EscolaType } from "../../shared/types/EscolaType"
 import { realmInstance } from "./databaseService"
 
 export const salvarEscolas = (escolas: EscolaType[]) =>{
-
+   
     return new Promise<void>((resolve, reject)=>{
            
         try{
             realmInstance.write(()=>{
 
                 escolas.forEach(escola=>{
-
                     //essa duplicação de código foi feita para controlar atualizações de todas os registros
                     //a primeira condição entram apenas atualizações
                     //no segundo novos registros
+                   
                     const escolaRealm = realmInstance.objects('Escola').filtered(`id == ${escola.id}`)[0];
                     //console.log('Imóvel recuperado do Realm:', imovelRealm);
-                    if(escola.sincronizado && escola && escolaRealm.idLocal==''){
-                       // console.log('Atualizando imóvel existente:', imovel);
+                    if(escola.sincronizado && escolaRealm && escola.idLocal==''){
+                       
                               const escolaPadrao ={
                                     ...escola,
                                     localidade: escola.localidade.id,
@@ -31,6 +31,7 @@ export const salvarEscolas = (escolas: EscolaType[]) =>{
                            localidade: escola.localidade.id,
                         };
 
+                        console.log("xxxxxxxxxxxxx", escolaPadrao)
                         realmInstance.create('Escola', escolaPadrao, true);
                     }
                    
@@ -65,6 +66,42 @@ export const getEscolas = (localidadeId:number): EscolaType[]=>{
     return escolasLimpas as EscolaType[];
 
 }
+
+export const salvarEscola= (escola:EscolaType): Promise<EscolaType> => {
+    return new Promise((resolve, reject) => {
+
+        try {
+            let escolaSalvo;
+            realmInstance.write(() => {
+                const escolaExistente = realmInstance
+                    .objects<EscolaType>("Escola")
+                    .filtered(`id == ${escola.id}`)[0];
+
+                const escolaPadrao = {
+                    ...escola,
+                    localidade: escola.localidade.id,
+                };
+
+                // Atualiza somente se sincronizado ou se não existir ainda
+                if (escola.sincronizado && escolaExistente && escola.idLocal === '') {
+                    escolaSalvo = realmInstance.create("Escola", escolaPadrao, true);
+                } else {
+                    escolaSalvo = realmInstance.create("Escola", escolaPadrao, true);
+                }
+            });
+    if (escolaSalvo) {
+        const cleanEscola = JSON.parse(JSON.stringify(escolaSalvo))
+        resolve(cleanEscola as EscolaType);
+    } else {
+    throw new Error("Erro ao recuperar a escola salva.");
+    }
+           
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 
 export const getEscolasDessincronizadas = (localidade: number): EscolaType[] => {
 

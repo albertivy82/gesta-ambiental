@@ -9,6 +9,7 @@ import { theme } from '../../../shared/themes/theme';
 import { PostoType } from '../../../shared/types/postoTypes';
 import { PostoContainer } from '../styles/Postos.style';
 import RenderItemImovel from '../ui-components/listaPostos';
+import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 
 export interface EscolaParam {
   localidadeId: number;
@@ -53,6 +54,7 @@ const Postos = () => {
   };
 
   const handleNovoImovel = () => {
+    console.log("a", localidadeId);
     novoPosto(navigation.navigate, localidadeId);
   };
 

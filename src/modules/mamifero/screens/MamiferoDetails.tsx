@@ -6,7 +6,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { MamiferosType } from '../../../shared/types/MamiferosType';
-import { MamiferoDetailContainer } from '../styles/mamifero.style';
+import { MamiferoDetailContainer } from '../styles/Mamifero.style';
 
 
 export interface MamiferosParam {

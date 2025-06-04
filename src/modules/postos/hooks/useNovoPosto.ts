@@ -2,11 +2,12 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from "uuid";
-import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
-import { salvarPostoSaudeQueue } from "../../../realm/services/postoService";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { SimNao } from "../../../enums/simNao.enum";
+import { salvarPosto, salvarPostoSaudeQueue } from "../../../realm/services/postoService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { postoSaudeInput } from "../../../shared/types/postoSaudeInput";
+import { PostoType } from "../../../shared/types/postoTypes";
 
 export const DEFAULT_POSTO_INPUT: postoSaudeInput = {
   nome: "",
@@ -18,7 +19,7 @@ export const DEFAULT_POSTO_INPUT: postoSaudeInput = {
   },
 };
 
-export const useNovoPosto = (id: number) => {
+export const useNovoPosto = (localidadeId: number) => {
   const [novoPosto, setNovoPosto] = useState<postoSaudeInput>(DEFAULT_POSTO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -35,40 +36,63 @@ export const useNovoPosto = (id: number) => {
 
   const objetoFila = () => {
     const postoData: postoSaudeInput = {
-      ...novoPosto,
-      localidade: {
-        id: id,
-      },
-      sincronizado: false,
-      idLocal: uuidv4(),
+        ...novoPosto, 
+        localidade: { id: localidadeId },
+        sincronizado: false,  
+        idLocal: uuidv4(),
     };
+  
     return postoData;
   };
 
-  const inputPostoApi = async () => {
-    novoPosto.localidade.id = id;
-    const netInfoState = await NetInfo.fetch();
 
-    if (netInfoState.isConnected) {
-      const isConnected = await testConnection();
+  const enviarRegistro = async () =>{
 
-      if (isConnected) {
-        try {
-          await connectionAPIPost("http://192.168.100.28:8080/posto-saude", novoPosto);
-        } catch (error) {
-          const registroNaoEnviado = objetoFila();
-          salvarPostoSaudeQueue(registroNaoEnviado);
-          console.error("Objeto armazenado internamente. Erro:", error);
-        }
-      } else {
-        const registroNaoEnviado = objetoFila();
-        salvarPostoSaudeQueue(registroNaoEnviado);
-      }
-    } else {
-      const registroNaoEnviado = objetoFila();
-      salvarPostoSaudeQueue(registroNaoEnviado);
-    }
-  };
+    novoPosto.localidade = {id:localidadeId};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/posto-de-saude', novoPosto) as PostoType;
+                          
+                      if (response && response.id) {
+                            return fetchPostoAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const postoDataQueue = objetoFila();
+                        const postoQueue = await salvarPostoSaudeQueue(postoDataQueue);
+                        return postoQueue;
+                       
+                    }
+                  }else{
+                    const postoDataQueue = objetoFila();
+                    const postoQueue = await salvarPostoSaudeQueue(postoDataQueue);
+                    return postoQueue;
+                  }
+  }
+  
+   const fetchPostoAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<PostoType>(`http://192.168.100.28:8080/posto-de-saude/${id}`);
+              if (response) {
+                const postoData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+              };
+                   return await salvarPosto(postoData);
+              }else{
+                      throw new Error('Dados de posto Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
 
   const handleOnChangeInput = (
     value: NativeSyntheticEvent<TextInputChangeEventData> | string,
@@ -81,14 +105,14 @@ export const useNovoPosto = (id: number) => {
     }));
   };
 
-  const handleAmbulatorialChange = (ambulatorial: SimNaoTalvez | "" | null) => {
+  const handleAmbulatorialChange = (ambulatorial: SimNao | "" | null) => {
     setNovoPosto((currentPosto) => ({
       ...currentPosto,
       ambulatorial: ambulatorial,
     }));
   };
 
-  const handleUrgenciaEmergenciaChange = (urgenciaEmergencia: SimNaoTalvez | "" | null) => {
+  const handleUrgenciaEmergenciaChange = (urgenciaEmergencia: SimNao | "" | null) => {
     setNovoPosto((currentPosto) => ({
       ...currentPosto,
       urgenciaEmergencia: urgenciaEmergencia,
@@ -115,7 +139,7 @@ export const useNovoPosto = (id: number) => {
 
   return {
     novoPosto,
-    inputPostoApi,
+    enviarRegistro,
     handleOnChangeInput,
     handleAmbulatorialChange,
     handleUrgenciaEmergenciaChange,

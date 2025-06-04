@@ -1,9 +1,10 @@
+import { SimNao } from "../../enums/simNao.enum";
 import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface postoSaudeInput {
   nome: string;
-  ambulatorial: SimNaoTalvez | "" | null;
-  urgenciaEmergencia: SimNaoTalvez | "" | null;
+  ambulatorial: SimNao | "" | null;
+  urgenciaEmergencia: SimNao | "" | null;
   medicosPorTurno: number;
   localidade: {
     id: number;

@@ -4,7 +4,7 @@ export const PescaArtesanalSchema = {
     properties: {
         id: 'int',
         freqPescaSemanal: 'int',
-        horasPorDia: 'double',
+        horasPorDia: 'string',
         localDaPesca: 'string',
         horarioPrefencialPesca: 'string',
         descartePorPescaria: 'float',

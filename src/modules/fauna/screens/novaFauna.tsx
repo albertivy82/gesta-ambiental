@@ -1,13 +1,12 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, Button } from "react-native";
+import { Alert, ScrollView, Button, View } from "react-native";
 import { SimNao } from "../../../enums/simNao.enum";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovaFauna } from "../hooks/useInputFuna";
 import { FaunaDetailContainer } from "../styles/Fauna.style";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { View } from "react-native-reanimated/lib/typescript/Animated";
 import { ActivityIndicator } from "react-native-paper";
 import { FaunaType } from "../../../shared/types/FaunaType";
 

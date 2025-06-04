@@ -11,7 +11,7 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_PESCA_ARTESANAL_INPUT: PescaArtesanalInput = {
   freqPescaSemanal: 0,
-  horasPorDia: 0,
+  horasPorDia: '',
   localDaPesca: '',
   horarioPrefencialPesca: '',
   descartePorPescaria: 0,
@@ -44,7 +44,7 @@ export const useInputPescaArtesanal = (benfeitoria: BenfeitoriaType) => {
     console.log(novaPescaArtesanal);
     if (
       novaPescaArtesanal.freqPescaSemanal > 0 &&
-      novaPescaArtesanal.horasPorDia > 0 &&
+      novaPescaArtesanal.horasPorDia > '' &&
       novaPescaArtesanal.localDaPesca !== '' &&
       novaPescaArtesanal.horarioPrefencialPesca !== '' &&
       novaPescaArtesanal.descartePorPescaria >= 0 &&
@@ -165,6 +165,19 @@ export const useInputPescaArtesanal = (benfeitoria: BenfeitoriaType) => {
         }));
       };
 
+      const handleOnChangeInput = (
+        value: NativeSyntheticEvent<TextInputChangeEventData> | string,
+        name: string
+      ) => {
+        // Verifica se "value" é um evento ou uma string diretamente
+        const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
+      
+        setNovaPescaArtesanal((current) => ({
+          ...current,
+          [name]: newValue,
+        }));
+        };
+
       const handleArrayFieldChange = (field: keyof PescaArtesanalInput, values: string[]) => {
                  const concatenatedValues = values.join(', '); // Concatena os valores com vírgulas
                  setNovaPescaArtesanal((currentState) => ({
@@ -172,13 +185,58 @@ export const useInputPescaArtesanal = (benfeitoria: BenfeitoriaType) => {
                    [field]: concatenatedValues,
                  }));
          };
+
+     const handleOnChangeMedidasPesca = (field: keyof PescaArtesanalInput, event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+          let value = event.nativeEvent.text;
+        
+          // Remove qualquer caractere não numérico
+          value = value.replace(/\D/g, '');
+        
+          // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+          const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+        
+          // Atualiza o estado com o valor formatado como número
+          setNovaPescaArtesanal((currentState) => ({
+            ...currentState,
+            [field]: parseFloat(formattedValue), // Salva como número para enviar à API
+          }));
+     };
+
+      const handleHoraMinutoFieldChange = (
+          field: keyof PescaArtesanalInput,
+          hora: number | null,
+          minuto: number | null
+        ) => {
+          if (hora === null || minuto === null) return;
+        
+          const horaFormatada = hora.toString().padStart(2, '0');
+          const minutoFormatado = minuto.toString().padStart(2, '0');
+          const horario = `${horaFormatada}:${minutoFormatado}`;
+        
+          setNovaPescaArtesanal((currentState) => ({
+            ...currentState,
+            [field]: horario,
+          }));
+        };
+
+          const handleEnumChange = (field: keyof PescaArtesanalInput, value: any) => {
+            setNovaPescaArtesanal((current) => ({
+               ...current,
+               [field]: value,
+             }));
+           };
+        
   
 
   return {
     novaPescaArtesanal,
     handleNumberChange,
+    handleOnChangeInput,
     handleArrayFieldChange,
+    handleHoraMinutoFieldChange,
+    handleOnChangeMedidasPesca,
     enviarRegistro,
+    handleEnumChange,
     disabled,
   };
 

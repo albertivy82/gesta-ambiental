@@ -7,7 +7,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { VegetacaoType } from '../../../shared/types/VegetacaoType';
-import { VegetacaoDetailContainer } from '../styles/vegetacao.style';
+import { VegetacaoDetailContainer } from '../styles/Vegetacao.style';
 import RenderItemVegetacao from '../ui-components/listaVegetacao';
 
 

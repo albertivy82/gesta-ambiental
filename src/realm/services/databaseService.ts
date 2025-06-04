@@ -1,10 +1,8 @@
 import Realm from 'realm';
-import { ComprasSchema } from '../models/ComprasSchema';
 import { FaunaSchema } from '../models/FaunaSchema';
 import { ParticipacaoInstituicaoSchema } from '../models/ParticipacaoInstituicaoSchema';
 import { ServicosComunicacaoSchema } from '../models/ServicosComunicacaoSchema';
 import { AguaSchema } from '../models/aguaSchema';
-import { AlimentacaoSchema } from '../models/alimentacaoSchema';
 import { AtividadeProdutivaSchema } from '../models/atividadeProdutivaSchema';
 import { AvesSchema } from '../models/avesSchema';
 import { BenfeitoriaSchema } from '../models/benfeitoriaSchema';
@@ -34,8 +32,6 @@ const allSchemas = [LocalidadeSchema,
                      PostoSchema, 
                      EscolaSchema, 
                      BenfeitoriaSchema,
-                     AlimentacaoSchema,
-                     ComprasSchema,
                      ServicosComunicacaoSchema,
                      DependenciasSchema,
                      AvesSchema,

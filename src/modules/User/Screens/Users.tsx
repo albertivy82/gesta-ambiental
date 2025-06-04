@@ -36,9 +36,7 @@ const {sendUser,
       const emailInput = useRef<TextInput>(null);
       const cpfInput = useRef<TextInput>(null);
       
-      console.log("user recebido", params)
-
-
+     
       useEffect(() => {
             if (user) {
               setDadosUsuarioEditado(user);

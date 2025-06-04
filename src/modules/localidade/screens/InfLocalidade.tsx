@@ -57,9 +57,7 @@ const InfLocalidade = () => {
       const {contagemPostos} = usePostos(localidade.id);     
       const {contagemEntrevistados} = useEntrevistados(localidade.id);
       
-      
-  
-      
+           
       
       //BLOCO IMOVEL
       const  handleGerenciaEntrevistados =  (localidadeId: number, contagemEntrevistados: number) =>{
@@ -73,7 +71,7 @@ const InfLocalidade = () => {
 
        //BLOCO ESCOLAS
        const  handleGerenciaEscolas =  (localidadeId: number, contagemEntrevistados: number) =>{
-        if(contagemEntrevistados>0){
+        if(contagemEscolas>0){
           escolasDaLocalidade(navigation.navigate, localidadeId);
         }else{
           NovaEscolaDaLocalidade(navigation.navigate, localidadeId);

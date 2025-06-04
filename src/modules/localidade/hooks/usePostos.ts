@@ -1,6 +1,6 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { apagarPostoQueue, getPostos, getPostosDessincronizados, salvarPostoSaudeQueue } from "../../../realm/services/postoService";
+import { apagarPostoQueue, getPostos, getPostosDessincronizados, salvarPostos, salvarPostoSaudeQueue } from "../../../realm/services/postoService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { PostoType } from "../../../shared/types/postoTypes";
@@ -48,39 +48,44 @@ export const usePostos = (localidadeId: number) => {
         }
     };
 
-    const fetchPostosFromLocalDb = () => {
-        const localData = getPostos(localidadeId);
-        if (localData.length > 0) {
-            const contagem = localData.length;
-            setContagemPostos(contagem);
-        }
+    const fetchPostosFromLocalDb = () =>{
+            const localData = getPostos(localidadeId);
+                  if (localData.length>0){
+                    const contagem = localData.length;
+                    setContagemPostos(contagem);
+                  }
     }
 
     const fetchPostosFromAPI = async () => {
+
         const netInfoState = await NetInfo.fetch();
         if (netInfoState.isConnected) {
             const isConnected = await testConnection();
             if (isConnected) {
-                try {
-                    const postosAPI = await connectionAPIGet<PostoType[]>(`http://192.168.100.28:8080/posto-de-saude/localidade-posto/${localidadeId}`);
-                    const PostoData = postosAPI.map(posto => ({
-                        ...posto,
-                        sincronizado: true, 
-                        idLocal: '',         
-                    }));
-                   
-                    if (PostoData && Array.isArray(PostoData) && PostoData.length > 0) {
-                        //await salvarPosto(PostoData);
-                        const contagem = PostoData.length;
-                        setContagemPostos(contagem);
-                    } else {
-                        throw new Error('Dados de postos inválidos');
-                    }
-                } catch (error) {
-                    console.log("CONTAGEM DE POSTOS-ERRO!!!:", error);
-                }
-            }
-        }
+          try {
+              const postosAPI = await connectionAPIGet<PostoType[]>(`http://192.168.100.28:8080/posto-de-saude/localidade-posto/${localidadeId}`);
+              
+              const postoData: PostoType[] = postosAPI.map(posto => ({
+                ...posto,
+                localidade: { id: posto.localidade.id }, // ajusta a estrutura
+                sincronizado: true,
+                idLocal: '', 
+              }));
+              
+
+             if(postoData && Array.isArray(postoData) && postoData.length> 0){
+                   await salvarPostos(postoData)
+                   const contagem = postoData.length;
+                   setContagemPostos(contagem);
+              } else {
+                    throw new Error('Dados de postos Inválidos');
+              }
+    
+          } catch (error) {
+            console.log("CONTAGEM DE POSTOS-ERRO!!!:", error);
+          }
+        }}
+          
     };
 
     useEffect(() => {

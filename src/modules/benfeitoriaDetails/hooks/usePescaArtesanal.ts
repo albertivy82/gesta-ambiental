@@ -2,7 +2,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { PescaArtesanalType } from "../../../shared/types/PescaArtesanal";
-import { apagarPescaArtesanalQueue, getPescaArtesanal, getPescaArtesanalDessincronizadas, salvarPescaArtesanal } from "../../../realm/services/pescaService";
+import { apagarPescaArtesanalQueue, getPescaArtesanal, getPescaArtesanalDessincronizadas, salvarPescaArtesanal, salvarPescasArtesanais } from "../../../realm/services/pescaService";
 
 
 export const convertToPescaArtesanalInput = (pesca: any) => ({
@@ -51,7 +51,7 @@ export const usePescaArtesanal = (benfeitoriaId: number) => {
         idFather: '',
       }));
       if (data.length > 0) {
-        await salvarPescaArtesanal(data);
+        await salvarPescasArtesanais(data);
         setPescaArtesanal(prev => [...prev, ...data]);
       }
     } catch (error) {

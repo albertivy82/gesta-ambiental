@@ -5,7 +5,7 @@ import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 export interface PescaArtesanalInput {
     
     freqPescaSemanal: number;
-    horasPorDia: number;
+    horasPorDia: string;
     localDaPesca: string;
     horarioPrefencialPesca: string;
     descartePorPescaria: number;

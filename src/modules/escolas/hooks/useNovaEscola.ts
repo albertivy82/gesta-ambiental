@@ -4,14 +4,17 @@ import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { escolaInput } from "../../../shared/types/EscolaInput";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
-import { salvarEscolaQueue } from "../../../realm/services/escolaService";
+import { salvarEscola, salvarEscolaQueue } from "../../../realm/services/escolaService";
 import { EsferaEnum } from "../../../enums/esfera.enum";
+import { EscolaType } from "../../../shared/types/EscolaType";
+import { LocalidadeType } from "../../../shared/types/LocalidadeType";
+import { SimNao } from "../../../enums/simNao.enum";
 
 
 export const DEFAULT_ESCOLA_INPUT: escolaInput = {
-  nome: "",
+  nome: '',
   iniciativa: null,
   merenda: null,
   transporte: null,
@@ -21,12 +24,12 @@ export const DEFAULT_ESCOLA_INPUT: escolaInput = {
   },
 };
 
-export const useNovaEscola = (id: number) => {
+export const useNovaEscola = (localidadeId: number) => {
   const [novaEscola, setNovaEscola] = useState<escolaInput>(DEFAULT_ESCOLA_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novaEscola)
+    
     if (
       novaEscola.nome !== '' && 
       novaEscola.iniciativa != null &&
@@ -35,45 +38,69 @@ export const useNovaEscola = (id: number) => {
       novaEscola.educacaoAmbiental != null
      
     ) {
-      setDisabled(true);
+      setDisabled(false);
     }
   }, [novaEscola]);
 
   const objetoFila = () => {
     const escolaData: escolaInput = {
-      ...novaEscola,
-      localidade: {
-        id: id,
-      },
-      sincronizado: false,
-      idLocal: uuidv4(),
+        ...novaEscola, 
+        localidade: { id: localidadeId},
+        sincronizado: false,  
+        idLocal: uuidv4(),
     };
+  
     return escolaData;
   };
 
-  const inputEscolaApi = async () => {
-    novaEscola.localidade.id = id;
-    const netInfoState = await NetInfo.fetch();
 
-    if (netInfoState.isConnected) {
-      const isConnected = await testConnection();
-      if (isConnected) {
-        try {
-          await connectionAPIPost("http://192.168.100.28:8080/escola",novaEscola);
-        } catch (error) {
-          const registroNaoEnviado = objetoFila();
-          salvarEscolaQueue(registroNaoEnviado);
-          console.error("Objeto armazenado internamente. Erro:", error);
-        }
-      } else {
-        const registroNaoEnviado = objetoFila();
-        salvarEscolaQueue(registroNaoEnviado);
-      }
-    } else {
-      const registroNaoEnviado = objetoFila();
-      salvarEscolaQueue(registroNaoEnviado);
-    }
-  };
+  const enviarRegistro = async () =>{
+
+    novaEscola.localidade = {id:localidadeId};
+            const netInfoState = await NetInfo.fetch();
+            const isConnected = await testConnection();
+          
+                  if(netInfoState.isConnected && isConnected){
+                    
+                    try{
+                       
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscola) as EscolaType;
+                          
+                      if (response && response.id) {
+                            return fetchEscolaAPI(response.id);
+                      }
+  
+                    } catch (error) {
+                        const escolaDataQueue = objetoFila();
+                        const escolaQueue = await salvarEscolaQueue(escolaDataQueue);
+                        return escolaQueue;
+                       
+                    }
+                  }else{
+                    const escolaDataQueue = objetoFila();
+                    const escolaQueue = await salvarEscolaQueue(escolaDataQueue);
+                    return escolaQueue;
+                  }
+  }
+  
+   const fetchEscolaAPI = async(id:number) =>{
+  
+          try{
+              const response = await connectionAPIGet<EscolaType>(`http://192.168.100.28:8080/escola/${id}`);
+              if (response) {
+                const escolaData = {
+                    ...response,
+                    sincronizado: true,
+                    idLocal: '',
+              };
+                   return await salvarEscola(escolaData);
+              }else{
+                      throw new Error('Dados de escola Inválidos'); 
+                  }
+          } catch (error) {
+                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+          }
+    };
 
   const handleOnChangeInput = (
     value: NativeSyntheticEvent<TextInputChangeEventData> | string,
@@ -94,14 +121,14 @@ export const useNovaEscola = (id: number) => {
     }));
   };
 
-  const handleMerenda = (merenda: SimNaoTalvez | "" | null) => {
+  const handleMerenda = (merenda: SimNao | "" | null) => {
     setNovaEscola((currentMerenda) => ({
       ...currentMerenda,
       merenda: merenda,
     }));
   };
 
-  const handleEducAmbiental = (educaAmbiental: SimNaoTalvez | "" | null) => {
+  const handleEducAmbiental = (educaAmbiental: SimNao | "" | null) => {
     setNovaEscola((currentEducaAbiental) => ({
       ...currentEducaAbiental,
       educacaoAmbiental: educaAmbiental,
@@ -109,7 +136,7 @@ export const useNovaEscola = (id: number) => {
   };
 
 
-  const handleTransporte = (transporte: SimNaoTalvez | "" | null) => {
+  const handleTransporte = (transporte: SimNao | "" | null) => {
     setNovaEscola((currentTransporte) => ({
       ...currentTransporte,
       transporte: transporte,
@@ -121,7 +148,7 @@ export const useNovaEscola = (id: number) => {
   return {
     novaEscola,
     handleOnChangeInput,
-    inputEscolaApi,
+    enviarRegistro,
     handleIniciativa,
     handleMerenda,
     handleEducAmbiental,

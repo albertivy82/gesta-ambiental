@@ -8,7 +8,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { FaunaType } from '../../../shared/types/FaunaType';
-import { FaunaDetailContainer } from '../styles/fauna.style';
+import { FaunaDetailContainer } from '../styles/Fauna.style';
 import RenderItemFauna from '../ui-components/listaFauna';
 
 
