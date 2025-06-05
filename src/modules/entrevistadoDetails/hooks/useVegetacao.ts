@@ -64,7 +64,7 @@ export const useVegetacoes = (entrevistadoId: number) => {
                                     console.log("Vegetação: ponto de sincronização 6");
                                 }
                             } catch (error) {
-                                // console.error('Erro na sincronização da vegetação:', error);
+                                // console.log('Erro na sincronização da vegetação:', error);
                             }
                         }
                     }
@@ -98,7 +98,7 @@ export const useVegetacoes = (entrevistadoId: number) => {
                 throw new Error('Dados de vegetação inválidos');
             }
         } catch (error) {
-            // console.error("CONTAGEM DE VEGETAÇÕES - ERRO!!!:", error);
+            // console.log("CONTAGEM DE VEGETAÇÕES - ERRO!!!:", error);
         }
     };
 

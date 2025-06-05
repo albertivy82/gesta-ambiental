@@ -9,6 +9,7 @@ import { theme } from '../../../shared/themes/theme';
 import { EscolaType } from '../../../shared/types/EscolaType';
 import { EscolaContainer } from '../styles/Escolas.style';
 import RenderItemEscola from '../ui-components/listaEscolas';
+import { useEscolas } from '../../localidade/hooks/useEscolas';
 
 export interface EscolasParam {
   localidadeId: number;
@@ -22,12 +23,13 @@ const Escolas = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, EscolasParam>, 'Imovel'>>();
   const { localidadeId } = route.params;
+  const {contagemEscolas} = useEscolas(localidadeId);
   const flatListRef = useRef<FlatList>(null);
 
   const [escola, setEscola] = useState<EscolaType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Carrega a lista inicial de imóveis
+  // Carrega a lista inicial de escolas
   const fetchEscolas = useCallback(async () => {
     setIsLoading(true);
     if (localidadeId) {
@@ -45,8 +47,9 @@ const Escolas = () => {
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
-
-  // Atualiza a lista de imóveis
+   
+ 
+  // Atualiza a lista de escolas
   const handleRefresh = () => {
     fetchEscolas();
     handleScrollToEnd();

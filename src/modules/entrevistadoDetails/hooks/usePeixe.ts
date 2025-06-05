@@ -42,7 +42,7 @@ export const usePeixes = (entrevistadoId: number) => {
                                     apagarPeixeQueue(peixe.idLocal!);
                                 }
                             } catch (error) {
-                                console.error('Erro na sincronização do peixe:', error);
+                                console.log('Erro na sincronização do peixe:', error);
                             }
                         }
                     }
@@ -76,7 +76,7 @@ export const usePeixes = (entrevistadoId: number) => {
                 throw new Error('Dados de peixe inválidos');
             }
         } catch (error) {
-            console.error("Erro ao recuperar peixes da API:", error);
+            console.log("Erro ao recuperar peixes da API:", error);
         }
     };
 

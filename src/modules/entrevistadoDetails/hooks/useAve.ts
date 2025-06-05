@@ -50,7 +50,7 @@ export const useAves = (entrevistadoId: number) => {
                                     apagarAveQueue(ave.idLocal!);
                                 }
                             } catch (error) {
-                                console.error('Erro na sincronização das aves:', error);
+                                console.log('Erro na sincronização das aves:', error);
                             }
                         }
                     }
@@ -85,7 +85,7 @@ export const useAves = (entrevistadoId: number) => {
                 throw new Error('Dados de aves inválidos');
             }
         } catch (error) {
-            console.error("Erro ao recuperar aves da API:", error);
+            console.log("Erro ao recuperar aves da API:", error);
         }
     };
 

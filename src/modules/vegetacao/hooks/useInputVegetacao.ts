@@ -35,7 +35,7 @@ export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
   },
 };
 
-export const useNovaVegetacao = (entrevistado:EntrevistadoType) => {
+export const useNovaVegetacao = (entrevistado:EntrevistadoType, vegetacao?: VegetacaoType) => {
   const [novaVegetacao, setNovaVegetacao] = useState<VegetacaoInput>(DEFAULT_VEGETACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 

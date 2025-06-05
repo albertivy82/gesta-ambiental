@@ -10,6 +10,7 @@ import { PostoType } from '../../../shared/types/postoTypes';
 import { PostoContainer } from '../styles/Postos.style';
 import RenderItemImovel from '../ui-components/listaPostos';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
+import { usePostos } from '../../localidade/hooks/usePostos';
 
 export interface EscolaParam {
   localidadeId: number;
@@ -23,6 +24,7 @@ const Postos = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, EscolaParam>, 'Posto'>>();
   const { localidadeId } = route.params;
+   const {contagemPostos} = usePostos(localidadeId);
   const flatListRef = useRef<FlatList>(null);
 
   const [posto, setPosto] = useState<PostoType[]>([]);

@@ -30,12 +30,12 @@ const fetchLocalidadeFromDB = () =>{
                                 setIsPresent(true);
                                 
                         } else {
-                          console.error('Dados de localidade inválidos:');
+                          console.log('Dados de localidade inválidos:');
                           throw new Error('Dados de localidade inválidos');
                         }
         
       } catch (err) {
-        console.error('Erro ao obter dados de localidade:', err);
+        console.log('Erro ao obter dados de localidade:', err);
               if (err instanceof Error) {
                 setError(err);
               } else {

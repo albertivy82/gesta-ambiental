@@ -57,7 +57,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-     console.log(novoEntrevistado)
+     
       if (
           novoEntrevistado.nome !== '' && 
           novoEntrevistado.naturalidade !== '' && 
@@ -96,7 +96,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
         
           setDisabled(false);
       }
-      console.log("Valor do disabled após o set:", disabled);
+      
   }, [novoEntrevistado]);
   
 

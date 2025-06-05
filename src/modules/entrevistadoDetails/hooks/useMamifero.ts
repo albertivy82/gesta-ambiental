@@ -46,7 +46,7 @@ export const useMamiferos = (entrevistadoId: number) => {
                                     apagarMamiferoQueue(mamifero.idLocal!);
                                 }
                             } catch (error) {
-                                console.error('Erro na sincronização do mamífero:', error);
+                                console.log('Erro na sincronização do mamífero:', error);
                             }
                         }
                     }
@@ -79,7 +79,7 @@ export const useMamiferos = (entrevistadoId: number) => {
                 throw new Error('Dados de mamífero inválidos');
             }
         } catch (error) {
-            console.error("Erro ao recuperar mamíferos da API:", error);
+            console.log("Erro ao recuperar mamíferos da API:", error);
         }
     };
 

@@ -11,16 +11,19 @@ import { ActivityIndicator } from "react-native-paper";
 import { VegetacaoType } from "../../../shared/types/VegetacaoType";
 
 
-export interface idParam {
-  entrevistado: EntrevistadoType;
-}
 
+export interface NovaVegetacaoParams {
+  entrevistado: EntrevistadoType;
+  vegetacao?: VegetacaoType;
+}
 export const detalharVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], vegetacao: VegetacaoType)=>{
     navigate('VegetacaoDetails', {vegetacao})
 }
 
 export const NovaVegetacao = ()=>{
-   const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+   const { params } = useRoute<RouteProp<Record<string, NovaVegetacaoParams>, string>>();
+   const entrevistado = params.entrevistado ?? params.vegetacao?.entrevistado;
+   const vegetacao = params.vegetacao;
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const [loading, setLoading] = useState(false); 
    const [outrosUsos, setOutrosUsos] = useState<string>('');     
@@ -31,7 +34,7 @@ export const NovaVegetacao = ()=>{
             handleEnumChange,
             handleArrayFieldChange,
             disabled
-          } = useNovaVegetacao(params.entrevistado);
+          } = useNovaVegetacao(entrevistado, vegetacao);
 
 
   useEffect(() => {

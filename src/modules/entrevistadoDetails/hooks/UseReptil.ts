@@ -45,7 +45,7 @@ export const useReptils = (entrevistadoId: number) => {
                                     apagarReptilQueue(reptil.idLocal!);
                                 }
                             } catch (error) {
-                                console.error('Erro na sincronização do reptil:', error);
+                                console.log('Erro na sincronização do reptil:', error);
                             }
                         }
                     }
@@ -79,7 +79,7 @@ export const useReptils = (entrevistadoId: number) => {
                 throw new Error('Dados de reptil inválidos');
             }
         } catch (error) {
-            console.error("Erro ao recuperar reptils da API:", error);
+            console.log("Erro ao recuperar reptils da API:", error);
         }
     };
 

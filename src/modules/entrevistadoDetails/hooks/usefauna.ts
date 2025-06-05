@@ -47,7 +47,7 @@ export const useFauna = (entrevistadoId: number) => {
                                     apagarFaunaQueue(fauna.idLocal!);
                                 }
                             } catch (error) {
-                                console.error('Erro na sincronização da fauna:', error);
+                                console.log('Erro na sincronização da fauna:', error);
                             }
                         }
                     }
@@ -80,7 +80,7 @@ export const useFauna = (entrevistadoId: number) => {
                 throw new Error('Dados de fauna inválidos');
             }
         } catch (error) {
-            console.error("Erro ao recuperar fauna da API:", error);
+            console.log("Erro ao recuperar fauna da API:", error);
         }
     };
 

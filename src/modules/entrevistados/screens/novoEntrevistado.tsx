@@ -18,6 +18,8 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import Text from "../../../shared/components/text/Text";
+import { formatarData, formatDateForApi } from "../../../shared/functions/data";
 
 
 export interface NovoEntrevistadoParams {
@@ -47,39 +49,68 @@ export const NovoEntrevistado = ()=>{
          
     
           useEffect(() => {
-            if (entrevistado) {
-              handleOnChangeInput(entrevistado.nome, 'nome');
-              handleOnChangeInput(entrevistado.naturalidade, 'naturalidade');
-              handleOnChangeData(new Date(entrevistado.nascimentoData), 'nascimentoData');
-              handleEnumChange('sexo', entrevistado.sexo);
-              handleOnChangeInput(entrevistado.apelido, 'apelido');
-              handleEnumChange('escolaridade', entrevistado.escolaridade);
-              handleEnumChange('estadoCivil', entrevistado.estadoCivil);
-              handleOnChangeInput(entrevistado.religiao, 'religiao');
-              handleEnumChange('morador', entrevistado.morador);
-              handleOnChangeData(new Date(entrevistado.dataChegada), 'dataChegada');
-              handleEnumChange('pretendeMudar', entrevistado.pretendeMudar);
-              handleOnChangeInput(entrevistado.motivoVontadeMudanca ?? '', 'motivoVontadeMudanca');
-              handleOnChangeInput(entrevistado.relacaoAreaImovel, 'relacaoAreaImovel');
-              handleOnChangeInput(entrevistado.relacaoVizinhos, 'relacaoVizinhos');
-              handleOnChangeInput(entrevistado.religiao, 'religiao');
-              handleOnChangeInput(entrevistado.problemasDeViolenciaLocal ?? '', 'problemasDeViolenciaLocal');
-              handleEnumChange('conheceUcs', entrevistado.conheceUcs);
-              handleEnumChange('conheceUcProposta', entrevistado.conheceUcProposta);
-              handleEnumChange('conheceAreaUc', entrevistado.conheceAreaUc);
-              handleOnChangeInput(entrevistado.propostaMelhorarArea ?? '', 'propostaMelhorarArea');
-              handleOnChangeInput(entrevistado.indicadoConsultaPublica ?? '', 'indicadoConsultaPublica');
-              handleOnChangeInput(entrevistado.contatoIndicadoConsultaPublica ?? '', 'contatoIndicadoConsultaPublica');
-              
-              // Campos numéricos
-              handleNumberChange({ nativeEvent: { text: entrevistado.sofreuAssaltos?.toString() ?? '' } } as any, 'sofreuAssaltos');
-              handleNumberChange({ nativeEvent: { text: entrevistado.presenciouAssalto?.toString() ?? '' } } as any, 'presenciouAssalto');
-            }
+            if (!entrevistado) return;
+          
+            // Campos básicos
+            handleOnChangeInput(entrevistado.nome, 'nome');
+            handleOnChangeInput(entrevistado.naturalidade, 'naturalidade');
+            handleOnChangeInput(entrevistado.apelido, 'apelido');
+            handleOnChangeInput(entrevistado.religiao, 'religiao');
+          
+            // Datas
+            handleOnChangeData(new Date(entrevistado.nascimentoData), 'nascimentoData');
+            handleOnChangeData(new Date(entrevistado.dataChegada), 'dataChegada');
+          
+            // Enums
+            handleEnumChange('sexo', entrevistado.sexo);
+            handleEnumChange('escolaridade', entrevistado.escolaridade);
+            handleEnumChange('estadoCivil', entrevistado.estadoCivil);
+            handleEnumChange('morador', entrevistado.morador);
+            handleEnumChange('pretendeMudar', entrevistado.pretendeMudar);
+            handleEnumChange('conheceUcs', entrevistado.conheceUcs);
+            handleEnumChange('conheceUcProposta', entrevistado.conheceUcProposta);
+            handleEnumChange('conheceAreaUc', entrevistado.conheceAreaUc);
+            
+
+
+
+            // Campos de texto opcionais
+            handleOnChangeInput(entrevistado.motivoVontadeMudanca ?? '', 'motivoVontadeMudanca');
+            handleOnChangeInput(entrevistado.relacaoAreaImovel ?? '', 'relacaoAreaImovel');
+            handleOnChangeInput(entrevistado.relacaoVizinhos ?? '', 'relacaoVizinhos');
+            handleOnChangeInput(entrevistado.tipoAlimentacao ?? '', 'tipoAlimentacao');
+            handleOnChangeInput(entrevistado.localCompras ?? '', 'localCompras');
+            handleOnChangeInput(entrevistado.servicosDeficitarios ?? '', 'servicosDeficitarios');
+            handleOnChangeInput(entrevistado.comoCuidaSaudeFamilia ?? '', 'comoCuidaSaudeFamilia');
+            handleOnChangeInput(entrevistado.instituicaoConhecida ?? '', 'instituicaoConhecida');
+            handleOnChangeInput(entrevistado.problemasDeViolenciaLocal ?? '', 'problemasDeViolenciaLocal');
+            handleOnChangeInput(entrevistado.propostaMelhorarArea ?? '', 'propostaMelhorarArea');
+            handleOnChangeInput(entrevistado.indicadoConsultaPublica ?? '', 'indicadoConsultaPublica');
+            handleOnChangeInput(entrevistado.contatoIndicadoConsultaPublica ?? '', 'contatoIndicadoConsultaPublica');
+            handleOnChangeInput(entrevistado.importanciaDeProtegerAmbiente ?? '', 'importanciaDeProtegerAmbiente');
+            handleOnChangeInput(entrevistado.importanciaDeProtegerFauna ?? '', 'importanciaDeProtegerFauna');
+            handleOnChangeInput(entrevistado.qualEspacoPrecisaSerPreservado ?? '', 'qualEspacoPrecisaSerPreservado');
+            handleOnChangeInput(entrevistado.problemasRelacionadosAoAmbiente ?? '', 'problemasRelacionadosAoAmbiente');
+            
+          
+            // Campos numéricos
+            handleNumberChange({ nativeEvent: { text: entrevistado.sofreuAssaltos?.toString() ?? '' } } as any, 'sofreuAssaltos');
+            handleNumberChange({ nativeEvent: { text: entrevistado.presenciouAssalto?.toString() ?? '' } } as any, 'presenciouAssalto');
+          
           }, [entrevistado]);
+
+          const valorSalvoUsoArea = entrevistado?.utilizaAreaUc ?? '';
+          const valorSalvoCuidadosSaude = entrevistado?.comoCuidaSaudeFamilia ?? '';
+          const valorSalvoInstituicaoConhecida = entrevistado?.instituicaoConhecida ?? '';
+          const valorSalvoTipoAlimentacao = entrevistado?.tipoAlimentacao ?? '';
+          const valorSalvoLocalCompras = entrevistado?.localCompras ?? '';
+          const valorSalvoServicosDeficitarios = entrevistado?.servicosDeficitarios ?? '';
+          const valorSalvoNascimento = entrevistado?.nascimentoData ? formatDateForApi(new Date(entrevistado.nascimentoData)) : '';
+          const valorSalvoDataChegada = entrevistado?.dataChegada   ? formatarData(new Date(entrevistado.dataChegada)) : '';
+          
+          
             
    
-    const nomeInput = useRef<TextInput>(null);
-    const naturalidadeInput = useRef<TextInput>(null);
     const sexoOptions = Object.values(Sexo);
     const saudeOptions = Object.values(AtendimentoSaude);
     const sexoEscolaridade = Object.values(Escolaridade);
@@ -89,8 +120,28 @@ export const NovoEntrevistado = ()=>{
     const alimentacaoOptions = Object.values(Alimentacao);
     const comprasOptions = Object.values(Compras);
     const servicosOptions = Object.values(ServicoPublicos);
+    
+    
+    const nomeInput = useRef<TextInput>(null);
+    const naturalidadeInput = useRef<TextInput>(null);
+    const apelidoInput = useRef<TextInput>(null);
+    const religiaoInput = useRef<TextInput>(null);
     const relacaoAreaInput = useRef<TextInput>(null);
     const relacaoVizinhoInput = useRef<TextInput>(null);
+    const propostaMelhoriaInput = useRef<TextInput>(null);
+    const indicadoConsultaInput = useRef<TextInput>(null);
+    const sofreuAssaltosInput = useRef<TextInput>(null);
+    const presenciouAssaltosInput = useRef<TextInput>(null);
+    const violenciaLocalInput = useRef<TextInput>(null);
+    const protegerAmbienteInput = useRef<TextInput>(null);
+    const protegerFaunaInput = useRef<TextInput>(null);
+    const espacoPreservadoInput = useRef<TextInput>(null);
+    const problemasAmbienteInput = useRef<TextInput>(null);
+    const contatoConsultaInput = useRef<TextInput>(null);
+
+
+
+
   
     const [alimentacoInformada, setAlimentacoInformada] = useState<string[]>([]);  
     const [outrasInformadas, setOutrasInformadas] = useState<string>('');
@@ -212,19 +263,25 @@ export const NovoEntrevistado = ()=>{
               placeholder="Nome do entrevistado"
               margin="15px 10px 30px 5px"
               title="Nome:"
-              onSubmitEditing={()=>naturalidadeInput.current?.focus()}
-              ref={nomeInput}/>
-
+              ref={nomeInput}
+              onSubmitEditing={() => naturalidadeInput.current?.focus()}
+            />
            <Input 
               value={novoEntrevistado.naturalidade} 
               onChange={(event)=> handleOnChangeInput(event, 'naturalidade')}
               placeholder="naturalidade"
               margin="15px 10px 30px 5px"
               title="Naturalidade:"
-              onSubmitEditing={()=>naturalidadeInput.current?.focus()}
-              ref={nomeInput}/>
+              ref={naturalidadeInput}
+              />
 
-           <DateSelector
+              {valorSalvoNascimento && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Data de nascimento salva (ano/mês/dia): {valorSalvoNascimento}
+                </Text>
+              )}
+
+              <DateSelector
                 label="Data de nascimento"
                 onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'nascimentoData')}
               />
@@ -242,8 +299,7 @@ export const NovoEntrevistado = ()=>{
               placeholder="como é mais conhecido na região"
               margin="15px 10px 30px 5px"
               title="Apelido:"
-              onSubmitEditing={()=>naturalidadeInput.current?.focus()}
-              ref={nomeInput}
+              ref={apelidoInput}
             />
              
           <RenderPicker
@@ -266,8 +322,8 @@ export const NovoEntrevistado = ()=>{
               placeholder="Qual a sua religião"
               margin="15px 10px 30px 5px"
               title="Qual a sua religião?"
-              onSubmitEditing={()=>naturalidadeInput.current?.focus()}
-              ref={nomeInput}/>
+              ref={religiaoInput}
+              />
 
             <RenderPicker
                 label="É morador do imóvel?"
@@ -276,6 +332,11 @@ export const NovoEntrevistado = ()=>{
                 options={simNaoOptions}
               />
             
+            {valorSalvoDataChegada && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Data de chegada salva (ano/mês/dia): {valorSalvoDataChegada}
+                </Text>
+              )}
             <DateSelector
                 label="Data de Chegada no Local"
                 onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataChegada')}
@@ -308,8 +369,8 @@ export const NovoEntrevistado = ()=>{
               placeholder="Relação do entrevistado com a área do imóvel"
               margin="15px 10px 30px 5px"
               title="Relação com a área"
-              onSubmitEditing={()=>relacaoVizinhoInput.current?.focus()}
               ref={relacaoAreaInput}
+              onSubmitEditing={() => relacaoVizinhoInput.current?.focus()}
               />
 
             <Input 
@@ -319,7 +380,15 @@ export const NovoEntrevistado = ()=>{
                   margin="15px 10px 30px 5px"
                   title="Relação com a vizinhança"
                   ref={relacaoVizinhoInput}
-                  />
+              />
+
+                {valorSalvoTipoAlimentacao && (
+                  <View style={{ marginBottom: 5 }}>
+                    <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                      Valor salvo sobre a alimentação: {valorSalvoTipoAlimentacao}
+                    </Text>
+                  </View>
+                )}
             
             <CheckboxSelector
                 options={alimentacaoOptions}
@@ -344,6 +413,13 @@ export const NovoEntrevistado = ()=>{
                 </View>
             )}
 
+            {valorSalvoLocalCompras && (
+                        <View style={{ marginBottom: 5 }}>
+                          <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                            Valor salvo sobre local de compras: {valorSalvoLocalCompras}
+                          </Text>
+                        </View>
+              )}
 
              <CheckboxSelector
                 options={comprasOptions}
@@ -368,6 +444,14 @@ export const NovoEntrevistado = ()=>{
                 </View>
             )}
 
+            {valorSalvoCuidadosSaude && (
+                        <View style={{ marginBottom: 5 }}>
+                          <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                            Valor salvo sobre  o atendimento de saúde: {valorSalvoCuidadosSaude}
+                          </Text>
+                        </View>
+            )}
+
             <CheckboxSelector
                 options={saudeOptions}
                 selectedValues={cuidadoMedico}
@@ -390,6 +474,14 @@ export const NovoEntrevistado = ()=>{
                     />
                 </View>
             )}
+
+        {valorSalvoServicosDeficitarios && (
+                    <View style={{ marginBottom: 5 }}>
+                      <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                        Valor salvo sobre serviços públicos deficitários: {valorSalvoServicosDeficitarios}
+                      </Text>
+                    </View>
+         )}
           
           <CheckboxSelector
                 options={servicosOptions}
@@ -415,40 +507,51 @@ export const NovoEntrevistado = ()=>{
             )}
 
 
-             <Input
-              value={novoEntrevistado.sofreuAssaltos?.toString() || ''}
-              onChange={(event)=>handleNumberChange(event, 'sofreuAssaltos')}
-              keyboardType='numeric'
-              placeholder="Área em m²"
-              margin="15px 10px 30px 5px"
-              title="Já sofreu Assaltos nesse local"
-            />
-
-             
-             <Input
-              value={novoEntrevistado.presenciouAssalto?.toString() || ''}
-              onChange={(event)=> handleNumberChange(event, 'presenciouAssalto')}
-              keyboardType='numeric'
-              placeholder="Quantas vezes?"
-              margin="15px 10px 30px 5px"
-              title="Já presenciou Assaltos nesse local"
-            />
-
-               <Input 
-              value={novoEntrevistado.problemasDeViolenciaLocal} 
-              onChange={(event)=> handleOnChangeInput(event, 'problemasDeViolenciaLocal')}
-              placeholder="separe por vírgulas se houver mais de uma relato"
-              margin="15px 10px 30px 5px"
-              title="Quais os problemas de violência aqui no local?"
+              <Input
+                value={novoEntrevistado.sofreuAssaltos?.toString() || ''}
+                onChange={(event) => handleNumberChange(event, 'sofreuAssaltos')}
+                keyboardType="numeric"
+                placeholder="Área em m²"
+                margin="15px 10px 30px 5px"
+                title="Já sofreu Assaltos nesse local"
+                ref={sofreuAssaltosInput}
+                onSubmitEditing={() => presenciouAssaltosInput.current?.focus()}
               />
 
+              <Input
+                value={novoEntrevistado.presenciouAssalto?.toString() || ''}
+                onChange={(event) => handleNumberChange(event, 'presenciouAssalto')}
+                keyboardType="numeric"
+                placeholder="Quantas vezes?"
+                margin="15px 10px 30px 5px"
+                title="Já presenciou Assaltos nesse local"
+                ref={presenciouAssaltosInput}
+                onSubmitEditing={() => violenciaLocalInput.current?.focus()}
+              />
+
+              <Input
+                value={novoEntrevistado.problemasDeViolenciaLocal}
+                onChange={(event) => handleOnChangeInput(event, 'problemasDeViolenciaLocal')}
+                placeholder="Separe por vírgulas se houver mais de um relato"
+                margin="15px 10px 30px 5px"
+                title="Quais os problemas de violência aqui no local?"
+                ref={violenciaLocalInput}
+              />
+
+              {valorSalvoInstituicaoConhecida && (
+                <View style={{ marginBottom: 5 }}>
+                  <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                    Valor salvo sobre Intituições conhecidas: {valorSalvoInstituicaoConhecida}
+                  </Text>
+                </View>
+              )}
               <RenderPicker
                   label="Você conhece o trabalho de alguma instituição governamental ou não governamental na sua localidade??"
                   selectedValue={conheceInstituicao}
                   onValueChange={(value) => {
                     setConheceInstituicao(value ?? ''); 
                     if (value !== '') {
-                      SetQuaisConhece('SIM');
+                      SetQuaisConhece('');
                     }
                   }}
                   options={['SIM', 'NÃO']}
@@ -467,36 +570,44 @@ export const NovoEntrevistado = ()=>{
 
              
               <Input 
-              value={novoEntrevistado.importanciaDeProtegerAmbiente} 
-              onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Para você, qual a importância de protejer o meio ambiente?"
+                value={novoEntrevistado.importanciaDeProtegerAmbiente} 
+                onChange={(event) => handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
+                placeholder="..."
+                margin="15px 10px 30px 5px"
+                title="Para você, qual a importância de proteger o meio ambiente?"
+                ref={protegerAmbienteInput}
+                onSubmitEditing={() => protegerFaunaInput.current?.focus()}
               />
 
               <Input 
-              value={novoEntrevistado.importanciaDeProtegerFauna} 
-              onChange={(event)=> handleOnChangeInput(event, 'importanciaDeProtegerFauna')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Qual a importância de proteger a fauna?"
+                value={novoEntrevistado.importanciaDeProtegerFauna} 
+                onChange={(event) => handleOnChangeInput(event, 'importanciaDeProtegerFauna')}
+                placeholder="..."
+                margin="15px 10px 30px 5px"
+                title="Qual a importância de proteger a fauna?"
+                ref={protegerFaunaInput}
+                onSubmitEditing={() => espacoPreservadoInput.current?.focus()}
               />
 
               <Input 
-              value={novoEntrevistado.qualEspacoPrecisaSerPreservado} 
-              onChange={(event)=> handleOnChangeInput(event, 'qualEspacoPrecisaSerPreservado')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Há algum espaço na sua localidade que você acredite que precisa ser protegido?"
+                value={novoEntrevistado.qualEspacoPrecisaSerPreservado} 
+                onChange={(event) => handleOnChangeInput(event, 'qualEspacoPrecisaSerPreservado')}
+                placeholder="..."
+                margin="15px 10px 30px 5px"
+                title="Há algum espaço na sua localidade que você acredite que precisa ser protegido?"
+                ref={espacoPreservadoInput}
+                onSubmitEditing={() => problemasAmbienteInput.current?.focus()}
               />
 
               <Input 
-              value={novoEntrevistado.problemasRelacionadosAoAmbiente} 
-              onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionadosAoAmbiente')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Qual é o problema relacionado ao meio ambiente que você percebe em sua localidade?"
+                value={novoEntrevistado.problemasRelacionadosAoAmbiente} 
+                onChange={(event) => handleOnChangeInput(event, 'problemasRelacionadosAoAmbiente')}
+                placeholder="..."
+                margin="15px 10px 30px 5px"
+                title="Qual é o problema relacionado ao meio ambiente que você percebe em sua localidade?"
+                ref={problemasAmbienteInput}
               />
+
 
               
               <RenderPicker
@@ -520,6 +631,13 @@ export const NovoEntrevistado = ()=>{
                 options={simNaoOptions}
               />
 
+                {valorSalvoUsoArea && (
+                  <View style={{ marginBottom: 5 }}>
+                    <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                      Valor salvo no banco de dados parao campo abaixo: {valorSalvoUsoArea}
+                    </Text>
+                  </View>
+                )}
        
                 <RenderPicker
                   label="Utiliza a área?"
@@ -545,29 +663,35 @@ export const NovoEntrevistado = ()=>{
             )}
 
 
-              <Input 
-              value={novoEntrevistado.propostaMelhorarArea} 
-              onChange={(event)=> handleOnChangeInput(event, 'propostaMelhorarArea')}
-              placeholder=" "
-              margin="15px 10px 30px 5px"
-              title="Qual sua sugestão de melhorias para a área?"
-              ref={relacaoVizinhoInput}/>
+          <Input 
+            value={novoEntrevistado.propostaMelhorarArea} 
+            onChange={(event) => handleOnChangeInput(event, 'propostaMelhorarArea')}
+            placeholder=" "
+            margin="15px 10px 30px 5px"
+            title="Qual sua sugestão de melhorias para a área?"
+            ref={propostaMelhoriaInput}
+            onSubmitEditing={() => indicadoConsultaInput.current?.focus()}
+          />
 
-              <Input 
-              value={novoEntrevistado.indicadoConsultaPublica} 
-              onChange={(event)=> handleOnChangeInput(event, 'indicadoConsultaPublica')}
-              placeholder=" "
-              margin="15px 10px 30px 5px"
-              title="Indicação de Nome para Participar da Consulta Pública"
-              ref={relacaoVizinhoInput}/>
-            
-             <Input 
-              value={novoEntrevistado.contatoIndicadoConsultaPublica} 
-              onChange={(event)=> handleOnChangeInput(event, 'contatoIndicadoConsultaPublica')}
-              placeholder=" "
-              margin="15px 10px 30px 5px"
-              title="Informe um contato do indicado"
-              ref={relacaoVizinhoInput}/>
+          <Input 
+            value={novoEntrevistado.indicadoConsultaPublica} 
+            onChange={(event) => handleOnChangeInput(event, 'indicadoConsultaPublica')}
+            placeholder=" "
+            margin="15px 10px 30px 5px"
+            title="Indicação de Nome para Participar da Consulta Pública"
+            ref={indicadoConsultaInput}
+            onSubmitEditing={() => contatoConsultaInput.current?.focus()}
+          />
+
+          <Input 
+            value={novoEntrevistado.contatoIndicadoConsultaPublica} 
+            onChange={(event) => handleOnChangeInput(event, 'contatoIndicadoConsultaPublica')}
+            placeholder=" "
+            margin="15px 10px 30px 5px"
+            title="Informe um contato do indicado"
+            ref={contatoConsultaInput}
+          />
+
 
        
          

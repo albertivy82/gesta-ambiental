@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -9,6 +9,8 @@ import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
+import { useNovoEntrevistado } from '../hooks/useInputEntrevistado';
+import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 
 
 export interface entrevistadoParam {
@@ -19,6 +21,7 @@ const Entrevistados = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, entrevistadoParam>, 'Entrevistado'>>();
   const { localidadeId } = route.params;
+  const { contagemEntrevistados } = useEntrevistados(localidadeId);
    const flatListRef = useRef<FlatList>(null);
   const [entrevistados, setEntrevistados] = useState<EntrevistadoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +39,23 @@ const Entrevistados = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  const refreshEntrevistados = () => {
-    setIsLoading(true);
-    setIsLoading(false);
-  };
+  const fetchEscolas = useCallback(async () => {
+      setIsLoading(true);
+      if (localidadeId) {
+        const eentrevistadosRealm = getEntrevistados(localidadeId);
+        setEntrevistados(eentrevistadosRealm);
+      }
+      setIsLoading(false);
+    }, [localidadeId]);
+
+    useEffect(() => {
+      fetchEscolas();
+    }, [fetchEscolas]);
+
+    const handleRefresh = () => {
+      fetchEscolas();
+      handleScrollToEnd();
+    };
 
   const handleNovoEntrevistado = () => {
     navigation.navigate('NovoEntrevistado', { localidadeId: localidadeId });
@@ -82,7 +98,7 @@ const Entrevistados = () => {
 
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={refreshEntrevistados} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh} disabled={isLoading}>
           <Icon size={20} name="spinner11" color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>

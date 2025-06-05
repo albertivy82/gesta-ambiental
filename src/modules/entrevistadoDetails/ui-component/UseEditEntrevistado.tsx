@@ -86,7 +86,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
             borderRadius: 10, 
             alignItems: 'center'
           }}>
-            <Text type={textTypes.PARAGRAPH_LIGHT}>Deseja realmente editar este item?</Text>
+            <Text type={textTypes.PARAGRAPH_LIGHT} color="#888">Deseja realmente editar este item?</Text>
             
             {loading ? (
               <ActivityIndicator size="large" color="#ff4500" />
