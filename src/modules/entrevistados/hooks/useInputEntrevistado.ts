@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarEntrevistado, salvarEntrevistadoQueue } from "../../../realm/services/entrevistado";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatDateForApi } from "../../../shared/functions/data";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { Alert } from "react-native";
 
 export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
 
@@ -51,7 +52,7 @@ export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
 
 
 
-export const useNovoEntrevistado = (id:number) => {
+export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) => {
     const [novoEntrevistado, setnovoEntrevistado] = useState<EntrevistadoInput>(DEFAULT_ENTREVISTADO_INPUT);
     const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -113,8 +114,15 @@ export const useNovoEntrevistado = (id:number) => {
       
     };
 
+    const enviarRegistro = async () => {
+      if (entrevistado) {
+        return await enviaEntrevistadoEdicao();
+      } else {
+        return await enviaEntrevistadoNova();
+      }
+    };
   
-  const enviarEntrevistado = async () => {
+  const enviaEntrevistadoNova = async () => {
    
     novoEntrevistado.localidade.id = id;
     const netInfoState = await NetInfo.fetch();
@@ -137,6 +145,88 @@ export const useNovoEntrevistado = (id:number) => {
       }
       
     };
+
+    const enviaEntrevistadoEdicao= async () =>{
+      const entrevistadoCorrigido = {
+        ...novoEntrevistado,
+        localidade: { id: typeof entrevistado!.localidade === 'number' ? entrevistado!.localidade : entrevistado!.localidade.id }
+      };
+      const netInfoState = await NetInfo.fetch();
+      const isConnected = await testConnection();
+      
+       if(netInfoState.isConnected && isConnected){
+              //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+              try{
+                
+                const response = await connectionAPIPut(`http://192.168.100.28:8080/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
+                if (response && response.id) {
+                  return fetchEntrevistadoAPI(response.id);
+                }
+                } catch (error) {
+                  
+                  Alert.alert(
+                    "Erro ao editar",
+                    "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                  );
+                  return null;
+                 
+              }
+            
+            } else {
+              if (!entrevistado!.sincronizado && entrevistado!.idLocal) {
+               
+                //Objeto ainda não sincronizado → atualizar no Realm
+                const entrevistadoAtualizado: EntrevistadoType = {
+                  ...entrevistado!,
+                  nome: novoEntrevistado.nome,
+                  naturalidade: novoEntrevistado.naturalidade,
+                  nascimentoData: novoEntrevistado.nascimentoData,
+                  sexo: novoEntrevistado.sexo,
+                  apelido: novoEntrevistado.apelido,
+                  escolaridade: novoEntrevistado.escolaridade,
+                  estadoCivil: novoEntrevistado.estadoCivil,
+                  religiao: novoEntrevistado.religiao,
+                  morador: novoEntrevistado.morador,
+                  dataChegada: novoEntrevistado.dataChegada,
+                  pretendeMudar: novoEntrevistado.pretendeMudar,
+                  motivoVontadeMudanca: novoEntrevistado.motivoVontadeMudanca,
+                  relacaoAreaImovel: novoEntrevistado.relacaoAreaImovel,
+                  relacaoVizinhos: novoEntrevistado.relacaoVizinhos,
+                  tipoAlimentacao: novoEntrevistado.tipoAlimentacao,
+                  localCompras: novoEntrevistado.localCompras,
+                  comoCuidaSaudeFamilia: novoEntrevistado.comoCuidaSaudeFamilia,
+                  servicosDeficitarios: novoEntrevistado.servicosDeficitarios,
+                  sofreuAssaltos: novoEntrevistado.sofreuAssaltos,
+                  presenciouAssalto: novoEntrevistado.presenciouAssalto,
+                  problemasDeViolenciaLocal: novoEntrevistado.problemasDeViolenciaLocal,
+                  instituicaoConhecida: novoEntrevistado.instituicaoConhecida,
+                  importanciaDeProtegerAmbiente: novoEntrevistado.importanciaDeProtegerAmbiente,
+                  importanciaDeProtegerFauna: novoEntrevistado.importanciaDeProtegerFauna,
+                  qualEspacoPrecisaSerPreservado: novoEntrevistado.qualEspacoPrecisaSerPreservado,
+                  problemasRelacionadosAoAmbiente: novoEntrevistado.problemasRelacionadosAoAmbiente,
+                  conheceUcs: novoEntrevistado.conheceUcs,
+                  conheceUcProposta: novoEntrevistado.conheceUcProposta,
+                  conheceAreaUc: novoEntrevistado.conheceAreaUc,
+                  utilizaAreaUc: novoEntrevistado.utilizaAreaUc,
+                  propostaMelhorarArea: novoEntrevistado.propostaMelhorarArea,
+                  indicadoConsultaPublica: novoEntrevistado.indicadoConsultaPublica,
+                  contatoIndicadoConsultaPublica: novoEntrevistado.contatoIndicadoConsultaPublica,
+                };
+                
+                
+                const entrevistadoQueue = await salvarEntrevistado(entrevistadoAtualizado);
+                return entrevistadoQueue;
+              } else {
+                // Objeto sincronizado → não permitir edição offline
+                Alert.alert(
+                  "Sem conexão",
+                  "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+                );
+                return null;
+              }
+            }
+            
+    }
 
     const fetchEntrevistadoAPI = async(id:number) =>{
     
@@ -215,7 +305,7 @@ const handleNumberChange = (
 
 return {
       novoEntrevistado,
-      enviarEntrevistado,
+      enviarRegistro,
       handleOnChangeInput,
       handleOnChangeData,
       handleEnumChange,

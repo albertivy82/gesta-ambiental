@@ -26,7 +26,6 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
     try {
      // console.log("aqui",entrevistado)
       navigation.navigate(destino, {entrevistado});
-      
       setModalVisible(false);
       onEditSuccess();
     } catch (error) {

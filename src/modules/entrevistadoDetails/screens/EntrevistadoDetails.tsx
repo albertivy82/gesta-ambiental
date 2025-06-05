@@ -142,7 +142,7 @@ const EntrevistadoDetails = () => {
                       entrevistado={params.entrevistado} 
                       destino="NovoEntrevistado" 
                       onEditSuccess={() => {
-                      
+                       //voltar para listagem de entrevistados
                       }} 
                       />
 
@@ -153,7 +153,7 @@ const EntrevistadoDetails = () => {
                       idLocal={params.entrevistado.idLocal}
                       deleteEndpoint="entrevistado" 
                       onDeleteSuccess={() => {
-                            
+                            //volta para infLocalidade
                       }} 
                       />
             </View>

@@ -19,29 +19,64 @@ import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
-export interface localidadeParam {
-   localidadeId: number,
+
+export interface NovoEntrevistadoParams {
+localidadeId?: number
+entrevistado?: EntrevistadoType;
 }
+
 
 export const detalharEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType)=>{
     navigate('EntrevistadoDetails', {entrevistado})
 }
 
 export const NovoEntrevistado = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, localidadeParam>>>();
+  const { params } = useRoute<RouteProp<Record<string, NovoEntrevistadoParams>, string>>();
+  const localidadeId = params.localidadeId ?? params.entrevistado?.localidade.id;
+  const entrevistado = params.entrevistado;
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false); 
   const { novoEntrevistado,
-          enviarEntrevistado,
+          enviarRegistro,
           handleOnChangeInput,
           handleOnChangeData,
           handleArrayFieldChange,
           handleEnumChange,
           handleNumberChange,
-          disabled} = useNovoEntrevistado(params.localidadeId);
+          disabled} = useNovoEntrevistado(localidadeId!, entrevistado);
          
     
-    
+          useEffect(() => {
+            if (entrevistado) {
+              handleOnChangeInput(entrevistado.nome, 'nome');
+              handleOnChangeInput(entrevistado.naturalidade, 'naturalidade');
+              handleOnChangeData(new Date(entrevistado.nascimentoData), 'nascimentoData');
+              handleEnumChange('sexo', entrevistado.sexo);
+              handleOnChangeInput(entrevistado.apelido, 'apelido');
+              handleEnumChange('escolaridade', entrevistado.escolaridade);
+              handleEnumChange('estadoCivil', entrevistado.estadoCivil);
+              handleOnChangeInput(entrevistado.religiao, 'religiao');
+              handleEnumChange('morador', entrevistado.morador);
+              handleOnChangeData(new Date(entrevistado.dataChegada), 'dataChegada');
+              handleEnumChange('pretendeMudar', entrevistado.pretendeMudar);
+              handleOnChangeInput(entrevistado.motivoVontadeMudanca ?? '', 'motivoVontadeMudanca');
+              handleOnChangeInput(entrevistado.relacaoAreaImovel, 'relacaoAreaImovel');
+              handleOnChangeInput(entrevistado.relacaoVizinhos, 'relacaoVizinhos');
+              handleOnChangeInput(entrevistado.religiao, 'religiao');
+              handleOnChangeInput(entrevistado.problemasDeViolenciaLocal ?? '', 'problemasDeViolenciaLocal');
+              handleEnumChange('conheceUcs', entrevistado.conheceUcs);
+              handleEnumChange('conheceUcProposta', entrevistado.conheceUcProposta);
+              handleEnumChange('conheceAreaUc', entrevistado.conheceAreaUc);
+              handleOnChangeInput(entrevistado.propostaMelhorarArea ?? '', 'propostaMelhorarArea');
+              handleOnChangeInput(entrevistado.indicadoConsultaPublica ?? '', 'indicadoConsultaPublica');
+              handleOnChangeInput(entrevistado.contatoIndicadoConsultaPublica ?? '', 'contatoIndicadoConsultaPublica');
+              
+              // Campos numéricos
+              handleNumberChange({ nativeEvent: { text: entrevistado.sofreuAssaltos?.toString() ?? '' } } as any, 'sofreuAssaltos');
+              handleNumberChange({ nativeEvent: { text: entrevistado.presenciouAssalto?.toString() ?? '' } } as any, 'presenciouAssalto');
+            }
+          }, [entrevistado]);
+            
    
     const nomeInput = useRef<TextInput>(null);
     const naturalidadeInput = useRef<TextInput>(null);
@@ -148,7 +183,7 @@ export const NovoEntrevistado = ()=>{
          setLoading(true);
        
          try {
-           const entrevistadoSalvo = await enviarEntrevistado(); 
+           const entrevistadoSalvo = await enviarRegistro(); 
                if (entrevistadoSalvo){
                  detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
                } else {

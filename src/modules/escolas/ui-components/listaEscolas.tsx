@@ -1,20 +1,48 @@
-import { TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { EscolaType } from "../../../shared/types/EscolaType";
+import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
 
 
 const RenderItemEscola = ({ item }: { item: EscolaType}) => {
-
-  const  handleDeletarEscola =  (imovel: EscolaType) =>{
-       // detalharImovel(navigation.navigate, imovel );
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
+  
+  const handleAcaoEscola = (escola: EscolaType) => {
      
-   }
+      Alert.alert(
+        'Ação sobre o escola',
+        `O que você deseja fazer com "${escola.nome}"?`,
+        [
+          {
+            text: 'Editar',
+            onPress: () => {
+              navigation.navigate('NovaEscola', { escola }); // reuso da tela para edição
+            },
+          },
+          {
+            text: 'Apagar',
+            onPress: () => {
+              setMostrarModalDelete(true);
+            },
+            style: 'destructive',
+          },
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+    };
 
 
    return (
-  <TouchableOpacity onPress={() => handleDeletarEscola(item)}>
+  <TouchableOpacity onPress={() => handleAcaoEscola(item)}>
     <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
 
       <Text
@@ -58,6 +86,19 @@ const RenderItemEscola = ({ item }: { item: EscolaType}) => {
       >
         Educação Ambiental: {item.educacaoAmbiental}
       </Text>
+
+      {mostrarModalDelete && (
+          
+          <DeleteConfirmation
+            id={item.id}
+            idLocal={item.idLocal}
+            deleteEndpoint="escola"
+            onDeleteSuccess={() => {
+            setMostrarModalDelete(false);
+              
+            }}
+          />
+        )}
 
     </View>
   </TouchableOpacity>

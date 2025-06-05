@@ -1,14 +1,16 @@
 import NetInfo from "@react-native-community/netinfo";
-import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
+import { apagarEscolaQueue, apagarEscolaSyncronizada } from "../../../realm/services/escolaService";
+import { apagarImovelQueue, apagarImovelSyncronizado } from '../../../realm/services/imovelService';
+import { apagarPostoQueue, apagarPostoSaudeSyncronizado } from '../../../realm/services/postoService';
 import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
+import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
-import { apagarImovelQueue, apagarImovelSyncronizado } from '../../../realm/services/imovelService';
-import { apagarPostoQueue, apagarPostoSaudeSyncronizado } from '../../../realm/services/postoService';
+import { apagarEntrevistadoQueue, apagarEntrevistadoSyncronizado } from "../../../realm/services/entrevistado";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -33,6 +35,12 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "posto-de-saude":
             apagarPostoQueue(idLocal);
             break;
+          case "escola":
+            apagarEscolaQueue(idLocal);
+            break;
+          case "entrevistado":
+            apagarEntrevistadoQueue(idLocal);
+            break;
         }
   
         setModalVisible(false);
@@ -52,6 +60,12 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
               break;
             case "posto-de-saude":
               apagarPostoSaudeSyncronizado(id);
+              break;
+            case "escola":
+              apagarEscolaSyncronizada(id);
+              break;
+            case "entrevistado":
+              apagarEntrevistadoSyncronizado(id);
               break;
           }
   

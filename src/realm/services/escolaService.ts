@@ -103,6 +103,8 @@ export const salvarEscola= (escola:EscolaType): Promise<EscolaType> => {
 };
 
 
+
+
 export const getEscolasDessincronizadas = (localidade: number): EscolaType[] => {
 
     const query = `localidade == ${localidade} and sincronizado == false`;
@@ -157,7 +159,22 @@ export const salvarEscolaQueue = (escola: escolaInput) =>{
             reject(error);
         }
     });
-    
-
 };
+
+
+ // Apagar escola sincronizado
+ export const apagarEscolaSyncronizada = (escolaId: number) => {
+    try {
+      realmInstance.write(() => {
+        const query = `id == ${escolaId}`;
+        const escolaAExcluir = realmInstance.objects<EscolaType>("Escola").filtered(query);
+        if (escolaAExcluir.length > 0) {
+          realmInstance.delete(escolaAExcluir);
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao excluir escola sincronizado:", error);
+    }
+  };
+  
 

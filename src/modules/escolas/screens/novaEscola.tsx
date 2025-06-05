@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { EsferaEnum } from "../../../enums/esfera.enum";
@@ -13,7 +13,7 @@ import { EscolaContainer } from "../styles/Escolas.style";
 
 
 
-export interface NovoEscolaParams {
+export interface NovaEscolaParams {
 localidadeId?: number
 escola?: EscolaType;
 }
@@ -25,11 +25,11 @@ export const detalharEscola = (navigate: NavigationProp<ParamListBase>['navigate
 
 
 export const NovaEscola = ()=>{
- const { params } = useRoute<RouteProp<Record<string, NovoEscolaParams>, string>>();
-   const localidadeId = params.localidadeId ?? params.escola?.localidade.id;
-   const escola = params.escola;
-  const navigation = useNavigation();
-  const [loading, setLoading] = useState(false); 
+ const { params } = useRoute<RouteProp<Record<string, NovaEscolaParams>, string>>();
+ const localidadeId = params.localidadeId ?? params.escola?.localidade.id;
+ const escola = params.escola;
+ const navigation = useNavigation();
+ const [loading, setLoading] = useState(false); 
   
   const { novaEscola,
           handleOnChangeInput,
@@ -38,9 +38,18 @@ export const NovaEscola = ()=>{
           handleMerenda,
           handleEducAmbiental,
           handleTransporte,
-          disabled,} = useNovaEscola(params.localidadeId!);
+          disabled,} = useNovaEscola(params.localidadeId!, escola);
     
-    
+          useEffect(() => {
+            if (escola) {
+              handleOnChangeInput(escola.nome, 'nome');
+              handleIniciativa(escola.iniciativa);
+              handleMerenda(escola.merenda as SimNao);
+              handleTransporte(escola.transporte as SimNao);
+              handleEducAmbiental(escola.educacaoAmbiental as SimNao);
+            }
+          }, [escola]);
+            
   
     const simNaoOptions =  Object.values(SimNao);
     const Iniciativa =  Object.values(EsferaEnum);

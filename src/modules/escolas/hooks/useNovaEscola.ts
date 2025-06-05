@@ -1,10 +1,10 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import { escolaInput } from "../../../shared/types/EscolaInput";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import { salvarEscola, salvarEscolaQueue } from "../../../realm/services/escolaService";
 import { EsferaEnum } from "../../../enums/esfera.enum";
@@ -24,7 +24,7 @@ export const DEFAULT_ESCOLA_INPUT: escolaInput = {
   },
 };
 
-export const useNovaEscola = (localidadeId: number) => {
+export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
   const [novaEscola, setNovaEscola] = useState<escolaInput>(DEFAULT_ESCOLA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -54,7 +54,16 @@ export const useNovaEscola = (localidadeId: number) => {
   };
 
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (escola) {
+      return await enviaEscolaEdicao();
+    } else {
+      return await enviaEscolaNova();
+    }
+  };
+
+
+  const enviaEscolaNova = async () =>{
 
     novaEscola.localidade = {id:localidadeId};
             const netInfoState = await NetInfo.fetch();
@@ -81,6 +90,60 @@ export const useNovaEscola = (localidadeId: number) => {
                     const escolaQueue = await salvarEscolaQueue(escolaDataQueue);
                     return escolaQueue;
                   }
+  }
+
+  const enviaEscolaEdicao= async () =>{
+    const escolaCorrigida = {
+      ...novaEscola,
+      localidade: { id: typeof escola!.localidade === 'number' ? escola!.localidade : escola!.localidade.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
+              if (response && response.id) {
+                return fetchEscolaAPI(response.id);
+              }
+              } catch (error) {
+                
+                Alert.alert(
+                  "Erro ao editar",
+                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                );
+                return null;
+               
+            }
+          
+          } else {
+            if (!escola!.sincronizado && escola!.idLocal) {
+             
+              //Objeto ainda não sincronizado → atualizar no Realm
+              const escolaAtualizada: EscolaType = {
+                ...escola!,
+                nome: novaEscola.nome,
+                iniciativa: novaEscola.iniciativa,
+                merenda: novaEscola.merenda?? "",
+                transporte: novaEscola.transporte ?? "",
+                educacaoAmbiental: novaEscola.educacaoAmbiental?? "",
+              };
+              
+              
+              const escolaQueue = await salvarEscola(escolaAtualizada);
+              return escolaQueue;
+            } else {
+              // Objeto sincronizado → não permitir edição offline
+              Alert.alert(
+                "Sem conexão",
+                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+              );
+              return null;
+            }
+          }
+          
   }
   
    const fetchEscolaAPI = async(id:number) =>{

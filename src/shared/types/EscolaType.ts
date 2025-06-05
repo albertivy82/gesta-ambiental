@@ -1,13 +1,13 @@
 ﻿import { EsferaEnum } from "../../enums/esfera.enum";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+import { SimNao } from "../../enums/simNao.enum";
 
 export interface EscolaType {
     id: number;
     nome: string;
     iniciativa: EsferaEnum| "" | null;
-    merenda: SimNaoTalvez | "" | null;
-    transporte: SimNaoTalvez | "" | null; 
-    educacaoAmbiental: SimNaoTalvez | "" | null; 
+    merenda: SimNao | "" | null;
+    transporte: SimNao | "" | null; 
+    educacaoAmbiental: SimNao | "" | null; 
     localidade: {
         id: number;
     }

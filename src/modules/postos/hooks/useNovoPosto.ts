@@ -111,7 +111,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
           
           } else {
             if (!posto!.sincronizado && posto!.idLocal) {
-              console.log(novoPosto, posto)
+             
               //Objeto ainda não sincronizado → atualizar no Realm
               const postoAtualizado: PostoType = {
                 ...posto!,
