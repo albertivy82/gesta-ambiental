@@ -11,6 +11,7 @@ import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
 import { apagarEntrevistadoQueue, apagarEntrevistadoSyncronizado } from "../../../realm/services/entrevistado";
+import { apagarVegetacaoQueue, apagarVegetacaoSyncronizada } from "../../../realm/services/vegetacaoService";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -41,6 +42,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "entrevistado":
             apagarEntrevistadoQueue(idLocal);
             break;
+          case "vegetacao":
+            apagarVegetacaoQueue(idLocal);
+            break;
         }
   
         setModalVisible(false);
@@ -66,6 +70,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
               break;
             case "entrevistado":
               apagarEntrevistadoSyncronizado(id);
+              break;
+            case "vegetacao":
+              apagarVegetacaoSyncronizada(id);
               break;
           }
   

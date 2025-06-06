@@ -13,16 +13,19 @@ import { AvesType } from "../../../shared/types/AvesType";
 
 
 
-export interface idParam {
+export interface NovaAveParams {
   entrevistado: EntrevistadoType;
+  ave?: AveType;
 }
 
-export const detalharAves = (navigate: NavigationProp<ParamListBase>['navigate'], ave: AvesType)=>{
-    navigate('AveDetails', {ave})
-}
+export const detalharAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('AveLista', { entrevistadoId });
+};
 
-export const NovaAve = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovaAve = () => {
+   const { params } = useRoute<RouteProp<Record<string, NovaAveParams>, string>>();
+   const entrevistado = params.entrevistado ?? params.ave?.entrevistado;
+   const ave = params.ave;
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const [loading, setLoading] = useState(false); 
    const [outrosUsos, setOutrosUsos] = useState<string>('');     
@@ -33,7 +36,7 @@ export const NovaAve = ()=>{
             handleEnumChange,
             handleArrayFieldChange,
             disabled
-          } = useNovaAves(params.entrevistado);
+          } = useNovaAves(params.entrevistado, ave);
 
 
   useEffect(() => {

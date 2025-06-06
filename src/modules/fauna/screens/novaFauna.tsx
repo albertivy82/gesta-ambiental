@@ -11,16 +11,19 @@ import { ActivityIndicator } from "react-native-paper";
 import { FaunaType } from "../../../shared/types/FaunaType";
 
 
-export interface idParam {
+export interface NovaFaunaParams {
   entrevistado: EntrevistadoType;
+  fauna?: FaunaType;
 }
 
-export const detalharFauna = (navigate: NavigationProp<ParamListBase>['navigate'], fauna: FaunaType)=>{
-    navigate('FaunaDetails', {fauna})
-}
+export const detalharFauna = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('FaunaLista', { entrevistadoId });
+};
 
-export const NovaFauna = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovaFauna = () => {
+     const { params } = useRoute<RouteProp<Record<string, NovaFaunaParams>, string>>();
+     const entrevistado = params.entrevistado ?? params.fauna?.entrevistado;
+     const fauna = params.fauna;
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 
      const {  novaFauna,
@@ -29,7 +32,7 @@ export const NovaFauna = ()=>{
               handleEnumChange,
               handleArrayFieldChange,
               disabled
-            } = useNovaFauna(params.entrevistado);
+            } = useNovaFauna(params.entrevistado, fauna);
   const [outrasOcorrencias, setOutrasOcorrencias] = useState<string>('');     
   const [qual, SetQual] = useState<string>('');
 

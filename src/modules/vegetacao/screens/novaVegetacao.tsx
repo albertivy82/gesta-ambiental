@@ -16,8 +16,9 @@ export interface NovaVegetacaoParams {
   entrevistado: EntrevistadoType;
   vegetacao?: VegetacaoType;
 }
-export const detalharVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], vegetacao: VegetacaoType)=>{
-    navigate('VegetacaoDetails', {vegetacao})
+
+export const detalharVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number)=>{
+    navigate('VegetacaoLista', {entrevistadoId})
 }
 
 export const NovaVegetacao = ()=>{
@@ -37,6 +38,33 @@ export const NovaVegetacao = ()=>{
           } = useNovaVegetacao(entrevistado, vegetacao);
 
 
+          useEffect(() => {
+            if (vegetacao) {
+              handleOnChangeInput(vegetacao.especie, 'especie');
+              handleEnumChange('usoMedicinal', vegetacao.usoMedicinal);
+              handleEnumChange('usoAlimentacao', vegetacao.usoAlimentacao);
+              handleEnumChange('usoOrnamental', vegetacao.usoOrnamental);
+              handleEnumChange('usoComercial', vegetacao.usoComercial);
+              handleEnumChange('usaFlor', vegetacao.usaFlor);
+              handleEnumChange('usaFolha', vegetacao.usaFolha);
+              handleEnumChange('usaSemente', vegetacao.usaSemente);
+              handleEnumChange('usaFruto', vegetacao.usaFruto);
+              handleEnumChange('usaCasca', vegetacao.usaCasca);
+              handleEnumChange('usaRaiz', vegetacao.usaRaiz);
+              handleEnumChange('usoLeiteLatex', vegetacao.usoLeiteLatex);
+              handleEnumChange('coletaLocalPublico', vegetacao.coletaLocalPublico);
+              handleEnumChange('coletaCultivo', vegetacao.coletaCultivo);
+              handleEnumChange('coletaCompra', vegetacao.coletaCompra);
+              handleEnumChange('coletaAmbienteEspecifica', vegetacao.coletaAmbienteEspecifica);
+              handleOnChangeInput(vegetacao.especie, 'quemEnsinouUso');
+              handleOnChangeInput(vegetacao.especie,  'repassaConhecimento');
+              handleOnChangeInput(vegetacao.especie,  'observacoesEspontaneas');
+                        
+            }
+          }, [vegetacao]);
+          
+
+
   useEffect(() => {
         const consolidaDados = outrosUsos === 'SIM' 
           ? (qual ? [`ocorrencia: ${qual}`] : [])  
@@ -54,7 +82,7 @@ export const NovaVegetacao = ()=>{
          try {
            const vegetacaoSalva = await enviarRegistro(); 
                if (vegetacaoSalva){
-                 detalharVegetacao(navigation.navigate, vegetacaoSalva);
+                 detalharVegetacao(navigation.navigate, entrevistado.id);
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a vegetacao. Tente novamente.");
                  navigation.goBack();

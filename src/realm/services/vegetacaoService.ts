@@ -152,3 +152,19 @@ export const apagarVegetacaoQueue = (idLocal: string) => {
     console.error('Erro ao excluir vegetação da fila:', error);
   }
 };
+
+// Apagar posto de saúde sincronizado
+export const apagarVegetacaoSyncronizada = (vegetacaoId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${vegetacaoId}`;
+      const vegetacaoExcluir = realmInstance.objects<VegetacaoType>("Vegetacao").filtered(query);
+      if (vegetacaoExcluir.length > 0) {
+        realmInstance.delete(vegetacaoExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir vegetacao de saúde sincronizado:", error);
+  }
+};
+

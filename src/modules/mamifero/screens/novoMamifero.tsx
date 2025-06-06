@@ -11,18 +11,19 @@ import { MamiferoDetailContainer } from "../styles/Mamifero.style";
 import { MamiferosType } from "../../../shared/types/MamiferosType";
 
 
-
-
-export interface idParam {
+export interface NovoMamiferoParams {
   entrevistado: EntrevistadoType;
+  mamifero?: MamiferosType;
 }
 
-export const detalharMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], mamifero: MamiferosType)=>{
-    navigate('MamiferoDetails', {mamifero})
-}
+export const detalharMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('MamiferoLista', { entrevistadoId });
+};
 
-export const NovoMamifero = ()=>{
-     const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovoMamifero = () => {
+     const { params } = useRoute<RouteProp<Record<string, NovoMamiferoParams>, string>>();
+     const entrevistado = params.entrevistado ?? params.mamifero?.entrevistado;
+     const mamifero = params.mamifero;
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 
      const [outrosUsos, setOutrosUsos] = useState<string>('');     
@@ -33,7 +34,7 @@ export const NovoMamifero = ()=>{
               handleEnumChange,
               handleArrayFieldChange,
               disabled
-            } = useNovoMamifero(params.entrevistado);
+            } = useNovoMamifero(params.entrevistado, mamifero);
    
     useEffect(() => {
             const consolidaDados = outrosUsos === 'SIM' 

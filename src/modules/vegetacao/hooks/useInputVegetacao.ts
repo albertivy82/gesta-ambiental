@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
 import { salvarVegetacao, salvarVegetacaoQueue } from "../../../realm/services/vegetacaoService";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { VegetacaoType } from "../../../shared/types/VegetacaoType";
 
 export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
@@ -88,8 +88,15 @@ const objetoFila = () => {
       return vegetacaoData;
     };
 
+    const enviarRegistro = async () => {
+      if (vegetacao) {
+        return await enviaVegetacaoEdicao();
+      } else {
+        return await enviaVegetacaoNovo();
+      }
+    };
 
-    const enviarRegistro = async () =>{
+    const enviaVegetacaoNovo = async () =>{
 
  
       //entrevistado offline
@@ -129,6 +136,74 @@ const objetoFila = () => {
                       
                     }
           }
+    }
+
+    const enviaVegetacaoEdicao= async () =>{
+      const vegetacaoCorrigida = {
+        ...novaVegetacao,
+        entrevistado: { id: typeof vegetacao!.entrevistado === 'number' ? vegetacao!.entrevistado : vegetacao!.entrevistado.id }
+      };
+      const netInfoState = await NetInfo.fetch();
+      const isConnected = await testConnection();
+      
+       if(netInfoState.isConnected && isConnected){
+              //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+              try{
+                
+                const response = await connectionAPIPut(`http://192.168.100.28:8080/vegetacao/${vegetacao!.id}`, vegetacaoCorrigida) as VegetacaoType;
+                if (response && response.id) {
+                  return fetchVegetacaoAPI(response.id);
+                }
+                } catch (error) {
+                  
+                  Alert.alert(
+                    "Erro ao editar",
+                    "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                  );
+                  return null;
+                 
+              }
+            
+            } else {
+              if (!vegetacao!.sincronizado && vegetacao!.idLocal) {
+               
+                //Objeto ainda não sincronizado → atualizar no Realm
+                const vegetacaoAtualizado: VegetacaoType = {
+                  ...vegetacao!,
+                  especie: novaVegetacao.especie,
+                  usoMedicinal: novaVegetacao.usoMedicinal,
+                  usoAlimentacao: novaVegetacao.usoAlimentacao,
+                  usoOrnamental: novaVegetacao.usoOrnamental,
+                  usoComercial: novaVegetacao.usoComercial,
+                  usaFlor: novaVegetacao.usaFlor,
+                  usaFolha: novaVegetacao.usaFolha,
+                  usaSemente: novaVegetacao.usaSemente,
+                  usaFruto: novaVegetacao.usaFruto,
+                  usaCasca: novaVegetacao.usaCasca,
+                  usaRaiz: novaVegetacao.usaRaiz,
+                  usoLeiteLatex: novaVegetacao.usoLeiteLatex,
+                  outrosUsos: novaVegetacao.outrosUsos,
+                  coletaLocalPublico: novaVegetacao.coletaLocalPublico,
+                  coletaCultivo: novaVegetacao.coletaCultivo,
+                  coletaCompra: novaVegetacao.coletaCompra,
+                  coletaAmbienteEspecifica: novaVegetacao.coletaAmbienteEspecifica,
+                  quemEnsinouUso: novaVegetacao.quemEnsinouUso,
+                  repassaConhecimento: novaVegetacao.repassaConhecimento,
+                  observacoesEspontaneas: novaVegetacao.observacoesEspontaneas,
+                };
+                
+                const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
+                return vegetacaoQueue;
+              } else {
+                // Objeto sincronizado → não permitir edição offline
+                Alert.alert(
+                  "Sem conexão",
+                  "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+                );
+                return null;
+              }
+            }
+            
     }
     
      const fetchVegetacaoAPI = async(id:number) =>{

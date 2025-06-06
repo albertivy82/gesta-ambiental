@@ -4,8 +4,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import LogoutButton from "./context/authUtils";
 import { getUser } from "./context/userStore";
-import User from "./modules/User";
 import admUsers from "./modules/admUsers/screens/AdmUsers";
+import Aguas from "./modules/agua/screens/Agua";
+import AguaDetails from "./modules/agua/screens/AguaDetails";
+import { NovaAgua } from "./modules/agua/screens/novaAgua";
+import Atividades from "./modules/atividadeProdutiva/screens/AtividadeProdutiva";
+import AtividadeDetails from "./modules/atividadeProdutiva/screens/AtividadeProdutivaDetails";
+import { NovaAtividade } from "./modules/atividadeProdutiva/screens/novaAtividade";
 import Aves from "./modules/aves/screens/Ave";
 import AvesDetails from "./modules/aves/screens/AveDetails";
 import { NovaAve } from "./modules/aves/screens/novaAve";
@@ -13,12 +18,18 @@ import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/Benfeitoria
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
 import { NovaBenfeitoria } from "./modules/benfeitorias/screens/novaBenfeitoria";
 import Coordenadas from "./modules/coordenadas";
+import Credito from "./modules/credito/screens/Credito";
+import CreditoDetails from "./modules/credito/screens/CreditoDetails";
+import { NovoCredito } from "./modules/credito/screens/novoCredito";
 import EditUser from "./modules/editUser";
 import EntrevistadoDetails from "./modules/entrevistadoDetails/screens/EntrevistadoDetails";
 import Entrevistados from "./modules/entrevistados/screens/Entrevistado";
 import { NovoEntrevistado } from "./modules/entrevistados/screens/novoEntrevistado";
 import Escolas from "./modules/escolas/screens/Escolas";
 import { NovaEscola } from "./modules/escolas/screens/novaEscola";
+import Fauna from "./modules/fauna/screens/Fauna";
+import FaunaDetails from "./modules/fauna/screens/faunaDetails";
+import { NovaFauna } from "./modules/fauna/screens/novaFauna";
 import Home from "./modules/home";
 import ImovelDetails from "./modules/imovel/screens/imovelDetails";
 import { NovoImovel } from "./modules/imovel/screens/novoImovel";
@@ -28,46 +39,34 @@ import Login from "./modules/login";
 import Mamiferos from "./modules/mamifero/screens/Mamifero";
 import MamiferoDetails from "./modules/mamifero/screens/MamiferoDetails";
 import { NovoMamifero } from "./modules/mamifero/screens/novoMamifero";
-import Postos from "./modules/postos/screens/Postos";
+import Morador from "./modules/morador/screens/Morador";
+import MoradorDetails from "./modules/morador/screens/MoradorDetails";
+import { NovoMorador } from "./modules/morador/screens/novoMorador";
+import { NovoPeixe } from "./modules/peixe/screens/novoPeixe";
+import Peixes from "./modules/peixe/screens/Peixe";
+import PeixesDetails from "./modules/peixe/screens/PeixeDetails";
 import { NovoPosto } from "./modules/postos/screens/novoPosto";
+import Postos from "./modules/postos/screens/Postos";
 import ProfileUser from "./modules/profileUser";
+import { NovaRendaOutrasFontes } from "./modules/rendaOutrasFontes/screens/novaRendaOutrasFontes";
+import RendaOutrasFontes from "./modules/rendaOutrasFontes/screens/RendaOutrasFontes";
+import RendaOutrasFontesDetails from "./modules/rendaOutrasFontes/screens/RendaOutrasFontesDetails";
+import { NovoReptil } from "./modules/repteis/screens/novoReptil";
 import Repteis from "./modules/repteis/screens/Reptil";
 import RepteisDetails from "./modules/repteis/screens/ReptilDetails";
-import { NovoReptil } from "./modules/repteis/screens/novoReptil";
+import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoSevicoComunicacao";
+import ServicosComunicacao from "./modules/servicoComunicacao/screens/ServicoComunicacao";
+import ServicosComunicacaoDetails from "./modules/servicoComunicacao/screens/ServicoComunicacaoDetail";
 import Splash from "./modules/splash";
+import User from "./modules/User";
 import UserDetails from "./modules/userDetails";
+import { NovaVegetacao } from "./modules/vegetacao/screens/novaVegetacao";
+import Vegetacao from "./modules/vegetacao/screens/Vegetacao";
 import { Icon } from "./shared/components/icon/Icon";
 import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
-import { NovoPeixe } from "./modules/peixe/screens/novoPeixe";
-import Peixes from "./modules/peixe/screens/Peixe";
-import PeixesDetails from "./modules/peixe/screens/PeixeDetails";
-import { NovaFauna } from "./modules/fauna/screens/novaFauna";
-import Fauna from "./modules/fauna/screens/Fauna";
-import FaunaDetails from "./modules/fauna/screens/faunaDetails";
-import { NovaVegetacao } from "./modules/vegetacao/screens/novaVegetacao";
-import Vegetacao from "./modules/vegetacao/screens/Vegetacao";
-import VegetacaoDetails from "./modules/vegetacao/screens/VegetacaoDetails";
-import { NovoCredito } from "./modules/credito/screens/novoCredito";
-import Credito from "./modules/credito/screens/Credito";
-import CreditoDetails from "./modules/credito/screens/CreditoDetails";
-import { NovaRendaOutrasFontes } from "./modules/rendaOutrasFontes/screens/novaRendaOutrasFontes";
-import RendaOutrasFontesDetails from "./modules/rendaOutrasFontes/screens/RendaOutrasFontesDetails";
-import RendaOutrasFontes from "./modules/rendaOutrasFontes/screens/RendaOutrasFontes";
-import { NovaAgua } from "./modules/agua/screens/novaAgua";
-import Aguas from "./modules/agua/screens/Agua";
-import AguaDetails from "./modules/agua/screens/AguaDetails";
-import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoSevicoComunicacao";
-import ServicosComunicacao from "./modules/servicoComunicacao/screens/ServicoComunicacao";
-import ServicosComunicacaoDetails from "./modules/servicoComunicacao/screens/ServicoComunicacaoDetail";
-import Atividades from "./modules/atividadeProdutiva/screens/AtividadeProdutiva";
-import AtividadeDetails from "./modules/atividadeProdutiva/screens/AtividadeProdutivaDetails";
-import { NovaAtividade } from "./modules/atividadeProdutiva/screens/novaAtividade";
-import Morador from "./modules/morador/screens/Morador";
-import MoradorDetails from "./modules/morador/screens/MoradorDetails";
-import { NovoMorador } from "./modules/morador/screens/novoMorador";
 
 
 
@@ -194,7 +193,6 @@ const Navigation =() =>{
           <Stack.Screen name="FaunaDetails" component={FaunaDetails} options={{ title: 'Detalhes da Fauna' }} />
           <Stack.Screen name="NovaVegetacao" component={NovaVegetacao} options={{ title: 'Cadastro de Vegetação' }} />
           <Stack.Screen name="VegetacaoLista" component={Vegetacao} options={{ title: 'Registro de Vegetação' }} />
-          <Stack.Screen name="VegetacaoDetails" component={VegetacaoDetails} options={{ title: 'Detalhes da Vegetação' }} />
           <Stack.Screen name="NovoCredito" component={NovoCredito} options={{ title: 'Cadastro de Crédito' }} />
           <Stack.Screen name="CreditoLista" component={Credito} options={{ title: 'Registro de Crédito' }} />
           <Stack.Screen name="CreditoDetails" component={CreditoDetails} options={{ title: 'Detalhes do Crédito' }} />
