@@ -164,7 +164,7 @@ export const apagarVegetacaoSyncronizada = (vegetacaoId: number) => {
       }
     });
   } catch (error) {
-    console.error("Erro ao excluir vegetacao de saúde sincronizado:", error);
+    console.error("Erro ao excluir vegetacao sincronizado:", error);
   }
 };
 

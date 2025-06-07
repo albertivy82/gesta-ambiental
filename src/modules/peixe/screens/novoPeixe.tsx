@@ -30,7 +30,7 @@ export const NovoPeixe = () => {
              handleOnChangeInput,
              handleEnumChange,
              disabled
-           } = useNovoPeixe(params.entrevistado);
+           } = useNovoPeixe(params.entrevistado, peixe);
  
  
     
@@ -42,7 +42,7 @@ export const NovoPeixe = () => {
           try {
             const peixeSalvo = await enviarRegistro(); 
                 if (peixeSalvo){
-                  detalharPeixe(navigation.navigate, peixeSalvo);
+                  detalharPeixe(navigation.navigate, entrevistado.id);
                 } else {
                   Alert.alert("Erro", "Não foi possível salvar o peixe. Tente novamente.");
                   navigation.goBack();

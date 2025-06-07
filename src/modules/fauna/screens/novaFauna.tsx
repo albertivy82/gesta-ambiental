@@ -71,7 +71,7 @@ export const NovaFauna = () => {
            try {
              const faunaSalva = await enviarRegistro(); 
                  if (faunaSalva){
-                   detalharFauna(navigation.navigate, faunaSalva);
+                   detalharFauna(navigation.navigate, entrevistado.id);
                  } else {
                    Alert.alert("Erro", "Não foi possível salvar a espécie. Tente novamente.");
                    navigation.goBack();

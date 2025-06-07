@@ -7,7 +7,7 @@ export interface AvesType {
     usoComercio: SimNao|null|'';
     usoCriacao: SimNao|null|'';
     usoRemedio: SimNao|null|'';
-    usoOutros: SimNao|null|'';
+    usoOutros: string;
     problemasRelacionados: string;
     ameacaSofrida: string;
     localDeAglomeracao: string;

@@ -146,3 +146,18 @@ export const apagarPeixeQueue = (idLocal: string) => {
         console.error('Erro ao excluir peixe da fila:', error);
     }
 };
+
+
+export const apagarPeixeSyncronizado = (peixeId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${peixeId}`;
+      const peixeExcluir = realmInstance.objects<PeixesType>("Peixes").filtered(query);
+      if (peixeExcluir.length > 0) {
+        realmInstance.delete(peixeExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir peixe sincronizado:", error);
+  }
+};

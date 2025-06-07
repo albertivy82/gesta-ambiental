@@ -27,7 +27,7 @@ export const DEFAULT_AVES_INPUT: AvesInput = {
   },
 };
 
-export const useNovaAves = (entrevistado:EntrevistadoType, ave: AvesType)  => {
+export const useNovaAves = (entrevistado:EntrevistadoType, ave?: AvesType)  => {
   const [novaAve, setNovaAve] = useState<AvesInput>(DEFAULT_AVES_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 

@@ -32,7 +32,7 @@ export interface NovoReptilParams {
   imovel?: imovelBody;
 }
 
-export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody) => {
+export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody) => {
   navigate('ImovelDetails', { imovel });
 };
 
@@ -46,9 +46,9 @@ export const NovoImovel = () => {
     handleOnChangeInput,
     handleArrayFieldChange,
     handleEnumChange,
-    inputImovelApi,
+    enviarRegistro,
     handleOnChangeAreaImovel,
-    disabled} = useNovoImovel(params.entrevistado);
+    disabled} = useNovoImovel(params.entrevistado, imovel);
 
   const [pavimentacaoInformada, setPavimentacaoInformada] = useState<string[]>([]);  
   const [outrasInformadas, SetOutrasInformadas] = useState<string>('');
@@ -113,20 +113,24 @@ export const NovoImovel = () => {
     
     
     
-    const handleEnviar = async () => {
-      setLoading(true); 
-  
-      try {
-        await inputImovelApi(); 
-        navigation.goBack(); 
-       
-      } catch (error) {
-        console.error('Erro no envio:', error);
-        Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-      } finally {
-        setLoading(false); 
-      }
-    };
+     const handleEnviar = async () => {
+             setLoading(true);
+           
+             try {
+               const imovelSalvo = await enviarRegistro(); 
+                   if (imovelSalvo){
+                     detalharImovel(navigation.navigate, imovelSalvo);
+                   } else {
+                     Alert.alert("Erro", "Não foi possível salvar a imovel. Tente novamente.");
+                     navigation.goBack();
+                   }
+             } catch (error) {
+               console.error("Erro no envio:", error);
+               Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+             } finally {
+               setLoading(false);
+             }
+        };
 
     
 

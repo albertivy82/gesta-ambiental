@@ -25,7 +25,7 @@ export const DEFAULT_MAMIFEROS_INPUT: MamiferosInput = {
   },
 };
 
-export const useNovoMamifero = (entrevistado:EntrevistadoType, mamifero: MamiferosType) => {
+export const useNovoMamifero = (entrevistado:EntrevistadoType, mamifero?: MamiferosType) => {
   const [novoMamifero, setNovoMamifero] = useState<MamiferosInput>(DEFAULT_MAMIFEROS_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -147,28 +147,17 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType, mamifero: Mamifer
             if (!mamifero!.sincronizado && mamifero!.idLocal) {
              
               //Objeto ainda não sincronizado → atualizar no Realm
-              const mamiferoAtualizado: MamiferoType = {
+              const mamiferoAtualizado: MamiferosType = {
                 ...mamifero!,
-                especie: novaMamifero.especie,
-                usoMedicinal: novaMamifero.usoMedicinal,
-                usoAlimentacao: novaMamifero.usoAlimentacao,
-                usoOrnamental: novaMamifero.usoOrnamental,
-                usoComercial: novaMamifero.usoComercial,
-                usaFlor: novaMamifero.usaFlor,
-                usaFolha: novaMamifero.usaFolha,
-                usaSemente: novaMamifero.usaSemente,
-                usaFruto: novaMamifero.usaFruto,
-                usaCasca: novaMamifero.usaCasca,
-                usaRaiz: novaMamifero.usaRaiz,
-                usoLeiteLatex: novaMamifero.usoLeiteLatex,
-                outrosUsos: novaMamifero.outrosUsos,
-                coletaLocalPublico: novaMamifero.coletaLocalPublico,
-                coletaCultivo: novaMamifero.coletaCultivo,
-                coletaCompra: novaMamifero.coletaCompra,
-                coletaAmbienteEspecifica: novaMamifero.coletaAmbienteEspecifica,
-                quemEnsinouUso: novaMamifero.quemEnsinouUso,
-                repassaConhecimento: novaMamifero.repassaConhecimento,
-                observacoesEspontaneas: novaMamifero.observacoesEspontaneas,
+                especie: novoMamifero.especie,
+                usoConsumo: novoMamifero.usoConsumo,
+                usoComercio: novoMamifero.usoComercio,
+                usoCriacao: novoMamifero.usoCriacao,
+                usoRemedio: novoMamifero.usoRemedio,
+                usoOutros: novoMamifero.usoOutros,
+                problemasRelacionados: novoMamifero.problemasRelacionados,
+                alimentacao: novoMamifero.alimentacao,
+                desricaoEspontanea: novoMamifero.desricaoEspontanea
               };
               
               const mamiferoQueue = await salvarMamifero(mamiferoAtualizado);

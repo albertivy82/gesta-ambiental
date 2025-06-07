@@ -146,3 +146,17 @@ export const apagarAveQueue = (idLocal: string) => {
     console.error('Erro ao excluir ave da fila:', error);
   }
 };
+
+export const apagarAveSyncronizada = (aveId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${aveId}`;
+      const aveExcluir = realmInstance.objects<AvesType>("Aves").filtered(query);
+      if (aveExcluir.length > 0) {
+        realmInstance.delete(aveExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir ave sincronizada:", error);
+  }
+};

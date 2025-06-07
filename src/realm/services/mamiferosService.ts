@@ -147,3 +147,17 @@ export const apagarMamiferoQueue = (idLocal: string) => {
         console.error('Erro ao excluir mamífero da fila:', error);
     }
 };
+
+export const apagarMamiferoSyncronizado = (mamiferoId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${mamiferoId}`;
+      const mamiferoExcluir = realmInstance.objects<MamiferosType>("Mamiferos").filtered(query);
+      if (mamiferoExcluir.length > 0) {
+        realmInstance.delete(mamiferoExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir mamifero sincronizado:", error);
+  }
+};

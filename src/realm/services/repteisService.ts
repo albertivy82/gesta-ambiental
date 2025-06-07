@@ -146,3 +146,18 @@ export const apagarReptilQueue = (idLocal: string) => {
     console.error('Erro ao excluir reptil da fila:', error);
   }
 };
+
+
+export const apagarReptilSyncronizado = (reptilId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${reptilId}`;
+      const reptilExcluir = realmInstance.objects<RepteisType>("Repteis").filtered(query);
+      if (reptilExcluir.length > 0) {
+        realmInstance.delete(reptilExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir reptil sincronizado:", error);
+  }
+};

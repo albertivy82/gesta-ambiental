@@ -23,7 +23,7 @@ export const DEFAULT_REPTEIS_INPUT: RepteisType = {
   },
 };
 
-export const useNovoReptil = (entrevistado: EntrevistadoType, reptil: RepteisType) => {
+export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisType) => {
   const [novoReptil, setNovoReptil] = useState<RepteisType>(DEFAULT_REPTEIS_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -145,28 +145,16 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil: RepteisTyp
             if (!reptil!.sincronizado && reptil!.idLocal) {
              
               //Objeto ainda não sincronizado → atualizar no Realm
-              const reptilAtualizado: ReptilType = {
+              const reptilAtualizado: RepteisType = {
                 ...reptil!,
-                especie: novaReptil.especie,
-                usoMedicinal: novaReptil.usoMedicinal,
-                usoAlimentacao: novaReptil.usoAlimentacao,
-                usoOrnamental: novaReptil.usoOrnamental,
-                usoComercial: novaReptil.usoComercial,
-                usaFlor: novaReptil.usaFlor,
-                usaFolha: novaReptil.usaFolha,
-                usaSemente: novaReptil.usaSemente,
-                usaFruto: novaReptil.usaFruto,
-                usaCasca: novaReptil.usaCasca,
-                usaRaiz: novaReptil.usaRaiz,
-                usoLeiteLatex: novaReptil.usoLeiteLatex,
-                outrosUsos: novaReptil.outrosUsos,
-                coletaLocalPublico: novaReptil.coletaLocalPublico,
-                coletaCultivo: novaReptil.coletaCultivo,
-                coletaCompra: novaReptil.coletaCompra,
-                coletaAmbienteEspecifica: novaReptil.coletaAmbienteEspecifica,
-                quemEnsinouUso: novaReptil.quemEnsinouUso,
-                repassaConhecimento: novaReptil.repassaConhecimento,
-                observacoesEspontaneas: novaReptil.observacoesEspontaneas,
+                especie: novoReptil.especie,
+                local: novoReptil.local,
+                periodo: novoReptil.periodo,
+                uso: novoReptil.uso,
+                ameacado: novoReptil.ameacado,
+                problemasRelacionados: novoReptil.problemasRelacionados,
+                cacado: novoReptil.cacado,
+                descricaoEspontanea: novoReptil.descricaoEspontanea
               };
               
               const reptilQueue = await salvarReptil(reptilAtualizado);

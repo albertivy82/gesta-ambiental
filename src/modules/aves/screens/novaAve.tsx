@@ -15,10 +15,10 @@ import { AvesType } from "../../../shared/types/AvesType";
 
 export interface NovaAveParams {
   entrevistado: EntrevistadoType;
-  ave?: AveType;
+  ave?: AvesType;
 }
 
-export const detalharAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+export const detalharAves = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
   navigate('AveLista', { entrevistadoId });
 };
 
@@ -56,7 +56,7 @@ export const NovaAve = () => {
          try {
            const aveSalva = await enviarRegistro(); 
                if (aveSalva){
-                 detalharAves(navigation.navigate, aveSalva);
+                 detalharAves(navigation.navigate, entrevistado.id);
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a aves. Tente novamente.");
                  navigation.goBack();

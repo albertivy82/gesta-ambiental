@@ -53,7 +53,7 @@ export const NovoMamifero = () => {
       try {
         const mamiferoSalvo = await enviarRegistro(); 
             if (mamiferoSalvo){
-              detalharMamifero(navigation.navigate, mamiferoSalvo);
+              detalharMamifero(navigation.navigate, entrevistado.id);
             } else {
               Alert.alert("Erro", "Não foi possível salvar a mamifero. Tente novamente.");
               navigation.goBack();

@@ -52,6 +52,47 @@ export const salvarImoveis = (imovel: imovelBody) =>{
 
 };
 
+export const salvarImovel = (imovel: imovelBody): Promise<imovelBody> =>{
+
+    return new Promise((resolve, reject)=>{
+           
+        try{
+            let imovelSalvo;
+            realmInstance.write(()=>{
+              const imovelRealm = realmInstance.objects('Imovel')
+              .filtered(`id == ${imovel.id}`)[0];
+                    
+                    if(imovel.sincronizado && imovelRealm && imovel.idLocal==''){
+                     
+                        const imovelPadrao ={
+                         ...imovel,
+                        entrevistado: imovel.entrevistado.id,
+                        };
+                        imovelSalvo =  realmInstance.create('Imovel', imovelPadrao, true);
+                    }else{
+                        const imovelPadrao ={
+                            ...imovel,
+                           entrevistado: imovel.entrevistado.id,
+                        };
+                        imovelSalvo =  realmInstance.create('Imovel', imovelPadrao, true);
+                    }
+            });
+            if(imovelSalvo){
+                const cleanImovel = JSON.parse(JSON.stringify(imovelSalvo));
+                resolve(cleanImovel);
+            }else{
+                throw new Error("Erro ao recuperar o imovel Salvo.");
+            }
+            
+
+        }catch(error){
+            reject(error)
+        }
+        
+    });
+
+};
+
 
 export const setIdEntrevistadoFromApiOnImovel = (idEntrevistadoApi: number, entrevistadoIdLocal: string) => {
     try {

@@ -28,7 +28,7 @@ export const NovoReptil = () => {
               enviarRegistro,
               handleOnChangeInput,
               disabled
-            } = useNovoReptil(params.entrevistado);
+            } = useNovoReptil(params.entrevistado, reptil);
   
   
        
@@ -38,7 +38,7 @@ export const NovoReptil = () => {
            try {
              const reptilSalvo = await enviarRegistro(); 
                  if (reptilSalvo){
-                  detalharReptil(navigation.navigate, reptilSalvo);
+                  detalharReptil(navigation.navigate, entrevistado.id);
                  } else {
                    Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
                    navigation.goBack();

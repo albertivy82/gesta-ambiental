@@ -25,7 +25,7 @@ export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   },
 };
 
-export const useNovaFauna = (entrevistado: EntrevistadoType, fauna: FaunaType) => {
+export const useNovaFauna = (entrevistado: EntrevistadoType, fauna?: FaunaType) => {
   const [novaFauna, setNovaFauna] = useState<FaunaInput>(DEFAULT_FAUNA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -150,25 +150,15 @@ export const useNovaFauna = (entrevistado: EntrevistadoType, fauna: FaunaType) =
               const faunaAtualizado: FaunaType = {
                 ...fauna!,
                 especie: novaFauna.especie,
-                usoMedicinal: novaFauna.usoMedicinal,
-                usoAlimentacao: novaFauna.usoAlimentacao,
-                usoOrnamental: novaFauna.usoOrnamental,
-                usoComercial: novaFauna.usoComercial,
-                usaFlor: novaFauna.usaFlor,
-                usaFolha: novaFauna.usaFolha,
-                usaSemente: novaFauna.usaSemente,
-                usaFruto: novaFauna.usaFruto,
-                usaCasca: novaFauna.usaCasca,
-                usaRaiz: novaFauna.usaRaiz,
-                usoLeiteLatex: novaFauna.usoLeiteLatex,
-                outrosUsos: novaFauna.outrosUsos,
-                coletaLocalPublico: novaFauna.coletaLocalPublico,
-                coletaCultivo: novaFauna.coletaCultivo,
-                coletaCompra: novaFauna.coletaCompra,
-                coletaAmbienteEspecifica: novaFauna.coletaAmbienteEspecifica,
-                quemEnsinouUso: novaFauna.quemEnsinouUso,
-                repassaConhecimento: novaFauna.repassaConhecimento,
-                observacoesEspontaneas: novaFauna.observacoesEspontaneas,
+                ocorreMata: novaFauna.ocorreMata,
+                ocorreRio: novaFauna.ocorreRio,
+                ocorreLago: novaFauna.ocorreLago,
+                ocorreRua: novaFauna.ocorreRua,
+                ocorreQuintal: novaFauna.ocorreQuintal,
+                outrasOcorrencias: novaFauna.outrasOcorrencias,
+                frequenciaAtual: novaFauna.frequenciaAtual,
+                frequenciaPassada: novaFauna.frequenciaPassada,
+                tempoQueNaoVe: novaFauna.tempoQueNaoVe !== null ? novaFauna.tempoQueNaoVe : '',
               };
               
               const faunaQueue = await salvarFauna(faunaAtualizado);

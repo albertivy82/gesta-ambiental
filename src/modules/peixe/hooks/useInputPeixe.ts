@@ -20,7 +20,7 @@ export const DEFAULT_PEIXES_INPUT: PeixesInput = {
   },
 };
 
-export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe: PeixesType) => {
+export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe?: PeixesType) => {
   const [novoPeixe, setNovoPeixe] = useState<PeixesInput>(DEFAULT_PEIXES_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -119,7 +119,7 @@ export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe: PeixesType) 
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/peixe/${peixe!.id}`, peixeCorrigida) as PeixeType;
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/peixe/${peixe!.id}`, peixeCorrigida) as PeixesType;
               if (response && response.id) {
                 return fetchPeixesAPI(response.id);
               }
@@ -139,26 +139,11 @@ export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe: PeixesType) 
               //Objeto ainda não sincronizado → atualizar no Realm
               const peixeAtualizado: PeixesType = {
                 ...peixe!,
-                especie: novaPeixe.especie,
-                usoMedicinal: novaPeixe.usoMedicinal,
-                usoAlimentacao: novaPeixe.usoAlimentacao,
-                usoOrnamental: novaPeixe.usoOrnamental,
-                usoComercial: novaPeixe.usoComercial,
-                usaFlor: novaPeixe.usaFlor,
-                usaFolha: novaPeixe.usaFolha,
-                usaSemente: novaPeixe.usaSemente,
-                usaFruto: novaPeixe.usaFruto,
-                usaCasca: novaPeixe.usaCasca,
-                usaRaiz: novaPeixe.usaRaiz,
-                usoLeiteLatex: novaPeixe.usoLeiteLatex,
-                outrosUsos: novaPeixe.outrosUsos,
-                coletaLocalPublico: novaPeixe.coletaLocalPublico,
-                coletaCultivo: novaPeixe.coletaCultivo,
-                coletaCompra: novaPeixe.coletaCompra,
-                coletaAmbienteEspecifica: novaPeixe.coletaAmbienteEspecifica,
-                quemEnsinouUso: novaPeixe.quemEnsinouUso,
-                repassaConhecimento: novaPeixe.repassaConhecimento,
-                observacoesEspontaneas: novaPeixe.observacoesEspontaneas,
+                especie: novoPeixe.especie,
+                locaisEspeciais: novoPeixe.locaisEspeciais,
+                locaisEspecificosAlimentacao: novoPeixe.locaisEspecificosAlimentacao,
+                usoAlimnetacao: novoPeixe.usoAlimnetacao,
+                usoComercio: novoPeixe.usoComercio
               };
               
               const peixeQueue = await salvarPeixe(peixeAtualizado);

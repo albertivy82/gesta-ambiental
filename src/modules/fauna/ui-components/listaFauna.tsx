@@ -1,23 +1,48 @@
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { FaunaType } from "../../../shared/types/FaunaType";
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
+import { useState } from "react";
 
-export const detalharFauna = (navigate: NavigationProp<ParamListBase>['navigate'], fauna: FaunaType) => {
-  navigate('FaunaDetails', { fauna });
-};
-
-const RenderItemFauna = ({ item }: { item: FaunaType }) => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
-
-  const handleGoToFaunaDetail = (fauna: FaunaType) => {
-    detalharFauna(navigation.navigate, fauna);
-  };
+export const RenderItemFauna = ({ item }: { item: FaunaType }) => {
+const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
+  
+  
+  
+    const handleAcaoFauna = (fauna: FaunaType) => {
+     
+      Alert.alert(
+        'Ação sobre o este item de fauna',
+        `O que você deseja fazer com "${fauna.especie}"?`,
+        [
+          {
+            text: 'Editar',
+            onPress: () => {
+              navigation.navigate('NovaFauna', { fauna }); // reuso da tela para edição
+            },
+          },
+          {
+            text: 'Apagar',
+            onPress: () => {
+              setMostrarModalDelete(true);
+            },
+            style: 'destructive',
+          },
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+    };
 
   return (
-    <TouchableOpacity onPress={() => handleGoToFaunaDetail(item)}>
+    <TouchableOpacity onPress={() => handleAcaoFauna(item)}>
       <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
@@ -32,7 +57,18 @@ const RenderItemFauna = ({ item }: { item: FaunaType }) => {
         <Text type={textTypes.BUTTON_REGULAR}>Frequência Atual: {item.frequenciaAtual}</Text>
         <Text type={textTypes.BUTTON_REGULAR}>Frequência Passada: {item.frequenciaPassada}</Text>
         <Text type={textTypes.BUTTON_REGULAR}>Tempo que não vê: {item.tempoQueNaoVe}</Text>
+         {mostrarModalDelete && (
+                  
+                  <DeleteConfirmation
+                     id={item.id}
+                     idLocal={item.idLocal}
+                     deleteEndpoint="fauna"
+                     onDeleteSuccess={() => {
+                     setMostrarModalDelete(false);}}
+                  />
+         )}
       </View>
+      
     </TouchableOpacity>
   );
 };

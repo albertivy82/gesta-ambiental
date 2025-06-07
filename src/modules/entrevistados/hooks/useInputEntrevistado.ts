@@ -118,18 +118,17 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
       if (entrevistado) {
         return await enviaEntrevistadoEdicao();
       } else {
-        return await enviaEntrevistadoNova();
+        return await enviaEntrevistadoNovo();
       }
     };
   
-  const enviaEntrevistadoNova = async () => {
+  const enviaEntrevistadoNovo = async () => {
    
     novoEntrevistado.localidade.id = id;
     const netInfoState = await NetInfo.fetch();
     const isConnected = await testConnection();
       if (netInfoState.isConnected && isConnected) {
           try {
-            console.log("useInputEntrevistado.ts...enviando api...", novoEntrevistado);
             const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado) as EntrevistadoType;
             if (response && response.id) {
               return fetchEntrevistadoAPI(response.id);

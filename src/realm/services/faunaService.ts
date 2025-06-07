@@ -146,3 +146,17 @@ export const apagarFaunaQueue = (idLocal: string) => {
         console.error('Erro ao excluir fauna da fila:', error);
     }
 };
+
+export const apagarFaunaSyncronizada = (faunaId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${faunaId}`;
+      const faunaExcluir = realmInstance.objects<FaunaType>("Fauna").filtered(query);
+      if (faunaExcluir.length > 0) {
+        realmInstance.delete(faunaExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir fauna sincronizada:", error);
+  }
+};

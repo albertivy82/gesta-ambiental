@@ -2,16 +2,21 @@ import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
+import { apagarAveSyncronizada } from "../../../realm/services/avesService";
+import { apagarEntrevistadoQueue, apagarEntrevistadoSyncronizado } from "../../../realm/services/entrevistado";
 import { apagarEscolaQueue, apagarEscolaSyncronizada } from "../../../realm/services/escolaService";
+import { apagarFaunaQueue, apagarFaunaSyncronizada } from "../../../realm/services/faunaService";
 import { apagarImovelQueue, apagarImovelSyncronizado } from '../../../realm/services/imovelService';
+import { apagarMamiferoQueue, apagarMamiferoSyncronizado } from "../../../realm/services/mamiferosService";
+import { apagarPeixeQueue, apagarPeixeSyncronizado } from "../../../realm/services/peixesService";
 import { apagarPostoQueue, apagarPostoSaudeSyncronizado } from '../../../realm/services/postoService';
+import { apagarReptilQueue, apagarReptilSyncronizado } from "../../../realm/services/repteisService";
+import { apagarVegetacaoQueue, apagarVegetacaoSyncronizada } from "../../../realm/services/vegetacaoService";
 import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
-import { apagarEntrevistadoQueue, apagarEntrevistadoSyncronizado } from "../../../realm/services/entrevistado";
-import { apagarVegetacaoQueue, apagarVegetacaoSyncronizada } from "../../../realm/services/vegetacaoService";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -45,6 +50,21 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "vegetacao":
             apagarVegetacaoQueue(idLocal);
             break;
+          case "ave":
+            apagarPeixeQueue(idLocal);
+            break;
+          case "fauna":
+            apagarFaunaQueue(idLocal);
+            break;
+          case "reptil":
+            apagarReptilQueue(idLocal);
+            break;
+          case "mamifero":
+            apagarMamiferoQueue(idLocal);
+            break;
+          case "peixe":
+            apagarPeixeQueue(idLocal);
+            break;
         }
   
         setModalVisible(false);
@@ -73,6 +93,21 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
               break;
             case "vegetacao":
               apagarVegetacaoSyncronizada(id);
+              break;
+            case "ave":
+              apagarAveSyncronizada(id);
+              break;
+            case "fauna":
+              apagarFaunaSyncronizada(id);
+              break;
+            case "reptil":
+              apagarReptilSyncronizado(id);
+              break;
+            case "mamifero":
+              apagarMamiferoSyncronizado(id);
+              break;
+            case "peixe":
+              apagarPeixeSyncronizado(id);
               break;
           }
   
