@@ -9,17 +9,19 @@ import { ActivityIndicator } from "react-native-paper";
 import { RepteisType } from "../../../shared/types/RepteisType";
 
 
-export interface idParam {
+export interface NovoReptilParams {
   entrevistado: EntrevistadoType;
+  reptil?: RepteisType;
 }
 
-export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], fauna: RepteisType)=>{
-    navigate('ReptilDetails', {fauna})
-}
+export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('ReptilLista', { entrevistadoId });
+};
 
-
-export const NovoReptil = ()=>{
-     const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovoReptil = () => {
+  const { params } = useRoute<RouteProp<Record<string, NovoReptilParams>, string>>();
+  const entrevistado = params.entrevistado ?? params.reptil?.entrevistado;
+  const reptil = params.reptil;
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 
      const {  novoReptil,

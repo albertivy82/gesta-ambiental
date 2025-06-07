@@ -2,11 +2,11 @@ import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarAve, salvarAveQueue } from "../../../realm/services/avesService";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { AvesInput } from "../../../shared/types/AvesInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { AvesType } from "../../../shared/types/AvesType";
 
 export const DEFAULT_AVES_INPUT: AvesInput = {
@@ -27,7 +27,7 @@ export const DEFAULT_AVES_INPUT: AvesInput = {
   },
 };
 
-export const useNovaAves = (entrevistado:EntrevistadoType)  => {
+export const useNovaAves = (entrevistado:EntrevistadoType, ave: AvesType)  => {
   const [novaAve, setNovaAve] = useState<AvesInput>(DEFAULT_AVES_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -72,7 +72,15 @@ export const useNovaAves = (entrevistado:EntrevistadoType)  => {
   };
   
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (ave) {
+      return await enviaAveEdicao();
+    } else {
+      return await enviaAveNova();
+    }
+  };
+
+  const enviaAveNova = async () =>{
 
  
     //entrevistado offline
@@ -112,6 +120,66 @@ export const useNovaAves = (entrevistado:EntrevistadoType)  => {
                     
                   }
         }
+  }
+
+  const enviaAveEdicao= async () =>{
+    const aveCorrigida = {
+      ...novaAve,
+      entrevistado: { id: typeof ave!.entrevistado === 'number' ? ave!.entrevistado : ave!.entrevistado.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/ave/${ave!.id}`, aveCorrigida) as AvesType;
+              if (response && response.id) {
+                return fetchAvesAPI(response.id);
+              }
+              } catch (error) {
+                
+                Alert.alert(
+                  "Erro ao editar",
+                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                );
+                return null;
+               
+            }
+          
+          } else {
+            if (!ave!.sincronizado && ave!.idLocal) {
+             
+              //Objeto ainda não sincronizado → atualizar no Realm
+              const aveAtualizado: AvesType = {
+                ...ave!,
+                especie:novaAve.especie,
+                useCosumo:novaAve.useCosumo,
+                usoComercio: novaAve.usoComercio,
+                usoCriacao:novaAve.usoCriacao,
+                usoRemedio:novaAve.usoRemedio,
+                usoOutros: novaAve.usoOutros,
+                problemasRelacionados:  novaAve.problemasRelacionados,
+                ameacaSofrida:  novaAve.ameacaSofrida,
+                localDeAglomeracao:novaAve.localDeAglomeracao,
+                qualImpotanciaDaEespecie:novaAve.qualImpotanciaDaEespecie,
+                alimentacao:novaAve.alimentacao,
+                descricaoEspontanea:novaAve.descricaoEspontanea,
+              };
+              
+              const aveQueue = await salvarAve(aveAtualizado);
+              return aveQueue;
+            } else {
+              // Objeto sincronizado → não permitir edição offline
+              Alert.alert(
+                "Sem conexão",
+                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+              );
+              return null;
+            }
+          }
+          
   }
   
    const fetchAvesAPI = async(id:number) =>{

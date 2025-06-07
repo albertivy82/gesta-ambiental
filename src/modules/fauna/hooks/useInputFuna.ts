@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { FaunaInput } from "../../../shared/types/FaunaInput";
 import { salvarFauna, salvarFaunaQueue } from "../../../realm/services/faunaService";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { FaunaType } from "../../../shared/types/FaunaType";
 
 export const DEFAULT_FAUNA_INPUT: FaunaInput = {
@@ -25,7 +25,7 @@ export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   },
 };
 
-export const useNovaFauna = (entrevistado: EntrevistadoType) => {
+export const useNovaFauna = (entrevistado: EntrevistadoType, fauna: FaunaType) => {
   const [novaFauna, setNovaFauna] = useState<FaunaInput>(DEFAULT_FAUNA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -67,7 +67,15 @@ export const useNovaFauna = (entrevistado: EntrevistadoType) => {
     return faunaData;
   };
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (fauna) {
+      return await enviaFaunaEdicao();
+    } else {
+      return await enviaFaunaNova();
+    }
+  };
+
+  const enviaFaunaNova = async () =>{
 
  
     //entrevistado offline
@@ -107,6 +115,74 @@ export const useNovaFauna = (entrevistado: EntrevistadoType) => {
                     
                   }
         }
+  }
+
+  const enviaFaunaEdicao= async () =>{
+    const faunaCorrigida = {
+      ...novaFauna,
+      entrevistado: { id: typeof fauna!.entrevistado === 'number' ? fauna!.entrevistado : fauna!.entrevistado.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/fauna/${fauna!.id}`, faunaCorrigida) as FaunaType;
+              if (response && response.id) {
+                return fetchFaunaAPI(response.id);
+              }
+              } catch (error) {
+                
+                Alert.alert(
+                  "Erro ao editar",
+                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                );
+                return null;
+               
+            }
+          
+          } else {
+            if (!fauna!.sincronizado && fauna!.idLocal) {
+             
+              //Objeto ainda não sincronizado → atualizar no Realm
+              const faunaAtualizado: FaunaType = {
+                ...fauna!,
+                especie: novaFauna.especie,
+                usoMedicinal: novaFauna.usoMedicinal,
+                usoAlimentacao: novaFauna.usoAlimentacao,
+                usoOrnamental: novaFauna.usoOrnamental,
+                usoComercial: novaFauna.usoComercial,
+                usaFlor: novaFauna.usaFlor,
+                usaFolha: novaFauna.usaFolha,
+                usaSemente: novaFauna.usaSemente,
+                usaFruto: novaFauna.usaFruto,
+                usaCasca: novaFauna.usaCasca,
+                usaRaiz: novaFauna.usaRaiz,
+                usoLeiteLatex: novaFauna.usoLeiteLatex,
+                outrosUsos: novaFauna.outrosUsos,
+                coletaLocalPublico: novaFauna.coletaLocalPublico,
+                coletaCultivo: novaFauna.coletaCultivo,
+                coletaCompra: novaFauna.coletaCompra,
+                coletaAmbienteEspecifica: novaFauna.coletaAmbienteEspecifica,
+                quemEnsinouUso: novaFauna.quemEnsinouUso,
+                repassaConhecimento: novaFauna.repassaConhecimento,
+                observacoesEspontaneas: novaFauna.observacoesEspontaneas,
+              };
+              
+              const faunaQueue = await salvarFauna(faunaAtualizado);
+              return faunaQueue;
+            } else {
+              // Objeto sincronizado → não permitir edição offline
+              Alert.alert(
+                "Sem conexão",
+                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+              );
+              return null;
+            }
+          }
+          
   }
   
    const fetchFaunaAPI = async(id:number) =>{

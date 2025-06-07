@@ -10,17 +10,19 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { PeixesType } from "../../../shared/types/PeixesType";
 
 
-export interface idParam {
+export interface NovoPeixeParams {
   entrevistado: EntrevistadoType;
+  peixe?: PeixesType;
 }
 
-export const detalharPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], peixe: PeixesType)=>{
-    navigate('PexeDetails', {peixe})
-}
+export const detalharPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+  navigate('PeixeLista', { entrevistadoId });
+};
 
-
-export const NovoPeixe = ()=>{
-    const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovoPeixe = () => {
+  const { params } = useRoute<RouteProp<Record<string, NovoPeixeParams>, string>>();
+  const entrevistado = params.entrevistado ?? params.peixe?.entrevistado;
+  const peixe = params.peixe;
     const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const [loading, setLoading] = useState(false); 
      const {  novoPeixe,

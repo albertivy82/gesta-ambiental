@@ -24,15 +24,22 @@ import { theme } from "../../../shared/themes/theme";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import Text from "../../../shared/components/text/Text";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 
-export interface idParam {
+export interface NovoReptilParams {
   entrevistado: EntrevistadoType;
+  imovel?: imovelBody;
 }
 
+export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody) => {
+  navigate('ImovelDetails', { imovel });
+};
 
-export const NovoImovel = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovoImovel = () => {
+  const { params } = useRoute<RouteProp<Record<string, NovoReptilParams>, string>>();
+  const entrevistado = params.entrevistado ?? params.imovel?.entrevistado;
+  const imovel = params.imovel;
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [loading, setLoading] = useState(false); 
   const { novoImovel,

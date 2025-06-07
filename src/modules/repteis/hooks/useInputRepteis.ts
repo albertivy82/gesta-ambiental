@@ -1,8 +1,8 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { RepteisType } from "../../../shared/types/RepteisType";
@@ -23,7 +23,7 @@ export const DEFAULT_REPTEIS_INPUT: RepteisType = {
   },
 };
 
-export const useNovoReptil = (entrevistado: EntrevistadoType) => {
+export const useNovoReptil = (entrevistado: EntrevistadoType, reptil: RepteisType) => {
   const [novoReptil, setNovoReptil] = useState<RepteisType>(DEFAULT_REPTEIS_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -65,7 +65,15 @@ export const useNovoReptil = (entrevistado: EntrevistadoType) => {
     return reptilData;
   };
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (reptil) {
+      return await enviaReptilEdicao();
+    } else {
+      return await enviaReptilNovo();
+    }
+  };
+
+  const enviaReptilNovo = async () =>{
 
  
     //entrevistado offline
@@ -105,6 +113,74 @@ export const useNovoReptil = (entrevistado: EntrevistadoType) => {
                     
                   }
         }
+  }
+
+  const enviaReptilEdicao= async () =>{
+    const reptilCorrigida = {
+      ...novoReptil,
+      entrevistado: { id: typeof reptil!.entrevistado === 'number' ? reptil!.entrevistado : reptil!.entrevistado.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/reptil/${reptil!.id}`, reptilCorrigida) as RepteisType;
+              if (response && response.id) {
+                return fetchRepteisAPI(response.id);
+              }
+              } catch (error) {
+                
+                Alert.alert(
+                  "Erro ao editar",
+                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                );
+                return null;
+               
+            }
+          
+          } else {
+            if (!reptil!.sincronizado && reptil!.idLocal) {
+             
+              //Objeto ainda não sincronizado → atualizar no Realm
+              const reptilAtualizado: ReptilType = {
+                ...reptil!,
+                especie: novaReptil.especie,
+                usoMedicinal: novaReptil.usoMedicinal,
+                usoAlimentacao: novaReptil.usoAlimentacao,
+                usoOrnamental: novaReptil.usoOrnamental,
+                usoComercial: novaReptil.usoComercial,
+                usaFlor: novaReptil.usaFlor,
+                usaFolha: novaReptil.usaFolha,
+                usaSemente: novaReptil.usaSemente,
+                usaFruto: novaReptil.usaFruto,
+                usaCasca: novaReptil.usaCasca,
+                usaRaiz: novaReptil.usaRaiz,
+                usoLeiteLatex: novaReptil.usoLeiteLatex,
+                outrosUsos: novaReptil.outrosUsos,
+                coletaLocalPublico: novaReptil.coletaLocalPublico,
+                coletaCultivo: novaReptil.coletaCultivo,
+                coletaCompra: novaReptil.coletaCompra,
+                coletaAmbienteEspecifica: novaReptil.coletaAmbienteEspecifica,
+                quemEnsinouUso: novaReptil.quemEnsinouUso,
+                repassaConhecimento: novaReptil.repassaConhecimento,
+                observacoesEspontaneas: novaReptil.observacoesEspontaneas,
+              };
+              
+              const reptilQueue = await salvarReptil(reptilAtualizado);
+              return reptilQueue;
+            } else {
+              // Objeto sincronizado → não permitir edição offline
+              Alert.alert(
+                "Sem conexão",
+                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+              );
+              return null;
+            }
+          }
+          
   }
   
    const fetchRepteisAPI = async(id:number) =>{

@@ -12,7 +12,6 @@ import Atividades from "./modules/atividadeProdutiva/screens/AtividadeProdutiva"
 import AtividadeDetails from "./modules/atividadeProdutiva/screens/AtividadeProdutivaDetails";
 import { NovaAtividade } from "./modules/atividadeProdutiva/screens/novaAtividade";
 import Aves from "./modules/aves/screens/Ave";
-import AvesDetails from "./modules/aves/screens/AveDetails";
 import { NovaAve } from "./modules/aves/screens/novaAve";
 import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
 import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
@@ -28,7 +27,6 @@ import { NovoEntrevistado } from "./modules/entrevistados/screens/novoEntrevista
 import Escolas from "./modules/escolas/screens/Escolas";
 import { NovaEscola } from "./modules/escolas/screens/novaEscola";
 import Fauna from "./modules/fauna/screens/Fauna";
-import FaunaDetails from "./modules/fauna/screens/faunaDetails";
 import { NovaFauna } from "./modules/fauna/screens/novaFauna";
 import Home from "./modules/home";
 import ImovelDetails from "./modules/imovel/screens/imovelDetails";
@@ -37,14 +35,12 @@ import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
 import Login from "./modules/login";
 import Mamiferos from "./modules/mamifero/screens/Mamifero";
-import MamiferoDetails from "./modules/mamifero/screens/MamiferoDetails";
 import { NovoMamifero } from "./modules/mamifero/screens/novoMamifero";
 import Morador from "./modules/morador/screens/Morador";
 import MoradorDetails from "./modules/morador/screens/MoradorDetails";
 import { NovoMorador } from "./modules/morador/screens/novoMorador";
 import { NovoPeixe } from "./modules/peixe/screens/novoPeixe";
 import Peixes from "./modules/peixe/screens/Peixe";
-import PeixesDetails from "./modules/peixe/screens/PeixeDetails";
 import { NovoPosto } from "./modules/postos/screens/novoPosto";
 import Postos from "./modules/postos/screens/Postos";
 import ProfileUser from "./modules/profileUser";
@@ -53,7 +49,6 @@ import RendaOutrasFontes from "./modules/rendaOutrasFontes/screens/RendaOutrasFo
 import RendaOutrasFontesDetails from "./modules/rendaOutrasFontes/screens/RendaOutrasFontesDetails";
 import { NovoReptil } from "./modules/repteis/screens/novoReptil";
 import Repteis from "./modules/repteis/screens/Reptil";
-import RepteisDetails from "./modules/repteis/screens/ReptilDetails";
 import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoSevicoComunicacao";
 import ServicosComunicacao from "./modules/servicoComunicacao/screens/ServicoComunicacao";
 import ServicosComunicacaoDetails from "./modules/servicoComunicacao/screens/ServicoComunicacaoDetail";
@@ -178,19 +173,14 @@ const Navigation =() =>{
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
           <Stack.Screen name="NovaAve" component={NovaAve} options={{title: 'Cadastro de Aves'}} />
           <Stack.Screen name="AvesLista" component={Aves} options={{title: 'Registro de Aves'}} />
-          <Stack.Screen name="AvesDetails" component={AvesDetails} options={{title: 'Registro de Aves'}} />
           <Stack.Screen name="NovoMamifero" component={NovoMamifero} options={{title: 'Cadastro de Aves'}} />
           <Stack.Screen name="Mamiferos" component={Mamiferos} options={{title: 'Registro de Aves'}} />
-          <Stack.Screen name="MamiferoDetails" component={MamiferoDetails} options={{title: 'Registro de Aves'}} />
           <Stack.Screen name="NovoReptil" component={NovoReptil} options={{ title: 'Cadastro de Répteis' }} />
           <Stack.Screen name="RepteisLista" component={Repteis} options={{ title: 'Registro de Répteis' }} />
-          <Stack.Screen name="ReptilDetails" component={RepteisDetails} options={{ title: 'Detalhes do Réptil' }} />
           <Stack.Screen name="NovoPeixe" component={NovoPeixe} options={{ title: 'Cadastro de Peixes' }} />
           <Stack.Screen name="PeixesLista" component={Peixes} options={{ title: 'Registro de Peixes' }} />
-          <Stack.Screen name="PeixeDetails" component={PeixesDetails} options={{ title: 'Detalhes do Peixe' }} />
           <Stack.Screen name="NovaFauna" component={NovaFauna} options={{ title: 'Cadastro de Fauna' }} />
           <Stack.Screen name="FaunaLista" component={Fauna} options={{ title: 'Registro de Fauna' }} />
-          <Stack.Screen name="FaunaDetails" component={FaunaDetails} options={{ title: 'Detalhes da Fauna' }} />
           <Stack.Screen name="NovaVegetacao" component={NovaVegetacao} options={{ title: 'Cadastro de Vegetação' }} />
           <Stack.Screen name="VegetacaoLista" component={Vegetacao} options={{ title: 'Registro de Vegetação' }} />
           <Stack.Screen name="NovoCredito" component={NovoCredito} options={{ title: 'Cadastro de Crédito' }} />

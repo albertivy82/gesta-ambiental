@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { MamiferosInput } from "../../../shared/types/MamiferosInput";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { salvarMamifero, salvarMamiferosQueue } from "../../../realm/services/mamiferosService";
 import { MamiferosType } from "../../../shared/types/MamiferosType";
 
@@ -25,7 +25,7 @@ export const DEFAULT_MAMIFEROS_INPUT: MamiferosInput = {
   },
 };
 
-export const useNovoMamifero = (entrevistado:EntrevistadoType) => {
+export const useNovoMamifero = (entrevistado:EntrevistadoType, mamifero: MamiferosType) => {
   const [novoMamifero, setNovoMamifero] = useState<MamiferosInput>(DEFAULT_MAMIFEROS_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -65,9 +65,17 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType) => {
   
     return mamiferoData;
   };
+
+  const enviarRegistro = async () => {
+    if (mamifero) {
+      return await enviaMamiferoEdicao();
+    } else {
+      return await enviaMamiferoNovo();
+    }
+  };
   
 
-  const enviarRegistro = async () =>{
+  const enviaMamiferoNovo = async () =>{
 
  
     //entrevistado offline
@@ -107,6 +115,74 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType) => {
                     
                   }
         }
+  }
+
+  const enviaMamiferoEdicao= async () =>{
+    const mamiferoCorrigida = {
+      ...novoMamifero,
+      entrevistado: { id: typeof mamifero!.entrevistado === 'number' ? mamifero!.entrevistado : mamifero!.entrevistado.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/mamifero/${mamifero!.id}`, mamiferoCorrigida) as MamiferosType;
+              if (response && response.id) {
+                return fetchMamiferoAPI(response.id);
+              }
+              } catch (error) {
+                
+                Alert.alert(
+                  "Erro ao editar",
+                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                );
+                return null;
+               
+            }
+          
+          } else {
+            if (!mamifero!.sincronizado && mamifero!.idLocal) {
+             
+              //Objeto ainda não sincronizado → atualizar no Realm
+              const mamiferoAtualizado: MamiferoType = {
+                ...mamifero!,
+                especie: novaMamifero.especie,
+                usoMedicinal: novaMamifero.usoMedicinal,
+                usoAlimentacao: novaMamifero.usoAlimentacao,
+                usoOrnamental: novaMamifero.usoOrnamental,
+                usoComercial: novaMamifero.usoComercial,
+                usaFlor: novaMamifero.usaFlor,
+                usaFolha: novaMamifero.usaFolha,
+                usaSemente: novaMamifero.usaSemente,
+                usaFruto: novaMamifero.usaFruto,
+                usaCasca: novaMamifero.usaCasca,
+                usaRaiz: novaMamifero.usaRaiz,
+                usoLeiteLatex: novaMamifero.usoLeiteLatex,
+                outrosUsos: novaMamifero.outrosUsos,
+                coletaLocalPublico: novaMamifero.coletaLocalPublico,
+                coletaCultivo: novaMamifero.coletaCultivo,
+                coletaCompra: novaMamifero.coletaCompra,
+                coletaAmbienteEspecifica: novaMamifero.coletaAmbienteEspecifica,
+                quemEnsinouUso: novaMamifero.quemEnsinouUso,
+                repassaConhecimento: novaMamifero.repassaConhecimento,
+                observacoesEspontaneas: novaMamifero.observacoesEspontaneas,
+              };
+              
+              const mamiferoQueue = await salvarMamifero(mamiferoAtualizado);
+              return mamiferoQueue;
+            } else {
+              // Objeto sincronizado → não permitir edição offline
+              Alert.alert(
+                "Sem conexão",
+                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
+              );
+              return null;
+            }
+          }
+          
   }
   
    const fetchMamiferoAPI = async(id:number) =>{
