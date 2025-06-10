@@ -1,4 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect } from 'react';
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
@@ -12,27 +13,36 @@ import { useFauna } from '../hooks/usefauna';
 import { useImovel } from '../hooks/useImovel';
 import { useMamiferos } from '../hooks/useMamifero';
 import { usePeixes } from '../hooks/usePeixe';
+import { useReptil } from '../hooks/UseReptil';
 import { useVegetacoes } from '../hooks/useVegetacao';
 import { EntrevistadoDetailContainer, Icones } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
-import { useEffect } from 'react';
+import { imovelBody } from '../../../shared/types/imovelType';
 
 
-export const handleNavigation = <T,>(
+// Para entidades MULTIPLAS (vegetacao, peixes, etc.)
+export const handleNavegacaoFilhas = (
   navigate: NavigationProp<ParamListBase>['navigate'], 
-  route: string, 
-  data: T | T[]
-) => {
-  navigate(route, { data });
-};
-
-export const handleNewEntry = (
-  navigate: NavigationProp<ParamListBase>['navigate'], 
-  route: string, 
+  rota: string, 
   entrevistado: EntrevistadoType
 ) => {
-  navigate(route, { entrevistado });
+  navigate(rota, { entrevistado });
 };
+
+// Para entidade ÚNICA (imóvel)
+export const handleImovelNavigation = (
+  navigate: NavigationProp<ParamListBase>['navigate'], 
+  rota: string, 
+  imovel?: imovelBody,
+  entrevistado?: EntrevistadoType
+) => {
+  if (imovel) {
+    navigate(rota, { imovel });
+  } else if (entrevistado) {
+    navigate("NovoImovel", { entrevistado });
+  }
+};
+
 
 
 
@@ -50,8 +60,9 @@ const EntrevistadoDetails = () => {
   const {peixes} = usePeixes(params.entrevistado.id);
   const {mamiferos} = useMamiferos(params.entrevistado.id);
   const {aves} = useAves(params.entrevistado.id);
+  const {reptil} = useReptil(params.entrevistado.id);
 
- 
+ console.log(params.entrevistado)
    // Alerta caso não haja imóveis
    useEffect(() => {
     if (!imovelPresente) {
@@ -74,20 +85,18 @@ const EntrevistadoDetails = () => {
   /**
    * Método genérico para decisão de navegação
    */
-  const handleDecision = <T,>(
-    data: T | T[],
+  const handleDecision = (
+    data: any[] | undefined,
     detailRoute: string,
     newRoute: string
   ) => {
-    if (Array.isArray(data) ? data.length > 0 : !!data) {
-      handleNavigation(navigation.navigate, detailRoute, data);
+    if (data && data.length > 0) {
+      handleNavegacaoFilhas(navigation.navigate, detailRoute, params.entrevistado);
     } else {
-      handleNewEntry(navigation.navigate, newRoute, params.entrevistado);
+      handleNavegacaoFilhas(navigation.navigate, newRoute, params.entrevistado);
     }
   };
   
-  
-
   return (
     
        <ScrollView style={{ flex: 1 }}>
@@ -163,8 +172,7 @@ const EntrevistadoDetails = () => {
           </View>
                 
           <TouchableOpacity
-                 onPress={() => handleDecision(imovelPresente, "ImovelDetails", "NovoImovel")}
-                >
+                 onPress={() => handleImovelNavigation(navigation.navigate, "ImovelDetails", imovelPresente, params.entrevistado)}>
                   {imovelPresente ? (
                     <View style={{ alignItems: 'center' }}> 
                       <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
@@ -189,11 +197,11 @@ const EntrevistadoDetails = () => {
 
          
 
-        <TouchableOpacity  onPress={() => {handleDecision(imovelPresente, "ImovelDetails", "NovoImovel")}}>
+        <TouchableOpacity  onPress={() => {handleDecision(vegetacao, "VegetacaoLista", "NovaVegetacao")}}>
                           
                      {vegetacao.length >0? (
 
-                      <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
+                      <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
                       Vegetações registradas: {vegetacao.length}
                       </Text>
 
@@ -211,11 +219,11 @@ const EntrevistadoDetails = () => {
 
                     
               
-              <TouchableOpacity  onPress={() => {handleDecision(imovelPresente, "ImovelDetails", "NovoImovel")}}>
+              <TouchableOpacity  onPress={() => {handleDecision(peixes, "PeixesLista", "NovoPeixe")}}>
                           
                           {peixes.length >0? (
      
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
+                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
                            Peixes registrados: {peixes.length}
                            </Text>
      
@@ -231,11 +239,11 @@ const EntrevistadoDetails = () => {
                           )}
               </TouchableOpacity>
 
-              <TouchableOpacity  onPress={() => {handleDecision(imovelPresente, "ImovelDetails", "NovoImovel")}}>
+              <TouchableOpacity  onPress={() => {handleDecision(mamiferos, "Mamiferos", "NovoMamifero")}}>
                           
                           {mamiferos.length >0? (
      
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
+                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
                            Itens de mamíferosregistrados: {mamiferos.length}
                            </Text>
      
@@ -251,11 +259,11 @@ const EntrevistadoDetails = () => {
                           )}
               </TouchableOpacity>
 
-              <TouchableOpacity  onPress={() => {handleDecision(imovelPresente, "ImovelDetails", "NovoImovel")}}>
+              <TouchableOpacity  onPress={() => {handleDecision(fauna, "FaunaLista", "NovaFauna")}}>
                           
                           {fauna.length >0? (
      
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
+                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
                               Itens de fauna registrados: {fauna.length}
                            </Text>
      
@@ -279,7 +287,7 @@ const EntrevistadoDetails = () => {
                           
                           {aves.length >0? (
      
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
+                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
                            Itens de aves registrados: {aves.length}
                            </Text>
      
@@ -291,6 +299,26 @@ const EntrevistadoDetails = () => {
                             }}>
                               <Icones resizeMode="contain" source={require('../../../assets/images/aves.png')} />
                               <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>aves</Text>
+                          </View>
+                          )}
+              </TouchableOpacity>
+
+              <TouchableOpacity  onPress={() => {handleDecision(reptil, "RepteisLista", "NovReptil")}}>
+                          
+                          {reptil.length >0? (
+     
+                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
+                           Itens de repteis registrados: {reptil.length}
+                           </Text>
+     
+                          ):( 
+                            <View style={{ alignItems: 'stretch', flexDirection: 'row', 
+                              padding: 10,
+                              borderWidth: 2, 
+                              borderColor: theme.colors.grayTheme.gray100 
+                            }}>
+                              <Icones resizeMode="contain" source={require('../../../assets/images/reptil.png')} />
+                              <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Repteis</Text>
                           </View>
                           )}
               </TouchableOpacity>

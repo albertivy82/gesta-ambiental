@@ -9,10 +9,11 @@ import { theme } from '../../../shared/themes/theme';
 import { VegetacaoType } from '../../../shared/types/VegetacaoType';
 import { VegetacaoDetailContainer } from '../styles/Vegetacao.style';
 import RenderItemVegetacao from '../ui-components/listaVegetacao';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 
 export interface VegetacaoParam {
-  vegetacao: VegetacaoType[];
+  entrevistado: EntrevistadoType;
 }
 
 export const novaVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
@@ -22,20 +23,26 @@ export const novaVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'
 const Vegetacao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, VegetacaoParam>, 'Vegetacao'>>();
-  const { vegetacao } = route.params;
+  const { entrevistado } = route.params;
+  console.log(entrevistado)
   const flatListRef = useRef<FlatList>(null);
-  const [vegetacoes, setVegetacoes] = useState<VegetacaoType[]>(vegetacao);
+  const [vegetacoes, setVegetacoes] = useState<VegetacaoType[]>();
 
   const fetchVegetacoes = async () => {
-    const entrevistadoId = vegetacao[0]?.entrevistado.id;
-    if (entrevistadoId) {
-      const novas = getVegetacoes(entrevistadoId);
-      const filtradas = novas.filter(nova =>
-        !vegetacoes.some(v => (v.id && nova.id && v.id === nova.id) || (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal))
-      );
-      setVegetacoes(prev => [...prev, ...filtradas]);
-    }
+    if (!entrevistado.id) return;
+  
+    const novas = getVegetacoes(entrevistado.id);
+  
+    const novasNaoDuplicadas = novas.filter(nova =>
+      !vegetacoes?.some(v =>
+        (v.id && nova.id && v.id === nova.id) ||
+        (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal)
+      )
+    );
+  
+    setVegetacoes(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
   };
+  
 
   useEffect(() => {
     fetchVegetacoes();
@@ -51,7 +58,7 @@ const Vegetacao = () => {
   };
 
   const handleNovaVegetacao = () => {
-    novaVegetacao(navigation.navigate, vegetacao[0]?.entrevistado.id);
+    novaVegetacao(navigation.navigate, entrevistado.id);
   };
 
   return (
@@ -66,7 +73,7 @@ const Vegetacao = () => {
       }}>
         <Icon size={30} name='leaf' color='#fefeff' />
         <Text
-          type={textTypes.TITLE_BOLD}
+          type={textTypes.BUTTON_REGULAR}
           color={theme.colors.whiteTheme.white}
           margin="0px 0px 0px 30px"
         >

@@ -23,8 +23,8 @@ export const convertToReptilInput = (reptil: any) => {
     return reptilInput;
 };
 
-export const useReptils = (entrevistadoId: number) => {
-    const [reptils, setReptils] = useState<RepteisType[]>([]);
+export const useReptil = (entrevistadoId: number) => {
+    const [reptil, setReptil] = useState<RepteisType[]>([]);
 
     const sincronizeReptilQueue = async () => {
         if (entrevistadoId > 0) {
@@ -55,9 +55,9 @@ export const useReptils = (entrevistadoId: number) => {
     };
 
     const fetchReptilsRealm = () => {
-            const reptilsRealm = getRepteis(entrevistadoId);
-            if (reptilsRealm.length > 0) {
-               setReptils((prevReptils) => [...prevReptils, ...reptilsRealm]); // Aqui usamos reptilsRealm
+            const reptilRealm = getRepteis(entrevistadoId);
+            if (reptilRealm.length > 0) {
+               setReptil((prevReptils) => [...prevReptils, ...reptilRealm]); // Aqui usamos reptilRealm
             }
    };
         
@@ -65,21 +65,21 @@ export const useReptils = (entrevistadoId: number) => {
     const fetchReptilsAPI = async () => {
         try {
             const response = await connectionAPIGet<RepteisType[]>(`http://192.168.100.28:8080/reptil/entrevistado-reptil/${entrevistadoId}`);
-            const reptilsData = response.map(reptil => ({
+            const reptilData = response.map(reptil => ({
                 ...reptil,
                 sincronizado: true,
                 idLocal: '',
                 idFather: '',
             }));
             
-            if (reptilsData && Array.isArray(reptilsData) && reptilsData.length > 0) {
-                await salvarRepteis(reptilsData);
-                setReptils((prevReptils) => [...prevReptils, ...reptilsData]);
+            if (reptilData && Array.isArray(reptilData) && reptilData.length > 0) {
+                await salvarRepteis(reptilData);
+                setReptil((prevReptils) => [...prevReptils, ...reptilData]);
             } else {
                 throw new Error('Dados de reptil inválidos');
             }
         } catch (error) {
-            console.log("Erro ao recuperar reptils da API:", error);
+            console.log("Erro ao recuperar reptil da API:", error);
         }
     };
 
@@ -89,5 +89,5 @@ export const useReptils = (entrevistadoId: number) => {
         sincronizeReptilQueue();
     }, []);
 
-    return { reptils };
+    return { reptil };
 };

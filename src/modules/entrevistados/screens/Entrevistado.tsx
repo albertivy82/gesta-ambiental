@@ -7,10 +7,9 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
-import { useNovoEntrevistado } from '../hooks/useInputEntrevistado';
-import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 
 
 export interface entrevistadoParam {

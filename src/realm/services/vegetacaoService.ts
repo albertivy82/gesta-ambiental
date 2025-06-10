@@ -15,6 +15,7 @@ export const salvarVegetacoes = (vegetacoes: VegetacaoType[]) => {
             };
             realmInstance.create('Vegetacao', vegetacaoPadrao, true);
           } else {
+            
             const vegetacaoPadrao = {
               ...vegetacao,
               entrevistado: vegetacao.entrevistado.id,
@@ -70,18 +71,20 @@ export const salvarVegetacaoQueue = (vegetacao:VegetacaoInput): Promise<Vegetaca
 
 export const salvarVegetacao= (vegetacao:VegetacaoType): Promise<VegetacaoType> => {
     return new Promise((resolve, reject) => {
-
+      console.log("rasreando objeto", vegetacao)
         try {
             let vegetacaoSalvo;
             realmInstance.write(() => {
                 const vegetacaoExistente = realmInstance
                     .objects<VegetacaoType>("Vegetacao")
                     .filtered(`id == ${vegetacao.id}`)[0];
-
+                    
                 const vegetacaoPadrao = {
                     ...vegetacao,
                     entrevistado: vegetacao.entrevistado.id,
                 };
+
+
 
                 // Atualiza somente se sincronizado ou se não existir ainda
                 if (vegetacao.sincronizado && vegetacaoExistente && vegetacao.idLocal === '') {
@@ -109,6 +112,7 @@ export const getVegetacoes = (entrevistadoId: number): VegetacaoType[] => {
     .objects<VegetacaoType>('Vegetacao')
     .filtered(query)
     .slice();
+    console.log("busca n real", vegetacoes)
   return JSON.parse(JSON.stringify(vegetacoes)) as VegetacaoType[];
 };
 

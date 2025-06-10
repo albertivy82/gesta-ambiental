@@ -69,7 +69,7 @@ export const useAves = (entrevistadoId: number) => {
 
     const fetchAvesAPI = async () => {
         try {
-            const response = await connectionAPIGet<AvesType[]>(`http://192.168.100.28:8080/aves/entrevistado-aves/${entrevistadoId}`);
+            const response = await connectionAPIGet<AvesType[]>(`http://192.168.100.28:8080/ave/entrevistado-ave/${entrevistadoId}`);
             const avesData = response.map(ave => ({
                 ...ave,
                 sincronizado: true,

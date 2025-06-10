@@ -76,8 +76,6 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
           novoEntrevistado.localCompras !== '' &&
           novoEntrevistado.comoCuidaSaudeFamilia!== '' &&
           novoEntrevistado.servicosDeficitarios !== '' &&
-          novoEntrevistado.sofreuAssaltos > 0 &&
-          novoEntrevistado.presenciouAssalto > 0 &&
           novoEntrevistado.problemasDeViolenciaLocal !== '' &&
           novoEntrevistado.instituicaoConhecida !== '' &&
           novoEntrevistado.importanciaDeProtegerAmbiente!== '' &&

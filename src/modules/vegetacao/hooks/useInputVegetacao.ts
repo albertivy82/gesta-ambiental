@@ -22,7 +22,7 @@ export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
   usaCasca: null,
   usaRaiz: null,
   usoLeiteLatex: null,
-  outrosUsos: null,
+  outrosUsos: '',
   coletaLocalPublico: null,
   coletaCultivo: null,
   coletaCompra: null,
@@ -40,7 +40,6 @@ export const useNovaVegetacao = (entrevistado:EntrevistadoType, vegetacao?: Vege
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novaVegetacao);
     if (
       novaVegetacao.especie !== '' &&
       novaVegetacao.usoMedicinal !== null &&
@@ -54,7 +53,7 @@ export const useNovaVegetacao = (entrevistado:EntrevistadoType, vegetacao?: Vege
       novaVegetacao.usaCasca !== null &&
       novaVegetacao.usaRaiz !== null &&
       novaVegetacao.usoLeiteLatex !== null &&
-      novaVegetacao.outrosUsos !== null &&
+      novaVegetacao.outrosUsos !== '' &&
       novaVegetacao.coletaLocalPublico !== null &&
       novaVegetacao.coletaCultivo !== null &&
       novaVegetacao.coletaCompra !== null &&
@@ -98,7 +97,7 @@ const objetoFila = () => {
 
     const enviaVegetacaoNovo = async () =>{
 
- 
+      
       //entrevistado offline
           if(!entrevistado.sincronizado && entrevistado.id<=0){
             //entrevistado offline
@@ -145,20 +144,80 @@ const objetoFila = () => {
       };
       const netInfoState = await NetInfo.fetch();
       const isConnected = await testConnection();
-      
        if(netInfoState.isConnected && isConnected){
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 
                 const response = await connectionAPIPut(`http://192.168.100.28:8080/vegetacao/${vegetacao!.id}`, vegetacaoCorrigida) as VegetacaoType;
                 if (response && response.id) {
-                  return fetchVegetacaoAPI(response.id);
-                }
+                return fetchVegetacaoAPI(response.id);
+                }else{
+                  const vegetacaoAtualizado: VegetacaoType = {
+                    ...vegetacao!,
+                    id: vegetacao!.id,
+                    especie: novaVegetacao.especie,
+                    usoMedicinal: novaVegetacao.usoMedicinal,
+                    usoAlimentacao: novaVegetacao.usoAlimentacao,
+                    usoOrnamental: novaVegetacao.usoOrnamental,
+                    usoComercial: novaVegetacao.usoComercial,
+                    usaFlor: novaVegetacao.usaFlor,
+                    usaFolha: novaVegetacao.usaFolha,
+                    usaSemente: novaVegetacao.usaSemente,
+                    usaFruto: novaVegetacao.usaFruto,
+                    usaCasca: novaVegetacao.usaCasca,
+                    usaRaiz: novaVegetacao.usaRaiz,
+                    usoLeiteLatex: novaVegetacao.usoLeiteLatex,
+                    outrosUsos: novaVegetacao.outrosUsos,
+                    coletaLocalPublico: novaVegetacao.coletaLocalPublico,
+                    coletaCultivo: novaVegetacao.coletaCultivo,
+                    coletaCompra: novaVegetacao.coletaCompra,
+                    coletaAmbienteEspecifica: novaVegetacao.coletaAmbienteEspecifica,
+                    quemEnsinouUso: novaVegetacao.quemEnsinouUso,
+                    repassaConhecimento: novaVegetacao.repassaConhecimento,
+                    observacoesEspontaneas: novaVegetacao.observacoesEspontaneas,
+                    sincronizado: vegetacao?.sincronizado,
+                    idLocal: vegetacao?.idLocal,
+                    idFather:vegetacao?.idFather,
+                  };
+                  console.log(vegetacaoAtualizado);
+                  const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
+                  return vegetacaoQueue;
+                  }
                 } catch (error) {
-                  
+                  const vegetacaoAtualizado: VegetacaoType = {
+                    ...vegetacao!,
+                    id: vegetacao!.id,
+                    especie: novaVegetacao.especie,
+                    usoMedicinal: novaVegetacao.usoMedicinal,
+                    usoAlimentacao: novaVegetacao.usoAlimentacao,
+                    usoOrnamental: novaVegetacao.usoOrnamental,
+                    usoComercial: novaVegetacao.usoComercial,
+                    usaFlor: novaVegetacao.usaFlor,
+                    usaFolha: novaVegetacao.usaFolha,
+                    usaSemente: novaVegetacao.usaSemente,
+                    usaFruto: novaVegetacao.usaFruto,
+                    usaCasca: novaVegetacao.usaCasca,
+                    usaRaiz: novaVegetacao.usaRaiz,
+                    usoLeiteLatex: novaVegetacao.usoLeiteLatex,
+                    outrosUsos: novaVegetacao.outrosUsos,
+                    coletaLocalPublico: novaVegetacao.coletaLocalPublico,
+                    coletaCultivo: novaVegetacao.coletaCultivo,
+                    coletaCompra: novaVegetacao.coletaCompra,
+                    coletaAmbienteEspecifica: novaVegetacao.coletaAmbienteEspecifica,
+                    quemEnsinouUso: novaVegetacao.quemEnsinouUso,
+                    repassaConhecimento: novaVegetacao.repassaConhecimento,
+                    observacoesEspontaneas: novaVegetacao.observacoesEspontaneas,
+                    sincronizado: vegetacao?.sincronizado,
+                    idLocal: vegetacao?.idLocal,
+                    idFather:vegetacao?.idFather,
+                  };
+                  console.log(vegetacaoAtualizado);
+                  const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
+                
+
                   Alert.alert(
-                    "Erro ao editar",
-                    "Não foi possível salvar as alterações. Tente novamente quando estiver online."
+                    "Erro ao enviar edição",
+                    "Não foi possível salvar as alterações no banco. Tente novamente quando estiver online."
                   );
                   return null;
                  
@@ -195,6 +254,7 @@ const objetoFila = () => {
                 const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
                 return vegetacaoQueue;
               } else {
+                console.log("objeto off line?")
                 // Objeto sincronizado → não permitir edição offline
                 Alert.alert(
                   "Sem conexão",

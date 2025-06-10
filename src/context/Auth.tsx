@@ -1,11 +1,8 @@
 
+import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { View, Button } from 'react-native';
 import qs from 'qs';
 import { storeAuthData } from './authStore';
-import { useNavigation, NavigationProp, ParamListBase } from '@react-navigation/native';
-import { WebView, WebViewMessageEvent, WebViewNavigation } from 'react-native-webview';
-import { useState } from 'react';
 
 const authServer = axios.create({
   baseURL: 'http://192.168.100.28:8080'

@@ -3,6 +3,7 @@ export const VegetacaoSchema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
+        especie: 'string',
         usoMedicinal: 'string',
         usoAlimentacao: 'string',
         usoOrnamental: 'string',

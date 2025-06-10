@@ -31,9 +31,6 @@ export const convertToVegetacaoInput = (vegetacao: any) => {
         entrevistado: {
             id: vegetacao.entrevistado.id,
         },
-        sincronizado: vegetacao.sincronizado ?? false,
-        idLocal: vegetacao.idLocal ?? "",
-        idFather: vegetacao.idFather ?? "",
     };
 
     return vegetacaoInput;
@@ -56,7 +53,6 @@ export const useVegetacoes = (entrevistadoId: number) => {
                         if (isConnected) {
                             try {
                                 const response = await connectionAPIPost('http://192.168.100.28:8080/vegetacao', novaVegetacaoInput);
-                                console.log("Vegetação: ponto de sincronização 5");
                                 const vegetacaoAPI = response as VegetacaoType;
 
                                 if (vegetacaoAPI.id) {
@@ -83,16 +79,15 @@ export const useVegetacoes = (entrevistadoId: number) => {
 
     const fetchVegetacoesAPI = async () => {
         try {
-            const response = await connectionAPIGet<VegetacaoType[]>(`http://192.168.100.28:8080/vegetacao/entrevistado/${entrevistadoId}`);
+            const response = await connectionAPIGet<VegetacaoType[]>(`http://192.168.100.28:8080/vegetacao/entrevistado-vegetacao/${entrevistadoId}`);
             const vegetacaoData = response.map(veg => ({
                 ...veg,
                 sincronizado: true,
                 idLocal: '',
                 idFather: '',
             }));
-            console.log("Vegetação: circuito da API");
-            if (vegetacaoData && Array.isArray(vegetacaoData) && vegetacaoData.length > 0) {
-                 await salvarVegetacoes(vegetacaoData);
+           if (vegetacaoData && Array.isArray(vegetacaoData) && vegetacaoData.length > 0) {
+                await salvarVegetacoes(vegetacaoData);
                  setVegetacao((prevVegetacao) => [...prevVegetacao, ...vegetacaoData]);
             } else {
                 throw new Error('Dados de vegetação inválidos');

@@ -49,26 +49,26 @@ const RenderItemVegetacao = ({ item }: { item: VegetacaoType }) => {
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
         </Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Espécie: {item.especie}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso Medicinal: {item.usoMedicinal}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso Alimentação: {item.usoAlimentacao}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso Ornamental: {item.usoOrnamental}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso Comercial: {item.usoComercial}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Flor: {item.usaFlor}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Folha: {item.usaFolha}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Semente: {item.usaSemente}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Fruto: {item.usaFruto}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Casca: {item.usaCasca}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Raiz: {item.usaRaiz}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Usa Leite/Látex: {item.usoLeiteLatex}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Outros Usos: {item.outrosUsos}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Coleta em Local Público: {item.coletaLocalPublico}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Coleta por Cultivo: {item.coletaCultivo}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Coleta por Compra: {item.coletaCompra}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Coleta no Ambiente: {item.coletaAmbienteEspecifica}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Quem Ensinou o Uso: {item.quemEnsinouUso}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Repassa o Conhecimento: {item.repassaConhecimento}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Observações Espontâneas: {item.observacoesEspontaneas}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Espécie: {item.especie}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Uso Medicinal: {item.usoMedicinal}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Uso Alimentação: {item.usoAlimentacao}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Uso Ornamental: {item.usoOrnamental}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Uso Comercial: {item.usoComercial}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Flor: {item.usaFlor}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Folha: {item.usaFolha}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Semente: {item.usaSemente}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Fruto: {item.usaFruto}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Casca: {item.usaCasca}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Raiz: {item.usaRaiz}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usa Leite/Látex: {item.usoLeiteLatex}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Outros Usos: {item.outrosUsos}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Coleta em Local Público: {item.coletaLocalPublico}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Coleta por Cultivo: {item.coletaCultivo}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Coleta por Compra: {item.coletaCompra}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Coleta no Ambiente: {item.coletaAmbienteEspecifica}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Quem Ensinou o Uso: {item.quemEnsinouUso}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Repassa o Conhecimento: {item.repassaConhecimento}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Observações Espontâneas: {item.observacoesEspontaneas}</Text>
 
         {mostrarModalDelete && (
                   

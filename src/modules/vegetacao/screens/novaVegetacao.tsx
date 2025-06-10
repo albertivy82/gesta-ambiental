@@ -40,7 +40,7 @@ export const NovaVegetacao = ()=>{
 
           useEffect(() => {
             if (vegetacao) {
-              handleOnChangeInput(vegetacao.especie, 'especie');
+              handleOnChangeInput(vegetacao.especie ?? '', 'especie');
               handleEnumChange('usoMedicinal', vegetacao.usoMedicinal);
               handleEnumChange('usoAlimentacao', vegetacao.usoAlimentacao);
               handleEnumChange('usoOrnamental', vegetacao.usoOrnamental);
@@ -56,9 +56,9 @@ export const NovaVegetacao = ()=>{
               handleEnumChange('coletaCultivo', vegetacao.coletaCultivo);
               handleEnumChange('coletaCompra', vegetacao.coletaCompra);
               handleEnumChange('coletaAmbienteEspecifica', vegetacao.coletaAmbienteEspecifica);
-              handleOnChangeInput(vegetacao.especie, 'quemEnsinouUso');
-              handleOnChangeInput(vegetacao.especie,  'repassaConhecimento');
-              handleOnChangeInput(vegetacao.especie,  'observacoesEspontaneas');
+              handleOnChangeInput(vegetacao.quemEnsinouUso ?? '', 'quemEnsinouUso');
+              handleOnChangeInput(vegetacao.repassaConhecimento ?? '',  'repassaConhecimento');
+              handleOnChangeInput(vegetacao.observacoesEspontaneas ?? '',  'observacoesEspontaneas');
                         
             }
           }, [vegetacao]);
@@ -210,14 +210,14 @@ export const NovaVegetacao = ()=>{
             )}
  
              <RenderPicker
-               label="Coleta"
+               label="A coleta é realizada em local público?"
                selectedValue={novaVegetacao.coletaLocalPublico}
                onValueChange={(value) => handleEnumChange('coletaLocalPublico', value)}
                options={simNaoOptions}
             />
 
              <RenderPicker
-               label="Coleta"
+               label="A coleta é fruto de cultivo da espécie?"
                selectedValue={novaVegetacao.coletaCultivo}
                onValueChange={(value) => handleEnumChange('coletaCultivo', value)}
                options={simNaoOptions}
@@ -266,7 +266,7 @@ export const NovaVegetacao = ()=>{
                          {loading ? (
                            <ActivityIndicator size="large" color="#ff4500" /> 
                          ) : (
-                           <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                           <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled || loading} />
                          )}
             </View>
     

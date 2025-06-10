@@ -173,8 +173,8 @@ const Navigation =() =>{
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
           <Stack.Screen name="NovaAve" component={NovaAve} options={{title: 'Cadastro de Aves'}} />
           <Stack.Screen name="AvesLista" component={Aves} options={{title: 'Registro de Aves'}} />
-          <Stack.Screen name="NovoMamifero" component={NovoMamifero} options={{title: 'Cadastro de Aves'}} />
-          <Stack.Screen name="Mamiferos" component={Mamiferos} options={{title: 'Registro de Aves'}} />
+          <Stack.Screen name="NovoMamifero" component={NovoMamifero} options={{title: 'Cadastro de Mamifero'}} />
+          <Stack.Screen name="Mamiferos" component={Mamiferos} options={{title: 'Registro de Mamiferos'}} />
           <Stack.Screen name="NovoReptil" component={NovoReptil} options={{ title: 'Cadastro de Répteis' }} />
           <Stack.Screen name="RepteisLista" component={Repteis} options={{ title: 'Registro de Répteis' }} />
           <Stack.Screen name="NovoPeixe" component={NovoPeixe} options={{ title: 'Cadastro de Peixes' }} />

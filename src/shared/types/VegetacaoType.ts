@@ -14,7 +14,7 @@ export interface VegetacaoType {
     usaCasca: SimNao | null | '';
     usaRaiz: SimNao | null | '';
     usoLeiteLatex: SimNao | null | '';
-    outrosUsos: SimNao | null | '';
+    outrosUsos: string;
     coletaLocalPublico: SimNao | null | '';
     coletaCultivo: SimNao | null | '';
     coletaCompra: SimNao | null | '';
