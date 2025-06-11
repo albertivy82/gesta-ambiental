@@ -11,17 +11,11 @@ import { AvesType } from "../../../shared/types/AvesType";
 
 export const DEFAULT_AVES_INPUT: AvesInput = {
   especie: '',
-  useCosumo: null,
-  usoComercio: null,
-  usoCriacao: null,
-  usoRemedio: null,
-  usoOutros: '',
-  problemasRelacionados: '',
-  ameacaSofrida: '',
+  climaOcorrencia: '',
+  usosDaEspécie: '',
   localDeAglomeracao: '',
-  qualImpotanciaDaEespecie: '',
-  alimentacao: '',
-  descricaoEspontanea: '',
+  problemasGerados: '',
+  ameacaSofrida: '',
   entrevistado: {
     id: 0,
   },
@@ -35,17 +29,11 @@ export const useNovaAves = (entrevistado:EntrevistadoType, ave?: AvesType)  => {
     console.log(novaAve);
     if (
       novaAve.especie !== '' &&
-      novaAve.useCosumo !== null &&
-      novaAve.usoComercio !== null &&
-      novaAve.usoCriacao !== null &&
-      novaAve.usoRemedio !== null &&
-      novaAve.usoOutros !== null &&
-      novaAve.problemasRelacionados !== '' &&
-      novaAve.ameacaSofrida !== '' &&
+      novaAve.climaOcorrencia !== '' &&
+      novaAve.usosDaEspécie !== '' &&
       novaAve.localDeAglomeracao !== '' &&
-      novaAve.qualImpotanciaDaEespecie !== '' &&
-      novaAve.alimentacao !== '' &&
-      novaAve.descricaoEspontanea !== ''
+      novaAve.problemasGerados !== '' &&
+      novaAve.ameacaSofrida !== '' 
     ) {
       setDisabled(false);
     }
@@ -135,52 +123,37 @@ export const useNovaAves = (entrevistado:EntrevistadoType, ave?: AvesType)  => {
             try{
               
               const response = await connectionAPIPut(`http://192.168.100.28:8080/ave/${ave!.id}`, aveCorrigida) as AvesType;
-              if (response && response.id) {
-                return fetchAvesAPI(response.id);
-              }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
-            }
+                    if (response && response.id) {
+                      return fetchAvesAPI(response.id);
+                    }else{
+                      const local = await salvarAve(buildAveAtualizada());
+                      return local;
+                                        }
+           } catch (error) {
+              const local = await salvarAve(buildAveAtualizada());
+              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              return local;
+          }
           
           } else {
             if (!ave!.sincronizado && ave!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const aveAtualizado: AvesType = {
-                ...ave!,
-                especie:novaAve.especie,
-                useCosumo:novaAve.useCosumo,
-                usoComercio: novaAve.usoComercio,
-                usoCriacao:novaAve.usoCriacao,
-                usoRemedio:novaAve.usoRemedio,
-                usoOutros: novaAve.usoOutros,
-                problemasRelacionados:  novaAve.problemasRelacionados,
-                ameacaSofrida:  novaAve.ameacaSofrida,
-                localDeAglomeracao:novaAve.localDeAglomeracao,
-                qualImpotanciaDaEespecie:novaAve.qualImpotanciaDaEespecie,
-                alimentacao:novaAve.alimentacao,
-                descricaoEspontanea:novaAve.descricaoEspontanea,
-              };
-              
-              const aveQueue = await salvarAve(aveAtualizado);
-              return aveQueue;
+             return await salvarAve(buildAveAtualizada());
             } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
+             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
             }
+            
           }
           
   }
+
+  const buildAveAtualizada = (): AvesType => ({
+    ...ave!,
+    ...novaAve,
+    sincronizado: ave?.sincronizado,
+    idLocal: ave?.idLocal,
+    idFather: ave?.idFather,
+});
   
    const fetchAvesAPI = async(id:number) =>{
   

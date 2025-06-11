@@ -3,17 +3,11 @@ import { SimNao } from "../../enums/simNao.enum";
 export interface AvesType {
     id: number;
     especie: string;
-    useCosumo: SimNao|null|'';
-    usoComercio: SimNao|null|'';
-    usoCriacao: SimNao|null|'';
-    usoRemedio: SimNao|null|'';
-    usoOutros: string;
-    problemasRelacionados: string;
-    ameacaSofrida: string;
+    climaOcorrencia: string;
+    usosDaEspécie: string;
     localDeAglomeracao: string;
-	qualImpotanciaDaEespecie: string;
-	alimentacao: string;
-	descricaoEspontanea: string;
+    problemasGerados: string;
+    ameacaSofrida: string;
     entrevistado: {
         id: number;
     };

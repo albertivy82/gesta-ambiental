@@ -2,13 +2,11 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import Input from "../../../shared/components/input/input";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { MamiferosType } from "../../../shared/types/MamiferosType";
 import { useNovoMamifero } from "../hooks/useInputMamifero";
 import { MamiferoDetailContainer } from "../styles/Mamifero.style";
-import { MamiferosType } from "../../../shared/types/MamiferosType";
 
 
 export interface NovoMamiferoParams {
@@ -35,18 +33,19 @@ export const NovoMamifero = () => {
               handleArrayFieldChange,
               disabled
             } = useNovoMamifero(params.entrevistado, mamifero);
+
+            useEffect(() => {
+              if (mamifero) {
+                handleOnChangeInput(mamifero.especie ?? '', 'especie');
+                handleOnChangeInput(mamifero.local ?? '', 'problemasRelacionados');
+                handleOnChangeInput(mamifero.usoDaEspecie ?? '', 'usoDaEspecie');
+                handleOnChangeInput(mamifero.problemasGerados ?? '', 'problemasGerados');
+                handleOnChangeInput(mamifero.alimentacao ?? '', 'alimentacao');
+                handleOnChangeInput(mamifero.desricaoEspontanea ?? '', 'desricaoEspontanea');
+              }
+            }, [mamifero]);
+            
    
-    useEffect(() => {
-            const consolidaDados = outrosUsos === 'SIM' 
-              ? (qual ? [`ocorrencia: ${qual}`] : [])  
-              : ['NÃO']; 
-          
-            handleArrayFieldChange('usoOutros', consolidaDados);
-          
-      }, [outrosUsos, qual]);
-   
-    const simNaoOptions =  Object.values(SimNaoTalvez);
-    
     const handleEnviar = async () => {
       setLoading(true);
     
@@ -71,87 +70,44 @@ export const NovoMamifero = () => {
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
         <MamiferoDetailContainer>
           
-        <Input 
+            <Input 
               value={novoMamifero.especie} 
-              onChange={(event)=> handleOnChangeInput(event, 'rua')}
+              onChange={(event)=> handleOnChangeInput(event, 'especie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
-        />
+              title="Informe  a espécie de mamífero:"
+             />
 
-            <RenderPicker
-               label="Consome a ave em casa?"
-               selectedValue={novoMamifero.usoConsumo}
-               onValueChange={(value) => handleEnumChange('usoConsumo', value)}
-               options={simNaoOptions}
-            />
-
-              <RenderPicker
-               label="comercializa a ave?"
-               selectedValue={novoMamifero.usoComercio}
-               onValueChange={(value) => handleEnumChange('usoComercio', value)}
-               options={simNaoOptions}
-            />
-
-              <RenderPicker
-               label="Faz a criação da ave?"
-               selectedValue={novoMamifero.usoCriacao}
-               onValueChange={(value) => handleEnumChange('usoCriacao', value)}
-               options={simNaoOptions}
-            />
-
-              <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novoMamifero.usoRemedio}
-               onValueChange={(value) => handleEnumChange('usoRemedio', value)}
-               options={simNaoOptions}
-              />
-
-             <RenderPicker
-                  label="Faz outro uso?"
-                  selectedValue={outrosUsos}
-                  onValueChange={(value) => {
-                    setOutrosUsos(value ?? ''); 
-                    if (value !== 'SIM') {
-                      SetQual('');
-                    }
-                  }}
-                  options={['SIM', 'NÃO']}
-                 />
-                    {outrosUsos.includes('SIM') && (
-                      <View style={{ marginTop: 10 }}>
-                      <Input
-                      value={qual}
-                      onChangeText={SetQual}
-                      placeholder="Separe as informações por vírgula"
-                      margin="15px 10px 30px 5px"
-                      title="Qual?"
-                       />
-                      </View>
-            )}
-
-             <Input 
-              value={novoMamifero.problemasRelacionados} 
-              onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionados')}
+            <Input 
+              value={novoMamifero.local} 
+              onChange={(event)=> handleOnChangeInput(event, 'local')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Quai problemas relacionados a ave:"
+              title="Onde a espécie é encontrada?"
               />
+
+              <Input 
+              value={novoMamifero.usoDaEspecie} 
+              onChange={(event)=> handleOnChangeInput(event, 'usoDaEspecie')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Faz algum uso da espécie?"
+                />
+
+              <Input 
+              value={novoMamifero.problemasGerados} 
+              onChange={(event)=> handleOnChangeInput(event, 'problemasGerados')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="A espécie causa algum problema no local?"
+             />
 
               <Input 
               value={novoMamifero.alimentacao} 
               onChange={(event)=> handleOnChangeInput(event, 'alimentacao')}
-              placeholder="..."
+              placeholder="frutas, insetos, néctar plantas, sangue de outros animais etc"
               margin="15px 10px 30px 5px"
-              title="A espécie se elimenta de que?:"
-                />
-
-              <Input 
-              value={novoMamifero.desricaoEspontanea} 
-              onChange={(event)=> handleOnChangeInput(event, 'desricaoEspontanea')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Deseja acrescentar mais informações sobre a espécie:"
+              title="Do que a espécie se alimenta?"
              />
 
           
@@ -159,7 +115,7 @@ export const NovoMamifero = () => {
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 
               ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading || disabled} />
               )}
             </View>
  

@@ -3,13 +3,11 @@ import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 export interface MamiferosType {
     id: number;
     especie: string;
-    usoConsumo: SimNaoTalvez |null|'';
-    usoComercio: SimNaoTalvez |null|'';
-    usoCriacao: SimNaoTalvez |null|'';
-    usoRemedio: SimNaoTalvez |null|'';
-    usoOutros:  SimNaoTalvez |null|'';
-    problemasRelacionados: string;
-    alimentacao: string;
+    usoConsumo: string;
+    local: string;
+    usoDaEspecie: string;
+    problemasGerados: string;
+    alimentacao:  string;
     desricaoEspontanea: string;
     entrevistado: {
         id: number;

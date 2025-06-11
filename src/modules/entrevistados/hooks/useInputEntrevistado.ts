@@ -157,73 +157,33 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
                 
                 const response = await connectionAPIPut(`http://192.168.100.28:8080/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
                 if (response && response.id) {
-                  return fetchEntrevistadoAPI(response.id);
+                     return fetchEntrevistadoAPI(response.id);
+                }else{
+                    const local = await salvarEntrevistado(builEntrevistadoAtualizada());
+                    return local;
                 }
-                } catch (error) {
-                  
-                  Alert.alert(
-                    "Erro ao editar",
-                    "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                  );
-                  return null;
-                 
-              }
-            
-            } else {
+              } catch (error) {
+                 const local = await await salvarEntrevistado(builEntrevistadoAtualizada());
+                 Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                 return local;
+               }
+        } else {
               if (!entrevistado!.sincronizado && entrevistado!.idLocal) {
-               
-                //Objeto ainda não sincronizado → atualizar no Realm
-                const entrevistadoAtualizado: EntrevistadoType = {
-                  ...entrevistado!,
-                  nome: novoEntrevistado.nome,
-                  naturalidade: novoEntrevistado.naturalidade,
-                  nascimentoData: novoEntrevistado.nascimentoData,
-                  sexo: novoEntrevistado.sexo,
-                  apelido: novoEntrevistado.apelido,
-                  escolaridade: novoEntrevistado.escolaridade,
-                  estadoCivil: novoEntrevistado.estadoCivil,
-                  religiao: novoEntrevistado.religiao,
-                  morador: novoEntrevistado.morador,
-                  dataChegada: novoEntrevistado.dataChegada,
-                  pretendeMudar: novoEntrevistado.pretendeMudar,
-                  motivoVontadeMudanca: novoEntrevistado.motivoVontadeMudanca,
-                  relacaoAreaImovel: novoEntrevistado.relacaoAreaImovel,
-                  relacaoVizinhos: novoEntrevistado.relacaoVizinhos,
-                  tipoAlimentacao: novoEntrevistado.tipoAlimentacao,
-                  localCompras: novoEntrevistado.localCompras,
-                  comoCuidaSaudeFamilia: novoEntrevistado.comoCuidaSaudeFamilia,
-                  servicosDeficitarios: novoEntrevistado.servicosDeficitarios,
-                  sofreuAssaltos: novoEntrevistado.sofreuAssaltos,
-                  presenciouAssalto: novoEntrevistado.presenciouAssalto,
-                  problemasDeViolenciaLocal: novoEntrevistado.problemasDeViolenciaLocal,
-                  instituicaoConhecida: novoEntrevistado.instituicaoConhecida,
-                  importanciaDeProtegerAmbiente: novoEntrevistado.importanciaDeProtegerAmbiente,
-                  importanciaDeProtegerFauna: novoEntrevistado.importanciaDeProtegerFauna,
-                  qualEspacoPrecisaSerPreservado: novoEntrevistado.qualEspacoPrecisaSerPreservado,
-                  problemasRelacionadosAoAmbiente: novoEntrevistado.problemasRelacionadosAoAmbiente,
-                  conheceUcs: novoEntrevistado.conheceUcs,
-                  conheceUcProposta: novoEntrevistado.conheceUcProposta,
-                  conheceAreaUc: novoEntrevistado.conheceAreaUc,
-                  utilizaAreaUc: novoEntrevistado.utilizaAreaUc,
-                  propostaMelhorarArea: novoEntrevistado.propostaMelhorarArea,
-                  indicadoConsultaPublica: novoEntrevistado.indicadoConsultaPublica,
-                  contatoIndicadoConsultaPublica: novoEntrevistado.contatoIndicadoConsultaPublica,
-                };
-                
-                
-                const entrevistadoQueue = await salvarEntrevistado(entrevistadoAtualizado);
-                return entrevistadoQueue;
+                  return await await salvarEntrevistado(builEntrevistadoAtualizada());
               } else {
-                // Objeto sincronizado → não permitir edição offline
-                Alert.alert(
-                  "Sem conexão",
-                  "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-                );
-                return null;
-              }
-            }
-            
-    }
+                  Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                  return null;
+               }
+        }
+                                          
+}
+                
+                  const builEntrevistadoAtualizada = (): EntrevistadoType => ({
+                    ...entrevistado!,
+                    ...novoEntrevistado,
+                    sincronizado: entrevistado?.sincronizado,
+                    idLocal: entrevistado?.idLocal,
+                  });
 
     const fetchEntrevistadoAPI = async(id:number) =>{
     

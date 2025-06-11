@@ -48,7 +48,7 @@ export const NovoImovel = () => {
     handleEnumChange,
     enviarRegistro,
     handleOnChangeAreaImovel,
-    disabled} = useNovoImovel(params.entrevistado, imovel);
+    disabled} = useNovoImovel(entrevistado, imovel);
 
   const [pavimentacaoInformada, setPavimentacaoInformada] = useState<string[]>([]);  
   const [outrasInformadas, SetOutrasInformadas] = useState<string>('');

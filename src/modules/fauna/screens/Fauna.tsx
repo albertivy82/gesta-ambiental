@@ -10,31 +10,39 @@ import { theme } from '../../../shared/themes/theme';
 import { FaunaType } from '../../../shared/types/FaunaType';
 import { FaunaDetailContainer } from '../styles/Fauna.style';
 import RenderItemFauna from '../ui-components/listaFauna';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 
 export interface FaunaParam {
-  fauna: FaunaType[];
+  entrevistado: EntrevistadoType;
 }
 
 export const novaFauna = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
   navigate('NovaFauna', { entrevistadoId });
 }
 
-const Fauna = () => {
+  const Fauna = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, FaunaParam>, 'Imovel'>>();
-  const { fauna } = route.params;
+  const route = useRoute<RouteProp<Record<string, FaunaParam>, 'FaunaLista'>>();
+  const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [faunaList, setFaunaList] = useState<FaunaType[]>(fauna);
+  const [faunas, setFaunas] = useState<FaunaType[]>();
 
   const fetchFauna = async () => {
-    const entrevistadoId = fauna[0]?.entrevistado.id;
-    if (entrevistadoId) {
-      const faunaRealm = getFauna(entrevistadoId);
-      const novos = faunaRealm.filter(f => !faunaList.some(existing => existing.id === f.id || existing.idLocal === f.idLocal));
-      setFaunaList(prev => [...prev, ...novos]);
-    }
+    if (!entrevistado.id) return;
+
+    const novas = getFauna(entrevistado.id);
+
+    const novasNaoDuplicadas = novas.filter(nova =>
+      !faunas?.some(v =>
+        (v.id && nova.id && v.id === nova.id) ||
+        (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal)
+      )
+    );
+
+    setFaunas(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
   };
+
 
   useEffect(() => {
     fetchFauna();
@@ -50,8 +58,7 @@ const Fauna = () => {
   };
 
   const handleNovaFauna = () => {
-    const entrevistadoId = fauna[0]?.entrevistado.id;
-    if (entrevistadoId) novaFauna(navigation.navigate, entrevistadoId);
+    novaFauna(navigation.navigate, entrevistado.id);
   };
 
   return (
@@ -86,8 +93,8 @@ const Fauna = () => {
 
       <FlatList
         ref={flatListRef}
-        data={faunaList}
-        extraData={faunaList}
+        data={faunas}
+        extraData={faunas}
         renderItem={({ item }) => <RenderItemFauna item={item} />}
         keyExtractor={(item) => item.id?.toString() ?? item.idLocal ?? 'SemId'}
       />

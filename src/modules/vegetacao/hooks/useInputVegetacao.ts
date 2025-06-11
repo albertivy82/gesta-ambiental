@@ -149,122 +149,38 @@ const objetoFila = () => {
               try{
                 
                 const response = await connectionAPIPut(`http://192.168.100.28:8080/vegetacao/${vegetacao!.id}`, vegetacaoCorrigida) as VegetacaoType;
-                if (response && response.id) {
-                return fetchVegetacaoAPI(response.id);
-                }else{
-                  const vegetacaoAtualizado: VegetacaoType = {
-                    ...vegetacao!,
-                    id: vegetacao!.id,
-                    especie: novaVegetacao.especie,
-                    usoMedicinal: novaVegetacao.usoMedicinal,
-                    usoAlimentacao: novaVegetacao.usoAlimentacao,
-                    usoOrnamental: novaVegetacao.usoOrnamental,
-                    usoComercial: novaVegetacao.usoComercial,
-                    usaFlor: novaVegetacao.usaFlor,
-                    usaFolha: novaVegetacao.usaFolha,
-                    usaSemente: novaVegetacao.usaSemente,
-                    usaFruto: novaVegetacao.usaFruto,
-                    usaCasca: novaVegetacao.usaCasca,
-                    usaRaiz: novaVegetacao.usaRaiz,
-                    usoLeiteLatex: novaVegetacao.usoLeiteLatex,
-                    outrosUsos: novaVegetacao.outrosUsos,
-                    coletaLocalPublico: novaVegetacao.coletaLocalPublico,
-                    coletaCultivo: novaVegetacao.coletaCultivo,
-                    coletaCompra: novaVegetacao.coletaCompra,
-                    coletaAmbienteEspecifica: novaVegetacao.coletaAmbienteEspecifica,
-                    quemEnsinouUso: novaVegetacao.quemEnsinouUso,
-                    repassaConhecimento: novaVegetacao.repassaConhecimento,
-                    observacoesEspontaneas: novaVegetacao.observacoesEspontaneas,
-                    sincronizado: vegetacao?.sincronizado,
-                    idLocal: vegetacao?.idLocal,
-                    idFather:vegetacao?.idFather,
-                  };
-                  console.log(vegetacaoAtualizado);
-                  const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
-                  return vegetacaoQueue;
-                  }
-                } catch (error) {
-                  const vegetacaoAtualizado: VegetacaoType = {
-                    ...vegetacao!,
-                    id: vegetacao!.id,
-                    especie: novaVegetacao.especie,
-                    usoMedicinal: novaVegetacao.usoMedicinal,
-                    usoAlimentacao: novaVegetacao.usoAlimentacao,
-                    usoOrnamental: novaVegetacao.usoOrnamental,
-                    usoComercial: novaVegetacao.usoComercial,
-                    usaFlor: novaVegetacao.usaFlor,
-                    usaFolha: novaVegetacao.usaFolha,
-                    usaSemente: novaVegetacao.usaSemente,
-                    usaFruto: novaVegetacao.usaFruto,
-                    usaCasca: novaVegetacao.usaCasca,
-                    usaRaiz: novaVegetacao.usaRaiz,
-                    usoLeiteLatex: novaVegetacao.usoLeiteLatex,
-                    outrosUsos: novaVegetacao.outrosUsos,
-                    coletaLocalPublico: novaVegetacao.coletaLocalPublico,
-                    coletaCultivo: novaVegetacao.coletaCultivo,
-                    coletaCompra: novaVegetacao.coletaCompra,
-                    coletaAmbienteEspecifica: novaVegetacao.coletaAmbienteEspecifica,
-                    quemEnsinouUso: novaVegetacao.quemEnsinouUso,
-                    repassaConhecimento: novaVegetacao.repassaConhecimento,
-                    observacoesEspontaneas: novaVegetacao.observacoesEspontaneas,
-                    sincronizado: vegetacao?.sincronizado,
-                    idLocal: vegetacao?.idLocal,
-                    idFather:vegetacao?.idFather,
-                  };
-                  console.log(vegetacaoAtualizado);
-                  const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
-                
-
-                  Alert.alert(
-                    "Erro ao enviar edição",
-                    "Não foi possível salvar as alterações no banco. Tente novamente quando estiver online."
-                  );
-                  return null;
+                    if (response && response.id) {
+                    return fetchVegetacaoAPI(response.id);
+                    }else{
+                      const local = await salvarVegetacao(buildVegetacaoAtualizada());
+                      return local;
+                    }
+              } catch (error) {
+                //console.error("Erro ao enviar PUT:", error);
+                const local = await salvarVegetacao(buildVegetacaoAtualizada());
+                Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                return local;
                  
               }
             
             } else {
               if (!vegetacao!.sincronizado && vegetacao!.idLocal) {
-               
-                //Objeto ainda não sincronizado → atualizar no Realm
-                const vegetacaoAtualizado: VegetacaoType = {
-                  ...vegetacao!,
-                  especie: novaVegetacao.especie,
-                  usoMedicinal: novaVegetacao.usoMedicinal,
-                  usoAlimentacao: novaVegetacao.usoAlimentacao,
-                  usoOrnamental: novaVegetacao.usoOrnamental,
-                  usoComercial: novaVegetacao.usoComercial,
-                  usaFlor: novaVegetacao.usaFlor,
-                  usaFolha: novaVegetacao.usaFolha,
-                  usaSemente: novaVegetacao.usaSemente,
-                  usaFruto: novaVegetacao.usaFruto,
-                  usaCasca: novaVegetacao.usaCasca,
-                  usaRaiz: novaVegetacao.usaRaiz,
-                  usoLeiteLatex: novaVegetacao.usoLeiteLatex,
-                  outrosUsos: novaVegetacao.outrosUsos,
-                  coletaLocalPublico: novaVegetacao.coletaLocalPublico,
-                  coletaCultivo: novaVegetacao.coletaCultivo,
-                  coletaCompra: novaVegetacao.coletaCompra,
-                  coletaAmbienteEspecifica: novaVegetacao.coletaAmbienteEspecifica,
-                  quemEnsinouUso: novaVegetacao.quemEnsinouUso,
-                  repassaConhecimento: novaVegetacao.repassaConhecimento,
-                  observacoesEspontaneas: novaVegetacao.observacoesEspontaneas,
-                };
-                
-                const vegetacaoQueue = await salvarVegetacao(vegetacaoAtualizado);
-                return vegetacaoQueue;
+               return await salvarVegetacao(buildVegetacaoAtualizada());
               } else {
-                console.log("objeto off line?")
-                // Objeto sincronizado → não permitir edição offline
-                Alert.alert(
-                  "Sem conexão",
-                  "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-                );
+                Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
                 return null;
               }
             }
             
     }
+
+    const buildVegetacaoAtualizada = (): VegetacaoType => ({
+      ...vegetacao!,
+      ...novaVegetacao,
+      sincronizado: vegetacao?.sincronizado,
+      idLocal: vegetacao?.idLocal,
+      idFather: vegetacao?.idFather,
+    });
     
      const fetchVegetacaoAPI = async(id:number) =>{
     

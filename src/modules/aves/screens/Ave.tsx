@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getAves } from '../../../realm/services/avesService';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -7,42 +7,42 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { AvesType } from '../../../shared/types/AvesType';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { AveDetailContainer } from '../styles/ave.style';
 import RenderItemAve from '../ui-components/listaAves';
 
 
 
-export interface ImoveisParam {
-  ave: AvesType[];
+export interface aveParam {
+  entrevistado: EntrevistadoType;
 }
 
 export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovoImovel', { entrevistadoId });
+  navigate('NovaAve', { entrevistadoId });
 }
 
 const Aves = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ImoveisParam>, 'Imovel'>>();
-  const { ave } = route.params;
+  const route = useRoute<RouteProp<Record<string, aveParam>, 'AvesLista'>>();
+  const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [aves, setAves] = useState<AvesType[]>([]);
+  const [aves, setAves] = useState<AvesType[]>();
   
 
-  // Carrega a lista inicial de imóveis
   const fetchAves = async () => {
-    if (ave.length && ave[0].entrevistado.id) {
-      const novasAves = getAves(ave[0].entrevistado.id);
-  
-      const avesUnicas = [...aves, ...novasAves].reduce((acc, curr) => {
-        if (!acc.find(item => item.id === curr.id)) {
-          acc.push(curr);
-        }
-        return acc;
-      }, [] as AvesType[]);
-  
-      setAves(avesUnicas);
-    }
-  };
+      if (!entrevistado.id) return;
+    
+      const novas = getAves(entrevistado.id);
+    
+      const novasNaoDuplicadas = novas.filter(nova =>
+        !aves?.some(a =>
+          (a.id && nova.id && a.id === nova.id) ||
+          (a.idLocal && nova.idLocal && a.idLocal === nova.idLocal)
+        )
+      );
+    
+      setAves(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
+    };
   
 
 
@@ -59,7 +59,7 @@ const Aves = () => {
   };
 
   const handleNovaAve = () => {
-    novaAve(navigation.navigate, ave[0].entrevistado.id);
+    novaAve(navigation.navigate, entrevistado.id);
   };
 
   return (

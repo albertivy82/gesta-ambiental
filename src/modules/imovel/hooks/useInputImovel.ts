@@ -140,57 +140,35 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
               
               const response = await connectionAPIPut(`http://192.168.100.28:8080/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
               if (response && response.id) {
-                return fetchImovelAPI(response.id);
+                  return fetchImovelAPI(response.id);
+              }else{
+                  const local = await salvarImovel(buildImovelAtualizada());
+                  return local;
               }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
+            } catch (error) {
+              const local = await await salvarImovel(buildImovelAtualizada());
+              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              return local;
             }
-          
-          } else {
-            if (!imovel!.sincronizado && imovel!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const imovelAtualizado: imovelBody = {
-                ...imovel!,
-                rua: novoImovel.rua, 
-                numero: novoImovel.numero, 
-                bairro: novoImovel.bairro,
-                referencial: novoImovel.referencial, 
-                latitude: novoImovel.latitude, 
-                longitude: novoImovel.longitude, 
-                areaImovel: novoImovel.areaImovel,
-                vizinhosConfinantes: novoImovel.vizinhosConfinantes,
-                situacaoFundiaria: novoImovel.situacaoFundiaria,
-                documentacaoImovel: novoImovel.documentacaoImovel,
-                limites: novoImovel.limites,
-                linhasDeBarco: novoImovel.linhasDeBarco,
-                pavimentacao: novoImovel.pavimentacao,
-                iluminacaoPublica: novoImovel.iluminacaoPublica,
-                equipamentosUrbanos: novoImovel.equipamentosUrbanos,
-                espacosEsporteLazer: novoImovel.espacosEsporteLazer,
-                programaInfraSaneamento: novoImovel.programaInfraSaneamento,
-                                
-              };
-                            
-              const imovelQueue = await salvarImovel(imovelAtualizado);
-              return imovelQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
+    } else {
+         if (!imovel!.sincronizado && imovel!.idLocal) {
+             return await salvarImovel(buildImovelAtualizada());
+         } else {
+            Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
           }
-          
-  }
+    }
+                           
+ }
+                        
+                
+  const buildImovelAtualizada = (): imovelBody => ({
+  ...imovel!,
+   ...novoImovel,
+     sincronizado: imovel?.sincronizado,
+     idLocal: imovel?.idLocal,
+      idFather: imovel?.idFather,
+  });
 
    const fetchImovelAPI = async(id:number) =>{
       

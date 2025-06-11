@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, ScrollView, View, Button } from "react-native";
 import Input from "../../../shared/components/input/input";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
@@ -7,6 +7,8 @@ import { useNovoReptil } from "../hooks/useInputRepteis";
 import { ReptilDetailContainer } from "../styles/Reptil.style";
 import { ActivityIndicator } from "react-native-paper";
 import { RepteisType } from "../../../shared/types/RepteisType";
+import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import Text from "../../../shared/components/text/Text";
 
 
 export interface NovoReptilParams {
@@ -26,11 +28,62 @@ export const NovoReptil = () => {
      const [loading, setLoading] = useState(false); 
      const {  novoReptil,
               enviarRegistro,
+              handleEnumChange,
               handleOnChangeInput,
               disabled
             } = useNovoReptil(params.entrevistado, reptil);
-  
-  
+    const [desova, setDesova] = useState<string>('');
+    const [localDesova, setLocalDesova] = useState<string>('');
+    const [periodoDesova, setPeriodoDesova] = useState<string>('');
+            
+     
+   
+    useEffect(() => {
+      handleEnumChange('desova', desova);
+    
+      setLocalDesova('');
+      setPeriodoDesova('');
+    }, [desova]);
+
+
+    useEffect(() => {
+    
+      handleOnChangeInput("localDesova", localDesova)
+     
+    }, [localDesova]);
+
+    useEffect(() => {
+      handleOnChangeInput("periodoDesova", periodoDesova);
+    }, [periodoDesova]);
+    
+
+
+    
+            
+            useEffect(() => {
+              if (reptil) {
+                handleOnChangeInput(reptil.especie ?? '', 'especie');
+                handleOnChangeInput(reptil.local ?? '', 'local');
+                handleOnChangeInput(reptil.usoDaEspecie ?? '', 'usoDaEspecie');
+                handleOnChangeInput(reptil.ameacaParaEspecie ?? '', 'ameacaParaEspecie');
+                handleOnChangeInput(reptil.problemasGerados ?? '', 'problemasGerados');
+                handleOnChangeInput(reptil.descricaoEspontanea ?? '', 'descricaoEspontanea');
+              }
+            }, [reptil]);
+             
+            const dadosDesova = reptil
+            ? [
+                reptil.desova ?? '',
+                reptil.localDesova ?? '',
+                reptil.periodoDesova ?? '',
+              ]
+                .filter(Boolean)
+                .join(' - ')
+            : '';
+          
+            
+            
+            
        
       const handleEnviar = async () => {
            setLoading(true);
@@ -61,9 +114,9 @@ export const NovoReptil = () => {
         <Input 
               value={novoReptil.especie} 
               onChange={(event)=> handleOnChangeInput(event, 'especie')}
-              placeholder="..."
+              placeholder="tartarugas, jabutis, jacarés, cobras etc."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Informe  a espécie de reptil:"
         />
 
         <Input 
@@ -71,63 +124,85 @@ export const NovoReptil = () => {
               onChange={(event)=> handleOnChangeInput(event, 'local')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Informe onde se encontra a espécie:"
          />
-         
+
+            {reptil && dadosDesova && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                Informações anteriores sobre desova: {dadosDesova}
+              </Text>
+              )}
+
+            <RenderPicker
+              label="Há desova dessa espécie na região?"
+              selectedValue={desova}
+              onValueChange={(value) => setDesova(value ?? '')}
+              options={['SIM', 'NÃO']}
+            />
+
+          {desova === 'SIM' && (
+            <>
+              <View style={{ marginTop: 10 }}>
+                <Input
+                  value={localDesova}
+                  onChangeText={setLocalDesova}
+                  placeholder="Descreva o local"
+                  margin="15px 10px 30px 5px"
+                  title="Qual é o local de desova?"
+                />
+              </View>
+
+              <View style={{ marginTop: 10 }}>
+                <Input
+                  value={periodoDesova}
+                  onChangeText={setPeriodoDesova}
+                  placeholder="Ex: Janeiro a Março"
+                  margin="15px 10px 30px 5px"
+                  title="Qual é o período de desova?"
+                />
+              </View>
+            </>
+          )}
+
+
          <Input 
-              value={novoReptil.periodo} 
-              onChange={(event)=> handleOnChangeInput(event, 'periodo')}
-              placeholder="..."
+              value={novoReptil.usoDaEspecie} 
+              onChange={(event)=> handleOnChangeInput(event, 'usoDaEspecie')}
+              placeholder="Comércio, consumo etc"
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Faz algum uso da espécie? Qual?"
+
          />
 
          <Input 
-              value={novoReptil.uso} 
-              onChange={(event)=> handleOnChangeInput(event, 'uso')}
+              value={novoReptil.ameacaParaEspecie} 
+              onChange={(event)=> handleOnChangeInput(event, 'ameacaParaEspecie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Existe alguma práica local que ameace a espécie"
          />
 
          <Input 
-              value={novoReptil.ameacado} 
-              onChange={(event)=> handleOnChangeInput(event, 'ameacado')}
+              value={novoReptil.problemasGerados} 
+              onChange={(event)=> handleOnChangeInput(event, 'problemasGerados')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Existe algum problema gerado por sua presença? Qual(is)?"
          />
 
          <Input 
-              value={novoReptil.problemasRelacionados} 
-              onChange={(event)=> handleOnChangeInput(event, 'problemasRelacionados')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
-         />
-
-         <Input 
-              value={novoReptil.cacado} 
-              onChange={(event)=> handleOnChangeInput(event, 'cacado')}
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
-         />
-
-        <Input 
               value={novoReptil.descricaoEspontanea} 
               onChange={(event)=> handleOnChangeInput(event, 'descricaoEspontanea')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Deseja acrescentar alguma observação sobre a espécie?"
          />
-          
 
-          <View style={{ marginTop: 40 }}>
+           <View style={{ marginTop: 40 }}>
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 
               ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading || disabled} />
               )}
             </View>
 

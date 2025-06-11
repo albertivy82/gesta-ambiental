@@ -2,11 +2,12 @@ import { SimNao } from "../../enums/simNao.enum";
 
 export interface PeixesInput {
     
-    especie: string;
-    locaisEspeciais: SimNao |null|'';
-    locaisEspecificosAlimentacao: SimNao |null|'';
-    usoAlimnetacao: SimNao |null|'';
-    usoComercio: SimNao |null|'';
+     especie: string;
+     climaOcorrencia: string;
+    locaisEspecificosReprodução: string;
+    locaisEspecificosAlimentacao: string;
+    maisImportanteDaRegiao: SimNao |null|'';
+    usosDaEspécie: string;
     entrevistado: {
         id: number;
     };

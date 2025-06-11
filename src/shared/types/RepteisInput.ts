@@ -2,11 +2,12 @@ export interface RepteisInput {
     
     especie: string;
     local: string;
-    periodo: string;
-    uso: string;
-    ameacado: string;
-    problemasRelacionados: string;
-    cacado: string;
+    desova: string;
+    localDesova: string;
+    periodoDesova: string;
+    usoDaEspecie: string;
+    ameacaParaEspecie: string;
+    problemasGerados: string;
     descricaoEspontanea: string;
     entrevistado: {
         id: number;

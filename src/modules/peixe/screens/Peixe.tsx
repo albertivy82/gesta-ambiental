@@ -9,31 +9,38 @@ import { theme } from '../../../shared/themes/theme';
 import { PeixeDetailContainer } from '../styles/peixe.style';
 import { PeixesType } from '../../../shared/types/PeixesType';
 import RenderItemPeixe from '../ui-components/listaPeixe';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 export interface PeixeParam {
-  peixe: PeixesType[];
+  entrevistado: EntrevistadoType;
 }
 
 export const novoPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
   navigate('NovoPeixe', { entrevistadoId });
-};
+}
 
 const Peixes = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, PeixeParam>, string>>();
-  const { peixe } = route.params;
+  const route = useRoute<RouteProp<Record<string, PeixeParam>, 'PeixeLista'>>();
+  const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [peixes, setPeixes] = useState<PeixesType[]>(peixe);
+  const [peixes, setPeixes] = useState<PeixesType[]>();
 
   const fetchPeixes = async () => {
-    if (peixe[0]?.entrevistado?.id) {
-      const novos = getPeixes(peixe[0].entrevistado.id);
-      const unicos = novos.filter((novo) =>
-        !peixes.some((existente) => existente.id === novo.id || existente.idLocal === novo.idLocal)
-      );
-      setPeixes((prev) => [...prev, ...unicos]);
-    }
+    if (!entrevistado.id) return;
+
+    const novas = getPeixes(entrevistado.id);
+
+    const novasNaoDuplicadas = novas.filter(nova =>
+      !peixes?.some(v =>
+        (v.id && nova.id && v.id === nova.id) ||
+        (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal)
+      )
+    );
+
+    setPeixes(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
   };
+
 
   useEffect(() => {
     fetchPeixes();
@@ -49,7 +56,7 @@ const Peixes = () => {
   };
 
   const handleNovoPeixe = () => {
-    novoPeixe(navigation.navigate, peixe[0].entrevistado.id);
+    novoPeixe(navigation.navigate, entrevistado.id);
   };
 
   return (

@@ -3,10 +3,11 @@ import { SimNao } from "../../enums/simNao.enum";
 export interface PeixesType {
     id: number;
     especie: string;
-    locaisEspeciais: SimNao |null|'';
-    locaisEspecificosAlimentacao: SimNao |null|'';
-    usoAlimnetacao: SimNao |null|'';
-    usoComercio: SimNao |null|'';
+    climaOcorrencia: string;
+    locaisEspecificosReprodução: string;
+    locaisEspecificosAlimentacao: string;
+    maisImportanteDaRegiao: SimNao |null|'';
+    usosDaEspécie: string;
     entrevistado: {
         id: number;
     };

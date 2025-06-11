@@ -29,42 +29,20 @@ export const NovaFauna = () => {
      const {  novaFauna,
               enviarRegistro,
               handleOnChangeInput,
-              handleEnumChange,
-              handleArrayFieldChange,
               disabled
             } = useNovaFauna(params.entrevistado, fauna);
-  const [outrasOcorrencias, setOutrasOcorrencias] = useState<string>('');     
-  const [qual, SetQual] = useState<string>('');
 
-   useEffect(() => {
-          const consolidaDados = outrasOcorrencias === 'SIM' 
-            ? (qual ? [`ocorrencia: ${qual}`] : [])  
-            : ['NÃO']; 
-        
-          handleArrayFieldChange('outrasOcorrencias', consolidaDados);
-        
-    }, [outrasOcorrencias, qual]);
-    
-  const simNaoOptions =  Object.values(SimNao);
-  const ocorrenciaOptions =  Object.values([
-    'NUNCA', 
-    'FREQUENTEMENTE', 
-    'NO PERíODO DE CUVAS',
-    'RARAMENTE',
-    'DEIXOU DE OCORRER',
-   ' NÃO INFORMADO']
-  );
-  const tempoOptions
-  =  Object.values([
-    'HÁ 6 MESES', 
-    'HÁ 1 ANO', 
-    'DIARIAMENTE',
-    'RARAMENTE',
-    'NO INVERNO',
-   ' NO VERÃO',
-    'HÁ MUITOS ANOS NÃO AVISTA',
-    'NÃO SABE INFORMAR']
-  );
+            useEffect(() => {
+              if (fauna) {
+                handleOnChangeInput(fauna.especie ?? '', 'especie');
+                handleOnChangeInput(fauna.ondeOcorre ?? '', 'especie');
+                handleOnChangeInput(fauna.abundanciaAtual ?? '', 'especie');
+                handleOnChangeInput(fauna.abundanciaPassada ?? '', 'especie');
+                handleOnChangeInput(fauna.tempoQueNaoVe ?? '', 'especie');
+                handleOnChangeInput(fauna.usoDaEspecie ?? '', 'especie');
+                }
+            }, [fauna]);
+            
       const handleEnviar = async () => {
            setLoading(true);
          
@@ -93,101 +71,55 @@ export const NovaFauna = () => {
               onChange={(event)=> handleOnChangeInput(event, 'especie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Informe  a espécie:"
         />
 
-            <RenderPicker
-               label="Consome a ave em casa?"
-               selectedValue={novaFauna.ocorreMata}
-               onValueChange={(value) => handleEnumChange('ocorreMata', value)}
-               options={simNaoOptions}
+          <Input 
+              value={novaFauna.ondeOcorre} 
+              onChange={(event)=> handleOnChangeInput(event, 'ondeOcorre')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Onde é o local de cocrrência da espécie?"
+          />
+
+            <Input 
+              value={novaFauna.abundanciaAtual} 
+              onChange={(event)=> handleOnChangeInput(event, 'abundanciaAtual')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="É abundante atualmente?"
+           />
+
+            <Input 
+              value={novaFauna.abundanciaPassada} 
+              onChange={(event)=> handleOnChangeInput(event, 'abundanciaPassada')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Era abundante no passado?"
             />
 
-              <RenderPicker
-               label="comercializa a ave?"
-               selectedValue={novaFauna.ocorreRio}
-               onValueChange={(value) => handleEnumChange('ocorreRio', value)}
-               options={simNaoOptions}
+             <Input 
+              value={novaFauna.tempoQueNaoVe} 
+              onChange={(event)=> handleOnChangeInput(event, 'tempoQueNaoVe')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Foi vista há quanto tempo pela última vez?"
+            />
+            
+            <Input 
+              value={novaFauna.usoDaEspecie} 
+              onChange={(event)=> handleOnChangeInput(event, 'tempoQueNaoVe')}
+              placeholder="..."
+              margin="15px 10px 30px 5px"
+              title="Faz algum uso da espécie? Se SIM, diga qual."
             />
 
-              <RenderPicker
-               label="Faz a criação da ave?"
-               selectedValue={novaFauna.ocorreLago}
-               onValueChange={(value) => handleEnumChange('ocorreLago', value)}
-               options={simNaoOptions}
-            />
-
-              <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novaFauna.ocorreRua}
-               onValueChange={(value) => handleEnumChange('ocorreRua', value)}
-               options={simNaoOptions}
-              />
-
-              <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novaFauna.ocorreQuintal}
-               onValueChange={(value) => handleEnumChange('ocorreQuintal', value)}
-               options={simNaoOptions}
-              />
-
-              
-             <RenderPicker
-                  label="Faz outro uso?"
-                  selectedValue={outrasOcorrencias}
-                  onValueChange={(value) => {
-                    setOutrasOcorrencias(value ?? ''); 
-                    if (value !== 'SIM') {
-                      SetQual('');
-                    }
-                  }}
-                  options={['SIM', 'NÃO']}
-                 />
-                    {outrasOcorrencias.includes('SIM') && (
-                      <View style={{ marginTop: 10 }}>
-                      <Input
-                      value={qual}
-                      onChangeText={SetQual}
-                      placeholder="Separe as informações por vírgula"
-                      margin="15px 10px 30px 5px"
-                      title="Qual?"
-                       />
-                      </View>
-                )}
-
-                
-              <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novaFauna.frequenciaAtual}
-               onValueChange={(value) => handleEnumChange('frequenciaAtual', value)}
-               options={ocorrenciaOptions}
-              />
-
-               <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novaFauna.frequenciaPassada}
-               onValueChange={(value) => handleEnumChange('frequenciaPassada', value)}
-               options={ocorrenciaOptions}
-              />
-
-               <RenderPicker
-               label="Faz algum uso medicinal da ave?"
-               selectedValue={novaFauna.tempoQueNaoVe}
-               onValueChange={(value) => handleEnumChange('tempoQueNaoVe', value)}
-               options={tempoOptions}
-              />
-
-
-
-
-             
-
-          
+                    
              <View style={{ marginTop: 40 }}>
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 
               ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading || disabled} />
               )}
             </View>
  

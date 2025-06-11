@@ -179,8 +179,6 @@ export const NovoEntrevistado = ()=>{
         ...(outrosLocais ? [`Outras: ${outrosLocais}`] : []),
       ];
 
-      console.log("mudanças no local de compras", novoEntrevistado.localCompras)
-
       handleArrayFieldChange('localCompras', consolidaDados);
     
     },[localCompras, outrosLocais ])
@@ -546,7 +544,7 @@ export const NovoEntrevistado = ()=>{
                 </View>
               )}
               <RenderPicker
-                  label="Você conhece o trabalho de alguma instituição governamental ou não governamental na sua localidade??"
+                  label="Você conhece o trabalho de alguma instituição governamental ou não governamental na sua localidade?"
                   selectedValue={conheceInstituicao}
                   onValueChange={(value) => {
                     setConheceInstituicao(value ?? ''); 

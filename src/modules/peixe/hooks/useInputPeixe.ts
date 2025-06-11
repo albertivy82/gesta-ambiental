@@ -122,42 +122,25 @@ export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe?: PeixesType)
               const response = await connectionAPIPut(`http://192.168.100.28:8080/peixe/${peixe!.id}`, peixeCorrigida) as PeixesType;
               if (response && response.id) {
                 return fetchPeixesAPI(response.id);
+              }else{
+                 const local = await salvarPeixe(buildPeixeAtualizada());
+                 return local;
               }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
-            }
-          
-          } else {
-            if (!peixe!.sincronizado && peixe!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const peixeAtualizado: PeixesType = {
-                ...peixe!,
-                especie: novoPeixe.especie,
-                locaisEspeciais: novoPeixe.locaisEspeciais,
-                locaisEspecificosAlimentacao: novoPeixe.locaisEspecificosAlimentacao,
-                usoAlimnetacao: novoPeixe.usoAlimnetacao,
-                usoComercio: novoPeixe.usoComercio
-              };
-              
-              const peixeQueue = await salvarPeixe(peixeAtualizado);
-              return peixeQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
-          }
-          
+           } catch (error) {
+             //console.error("Erro ao enviar PUT:", error);
+             const local = await salvarPeixe(buildPeixeAtualizada());
+             Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+             return local;
+           }
+    } else {
+       if (!peixe!.sincronizado && peixe!.idLocal) {
+          return await salvarPeixe(buildPeixeAtualizada());
+        } else {
+           Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+           return null;
+        }
+    }
+                          
   }
   
    const fetchPeixesAPI = async(id:number) =>{
@@ -179,6 +162,14 @@ export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe?: PeixesType)
                   //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
           }
     };
+
+    const buildPeixeAtualizada = (): PeixesType => ({
+      ...peixe!,
+      ...novoPeixe,
+      sincronizado: peixe?.sincronizado,
+      idLocal: peixe?.idLocal,
+      idFather: peixe?.idFather,
+ });
 
   const handleOnChangeInput = (
         value: NativeSyntheticEvent<TextInputChangeEventData> | string,

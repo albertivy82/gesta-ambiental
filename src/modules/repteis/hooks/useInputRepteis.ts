@@ -7,16 +7,17 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { RepteisType } from "../../../shared/types/RepteisType";
 import { salvarReptil, salvarReptilQueue } from "../../../realm/services/repteisService";
+import { RepteisInput } from "../../../shared/types/RepteisInput";
 
-export const DEFAULT_REPTEIS_INPUT: RepteisType = {
-  id: 0,
+export const DEFAULT_REPTEIS_INPUT: RepteisInput = {
   especie: '',
   local: '',
-  periodo: '',
-  uso: '',
-  ameacado: '',
-  problemasRelacionados: '',
-  cacado: '',
+  desova: '',
+  localDesova: '',
+  periodoDesova: '',
+  usoDaEspecie: '',
+  ameacaParaEspecie: '',
+  problemasGerados: '',
   descricaoEspontanea: '',
   entrevistado: {
     id: 0,
@@ -24,7 +25,7 @@ export const DEFAULT_REPTEIS_INPUT: RepteisType = {
 };
 
 export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisType) => {
-  const [novoReptil, setNovoReptil] = useState<RepteisType>(DEFAULT_REPTEIS_INPUT);
+  const [novoReptil, setNovoReptil] = useState<RepteisInput>(DEFAULT_REPTEIS_INPUT);
   const [disabled, setDisabled] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,12 +33,10 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
     if (
       novoReptil.especie !== '' &&
       novoReptil.local !== '' &&
-      novoReptil.periodo !== '' &&
-      novoReptil.uso !== '' &&
-      novoReptil.ameacado !== '' &&
-      novoReptil.problemasRelacionados !== '' &&
-      novoReptil.cacado !== '' &&
-      novoReptil.descricaoEspontanea !== ''
+      novoReptil.desova !== '' &&
+      novoReptil.usoDaEspecie !== '' &&
+      novoReptil.ameacaParaEspecie !== '' &&
+      novoReptil.problemasGerados !== ''
     ) {
       setDisabled(true);
     
@@ -45,9 +44,8 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
   }, [novoReptil]);
 
   const objetoFila = () => {
-    const reptilData: RepteisType = {
+    const reptilData: RepteisInput = {
       ...novoReptil,
-      id: 0,  // ID será gerado pelo backend após sincronização
       idLocal: uuidv4(),
       sincronizado: false,
     };
@@ -129,47 +127,36 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
               
               const response = await connectionAPIPut(`http://192.168.100.28:8080/reptil/${reptil!.id}`, reptilCorrigida) as RepteisType;
               if (response && response.id) {
-                return fetchRepteisAPI(response.id);
+                  return fetchRepteisAPI(response.id);
+              }else{
+                const local = await salvarReptil(buildReptilAtualizada());
+               return local;
               }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
-            }
-          
-          } else {
-            if (!reptil!.sincronizado && reptil!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const reptilAtualizado: RepteisType = {
-                ...reptil!,
-                especie: novoReptil.especie,
-                local: novoReptil.local,
-                periodo: novoReptil.periodo,
-                uso: novoReptil.uso,
-                ameacado: novoReptil.ameacado,
-                problemasRelacionados: novoReptil.problemasRelacionados,
-                cacado: novoReptil.cacado,
-                descricaoEspontanea: novoReptil.descricaoEspontanea
-              };
-              
-              const reptilQueue = await salvarReptil(reptilAtualizado);
-              return reptilQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
+            } catch (error) {
+                //console.error("Erro ao enviar PUT:", error);
+                const local = await await salvarReptil(buildReptilAtualizada());
+                Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                return local;
+           }
+                          
+    } else {
+         if (!reptil!.sincronizado && reptil!.idLocal) {
+              return await await salvarReptil(buildReptilAtualizada());
+         } else {
+             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
           }
-          
-  }
+    }
+                          
+   }
+
+  const buildReptilAtualizada = (): RepteisType => ({
+    ...reptil!,
+    ...novoReptil,
+    sincronizado: reptil?.sincronizado,
+    idLocal: reptil?.idLocal,
+    idFather: reptil?.idFather,
+});
   
    const fetchRepteisAPI = async(id:number) =>{
   
@@ -203,6 +190,13 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
           [name]: newValue,
         }));
       };
+
+   const handleEnumChange = (field: keyof RepteisInput, value: any) => {
+        setNovoReptil((current) => ({
+          ...current,
+          [field]: value,
+        }));
+      };
   
     
   
@@ -210,6 +204,7 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
     return {
       novoReptil,
       enviarRegistro,
+      handleEnumChange,
       handleOnChangeInput,
       disabled,
   };

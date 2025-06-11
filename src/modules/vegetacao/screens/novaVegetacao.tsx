@@ -9,6 +9,7 @@ import { useNovaVegetacao } from "../hooks/useInputVegetacao";
 import { VegetacaoDetailContainer } from "../styles/Vegetacao.style";
 import { ActivityIndicator } from "react-native-paper";
 import { VegetacaoType } from "../../../shared/types/VegetacaoType";
+import Text from "../../../shared/components/text/Text";
 
 
 
@@ -63,7 +64,7 @@ export const NovaVegetacao = ()=>{
             }
           }, [vegetacao]);
           
-
+          const outorsUsos = vegetacao?.outrosUsos ?? '';
 
   useEffect(() => {
         const consolidaDados = outrosUsos === 'SIM' 
@@ -138,54 +139,58 @@ export const NovaVegetacao = ()=>{
             />
           
               <RenderPicker
-               label="Utiliza a flor da espécia?"
+               label="Utiliza a flor da espécie?"
                selectedValue={novaVegetacao.usaFlor}
                onValueChange={(value) => handleEnumChange('usaFlor', value)}
                options={simNaoOptions}
             />
 
              <RenderPicker
-               label="Utiliza a folha da espécia?"
+               label="Utiliza a folha da espécie?"
                selectedValue={novaVegetacao.usaFolha}
                onValueChange={(value) => handleEnumChange('usaFolha', value)}
                options={simNaoOptions}
             />
 
               <RenderPicker
-               label="Utiliza a semente da espécia?"
+               label="Utiliza a semente da espécie?"
                selectedValue={novaVegetacao.usaSemente}
                onValueChange={(value) => handleEnumChange('usaSemente', value)}
                options={simNaoOptions}
             />
 
              <RenderPicker
-               label="Utiliza o fruto da espécia?"
+               label="Utiliza o fruto da espécie?"
                selectedValue={novaVegetacao.usaFruto}
                onValueChange={(value) => handleEnumChange('usaFruto', value)}
                options={simNaoOptions}
             />
 
              <RenderPicker
-               label="Utiliza a casca da espécia?"
+               label="Utiliza a casca da espécie?"
                selectedValue={novaVegetacao.usaCasca}
                onValueChange={(value) => handleEnumChange('usaCasca', value)}
                options={simNaoOptions}
             />
 
               <RenderPicker
-               label="Utiliza a raiz da espécia?"
+               label="Utiliza a raiz da espécie?"
                selectedValue={novaVegetacao.usaRaiz}
                onValueChange={(value) => handleEnumChange('usaRaiz', value)}
                options={simNaoOptions}
             />
 
               <RenderPicker
-               label="Utiliza o látex da espécia?"
+               label="Utiliza o látex da espécie?"
                selectedValue={novaVegetacao.usoLeiteLatex}
                onValueChange={(value) => handleEnumChange('usoLeiteLatex', value)}
                options={simNaoOptions}
             />
-
+                {outorsUsos && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação registrada anteriormente: {outorsUsos}
+                </Text>
+              )}
                <RenderPicker
                   label="Faz outro uso?"
                   selectedValue={outrosUsos}
@@ -224,14 +229,14 @@ export const NovaVegetacao = ()=>{
             />
 
             <RenderPicker
-               label="Coleta"
+               label="A espécie é obtida por meio de compra?"
                selectedValue={novaVegetacao.coletaCompra}
                onValueChange={(value) => handleEnumChange('coletaCompra', value)}
                options={simNaoOptions}
             />
 
              <RenderPicker
-               label="Coleta"
+               label="A coleta é realizada em ambientes naturais específicos (como restingas, lagos)?"
                selectedValue={novaVegetacao.coletaAmbienteEspecifica}
                onValueChange={(value) => handleEnumChange('coletaAmbienteEspecifica', value)}
                options={simNaoOptions}
@@ -250,7 +255,7 @@ export const NovaVegetacao = ()=>{
               onChange={(event)=> handleOnChangeInput(event, 'repassaConhecimento')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="O conhecimento está sendo repassado?"
+              title="Você repassa esse conhecimento para outras pessoas? Se sim, para quem?"
            />
 
           <Input 
@@ -258,7 +263,7 @@ export const NovaVegetacao = ()=>{
               onChange={(event)=> handleOnChangeInput(event, 'observacoesEspontaneas')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Deseja acrescentar alguma observação sobre o tema?"
+              title="“Deseja registrar alguma observação relevante (como número da fotografia ou outro detalhe)?"
            />
 
 

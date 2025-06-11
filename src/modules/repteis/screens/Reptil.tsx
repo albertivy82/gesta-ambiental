@@ -9,46 +9,51 @@ import { theme } from '../../../shared/themes/theme';
 import { RepteisType } from '../../../shared/types/RepteisType';
 import RenderItemReptil from '../ui-components/listaRepteis';
 import { ReptilDetailContainer } from '../styles/Reptil.style';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 
-export interface RepteisParam {
-  data: RepteisType[];
+export interface ReptilParam {
+  entrevistado: EntrevistadoType;
 }
 
-export const novaReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
+export const novoReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
   navigate('NovoReptil', { entrevistadoId });
-};
+}
 
 const Repteis = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, RepteisParam>, 'Repteis'>>();
-  const { data } = route.params;
+  const route = useRoute<RouteProp<Record<string, ReptilParam>, 'ReptilLista'>>();
+  const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [repteis, setRepteis] = useState<RepteisType[]>([...data]);
+  const [repteis, setRepteis] = useState<RepteisType[]>();
 
-  const fetchRepteisAtualizados = async () => {
-    if (data[0]?.entrevistado?.id) {
-      const novosRepteis = getRepteis(data[0].entrevistado.id);
-      const idsExistentes = new Set(repteis.map(item => item.id || item.idLocal));
-      const unicos = novosRepteis.filter(item => {
-        const id = item.id || item.idLocal;
-        return id && !idsExistentes.has(id);
-      });
-      if (unicos.length > 0) setRepteis(prev => [...prev, ...unicos]);
-    }
+  const fetchRepteis = async () => {
+    if (!entrevistado.id) return;
+
+    const novas = getRepteis(entrevistado.id);
+
+    const novasNaoDuplicadas = novas.filter(nova =>
+      !repteis?.some(v =>
+        (v.id && nova.id && v.id === nova.id) ||
+        (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal)
+      )
+    );
+
+    setRepteis(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
   };
+
 
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
   const handleRefresh = () => {
-    fetchRepteisAtualizados();
+    fetchRepteis();
     handleScrollToEnd();
   };
 
   const handleNovaReptil = () => {
-    novaReptil(navigation.navigate, data[0].entrevistado.id);
+    novoReptil(navigation.navigate, entrevistado.id);
   };
 
   return (

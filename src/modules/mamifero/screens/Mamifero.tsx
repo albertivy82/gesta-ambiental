@@ -9,40 +9,39 @@ import { theme } from '../../../shared/themes/theme';
 import { MamiferosType } from '../../../shared/types/MamiferosType';
 import { MamiferoDetailContainer } from '../styles/Mamifero.style';
 import RenderItemMamifero from '../ui-components/listaMamiferos';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 
-
-export interface MamiferosParam {
-  mamifero: MamiferosType[];
+export interface MamiferoParam {
+  entrevistado: EntrevistadoType;
 }
 
-export const novoMamifero = (
-  navigate: NavigationProp<ParamListBase>['navigate'],
-  entrevistadoId: number
-) => {
+export const novoMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
   navigate('NovoMamifero', { entrevistadoId });
-};
+}
 
 const Mamiferos = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, MamiferosParam>, 'Imovel'>>();
-  const { mamifero } = route.params;
+  const route = useRoute<RouteProp<Record<string, MamiferoParam>, 'MamiferoLista'>>();
+  const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
-  const [mamiferos, setMamiferos] = useState<MamiferosType[]>(mamifero);
+  const [mamiferos, setMamiferos] = useState<MamiferosType[]>();
 
   const fetchMamiferos = async () => {
-    const entrevistadoId = mamifero[0]?.entrevistado?.id;
-    if (entrevistadoId) {
-      const realmData = getMamiferos(entrevistadoId);
-      const novos = realmData.filter((novo) =>
-        !mamiferos.some((existente) =>
-          (novo.id && existente.id && novo.id === existente.id) ||
-          (novo.idLocal && existente.idLocal && novo.idLocal === existente.idLocal)
-        )
-      );
-      setMamiferos((prev) => [...prev, ...novos]);
-    }
+    if (!entrevistado.id) return;
+
+    const novas = getMamiferos(entrevistado.id);
+
+    const novasNaoDuplicadas = novas.filter(nova =>
+      !mamiferos?.some(v =>
+        (v.id && nova.id && v.id === nova.id) ||
+        (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal)
+      )
+    );
+
+    setMamiferos(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
   };
+
 
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
@@ -54,7 +53,7 @@ const Mamiferos = () => {
   };
 
   const handleNovoMamifero = () => {
-    novoMamifero(navigation.navigate, mamifero[0]?.entrevistado?.id);
+    novoMamifero(navigation.navigate, entrevistado?.id);
   };
 
   return (

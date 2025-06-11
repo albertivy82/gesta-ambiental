@@ -1,13 +1,13 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, Button, ScrollView, View } from "react-native";
 import { SimNao } from "../../../enums/simNao.enum";
+import Input from "../../../shared/components/input/input";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { PeixesType } from "../../../shared/types/PeixesType";
 import { useNovoPeixe } from "../hooks/useInputPeixe";
 import { PeixeDetailContainer } from "../styles/peixe.style";
-import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { PeixesType } from "../../../shared/types/PeixesType";
 
 
 export interface NovoPeixeParams {
@@ -32,10 +32,14 @@ export const NovoPeixe = () => {
              disabled
            } = useNovoPeixe(params.entrevistado, peixe);
  
- 
+           useEffect(() => {
+            if (peixe) {
+              handleOnChangeInput(peixe.especie ?? '', 'especie');
+             
+            }
+          }, [peixe]);
     
-   const simNaoOptions =  Object.values(SimNao);
-     
+        
      const handleEnviar = async () => {
           setLoading(true);
         
@@ -64,45 +68,55 @@ export const NovoPeixe = () => {
               onChange={(event)=> handleOnChangeInput(event, 'especie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Informe  a espécie de ave:"
+              title="Informe  a espécie do peixe:"
         />
 
-          <RenderPicker
-           label="locaisEspeciais?"
-           selectedValue={novoPeixe.locaisEspeciais}
-           onValueChange={(value) => handleEnumChange('locaisEspeciais', value)}
-           options={simNaoOptions}
-           />
+         <RenderPicker
+          label="A espécie é mais comuns no verão ou no inverno?"
+          selectedValue={novoPeixe.climaOcorrencia}
+          onValueChange={(value) => handleEnumChange('climaOcorrencia', value)}
+          options={['VERÃO', 'INVERNO']}
+          />
+
+        <Input 
+              value={novoPeixe.locaisEspecificosReprodução} 
+              onChange={(event)=> handleOnChangeInput(event, 'locaisEspecificosReprodução')}
+              placeholder="informe quais"
+              margin="15px 10px 30px 5px"
+              title="Existem locais muito importantes para  a reprodução do peixe?"
+        />
+
+         <Input 
+              value={novoPeixe.locaisEspecificosAlimentacao} 
+              onChange={(event)=> handleOnChangeInput(event, 'locaisEspecificosAlimentacao')}
+              placeholder="Informe quais"
+              margin="15px 10px 30px 5px"
+              title="Existem locais muito importantes para alimentação do peixe?"
+         />
 
           <RenderPicker
-           label="locaisEspecificosAlimentacao?"
-           selectedValue={novoPeixe.locaisEspecificosAlimentacao}
-           onValueChange={(value) => handleEnumChange('locaisEspecificosAlimentacao', value)}
-           options={simNaoOptions}
-           />
+            label="A espécie é a mais importante da região?"
+            selectedValue={novoPeixe.maisImportanteDaRegiao}
+            onValueChange={(value) => handleEnumChange('maisImportanteDaRegiao', value)}
+            options={['SIM', 'NÃO']}
+            />
 
-          <RenderPicker
-           label="usoAlimnetacao?"
-           selectedValue={novoPeixe.usoAlimnetacao}
-           onValueChange={(value) => handleEnumChange('usoAlimnetacao', value)}
-           options={simNaoOptions}
-           />
-            
-          <RenderPicker
-           label="usoComercio?"
-           selectedValue={novoPeixe.usoAlimnetacao}
-           onValueChange={(value) => handleEnumChange('usoComercio', value)}
-           options={simNaoOptions}
-           />
-        
-    
-          <View style={{ marginTop: 40 }}>
+         <Input 
+              value={novoPeixe.usosDaEspécie} 
+              onChange={(event)=> handleOnChangeInput(event, 'usosDaEspécie')}
+              placeholder="Informe quais"
+              margin="15px 10px 30px 5px"
+              title="Faz algum uso da espécie, como comércio, alimnetação etc?"
+         />
+
+
+        <View style={{ marginTop: 40 }}>
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 
               ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading || disabled} />
               )}
-            </View>
+        </View>
  
       
 

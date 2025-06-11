@@ -12,12 +12,9 @@ import { MamiferosType } from "../../../shared/types/MamiferosType";
 export const DEFAULT_MAMIFEROS_INPUT: MamiferosInput = {
   
   especie: '',
-  usoConsumo: null,
-  usoComercio: null,
-  usoCriacao: null,
-  usoRemedio: null,
-  usoOutros: null,
-  problemasRelacionados: '',
+  local: '',
+  usoDaEspecie: '',
+  problemasGerados: '',
   alimentacao: '',
   desricaoEspontanea: '',
   entrevistado: {
@@ -33,15 +30,10 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType, mamifero?: Mamife
     console.log(novoMamifero);
     if (
       novoMamifero.especie !== '' &&
-      novoMamifero.usoConsumo !== null &&
-      novoMamifero.usoComercio !== null &&
-      novoMamifero.usoCriacao !== null &&
-      novoMamifero.usoRemedio !== null &&
-      novoMamifero.usoOutros !== null &&
-      novoMamifero.problemasRelacionados !== '' &&
-      novoMamifero.alimentacao !== '' &&
-      novoMamifero.desricaoEspontanea !== ''
-    ) {
+      novoMamifero.local !== '' &&
+      novoMamifero.usoDaEspecie !== '' &&
+      novoMamifero.problemasGerados !== ''
+      ) {
       setDisabled(false);
     } 
   }, [novoMamifero]);
@@ -131,48 +123,36 @@ export const useNovoMamifero = (entrevistado:EntrevistadoType, mamifero?: Mamife
               
               const response = await connectionAPIPut(`http://192.168.100.28:8080/mamifero/${mamifero!.id}`, mamiferoCorrigida) as MamiferosType;
               if (response && response.id) {
-                return fetchMamiferoAPI(response.id);
-              }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
-            }
-          
-          } else {
-            if (!mamifero!.sincronizado && mamifero!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const mamiferoAtualizado: MamiferosType = {
-                ...mamifero!,
-                especie: novoMamifero.especie,
-                usoConsumo: novoMamifero.usoConsumo,
-                usoComercio: novoMamifero.usoComercio,
-                usoCriacao: novoMamifero.usoCriacao,
-                usoRemedio: novoMamifero.usoRemedio,
-                usoOutros: novoMamifero.usoOutros,
-                problemasRelacionados: novoMamifero.problemasRelacionados,
-                alimentacao: novoMamifero.alimentacao,
-                desricaoEspontanea: novoMamifero.desricaoEspontanea
-              };
+                                return fetchMamiferoAPI(response.id);
+                            }else{
+                              const local = await salvarMamifero(buildMamiferoAtualizada());
+                             return local;
+                            }
+                          } catch (error) {
+                              //console.error("Erro ao enviar PUT:", error);
+                              const local = await await salvarMamifero(buildMamiferoAtualizada());
+                              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                              return local;
+                         }
+                                        
+                  } else {
+                       if (!mamifero!.sincronizado && mamifero!.idLocal) {
+                            return await await salvarMamifero(buildMamiferoAtualizada());
+                       } else {
+                           Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                           return null;
+                        }
+                  }
+                                        
+                 }
               
-              const mamiferoQueue = await salvarMamifero(mamiferoAtualizado);
-              return mamiferoQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
-          }
-          
-  }
+                const buildMamiferoAtualizada = (): MamiferosType => ({
+                  ...mamifero!,
+                  ...novoMamifero,
+                  sincronizado: mamifero?.sincronizado,
+                  idLocal: mamifero?.idLocal,
+                  idFather: mamifero?.idFather,
+              });
   
    const fetchMamiferoAPI = async(id:number) =>{
   

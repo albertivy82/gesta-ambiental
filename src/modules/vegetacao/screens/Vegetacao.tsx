@@ -22,9 +22,8 @@ export const novaVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'
 
 const Vegetacao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, VegetacaoParam>, 'Vegetacao'>>();
+  const route = useRoute<RouteProp<Record<string, VegetacaoParam>, 'VegetacaoLista'>>();
   const { entrevistado } = route.params;
-  console.log(entrevistado)
   const flatListRef = useRef<FlatList>(null);
   const [vegetacoes, setVegetacoes] = useState<VegetacaoType[]>();
 

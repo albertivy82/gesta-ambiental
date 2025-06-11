@@ -11,15 +11,11 @@ import { FaunaType } from "../../../shared/types/FaunaType";
 
 export const DEFAULT_FAUNA_INPUT: FaunaInput = {
   especie: '',
-  ocorreMata: null,
-  ocorreRio: null,
-  ocorreLago: null,
-  ocorreRua: null,
-  ocorreQuintal: null,
-  outrasOcorrencias: null,
-  frequenciaAtual: '',
-  frequenciaPassada: '',
-  tempoQueNaoVe: null,
+  ondeOcorre: '',
+  abundanciaAtual: '',
+  abundanciaPassada: '',
+  tempoQueNaoVe: '',
+  usoDaEspecie: '',
   entrevistado: {
     id: 0,
   },
@@ -33,15 +29,11 @@ export const useNovaFauna = (entrevistado: EntrevistadoType, fauna?: FaunaType) 
     console.log(novaFauna);
     if (
       novaFauna.especie !== '' &&
-      novaFauna.ocorreMata !== null &&
-      novaFauna.ocorreRio !== null &&
-      novaFauna.ocorreLago !== null &&
-      novaFauna.ocorreRua !== null &&
-      novaFauna.ocorreQuintal !== null &&
-      novaFauna.outrasOcorrencias !== null &&
-      novaFauna.frequenciaAtual !== '' &&
-      novaFauna.frequenciaPassada !== null &&
-      novaFauna.tempoQueNaoVe !== null
+      novaFauna.ondeOcorre !== '' &&
+      novaFauna.abundanciaAtual !== '' &&
+      novaFauna.abundanciaPassada !== '' &&
+      novaFauna.tempoQueNaoVe !== '' &&
+      novaFauna.usoDaEspecie !== '' 
     ) 
       setDisabled(true);
     
@@ -130,50 +122,38 @@ export const useNovaFauna = (entrevistado: EntrevistadoType, fauna?: FaunaType) 
             try{
               
               const response = await connectionAPIPut(`http://192.168.100.28:8080/fauna/${fauna!.id}`, faunaCorrigida) as FaunaType;
-              if (response && response.id) {
-                return fetchFaunaAPI(response.id);
-              }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
+                if (response && response.id) {
+                    return fetchFaunaAPI(response.id);
+                 }else{
+                    const local = await salvarFauna(buildFaunaAtualizada());
+                    return local;
+                 }
+            } catch (error) {
+                const local = await await salvarFauna(buildFaunaAtualizada());
+                Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                return local;
+            }
+    } else {
+               if (!fauna!.sincronizado && fauna!.idLocal) {
+                return await salvarFauna(buildFaunaAtualizada());
+               } else {
+                Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
                 return null;
+               }
                
-            }
-          
-          } else {
-            if (!fauna!.sincronizado && fauna!.idLocal) {
+             }
              
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const faunaAtualizado: FaunaType = {
-                ...fauna!,
-                especie: novaFauna.especie,
-                ocorreMata: novaFauna.ocorreMata,
-                ocorreRio: novaFauna.ocorreRio,
-                ocorreLago: novaFauna.ocorreLago,
-                ocorreRua: novaFauna.ocorreRua,
-                ocorreQuintal: novaFauna.ocorreQuintal,
-                outrasOcorrencias: novaFauna.outrasOcorrencias,
-                frequenciaAtual: novaFauna.frequenciaAtual,
-                frequenciaPassada: novaFauna.frequenciaPassada,
-                tempoQueNaoVe: novaFauna.tempoQueNaoVe !== null ? novaFauna.tempoQueNaoVe : '',
-              };
-              
-              const faunaQueue = await salvarFauna(faunaAtualizado);
-              return faunaQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
-          }
+     }
           
-  }
+  
+
+  const buildFaunaAtualizada = (): FaunaType => ({
+    ...fauna!,
+    ...novaFauna,
+    sincronizado: fauna?.sincronizado,
+    idLocal: fauna?.idLocal,
+    idFather: fauna?.idFather,
+  });
   
    const fetchFaunaAPI = async(id:number) =>{
   
