@@ -9,17 +9,13 @@ import { FaunaType } from "../../../shared/types/FaunaType";
 export const convertToFaunaInput = (fauna: any) => {
     const faunaInput: FaunaInput = {
         especie: fauna.especie,
-        ocorreMata: fauna.ocorreMata,
-        ocorreRio: fauna.ocorreRio,
-        ocorreLago: fauna.ocorreLago,
-        ocorreRua: fauna.ocorreRua,
-        ocorreQuintal: fauna.ocorreQuintal,
-        outrasOcorrencias: fauna.outrasOcorrencias,
-        frequenciaAtual: fauna.frequenciaAtual,
-        frequenciaPassada: fauna.frequenciaPassada,
+        ondeOcorre: fauna.ondeOcorre,
+        abundanciaAtual: fauna.abundanciaAtual,
+        abundanciaPassada: fauna.abundanciaPassada,
         tempoQueNaoVe: fauna.tempoQueNaoVe,
+        usoDaEspecie: fauna.usoDaEspecie,
         entrevistado: {
-            id: fauna.entrevistado.id, 
+            id: fauna.entrevistado, 
         },
     };
     return faunaInput;

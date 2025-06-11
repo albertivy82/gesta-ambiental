@@ -4,10 +4,10 @@ export interface PeixesType {
     id: number;
     especie: string;
     climaOcorrencia: string;
-    locaisEspecificosReprodução: string;
+    locaisEspecificosReproducao: string;
     locaisEspecificosAlimentacao: string;
     maisImportanteDaRegiao: SimNao |null|'';
-    usosDaEspécie: string;
+    usosDaEspecie: string;
     entrevistado: {
         id: number;
     };

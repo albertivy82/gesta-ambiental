@@ -9,16 +9,13 @@ import { MamiferosType } from "../../../shared/types/MamiferosType";
 export const convertToMamiferoInput = (mamifero: any) => {
     const mamiferoInput: MamiferosInput = {
         especie: mamifero.especie,
-        usoConsumo: mamifero.usoConsumo,
-        usoComercio: mamifero.usoComercio,
-        usoCriacao: mamifero.usoCriacao,
-        usoRemedio: mamifero.usoRemedio,
-        usoOutros: mamifero.usoOutros,
-        problemasRelacionados: mamifero.problemasRelacionados,
-        alimentacao: mamifero.alimentacao,
-        desricaoEspontanea: mamifero.desricaoEspontanea,
+        local: mamifero.usoConsumo,
+        usoDaEspecie: mamifero.usoComercio,
+        problemasGerados: mamifero.usoCriacao,
+        alimentacao: mamifero.usoRemedio,
+        desricaoEspontanea: mamifero.usoOutros,
         entrevistado: {
-            id: mamifero.entrevistado.id, 
+            id: mamifero.entrevistado, 
         },
     };
     return mamiferoInput;

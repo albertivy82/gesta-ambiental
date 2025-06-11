@@ -9,19 +9,13 @@ import { AvesType } from "../../../shared/types/AvesType";
 export const convertToAvesInput = (ave: any) => {
     const avesInput: AvesInput = {
         especie: ave.especie,
-        useCosumo: ave.useCosumo,
-        usoComercio: ave.usoComercio,
-        usoCriacao: ave.usoCriacao,
-        usoRemedio: ave.usoRemedio,
-        usoOutros: ave.usoOutros,
-        problemasRelacionados: ave.problemasRelacionados,
-        ameacaSofrida: ave.ameacaSofrida,
-        localDeAglomeracao: ave.localDeAglomeracao,
-        qualImpotanciaDaEespecie: ave.qualImpotanciaDaEespecie,
-        alimentacao: ave.alimentacao,
-        descricaoEspontanea: ave.descricaoEspontanea,
+        climaOcorrencia: ave.useCosumo,
+        usosDaEspecie: ave.usoComercio,
+        localDeAglomeracao: ave.usoCriacao,
+        problemasGerados: ave.usoRemedio,
+        ameacaSofrida: ave.usoOutros,
         entrevistado: {
-            id: ave.entrevistado.id, 
+            id: ave.entrevistado, 
         },
     };
     return avesInput;

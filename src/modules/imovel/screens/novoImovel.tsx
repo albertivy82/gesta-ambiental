@@ -33,7 +33,7 @@ export interface NovoReptilParams {
 }
 
 export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody) => {
-  navigate('ImovelDetails', { imovel });
+  navigate('ImovelDetail', { imovel });
 };
 
 export const NovoImovel = () => {
@@ -49,6 +49,7 @@ export const NovoImovel = () => {
     enviarRegistro,
     handleOnChangeAreaImovel,
     disabled} = useNovoImovel(entrevistado, imovel);
+    
 
   const [pavimentacaoInformada, setPavimentacaoInformada] = useState<string[]>([]);  
   const [outrasInformadas, SetOutrasInformadas] = useState<string>('');

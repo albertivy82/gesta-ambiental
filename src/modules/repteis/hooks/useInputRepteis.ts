@@ -26,10 +26,10 @@ export const DEFAULT_REPTEIS_INPUT: RepteisInput = {
 
 export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisType) => {
   const [novoReptil, setNovoReptil] = useState<RepteisInput>(DEFAULT_REPTEIS_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novoReptil);
+    
     if (
       novoReptil.especie !== '' &&
       novoReptil.local !== '' &&
@@ -38,7 +38,7 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
       novoReptil.ameacaParaEspecie !== '' &&
       novoReptil.problemasGerados !== ''
     ) {
-      setDisabled(true);
+      setDisabled(false);
     
     }
   }, [novoReptil]);
@@ -91,7 +91,7 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/repteis', novoReptil) as RepteisType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/reptil', novoReptil) as RepteisType;
                           
                       if (response && response.id) {
                             return fetchRepteisAPI(response.id);

@@ -5,7 +5,7 @@ export const AvesSchema = {
     id: 'int',
     especie: 'string',
     climaOcorrencia: 'string',
-    usosDaEspécie: 'string',
+    usosDaEspecie: 'string',
     localDeAglomeracao: 'string',
     problemasGerados: 'string',
     ameacaSofrida: 'string',

@@ -16,8 +16,8 @@ export interface VegetacaoParam {
   entrevistado: EntrevistadoType;
 }
 
-export const novaVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovaVegetacao', { entrevistadoId });
+export const novaVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('NovaVegetacao', { entrevistado });
 }
 
 const Vegetacao = () => {
@@ -57,7 +57,7 @@ const Vegetacao = () => {
   };
 
   const handleNovaVegetacao = () => {
-    novaVegetacao(navigation.navigate, entrevistado.id);
+    novaVegetacao(navigation.navigate, entrevistado);
   };
 
   return (

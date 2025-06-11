@@ -51,14 +51,54 @@ export const RenderItemReptil = ({ item }: { item: RepteisType }) => {
         >
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
         </Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Espécie: {item.especie}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Local: {item.local}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Período: {item.periodo}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso: {item.uso}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Ameaçado: {item.ameacado}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Problemas Relacionados: {item.problemasRelacionados}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Caçado: {item.cacado}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Descrição Espontânea: {item.descricaoEspontanea}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Espécie: {item.especie}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Local: {item.local}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >espécie: {item.especie}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Local de incidência da espécie: {item.local}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Desova: {item.desova}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Local de desova: {item.localDesova}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Período de desova: {item.periodoDesova}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Usos da espécie: {item.usoDaEspecie}</Text>
+
+          <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Ameaças sofridas pela espécie no local: {item.ameacaParaEspecie}</Text>
+        
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Problemas causados pela espécie no local: {item.problemasGerados}</Text>
+        
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Descrição Espontânea: {item.descricaoEspontanea}</Text>
+        
         {mostrarModalDelete && (
                   
                   <DeleteConfirmation

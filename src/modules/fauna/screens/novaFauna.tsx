@@ -16,8 +16,8 @@ export interface NovaFaunaParams {
   fauna?: FaunaType;
 }
 
-export const detalharFauna = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('FaunaLista', { entrevistadoId });
+export const detalharFauna = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('FaunaLista', { entrevistado });
 };
 
 export const NovaFauna = () => {
@@ -49,7 +49,7 @@ export const NovaFauna = () => {
            try {
              const faunaSalva = await enviarRegistro(); 
                  if (faunaSalva){
-                   detalharFauna(navigation.navigate, entrevistado.id);
+                   detalharFauna(navigation.navigate, entrevistado);
                  } else {
                    Alert.alert("Erro", "Não foi possível salvar a espécie. Tente novamente.");
                    navigation.goBack();

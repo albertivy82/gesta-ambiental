@@ -17,8 +17,8 @@ export interface NovaAveParams {
   ave?: AvesType;
 }
 
-export const detalharAves = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('AveLista', { entrevistadoId });
+export const detalharAves = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('AveLista', { entrevistado });
 };
 
 export const NovaAve = () => {
@@ -38,7 +38,7 @@ export const NovaAve = () => {
             if (ave) {
               handleOnChangeInput(ave.especie ?? '', 'especie');
               handleEnumChange('climaOcorrencia', ave.climaOcorrencia);
-              handleOnChangeInput(ave.usosDaEspécie ?? '', 'usosDaEspécie');
+              handleOnChangeInput(ave.usosDaEspecie ?? '', 'usosDaEspécie');
               handleOnChangeInput(ave.localDeAglomeracao ?? '', 'localDeAglomeracao');
               handleOnChangeInput(ave.problemasGerados ?? '', 'problemasGerados');
               handleOnChangeInput(ave.ameacaSofrida ?? '', 'ameacaSofrida');
@@ -54,7 +54,7 @@ export const NovaAve = () => {
          try {
            const aveSalva = await enviarRegistro(); 
                if (aveSalva){
-                 detalharAves(navigation.navigate, entrevistado.id);
+                 detalharAves(navigation.navigate, entrevistado);
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a aves. Tente novamente.");
                  navigation.goBack();
@@ -87,7 +87,7 @@ export const NovaAve = () => {
               />
 
               <Input 
-              value={novaAve.usosDaEspécie} 
+              value={novaAve.usosDaEspecie} 
               onChange={(event)=> handleOnChangeInput(event, 'usosDaEspécie')}
               placeholder="..."
               margin="15px 10px 30px 5px"

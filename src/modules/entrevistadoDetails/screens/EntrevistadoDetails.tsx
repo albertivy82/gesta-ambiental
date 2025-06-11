@@ -62,7 +62,7 @@ const EntrevistadoDetails = () => {
   const {aves} = useAves(params.entrevistado.id);
   const {reptil} = useReptil(params.entrevistado.id);
 
- console.log(params.entrevistado)
+ 
    // Alerta caso não haja imóveis
    useEffect(() => {
     if (!imovelPresente) {
@@ -172,15 +172,18 @@ const EntrevistadoDetails = () => {
           </View>
                 
           <TouchableOpacity
-                 onPress={() => handleImovelNavigation(navigation.navigate, "ImovelDetails", imovelPresente, params.entrevistado)}>
+                 onPress={() => handleImovelNavigation(navigation.navigate, "ImovelDetail", imovelPresente, params.entrevistado)}>
                   {imovelPresente ? (
                     <View style={{ alignItems: 'center' }}> 
                       <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
                         Imóvel Cadastrado
                       </Text>
                       <View style={{ marginTop: 10 }}>  
-                        {renderField('Documentação do Imóvel', imovelPresente.documentacaoImovel)}
-                        {renderField('Sincronizado', imovelPresente.sincronizado ? 'Sim' : 'Não')}
+                      {renderField('  Imóvel Cadastrado',
+                      `Documentação: ${imovelPresente.documentacaoImovel ?? 
+                        'Não informado'}\nSincronizado: ${imovelPresente.sincronizado ? 'Sim' : 'Não'}`
+                        )}
+
                       </View>
                     </View>
                   ) : (
@@ -197,131 +200,122 @@ const EntrevistadoDetails = () => {
 
          
 
-        <TouchableOpacity  onPress={() => {handleDecision(vegetacao, "VegetacaoLista", "NovaVegetacao")}}>
-                          
-                     {vegetacao.length >0? (
-
-                      <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
-                      Vegetações registradas: {vegetacao.length}
-                      </Text>
-
-                     ):(   
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          borderWidth: 2, 
-                                          borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                            <Icon size={30} name='leaf' color='green' />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Vegetação</Text>
-                        </View>
-                    )}  
+        <TouchableOpacity onPress={() => handleDecision(vegetacao, "VegetacaoLista", "NovaVegetacao")}>
+          <View style={{
+            alignItems: 'stretch',
+            flexDirection: 'row',
+            padding: 10,
+            borderWidth: 2,
+            borderColor: theme.colors.grayTheme.gray100
+          }}>
+            <Icon size={30} name='leaf' color='green' />
+            <Text
+              type={textTypes.BUTTON_BOLD}
+              color={vegetacao.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+              style={{ marginLeft: 10 }}
+            >
+              {vegetacao.length > 0
+                ? `Vegetações registradas: ${vegetacao.length}`
+                : 'Vegetação'}
+            </Text>
+          </View>
         </TouchableOpacity>
 
-                    
-              
-              <TouchableOpacity  onPress={() => {handleDecision(peixes, "PeixesLista", "NovoPeixe")}}>
-                          
-                          {peixes.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
-                           Peixes registrados: {peixes.length}
-                           </Text>
-     
-                          ):( 
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          borderWidth: 2, 
-                                          borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                            <Icones resizeMode="contain" source={require('../../../assets/images/peixes.png')} />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Peixes</Text>
-                        </View>
-                          )}
-              </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleDecision(peixes, "PeixesLista", "NovoPeixe")}>
+            <View style={{
+              alignItems: 'stretch',
+              flexDirection: 'row',
+              padding: 10,
+              borderWidth: 2,
+              borderColor: theme.colors.grayTheme.gray100
+            }}>
+              <Icones resizeMode="contain" source={require('../../../assets/images/peixes.png')} />
+              <Text
+                type={textTypes.BUTTON_BOLD}
+                color={peixes.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                style={{ marginLeft: 10 }}
+              >
+                {peixes.length > 0 ? `Peixes registrados: ${peixes.length}` : 'Peixes'}
+              </Text>
+            </View>
+      </TouchableOpacity>
 
-              <TouchableOpacity  onPress={() => {handleDecision(mamiferos, "Mamiferos", "NovoMamifero")}}>
-                          
-                          {mamiferos.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
-                           Itens de mamíferosregistrados: {mamiferos.length}
-                           </Text>
-     
-                          ):( 
-                           <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                            padding: 10,
-                                            borderWidth: 2, 
-                                            borderColor: theme.colors.grayTheme.gray100 
-                                          }}>
-                              <Icones resizeMode="contain" source={require('../../../assets/images/macaco.png')} />
-                              <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Mamíferos</Text>
-                          </View>
-                          )}
-              </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleDecision(mamiferos, "Mamiferos", "NovoMamifero")}>
+        <View style={{
+          alignItems: 'stretch',
+          flexDirection: 'row',
+          padding: 10,
+          borderWidth: 2,
+          borderColor: theme.colors.grayTheme.gray100
+        }}>
+          <Icones resizeMode="contain" source={require('../../../assets/images/macaco.png')} />
+          <Text
+            type={textTypes.BUTTON_BOLD}
+            color={mamiferos.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+            style={{ marginLeft: 10 }}
+          >
+            {mamiferos.length > 0 ? `Mamíferos registrados: ${mamiferos.length}` : 'Mamíferos'}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
-              <TouchableOpacity  onPress={() => {handleDecision(fauna, "FaunaLista", "NovaFauna")}}>
-                          
-                          {fauna.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
-                              Itens de fauna registrados: {fauna.length}
-                           </Text>
-     
-                          ):( 
-                           
-                          <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                          padding: 10,
-                                          borderWidth: 2, 
-                                          borderColor: theme.colors.grayTheme.gray100 
-                                        }}>
-                            <Icones resizeMode="contain" source={require('../../../assets/images/fauna.png')} />
-                            <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>fauna</Text>
-                        </View>
-                   
-                          )}
-              </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleDecision(fauna, "FaunaLista", "NovaFauna")}>
+        <View style={{
+          alignItems: 'stretch',
+          flexDirection: 'row',
+          padding: 10,
+          borderWidth: 2,
+          borderColor: theme.colors.grayTheme.gray100
+        }}>
+          <Icones resizeMode="contain" source={require('../../../assets/images/fauna.png')} />
+          <Text
+            type={textTypes.BUTTON_BOLD}
+            color={fauna.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+            style={{ marginLeft: 10 }}
+          >
+            {fauna.length > 0 ? `Fauna registrada: ${fauna.length}` : 'Fauna'}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => handleDecision(aves, "AvesLista", "NovaAve")}>
+        <View style={{
+          alignItems: 'stretch',
+          flexDirection: 'row',
+          padding: 10,
+          borderWidth: 2,
+          borderColor: theme.colors.grayTheme.gray100
+        }}>
+          <Icones resizeMode="contain" source={require('../../../assets/images/aves.png')} />
+          <Text
+            type={textTypes.BUTTON_BOLD}
+            color={aves.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+            style={{ marginLeft: 10 }}
+          >
+            {aves.length > 0 ? `Aves registradas: ${aves.length}` : 'Aves'}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
+      <TouchableOpacity onPress={() => handleDecision(reptil, "RepteisLista", "NovoReptil")}>
+        <View style={{
+          alignItems: 'stretch',
+          flexDirection: 'row',
+          padding: 10,
+          borderWidth: 2,
+          borderColor: theme.colors.grayTheme.gray100
+        }}>
+          <Icones resizeMode="contain" source={require('../../../assets/images/reptil.png')} />
+          <Text
+            type={textTypes.BUTTON_BOLD}
+            color={reptil.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+            style={{ marginLeft: 10 }}
+          >
+            {reptil.length > 0 ? `Répteis registrados: ${reptil.length}` : 'Répteis'}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
-              <TouchableOpacity  onPress={() => {handleDecision(aves, "AvesLista", "NovaAve")}}>
-                          
-                          {aves.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
-                           Itens de aves registrados: {aves.length}
-                           </Text>
-     
-                          ):( 
-                            <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                              padding: 10,
-                              borderWidth: 2, 
-                              borderColor: theme.colors.grayTheme.gray100 
-                            }}>
-                              <Icones resizeMode="contain" source={require('../../../assets/images/aves.png')} />
-                              <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>aves</Text>
-                          </View>
-                          )}
-              </TouchableOpacity>
-
-              <TouchableOpacity  onPress={() => {handleDecision(reptil, "RepteisLista", "NovReptil")}}>
-                          
-                          {reptil.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.grayTheme.gray80}>
-                           Itens de repteis registrados: {reptil.length}
-                           </Text>
-     
-                          ):( 
-                            <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                              padding: 10,
-                              borderWidth: 2, 
-                              borderColor: theme.colors.grayTheme.gray100 
-                            }}>
-                              <Icones resizeMode="contain" source={require('../../../assets/images/reptil.png')} />
-                              <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Repteis</Text>
-                          </View>
-                          )}
-              </TouchableOpacity>
 
               
      

@@ -29,7 +29,7 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
       espacosEsporteLazer: imovel.espacosEsporteLazer,
       programaInfraSaneamento: imovel.programaInfraSaneamento,
       entrevistado: {
-          id: imovel.entrevistado.id,
+          id: imovel.entrevistado,
       },
   };
 

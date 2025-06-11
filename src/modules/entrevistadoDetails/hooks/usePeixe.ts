@@ -9,12 +9,13 @@ import { apagarPeixeQueue, getPeixes, getPeixesDessincronizados, salvarPeixes } 
 export const convertToPeixeInput = (peixe: any) => {
     const peixeInput: PeixesInput = {
         especie: peixe.especie,
-        locaisEspeciais: peixe.locaisEspeciais,
+        climaOcorrencia: peixe.climaOcorrencia,
+        locaisEspecificosReproducao: peixe.locaisEspecificosReproducao,
         locaisEspecificosAlimentacao: peixe.locaisEspecificosAlimentacao,
-        usoAlimnetacao: peixe.usoAlimnetacao,
-        usoComercio: peixe.usoComercio,
+        maisImportanteDaRegiao: peixe.maisImportanteDaRegiao,
+        usosDaEspecie: peixe.usosDaEspecie,
         entrevistado: {
-            id: peixe.entrevistado.id, 
+            id: peixe.entrevistado, 
         },
     };
     return peixeInput;

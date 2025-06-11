@@ -22,7 +22,7 @@ export const novoReptil = (navigate: NavigationProp<ParamListBase>['navigate'], 
 
 const Repteis = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ReptilParam>, 'ReptilLista'>>();
+  const route = useRoute<RouteProp<Record<string, ReptilParam>, 'RepteisLista'>>();
   const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
   const [repteis, setRepteis] = useState<RepteisType[]>();

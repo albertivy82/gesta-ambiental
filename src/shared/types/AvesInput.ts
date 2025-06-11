@@ -4,7 +4,7 @@ export interface AvesInput {
     
     especie: string;
     climaOcorrencia: string;
-    usosDaEspécie: string;
+    usosDaEspecie: string;
     localDeAglomeracao: string;
     problemasGerados: string;
     ameacaSofrida: string;

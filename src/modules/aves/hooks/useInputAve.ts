@@ -12,7 +12,7 @@ import { AvesType } from "../../../shared/types/AvesType";
 export const DEFAULT_AVES_INPUT: AvesInput = {
   especie: '',
   climaOcorrencia: '',
-  usosDaEspécie: '',
+  usosDaEspecie: '',
   localDeAglomeracao: '',
   problemasGerados: '',
   ameacaSofrida: '',
@@ -30,7 +30,7 @@ export const useNovaAves = (entrevistado:EntrevistadoType, ave?: AvesType)  => {
     if (
       novaAve.especie !== '' &&
       novaAve.climaOcorrencia !== '' &&
-      novaAve.usosDaEspécie !== '' &&
+      novaAve.usosDaEspecie !== '' &&
       novaAve.localDeAglomeracao !== '' &&
       novaAve.problemasGerados !== '' &&
       novaAve.ameacaSofrida !== '' 
@@ -88,7 +88,7 @@ export const useNovaAves = (entrevistado:EntrevistadoType, ave?: AvesType)  => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/aves', novaAve) as AvesType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/ave', novaAve) as AvesType;
                           
                       if (response && response.id) {
                             return fetchAvesAPI(response.id);

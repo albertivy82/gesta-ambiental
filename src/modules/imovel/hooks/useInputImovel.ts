@@ -42,9 +42,9 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
 export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody) => {
     const [novoImovel, setNovoImovel] = useState<imovelInput>(DEFAUL_IMOVEL_INPUT);
     const [disabled, setDisabled] = useState<boolean>(true);
-
+   
     useEffect(() => {
-      console.log(novoImovel)
+      
       if (
           novoImovel.rua !== '' && 
           novoImovel.numero !== '' && 
@@ -90,7 +90,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
   };
 
   const enviarRegistro = async () => {
-    if (entrevistado) {
+    if (imovel) {
       return await enviaImovelEdicao();
     } else {
       return await enviaImovelNovo();
@@ -105,11 +105,14 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         salvarImovelQueue(imovelDataQueue);
     } else {
         novoImovel.entrevistado = { id: entrevistado.id };
+        console.log( novoImovel.entrevistado)
         const netInfoState = await NetInfo.fetch();
         const isConnected = await testConnection();
         
             if (netInfoState.isConnected && isConnected) {
                 try {
+                  
+                   console.log( novoImovel)
                   const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel) as imovelBody;
                   if (response && response.id) {
                     return fetchImovelAPI(response.id);

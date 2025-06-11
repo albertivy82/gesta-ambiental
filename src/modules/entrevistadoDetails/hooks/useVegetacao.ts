@@ -7,6 +7,9 @@ import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
 import { VegetacaoType } from "../../../shared/types/VegetacaoType";
 
 export const convertToVegetacaoInput = (vegetacao: any) => {
+    console.log("vegetação enviada para conversão",vegetacao)
+    console.log(typeof vegetacao.entrevistado);           // "object"
+    console.log(typeof vegetacao.entrevistado.id);
     const vegetacaoInput: VegetacaoInput = {
         especie: vegetacao.especie,
         usoMedicinal: vegetacao.usoMedicinal,
@@ -29,8 +32,8 @@ export const convertToVegetacaoInput = (vegetacao: any) => {
         repassaConhecimento: vegetacao.repassaConhecimento,
         observacoesEspontaneas: vegetacao.observacoesEspontaneas,
         entrevistado: {
-            id: vegetacao.entrevistado.id,
-        },
+            id: vegetacao.entrevistado, 
+        }
     };
 
     return vegetacaoInput;
@@ -41,12 +44,13 @@ export const useVegetacoes = (entrevistadoId: number) => {
 
     const sincronizarVegetacaoQueue = async () => {
         if (entrevistadoId > 0) {
-            console.log("useVegetacoes/sincronizarVegetacaoQueue");
+           
             const vegetacoesQueue = getVegetacoesDessincronizadas(entrevistadoId);
-
+           
             if (vegetacoesQueue.length > 0) {
                 for (const vegetacao of vegetacoesQueue) {
                     const novaVegetacaoInput = convertToVegetacaoInput(vegetacao);
+                    console.log("useVegetacoes/novaVegetacaoInput", novaVegetacaoInput );
                     const netInfoState = await NetInfo.fetch();
                     if (netInfoState.isConnected) {
                         const isConnected = await testConnection();

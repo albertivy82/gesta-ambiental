@@ -16,8 +16,8 @@ export interface NovoReptilParams {
   reptil?: RepteisType;
 }
 
-export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('ReptilLista', { entrevistadoId });
+export const detalharReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('RepteisLista', { entrevistado });
 };
 
 export const NovoReptil = () => {
@@ -91,7 +91,7 @@ export const NovoReptil = () => {
            try {
              const reptilSalvo = await enviarRegistro(); 
                  if (reptilSalvo){
-                  detalharReptil(navigation.navigate, entrevistado.id);
+                  detalharReptil(navigation.navigate, entrevistado);
                  } else {
                    Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
                    navigation.goBack();

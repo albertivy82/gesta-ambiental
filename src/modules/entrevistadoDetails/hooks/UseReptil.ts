@@ -9,16 +9,17 @@ import { apagarReptilQueue, getRepteis, getRepteisDessincronizadas, salvarReptei
 export const convertToReptilInput = (reptil: any) => {
     const reptilInput: RepteisInput = {
         especie: reptil.especie,
-        local: reptil,
-        periodo: reptil,
-        uso: reptil,
-        ameacado: reptil,
-        problemasRelacionados: reptil,
-        cacado: reptil,
-        descricaoEspontanea: reptil,
+        local: reptil.local,
+        desova: reptil.desova,
+        localDesova: reptil.localDesova,
+        usoDaEspecie: reptil.usoDaEspecie,
+        periodoDesova: reptil.periodoDesova,
+        ameacaParaEspecie: reptil.ameacaParaEspecie,
+        problemasGerados: reptil.problemasGerados,
+        descricaoEspontanea: reptil.descricaoEspontanea,
         entrevistado: {
-          id: 0,
-        },
+            id: reptil.entrevistado, 
+        }
     };
     return reptilInput;
 };

@@ -15,8 +15,8 @@ export interface NovoPeixeParams {
   peixe?: PeixesType;
 }
 
-export const detalharPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('PeixeLista', { entrevistadoId });
+export const detalharPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('PeixesLista', { entrevistado });
 };
 
 export const NovoPeixe = () => {
@@ -46,7 +46,7 @@ export const NovoPeixe = () => {
           try {
             const peixeSalvo = await enviarRegistro(); 
                 if (peixeSalvo){
-                  detalharPeixe(navigation.navigate, entrevistado.id);
+                  detalharPeixe(navigation.navigate, entrevistado);
                 } else {
                   Alert.alert("Erro", "Não foi possível salvar o peixe. Tente novamente.");
                   navigation.goBack();

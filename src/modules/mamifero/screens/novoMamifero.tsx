@@ -14,8 +14,8 @@ export interface NovoMamiferoParams {
   mamifero?: MamiferosType;
 }
 
-export const detalharMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('MamiferoLista', { entrevistadoId });
+export const detalharMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('MamiferoLista', { entrevistado });
 };
 
 export const NovoMamifero = () => {
@@ -52,7 +52,7 @@ export const NovoMamifero = () => {
       try {
         const mamiferoSalvo = await enviarRegistro(); 
             if (mamiferoSalvo){
-              detalharMamifero(navigation.navigate, entrevistado.id);
+              detalharMamifero(navigation.navigate, entrevistado);
             } else {
               Alert.alert("Erro", "Não foi possível salvar a mamifero. Tente novamente.");
               navigation.goBack();

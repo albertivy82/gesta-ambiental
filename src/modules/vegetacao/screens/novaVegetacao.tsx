@@ -18,8 +18,8 @@ export interface NovaVegetacaoParams {
   vegetacao?: VegetacaoType;
 }
 
-export const detalharVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number)=>{
-    navigate('VegetacaoLista', {entrevistadoId})
+export const detalharVegetacao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType)=>{
+    navigate('VegetacaoLista', {entrevistado})
 }
 
 export const NovaVegetacao = ()=>{
@@ -38,7 +38,7 @@ export const NovaVegetacao = ()=>{
             disabled
           } = useNovaVegetacao(entrevistado, vegetacao);
 
-
+console.log(entrevistado)
           useEffect(() => {
             if (vegetacao) {
               handleOnChangeInput(vegetacao.especie ?? '', 'especie');
@@ -82,9 +82,11 @@ export const NovaVegetacao = ()=>{
        
          try {
            const vegetacaoSalva = await enviarRegistro(); 
+           console.log("hendleEnviar - vegetacaoSalva", vegetacaoSalva)
                if (vegetacaoSalva){
-                 detalharVegetacao(navigation.navigate, entrevistado.id);
-               } else {
+                console.log("hendleEnviar - vegetacaoSalva", entrevistado.id)
+                 detalharVegetacao(navigation.navigate, entrevistado);
+                } else {
                  Alert.alert("Erro", "Não foi possível salvar a vegetacao. Tente novamente.");
                  navigation.goBack();
                }

@@ -38,7 +38,7 @@ export const DEFAULT_VEGETACAO_INPUT: VegetacaoInput = {
 export const useNovaVegetacao = (entrevistado:EntrevistadoType, vegetacao?: VegetacaoType) => {
   const [novaVegetacao, setNovaVegetacao] = useState<VegetacaoInput>(DEFAULT_VEGETACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
-
+  console.log('useNovaVegetacao', entrevistado)
   useEffect(() => {
     if (
       novaVegetacao.especie !== '' &&
@@ -89,9 +89,10 @@ const objetoFila = () => {
 
     const enviarRegistro = async () => {
       if (vegetacao) {
+        console.log('enviaVegetacaoEdicao', vegetacao)
         return await enviaVegetacaoEdicao();
       } else {
-        return await enviaVegetacaoNovo();
+         return await enviaVegetacaoNovo();
       }
     };
 
