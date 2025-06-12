@@ -6,25 +6,21 @@ import { Vizinhos } from "../../../enums/Vizinhos";
 import { documentacao } from "../../../enums/documentacao.enum";
 import { esporteLazerEnum } from "../../../enums/esporteLazer.enum";
 import { limitesTerrenoEnum } from "../../../enums/limitesTerreno.enum";
-import { ServicosBasicos } from "../../../enums/servicosBasicos.enum";
-import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
+import { pavimentacao } from "../../../enums/pavimentacao.enum";
+import { SimNao } from "../../../enums/simNao.enum";
 import { situacaoFundiaria } from "../../../enums/situacaoFundiaria.enum";
 import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
-import { transporteEnum } from "../../../enums/transporte.enum";
-import { getLocalidadesPorId } from "../../../realm/services/localidadeServices";
 import LocationInput from "../../../shared/components/input/LocationInput";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { useNovoImovel } from "../hooks/useInputImovel";
-import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
-import { SimNao } from "../../../enums/simNao.enum";
-import { pavimentacao } from "../../../enums/pavimentacao.enum";
-import { theme } from "../../../shared/themes/theme";
-import { textTypes } from "../../../shared/components/text/textTypes";
 import Text from "../../../shared/components/text/Text";
+import { textTypes } from "../../../shared/components/text/textTypes";
+import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { useNovoImovel } from "../hooks/useInputImovel";
+import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
 
 
 export interface NovoReptilParams {
@@ -91,9 +87,7 @@ export const NovoImovel = () => {
   }, [equipamentosUrbanosInformados, outrosEquipamentosUrbanos]);
 
 
-  
-
-    
+     
     const fundiarioOptions = Object.values(situacaoFundiaria);
     const documentacaoOptions = Object.values(documentacao);
     const limitesOptions = Object.values(limitesTerrenoEnum);
@@ -108,10 +102,38 @@ export const NovoImovel = () => {
     const referencialInput = useRef<TextInput>(null);
     const areaImovelInput = useRef<TextInput>(null);
     const linhaBarcoInput = useRef<TextInput>(null);
-    const inraestruturaInput = useRef<TextInput>(null);
     const pavimentacaoOptions = Object.values(pavimentacao);
     
+    useEffect(() => {
+      if (!imovel) return;
     
+      // Campos básicos
+      handleOnChangeInput(imovel.rua, 'rua');
+      handleOnChangeInput(imovel.numero, 'numero');
+      handleOnChangeInput(imovel.bairro, 'bairro');
+      handleOnChangeInput(imovel.referencial, 'referencial');
+      handleOnChangeInput(imovel.latitude, 'latitude');
+      handleOnChangeInput(imovel.longitude, 'longitude');
+         
+      // Enums
+      handleEnumChange('tipoSolo', imovel.tipoSolo);
+      handleEnumChange('situacaoFundiaria', imovel.situacaoFundiaria);
+      handleEnumChange('documentacaoImovel', imovel.documentacaoImovel);
+      handleEnumChange('limites', imovel.limites);
+      handleEnumChange('iluminacaoPublica', imovel.iluminacaoPublica);
+      handleEnumChange('espacosEsporteLazer', imovel.espacosEsporteLazer);
+    
+      // Campos de texto
+      handleOnChangeInput(imovel.linhasDeBarco ?? '', 'linhasDeBarco');
+      handleOnChangeInput(imovel.programaInfraSaneamento ?? '', 'programaInfraSaneamento');
+    }, [imovel]);
+    
+
+    const valorSalvoPavimentacao = imovel?.pavimentacao ?? '';
+    const valorSalvoVizinhosConfinantes = imovel?.vizinhosConfinantes ?? '';
+    const valorSalvoEquipamentosUrbanos = imovel?.equipamentosUrbanos ?? '';
+    const valorSalvoAreaImovel = imovel?.areaImovel ? imovel.areaImovel.toFixed(2) : '';
+
     
     
      const handleEnviar = async () => {
@@ -183,6 +205,11 @@ export const NovoImovel = () => {
                 }}
               />
 
+              {valorSalvoAreaImovel && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  área informada anteriormente: {valorSalvoAreaImovel}
+                </Text>
+              )}
             <Input
               value={novoImovel.areaImovel?.toFixed(2) || ''}
               onChange={handleOnChangeAreaImovel}
@@ -199,6 +226,12 @@ export const NovoImovel = () => {
                     onValueChange={(value) => handleEnumChange('tipoSolo', value)}
                     options={soloOptions}
             />
+
+                {valorSalvoVizinhosConfinantes  && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informada dada anteriormente: {valorSalvoVizinhosConfinantes }
+                </Text>
+                 )}
 
                 <CheckboxSelector
                     options={vizinhoOptions}
@@ -263,6 +296,12 @@ export const NovoImovel = () => {
               ref={linhaBarcoInput}
               />
 
+                {valorSalvoPavimentacao   && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informada dada anteriormente: {valorSalvoPavimentacao  }
+                </Text>
+                 )}
+
               <CheckboxSelector
                 options={pavimentacaoOptions}
                 selectedValues={pavimentacaoInformada}
@@ -301,7 +340,11 @@ export const NovoImovel = () => {
               options={simNaoOptions}
               />
 
-             
+                 {valorSalvoEquipamentosUrbanos    && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informada dada anteriormente: {valorSalvoEquipamentosUrbanos   }
+                </Text>
+                 )}
 
                 <CheckboxSelector
                     options={equipamentosUrbanosOptions}
@@ -349,8 +392,6 @@ export const NovoImovel = () => {
               placeholder="Conhece algum destinado para a área"
               margin="15px 10px 30px 5px"
               title="Programas de Infraestrutura e Saneamento:"
-              onSubmitEditing={()=>linhaBarcoInput.current?.focus()}
-              ref={inraestruturaInput}
               />
 
 

@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, View } from 'react-native';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
@@ -10,6 +10,11 @@ import { usePostos } from '../hooks/usePostos';
 import { LocalidadeContainer } from '../styles/Localidade.style';
 import EditConfirmation from '../ui-components/UseEditLocalidade';
 import QuadroDeItens from '../ui-components/quadroDeItens';
+import { getEscolas } from '../../../realm/services/escolaService';
+import { getEntrevistados } from '../../../realm/services/entrevistado';
+import { getPostos } from '../../../realm/services/postoService';
+import Localidade from '../../localidades';
+import { useCallback } from 'react';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
@@ -68,6 +73,14 @@ const InfLocalidade = () => {
           NovoEntrevistado(navigation.navigate, localidadeId);
         }
       }
+
+      useFocusEffect(
+            useCallback(() => {
+              getEscolas(localidade.id);
+              getEntrevistados(localidade.id);
+              getPostos(localidade.id);
+      }, [localidade.id])
+      );
 
        //BLOCO ESCOLAS
        const  handleGerenciaEscolas =  (localidadeId: number, contagemEntrevistados: number) =>{

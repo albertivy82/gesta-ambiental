@@ -112,7 +112,7 @@ export const getVegetacoes = (entrevistadoId: number): VegetacaoType[] => {
     .objects<VegetacaoType>('Vegetacao')
     .filtered(query)
     .slice();
-    console.log("busca n real", vegetacoes)
+  
   return JSON.parse(JSON.stringify(vegetacoes)) as VegetacaoType[];
 };
 

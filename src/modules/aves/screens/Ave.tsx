@@ -1,5 +1,5 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useRef, useState } from 'react';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getAves } from '../../../realm/services/avesService';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -17,8 +17,8 @@ export interface aveParam {
   entrevistado: EntrevistadoType;
 }
 
-export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovaAve', { entrevistadoId });
+export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('NovaAve', { entrevistado });
 }
 
 const Aves = () => {
@@ -58,8 +58,14 @@ const Aves = () => {
     handleScrollToEnd();
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchAves();
+    }, [entrevistado.id])
+  );
+
   const handleNovaAve = () => {
-    novaAve(navigation.navigate, entrevistado.id);
+    novaAve(navigation.navigate, entrevistado);
   };
 
   return (

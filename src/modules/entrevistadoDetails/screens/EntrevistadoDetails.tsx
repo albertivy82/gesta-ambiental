@@ -1,5 +1,5 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useEffect } from 'react';
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
@@ -18,6 +18,13 @@ import { useVegetacoes } from '../hooks/useVegetacao';
 import { EntrevistadoDetailContainer, Icones } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
 import { imovelBody } from '../../../shared/types/imovelType';
+import { getRepteis } from '../../../realm/services/repteisService';
+import { getAves } from '../../../realm/services/avesService';
+import { getFauna } from '../../../realm/services/faunaService';
+import { getMamiferos } from '../../../realm/services/mamiferosService';
+import { getPeixes } from '../../../realm/services/peixesService';
+import { getVegetacoes } from '../../../realm/services/vegetacaoService';
+import { getImovel } from '../../../realm/services/imovelService';
 
 
 // Para entidades MULTIPLAS (vegetacao, peixes, etc.)
@@ -72,6 +79,18 @@ const EntrevistadoDetails = () => {
       );
     }
   }, [imovelPresente]);
+
+  useFocusEffect(
+      useCallback(() => {
+        getRepteis(params.entrevistado.id);
+        getAves(params.entrevistado.id);
+        getFauna(params.entrevistado.id);
+        getMamiferos(params.entrevistado.id);
+        getPeixes(params.entrevistado.id);
+        getVegetacoes(params.entrevistado.id);
+        getImovel(params.entrevistado.id);
+      }, [params.entrevistado.id])
+    );
 
   useEffect(() => {
     if ([fauna, vegetacao, peixes, mamiferos, aves].some((arr) => arr.length === 0)) {

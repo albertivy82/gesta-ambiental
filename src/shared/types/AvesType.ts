@@ -1,4 +1,3 @@
-import { SimNao } from "../../enums/simNao.enum";
 
 export interface AvesType {
     id: number;

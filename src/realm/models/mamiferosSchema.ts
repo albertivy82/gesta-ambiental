@@ -4,7 +4,6 @@ export const MamiferosSchema = {
     properties: {
     id: 'int',
     especie: 'string',
-    usoConsumo: 'string',
     local: 'string',
     usoDaEspecie: 'string',
     problemasGerados: 'string',

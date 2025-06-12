@@ -80,7 +80,7 @@ export const NovaAve = () => {
               />
 
              <RenderPicker
-              label="Em qual período do ano no qual elas são mais comumente observadas?"
+              label="Em qual período do ano elas são mais comumente observadas?"
               selectedValue={novaAve.climaOcorrencia}
               onValueChange={(value) => handleEnumChange('climaOcorrencia', value)}
               options={['INVERNO / CHUVOSO', 'VERÃO / SECO']}
@@ -88,10 +88,10 @@ export const NovaAve = () => {
 
               <Input 
               value={novaAve.usosDaEspecie} 
-              onChange={(event)=> handleOnChangeInput(event, 'usosDaEspécie')}
+              onChange={(event)=> handleOnChangeInput(event, 'usosDaEspecie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="As pessoas desta comunidade fazer uso de algum tipo de ave? Qual?"
+              title="A comunidade faz uso de algum tipo de ave? Qual?"
               />
 
               <Input 
@@ -106,9 +106,9 @@ export const NovaAve = () => {
               <Input 
               value={novaAve.problemasGerados} 
               onChange={(event)=> handleOnChangeInput(event, 'problemasGerados')}
-              placeholder="..."
+              placeholder=".."
               margin="15px 10px 30px 5px"
-              title="As pessoas desta comunidade fazer uso de algum tipo de ave? Qual?"
+              title="A espécie causa algum problema no local?"
               />
 
               <Input 
@@ -116,7 +116,7 @@ export const NovaAve = () => {
               onChange={(event)=> handleOnChangeInput(event, 'ameacaSofrida')}
               placeholder="..."
               margin="15px 10px 30px 5px"
-              title="Qual é a importância da espécie:"
+              title="A espécie sofre alguma ameaça no local?"
               />
 
                      

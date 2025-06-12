@@ -79,8 +79,8 @@ export const NovoPeixe = () => {
           />
 
         <Input 
-              value={novoPeixe.locaisEspecificosReprodução} 
-              onChange={(event)=> handleOnChangeInput(event, 'locaisEspecificosReprodução')}
+              value={novoPeixe.locaisEspecificosReproducao} 
+              onChange={(event)=> handleOnChangeInput(event, 'locaisEspecificosReproducao')}
               placeholder="informe quais"
               margin="15px 10px 30px 5px"
               title="Existem locais muito importantes para  a reprodução do peixe?"
@@ -102,8 +102,8 @@ export const NovoPeixe = () => {
             />
 
          <Input 
-              value={novoPeixe.usosDaEspécie} 
-              onChange={(event)=> handleOnChangeInput(event, 'usosDaEspécie')}
+              value={novoPeixe.usosDaEspecie} 
+              onChange={(event)=> handleOnChangeInput(event, 'usosDaEspecie')}
               placeholder="Informe quais"
               margin="15px 10px 30px 5px"
               title="Faz algum uso da espécie, como comércio, alimnetação etc?"

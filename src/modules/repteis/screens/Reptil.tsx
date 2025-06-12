@@ -1,5 +1,5 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getRepteis } from '../../../realm/services/repteisService';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -16,8 +16,8 @@ export interface ReptilParam {
   entrevistado: EntrevistadoType;
 }
 
-export const novoReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovoReptil', { entrevistadoId });
+export const novoReptil = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('NovoReptil', { entrevistado });
 }
 
 const Repteis = () => {
@@ -52,8 +52,17 @@ const Repteis = () => {
     handleScrollToEnd();
   };
 
+  
+
+    useFocusEffect(
+      useCallback(() => {
+        fetchRepteis();
+      }, [entrevistado.id])
+    );
+
+
   const handleNovaReptil = () => {
-    novoReptil(navigation.navigate, entrevistado.id);
+    novoReptil(navigation.navigate, entrevistado);
   };
 
   return (

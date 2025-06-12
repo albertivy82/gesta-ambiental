@@ -39,22 +39,21 @@ export const NovoReptil = () => {
      
    
     useEffect(() => {
-      handleEnumChange('desova', desova);
-    
-      setLocalDesova('');
-      setPeriodoDesova('');
+       handleEnumChange('desova', desova);
+       setLocalDesova('');
+       setPeriodoDesova('');
     }, [desova]);
-
-
-    useEffect(() => {
     
-      handleOnChangeInput("localDesova", localDesova)
-     
-    }, [localDesova]);
+
 
     useEffect(() => {
-      handleOnChangeInput("periodoDesova", periodoDesova);
+      handleOnChangeInput(localDesova, "localDesova");
+    }, [localDesova]);
+    
+    useEffect(() => {
+      handleOnChangeInput(periodoDesova, "periodoDesova");
     }, [periodoDesova]);
+    
     
 
 
@@ -62,6 +61,7 @@ export const NovoReptil = () => {
             
             useEffect(() => {
               if (reptil) {
+                console.log("entra aqui de toca?")
                 handleOnChangeInput(reptil.especie ?? '', 'especie');
                 handleOnChangeInput(reptil.local ?? '', 'local');
                 handleOnChangeInput(reptil.usoDaEspecie ?? '', 'usoDaEspecie');

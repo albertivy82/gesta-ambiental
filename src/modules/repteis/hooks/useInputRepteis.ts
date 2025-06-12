@@ -161,7 +161,7 @@ export const useNovoReptil = (entrevistado: EntrevistadoType, reptil?: RepteisTy
    const fetchRepteisAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<RepteisType>(`http://192.168.100.28:8080/repteis/${id}`);
+              const response = await connectionAPIGet<RepteisType>(`http://192.168.100.28:8080/reptil/${id}`);
               if (response) {
                 const repteisData = {
                     ...response,

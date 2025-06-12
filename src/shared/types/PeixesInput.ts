@@ -6,7 +6,7 @@ export interface PeixesInput {
     climaOcorrencia: string;
     locaisEspecificosReproducao: string;
     locaisEspecificosAlimentacao: string;
-    maisImportanteDaRegiao: SimNao |null|'';
+    maisImportanteDaRegiao: string;
     usosDaEspecie: string;
     entrevistado: {
         id: number;
