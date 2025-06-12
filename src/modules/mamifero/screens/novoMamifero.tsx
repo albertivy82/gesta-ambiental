@@ -15,7 +15,7 @@ export interface NovoMamiferoParams {
 }
 
 export const detalharMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
-  navigate('MamiferoLista', { entrevistado });
+  navigate('Mamiferos', { entrevistado });
 };
 
 export const NovoMamifero = () => {
@@ -24,20 +24,16 @@ export const NovoMamifero = () => {
      const mamifero = params.mamifero;
      const navigation = useNavigation<NavigationProp<ParamListBase>>();
      const [loading, setLoading] = useState(false); 
-     const [outrosUsos, setOutrosUsos] = useState<string>('');     
-     const [qual, SetQual] = useState<string>('');
      const {  novoMamifero,
               enviarRegistro,
               handleOnChangeInput,
-              handleEnumChange,
-              handleArrayFieldChange,
               disabled
             } = useNovoMamifero(params.entrevistado, mamifero);
 
             useEffect(() => {
               if (mamifero) {
                 handleOnChangeInput(mamifero.especie ?? '', 'especie');
-                handleOnChangeInput(mamifero.local ?? '', 'problemasRelacionados');
+                handleOnChangeInput(mamifero.local ?? '', 'local');
                 handleOnChangeInput(mamifero.usoDaEspecie ?? '', 'usoDaEspecie');
                 handleOnChangeInput(mamifero.problemasGerados ?? '', 'problemasGerados');
                 handleOnChangeInput(mamifero.alimentacao ?? '', 'alimentacao');
@@ -64,7 +60,7 @@ export const NovoMamifero = () => {
         setLoading(false);
       }
     };
-    console.log(disabled, loading)
+   
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>

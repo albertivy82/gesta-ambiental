@@ -112,8 +112,7 @@ export const NovoImovel = () => {
       handleOnChangeInput(imovel.numero, 'numero');
       handleOnChangeInput(imovel.bairro, 'bairro');
       handleOnChangeInput(imovel.referencial, 'referencial');
-      handleOnChangeInput(imovel.latitude, 'latitude');
-      handleOnChangeInput(imovel.longitude, 'longitude');
+    
          
       // Enums
       handleEnumChange('tipoSolo', imovel.tipoSolo);
@@ -133,8 +132,9 @@ export const NovoImovel = () => {
     const valorSalvoVizinhosConfinantes = imovel?.vizinhosConfinantes ?? '';
     const valorSalvoEquipamentosUrbanos = imovel?.equipamentosUrbanos ?? '';
     const valorSalvoAreaImovel = imovel?.areaImovel ? imovel.areaImovel.toFixed(2) : '';
-
-    
+    const valorSalvoLatitude = imovel?.latitude ?? '';
+    const valorSalvoLongitude = imovel?.longitude ?? '';
+   
     
      const handleEnviar = async () => {
              setLoading(true);
@@ -198,6 +198,12 @@ export const NovoImovel = () => {
               onSubmitEditing={()=>areaImovelInput.current?.focus()}
               ref={referencialInput}/>
 
+           {valorSalvoLatitude && valorSalvoLongitude && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Latitude informada anteiormente:  {valorSalvoLatitude}{"\n"}
+                 Longitude informada anteriormente:  {valorSalvoLongitude}
+                </Text>
+              )}
             <LocationInput
                 onLocationChange={(lat, lon) => {
                   handleOnChangeInput(lat, 'latitude');

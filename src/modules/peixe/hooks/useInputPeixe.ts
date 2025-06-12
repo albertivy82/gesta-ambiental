@@ -11,10 +11,11 @@ import { PeixesType } from "../../../shared/types/PeixesType";
 
 export const DEFAULT_PEIXES_INPUT: PeixesInput = {
   especie: '',
-  locaisEspeciais: null,
-  locaisEspecificosAlimentacao: null,
-  usoAlimnetacao: null,  // Corrigido erro de digitação
-  usoComercio: null,
+  climaOcorrencia:'',
+  locaisEspecificosReproducao: '',
+  locaisEspecificosAlimentacao: '',
+  maisImportanteDaRegiao: '',  // Corrigido erro de digitação
+  usosDaEspecie: '',
   entrevistado: {
     id: 0,
   },
@@ -22,18 +23,19 @@ export const DEFAULT_PEIXES_INPUT: PeixesInput = {
 
 export const useNovoPeixe = (entrevistado: EntrevistadoType, peixe?: PeixesType) => {
   const [novoPeixe, setNovoPeixe] = useState<PeixesInput>(DEFAULT_PEIXES_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novoPeixe);
+  
     if (
       novoPeixe.especie !== '' &&
-      novoPeixe.locaisEspeciais !== null &&
-      novoPeixe.locaisEspecificosAlimentacao !== null &&
-      novoPeixe.usoAlimnetacao !== null &&
-      novoPeixe.usoComercio !== null
+      novoPeixe.climaOcorrencia !== '' &&
+      novoPeixe.locaisEspecificosReproducao !== '' &&
+      novoPeixe.locaisEspecificosAlimentacao !== '' &&
+      novoPeixe.maisImportanteDaRegiao !== '' &&
+      novoPeixe.usosDaEspecie !== null
     ) {
-      setDisabled(true);
+      setDisabled(false);
     }
   }, [novoPeixe]);
 

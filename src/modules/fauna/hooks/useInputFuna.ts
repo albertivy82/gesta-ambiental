@@ -23,7 +23,7 @@ export const DEFAULT_FAUNA_INPUT: FaunaInput = {
 
 export const useNovaFauna = (entrevistado: EntrevistadoType, fauna?: FaunaType) => {
   const [novaFauna, setNovaFauna] = useState<FaunaInput>(DEFAULT_FAUNA_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     console.log(novaFauna);
@@ -35,7 +35,7 @@ export const useNovaFauna = (entrevistado: EntrevistadoType, fauna?: FaunaType) 
       novaFauna.tempoQueNaoVe !== '' &&
       novaFauna.usoDaEspecie !== '' 
     ) 
-      setDisabled(true);
+      setDisabled(false);
     
   }, [novaFauna]);
 

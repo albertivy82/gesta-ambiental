@@ -1,28 +1,28 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getMamiferos } from '../../../realm/services/mamiferosService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { MamiferosType } from '../../../shared/types/MamiferosType';
 import { MamiferoDetailContainer } from '../styles/Mamifero.style';
 import RenderItemMamifero from '../ui-components/listaMamiferos';
-import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 
 export interface MamiferoParam {
   entrevistado: EntrevistadoType;
 }
 
-export const novoMamifero = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovoMamifero', { entrevistadoId });
+export const novoMamifero = (navigate: NavigationProp<ParamListBase>['navigate'],  entrevistado: EntrevistadoType) => {
+  navigate('NovoMamifero', { entrevistado });
 }
 
 const Mamiferos = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, MamiferoParam>, 'MamiferoLista'>>();
+  const route = useRoute<RouteProp<Record<string, MamiferoParam>, 'Mamiferos'>>();
   const { entrevistado } = route.params;
   const flatListRef = useRef<FlatList>(null);
   const [mamiferos, setMamiferos] = useState<MamiferosType[]>();
@@ -53,7 +53,7 @@ const Mamiferos = () => {
   };
 
   const handleNovoMamifero = () => {
-    novoMamifero(navigation.navigate, entrevistado?.id);
+    novoMamifero(navigation.navigate, entrevistado);
   };
 
   return (

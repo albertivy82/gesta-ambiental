@@ -47,16 +47,12 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
         </Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Espécie: {item.especie}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Ocorre na Mata: {item.ocorreMata}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Ocorre no Rio: {item.ocorreRio}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Ocorre no Lago: {item.ocorreLago}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Ocorre na Rua: {item.ocorreRua}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Ocorre no Quintal: {item.ocorreQuintal}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Outras Ocorrências: {item.outrasOcorrencias}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Frequência Atual: {item.frequenciaAtual}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Frequência Passada: {item.frequenciaPassada}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Tempo que não vê: {item.tempoQueNaoVe}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Espécie: {item.especie}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Local: {item.ondeOcorre}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Frequeência atual {item.abundanciaAtual}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Frequência no passado: {item.abundanciaPassada}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Ultimos avistamentos: {item.tempoQueNaoVe}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Usos da espécie: {item.usoDaEspecie}</Text>
          {mostrarModalDelete && (
                   
                   <DeleteConfirmation

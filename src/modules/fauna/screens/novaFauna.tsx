@@ -35,11 +35,11 @@ export const NovaFauna = () => {
             useEffect(() => {
               if (fauna) {
                 handleOnChangeInput(fauna.especie ?? '', 'especie');
-                handleOnChangeInput(fauna.ondeOcorre ?? '', 'especie');
-                handleOnChangeInput(fauna.abundanciaAtual ?? '', 'especie');
-                handleOnChangeInput(fauna.abundanciaPassada ?? '', 'especie');
-                handleOnChangeInput(fauna.tempoQueNaoVe ?? '', 'especie');
-                handleOnChangeInput(fauna.usoDaEspecie ?? '', 'especie');
+                handleOnChangeInput(fauna.ondeOcorre ?? '', 'ondeOcorre');
+                handleOnChangeInput(fauna.abundanciaAtual ?? '', 'abundanciaAtual');
+                handleOnChangeInput(fauna.abundanciaPassada ?? '', 'abundanciaPassada');
+                handleOnChangeInput(fauna.tempoQueNaoVe ?? '', 'tempoQueNaoVe');
+                handleOnChangeInput(fauna.usoDaEspecie ?? '', 'usoDaEspecie');
                 }
             }, [fauna]);
             
@@ -108,7 +108,7 @@ export const NovaFauna = () => {
             
             <Input 
               value={novaFauna.usoDaEspecie} 
-              onChange={(event)=> handleOnChangeInput(event, 'tempoQueNaoVe')}
+              onChange={(event)=> handleOnChangeInput(event, 'usoDaEspecie')}
               placeholder="..."
               margin="15px 10px 30px 5px"
               title="Faz algum uso da espécie? Se SIM, diga qual."

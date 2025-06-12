@@ -37,7 +37,7 @@ export const useAves = (entrevistadoId: number) => {
                         const isConnected = await testConnection();
                         if (isConnected) {
                             try {
-                                const response = await connectionAPIPost('http://192.168.100.28:8080/aves', novaAvesInput);
+                                const response = await connectionAPIPost('http://192.168.100.28:8080/ave', novaAvesInput);
                                 const avesAPI = response as AvesType;
 
                                 if (avesAPI.id) {

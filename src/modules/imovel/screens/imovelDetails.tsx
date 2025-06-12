@@ -89,10 +89,7 @@ const ImovelDetails = () => {
               {renderField('Equipamentos Urbanos Presentes', params.imovel.equipamentosUrbanos)}
               {renderField('Espaços de Esporte e Lazer', params.imovel.espacosEsporteLazer)}
               {renderField('Programa de Infraestrutura e Saneamento', params.imovel.programaInfraSaneamento)}
-              {renderField('ID do Entrevistado Associado', params.imovel.entrevistado?.id?.toString())}
-              {renderField('Sincronizado', params.imovel.sincronizado ? 'Sim' : 'Não')}
-              {renderField('ID Local', params.imovel.idLocal)}
-              {renderField('ID Pai', params.imovel.idFather)}
+            
             </View>
             
             

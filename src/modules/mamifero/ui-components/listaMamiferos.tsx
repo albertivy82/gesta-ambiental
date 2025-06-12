@@ -22,7 +22,7 @@ export const RenderItemMamifero  = ({ item }: { item: MamiferosType }) => {
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovaMamifero', { mamifero }); // reuso da tela para edição
+              navigation.navigate('NovoMamifero', { mamifero }); // reuso da tela para edição
             },
           },
           {
@@ -50,16 +50,31 @@ export const RenderItemMamifero  = ({ item }: { item: MamiferosType }) => {
         >
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
         </Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Espécie: {item.especie}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso para Consumo: {item.usoConsumo}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso para Comércio: {item.usoComercio}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso para Criação: {item.usoCriacao}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Uso como Remédio: {item.usoRemedio}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Outros Usos: {item.usoOutros}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Problemas Relacionados: {item.problemasRelacionados}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Alimentação: {item.alimentacao}</Text>
-        <Text type={textTypes.BUTTON_REGULAR}>Descrição Espontânea: {item.desricaoEspontanea}</Text>
-
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Espécie: {item.especie}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#635757" : theme.colors.redTheme.red}
+        >Local de incidência: {item.local}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Usos da espécie: {item.usoDaEspecie}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Porblemas causados pela espécie: {item.problemasGerados}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Alimentos da espécie: {item.alimentacao}</Text>
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+        >Outras informações: {item.desricaoEspontanea}</Text>
+        
         {mostrarModalDelete && (
                   
                   <DeleteConfirmation

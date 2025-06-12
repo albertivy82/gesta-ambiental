@@ -17,8 +17,8 @@ export interface FaunaParam {
   entrevistado: EntrevistadoType;
 }
 
-export const novaFauna = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovaFauna', { entrevistadoId });
+export const novaFauna = (navigate: NavigationProp<ParamListBase>['navigate'],  entrevistado: EntrevistadoType) => {
+  navigate('NovaFauna', { entrevistado });
 }
 
   const Fauna = () => {
@@ -58,7 +58,7 @@ export const novaFauna = (navigate: NavigationProp<ParamListBase>['navigate'], e
   };
 
   const handleNovaFauna = () => {
-    novaFauna(navigation.navigate, entrevistado.id);
+    novaFauna(navigation.navigate, entrevistado);
   };
 
   return (

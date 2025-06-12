@@ -32,12 +32,22 @@ export const NovoPeixe = () => {
              disabled
            } = useNovoPeixe(params.entrevistado, peixe);
  
+          
            useEffect(() => {
-            if (peixe) {
-              handleOnChangeInput(peixe.especie ?? '', 'especie');
-             
-            }
+            if (!peixe) return;
+          
+            // Campos de texto
+            handleOnChangeInput(peixe.especie ?? '', 'especie');
+            handleOnChangeInput(peixe.locaisEspecificosReproducao ?? '', 'locaisEspecificosReproducao');
+            handleOnChangeInput(peixe.locaisEspecificosAlimentacao ?? '', 'locaisEspecificosAlimentacao');
+            handleOnChangeInput(peixe.usosDaEspecie ?? '', 'usosDaEspecie');
+          
+            // Campos enum
+            handleEnumChange('climaOcorrencia', peixe.climaOcorrencia ?? '');
+            handleEnumChange('maisImportanteDaRegiao', peixe.maisImportanteDaRegiao ?? '');
+          
           }, [peixe]);
+          
     
         
      const handleEnviar = async () => {

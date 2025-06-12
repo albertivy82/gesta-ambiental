@@ -65,49 +65,14 @@ const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
               type={textTypes.BUTTON_REGULAR}
               color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
             >
-              Uso para consumo: {item.useCosumo}
+              Período de ocorrência: {item.climaOcorrencia}
             </Text>
 
             <Text
               type={textTypes.BUTTON_REGULAR}
               color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
             >
-              Uso para comércio: {item.usoComercio}
-            </Text>
-
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Uso para criação: {item.usoCriacao}
-            </Text>
-
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Uso como remédio: {item.usoRemedio}
-            </Text>
-
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Outros usos: {item.usoOutros}
-            </Text>
-
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Problemas relacionados: {item.problemasRelacionados}
-            </Text>
-
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Ameaça sofrida: {item.ameacaSofrida}
+              Uso da espécie: {item.usosDaEspecie}
             </Text>
 
             <Text
@@ -121,23 +86,10 @@ const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
               type={textTypes.BUTTON_REGULAR}
               color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
             >
-              Importância da espécie: {item.qualImpotanciaDaEespecie}
+             A meaças enfrentadas pela espécie: {item.ameacaSofrida}
             </Text>
 
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Alimentação: {item.alimentacao}
-            </Text>
-
-            <Text
-              type={textTypes.BUTTON_REGULAR}
-              color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-            >
-              Descrição espontânea: {item.descricaoEspontanea}
-            </Text>
-           
+                    
             {mostrarModalDelete && (
                   
                 <DeleteConfirmation

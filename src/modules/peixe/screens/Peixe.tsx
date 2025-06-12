@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { getPeixes } from '../../../realm/services/peixesService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
@@ -15,8 +15,8 @@ export interface PeixeParam {
   entrevistado: EntrevistadoType;
 }
 
-export const novoPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistadoId: number) => {
-  navigate('NovoPeixe', { entrevistadoId });
+export const novoPeixe = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
+  navigate('NovoPeixe', { entrevistado });
 }
 
 const Peixes = () => {
@@ -55,8 +55,10 @@ const Peixes = () => {
     handleScrollToEnd();
   };
 
+  
+
   const handleNovoPeixe = () => {
-    novoPeixe(navigation.navigate, entrevistado.id);
+    novoPeixe(navigation.navigate, entrevistado);
   };
 
   return (
