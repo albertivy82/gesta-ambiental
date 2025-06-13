@@ -17,6 +17,7 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
+import { apagarBenfeitiaQueue, apagarBenfeitoriaSyncronizada } from "../../../realm/services/benfeitoriaService";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -65,6 +66,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "peixe":
             apagarPeixeQueue(idLocal);
             break;
+          case "benfeitoria":
+            apagarBenfeitiaQueue(idLocal);
+            break;
         }
   
         setModalVisible(false);
@@ -108,6 +112,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
               break;
             case "peixe":
               apagarPeixeSyncronizado(id);
+              break;
+            case "benfeitoria":
+              apagarBenfeitoriaSyncronizada(id);
               break;
           }
   

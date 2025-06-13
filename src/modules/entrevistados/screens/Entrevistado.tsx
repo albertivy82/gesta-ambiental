@@ -21,7 +21,7 @@ const Entrevistados = () => {
   const route = useRoute<RouteProp<Record<string, entrevistadoParam>, 'Entrevistado'>>();
   const { localidadeId } = route.params;
   const { contagemEntrevistados } = useEntrevistados(localidadeId);
-   const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlatList>(null);
   const [entrevistados, setEntrevistados] = useState<EntrevistadoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 

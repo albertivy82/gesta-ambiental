@@ -6,15 +6,15 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { testConnection } from '../../../shared/functions/connection/testConnection';
-import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 
 interface EditConfirmationProps {
-  entrevistado: EntrevistadoType;
+  benfeitoria: BenfeitoriaType;
   destino: string;
   onEditSuccess: () => void;
 }
 
-const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, destino, onEditSuccess }) => {
+const EditConfirmation: React.FC<EditConfirmationProps> = ({ benfeitoria, destino, onEditSuccess }) => {
 
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -24,8 +24,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
-     // console.log("aqui",entrevistado)
-      navigation.navigate(destino, {entrevistado});
+     // console.log("aqui",benfeitoria)
+      navigation.navigate(destino, {benfeitoria});
       setModalVisible(false);
       onEditSuccess();
     } catch (error) {

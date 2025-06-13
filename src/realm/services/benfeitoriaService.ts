@@ -201,6 +201,25 @@ export const setIdImovelFromApiOnBenfeitoria = (idImovelApi: number, imovelIdLoc
 };
 
 
+export const apagarBenfeitoriaSyncronizada = (benfeitoriaId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${benfeitoriaId}"`;
+            const benfeitoriaExcluir = realmInstance.objects<imovelBody>('Benfeitoria').filtered(query);
+
+            if (benfeitoriaExcluir.length > 0) {
+
+             realmInstance.delete(benfeitoriaExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('apagarBenfeitoriaSyncronizado/Erro ao excluir benfeitoria da fila:', error);
+    }
+};
+
+
 
 export const apagarBenfeitiaQueue = (idLocal: string) => {
     try {

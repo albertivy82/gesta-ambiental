@@ -11,25 +11,7 @@ import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import EditConfirmation from '../ui-component/UseEditImovel';
 import { renderField } from '../ui-component/renderFilds';
 import { useEffect } from 'react';
-
-
-export const handleNavigation = <T,>(
-  navigate: NavigationProp<ParamListBase>['navigate'], 
-  route: string, 
-  data: T | T[]
-) => {
-  navigate(route, { data });
-};
-
-export const handleNewEntry = (
-  navigate: NavigationProp<ParamListBase>['navigate'], 
-  route: string, 
-  imovel: imovelBody
-) => {
-  navigate(route, { imovel });
-};
-
-
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
 
 
@@ -40,17 +22,15 @@ export interface ImovelParam {
 const ImovelDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
+  const imovel = params.imovel;
   const {benfeitoria} = useBenfeitorias(params.imovel.id);
  
-  const handleDecision = <T,>(
-      data: T | T[],
-      detailRoute: string,
-      newRoute: string
-    ) => {
-      if (Array.isArray(data) ? data.length > 0 : !!data) {
-        handleNavigation(navigation.navigate, detailRoute, data);
+  const handleDecision = (benfeitoria: BenfeitoriaType[]) => {
+      if (Array.isArray(benfeitoria) ? benfeitoria.length > 0 : !!benfeitoria) {
+        console.log(benfeitoria)
+        navigation.navigate("Benfeitorias", {imovel});
       } else {
-        handleNewEntry(navigation.navigate, newRoute, params.imovel);
+        navigation.navigate("NovaBenfeitoria", {imovel});
       }
     };
 
@@ -91,33 +71,9 @@ const ImovelDetails = () => {
               {renderField('Programa de Infraestrutura e Saneamento', params.imovel.programaInfraSaneamento)}
             
             </View>
-            
-            
-            <TouchableOpacity  onPress={() => {handleDecision(benfeitoria, "Benfeitorias", "NovaBenfeitoria")}}>
-                          
-                          {benfeitoria.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
-                           Benfeitoria registradas: {benfeitoria.length}
-                           </Text>
-     
-                          ):( 
-                            <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                              padding: 10,
-                              borderWidth: 2, 
-                              borderColor: theme.colors.grayTheme.gray100 
-                            }}>
-                              <Icon size={30} name='home3' color='red' />
-                              <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>+ Benfeitorias</Text>
-                          </View>
-                          )}
-            </TouchableOpacity>
-                    
-                    
-                 
 
-
-                    <View style={{ flexDirection: 'row', 
+            
+            <View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 
                       padding: 10,
                       marginTop: 40, 
@@ -144,9 +100,32 @@ const ImovelDetails = () => {
                       }} 
                       />
                       </View>
-               
+            
+            
+            <TouchableOpacity onPress={() => handleDecision(benfeitoria)}>
+                  <View
+                    style={{
+                      alignItems: 'stretch',
+                      flexDirection: 'row',
+                      padding: 10,
+                      borderWidth: 2,
+                      borderColor: theme.colors.grayTheme.gray100
+                    }}
+                  >
+                    <Icon size={30} name="home3" color="red" />
+                    <Text
+                      type={textTypes.BUTTON_BOLD}
+                      color={benfeitoria.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                      style={{ marginLeft: 10 }}
+                    >
+                      {benfeitoria.length > 0
+                        ? `Benfeitorias registradas: ${benfeitoria.length}`
+                        : ' + Benfeitorias'}
+                    </Text>
+                  </View>
+              </TouchableOpacity>
               
-      
+  
        </ImovelDetailContainer>
     </ScrollView>     
    

@@ -23,11 +23,11 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 export interface imovelParam {
-imovelId: number, 
-idLocal : string|undefined,
-sincronizado: boolean
+imovel: imovelBody, 
+benfeitoria?: BenfeitoriaType,
 }
 
 export const detalharBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
@@ -35,9 +35,11 @@ export const detalharBenfeitoria = (navigate: NavigationProp<ParamListBase>['nav
 }
 
 export const NovaBenfeitoria=()=>{
-    const { params } = useRoute<RouteProp<Record<string, imovelParam>>>();
-    const navigation = useNavigation<NavigationProp<ParamListBase>>();
-    const {novaBenfeitoria, 
+  const { params } = useRoute<RouteProp<Record<string, imovelParam>, string>>();
+  const imovel = params.imovel ?? params.benfeitoria?.imovel;
+  const benfeitoria = params.benfeitoria;
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const {novaBenfeitoria, 
            enviarRegistro,
            handleEnumChange,
            handleArrayFieldChange,
@@ -45,7 +47,7 @@ export const NovaBenfeitoria=()=>{
            handleNumberChange,      
            handleOnChangeInput,     
            disabled,
-           } = UseNovaBenfeitoria(params.imovelId, params.idLocal, params.sincronizado);
+           } = UseNovaBenfeitoria(imovel, benfeitoria);
 
     const [referencaiDaPrincipal, setReferencaiDaPrincipal] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);    
@@ -172,6 +174,24 @@ export const NovaBenfeitoria=()=>{
         setLoading(false);
       }
     };
+
+    useEffect(() => {
+      if (!benfeitoria) return;
+    
+      // Enums (selects diretos)
+      handleEnumChange('tipoBenfeitoria', novaBenfeitoria.tipoBenfeitoria);
+      handleEnumChange('funcao', novaBenfeitoria.funcao);
+      handleEnumChange('impermeabilizacaoSolo', novaBenfeitoria.impermeabilizacaoSolo);
+      handleEnumChange('limites', novaBenfeitoria.limites);
+      handleEnumChange('paredes', novaBenfeitoria.paredes);
+      handleEnumChange('tipoCobertura', novaBenfeitoria.tipoCobertura);
+      handleEnumChange('tipoEsquadrias', novaBenfeitoria.tipoEsquadrias);
+      handleEnumChange('origemMadeiraDaConstrucao', novaBenfeitoria.origemMadeiraDaConstrucao);
+      handleEnumChange('origemPedraDaConstrucao', novaBenfeitoria.origemPedraDaConstrucao);
+      handleEnumChange('origemAreiaDaConstrucao', novaBenfeitoria.origemAreiaDaConstrucao);
+      handleEnumChange('meiosLocomocao', novaBenfeitoria.meiosLocomocao);
+      handleOnChangeInput(novaBenfeitoria.epocaOcorrencia ?? '', 'epocaOcorrencia');
+    }, [benfeitoria]);
     
        
     return( 
@@ -309,7 +329,7 @@ export const NovaBenfeitoria=()=>{
                           onChange={(event)=> handleOnChangeInput(event, 'epocaOcorrencia')}
                           placeholder="..."
                           margin="15px 10px 30px 5px"
-                          title="Época de ano em que ocorre(u): "
+                          title="Em que época do ano ocorrem/ocorreram os alagamentos?"
                           />
                     </View>
                     )}
@@ -427,7 +447,7 @@ export const NovaBenfeitoria=()=>{
 
              
              <RenderPicker
-                  label="Existem linhas de ônibus locais?"
+                  label="Existem linhas de ônibus que atendem o local?"
                   selectedValue={linhaOnibus}
                   onValueChange={(value) => {
                     setLinhaOnibus(value ?? ''); 
@@ -444,7 +464,7 @@ export const NovaBenfeitoria=()=>{
                       onChangeText={SetQual}
                       placeholder="Separe as informações por vírgula"
                       margin="15px 10px 30px 5px"
-                      title="Qual?"
+                      title="Quais linhas?"
                        />
                       </View>
                       )}
@@ -454,7 +474,7 @@ export const NovaBenfeitoria=()=>{
               <CheckboxSelector
                 options={optionsInformativoPredominante}
                 selectedValues={meioInofrmativo}
-                label="Qual o meio de informação mais usado?"
+                label="Qual(is) meio(s) de informação a família mais utiliza?"
                 onSave={(selectedValues) => {
                     setMeioInformativo(selectedValues);
                     if (!selectedValues.includes('Outros')) {

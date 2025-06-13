@@ -13,38 +13,38 @@ import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { setIdBenfeitoriaFromApiOnPesca } from "../../../realm/services/pescaService";
 
-export const convertToBenfeitoriaInput=(benfeitoria: any) => {
-
-    const benfeitoriaInput: BenfeitoriaInput ={
-        tipoBenfeitoria: benfeitoria.tipoBenfeitoria,
-        funcao: benfeitoria.funcao,
-        afastamentoDaPrincipal: benfeitoria.afastamentoDaPrincipal,
-        impermeabilizacaoSolo: benfeitoria.impermeabilizacaoSolol,
-        limites: benfeitoria.limites,
-        areaBenfeitoria: benfeitoria.areaBenfeitoria,
-        pavimentos: benfeitoria.pavimentos,
-        paredes: benfeitoria.paredes,
-        tipoCobertura: benfeitoria.tipoCobertura,
-        tipoEsquadrias: benfeitoria.tipoEsquadrias,
-        origemMadeiraDaConstrucao: benfeitoria.origemMadeiraDaConstrucao,
-        origemPedraDaConstrucao: benfeitoria.origemPedraDaConstrucao,
-        origemAreiaDaConstrucao: benfeitoria.origemAreiaDaConstrucao,
-        alagamentos: benfeitoria.alagamentos,
-        epocaOcorrencia: benfeitoria.epocaOcorrencia,
-        efluentes: benfeitoria.efluentes,
-        residuos: benfeitoria.residuos,
-        fonteEnergia: benfeitoria.fonteEnergia,
-        energiaAlimentos: benfeitoria.energiaAlimentos,
-        meiosLocomocao: benfeitoria.meiosLocomocao,
-        linhasOnibus: benfeitoria.linhasOnibus,
-        informativoPredominante: benfeitoria.informativoPredominante,
-        imovel: {
-            id: benfeitoria.imovel, 
-        },
-    }
-   
-        return benfeitoriaInput
-}
+export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput => {
+    const benfeitoriaInput: BenfeitoriaInput = {
+      tipoBenfeitoria: benfeitoria.tipoBenfeitoria,
+      funcao: benfeitoria.funcao,
+      afastamentoDaPrincipal: benfeitoria.afastamentoDaPrincipal,
+      impermeabilizacaoSolo: benfeitoria.impermeabilizacaoSolo,
+      limites: benfeitoria.limites,
+      areaBenfeitoria: benfeitoria.areaBenfeitoria,
+      pavimentos: benfeitoria.pavimentos,
+      paredes: benfeitoria.paredes,
+      tipoCobertura: benfeitoria.tipoCobertura,
+      tipoEsquadrias: benfeitoria.tipoEsquadrias,
+      origemMadeiraDaConstrucao: benfeitoria.origemMadeiraDaConstrucao,
+      origemPedraDaConstrucao: benfeitoria.origemPedraDaConstrucao,
+      origemAreiaDaConstrucao: benfeitoria.origemAreiaDaConstrucao,
+      alagamentos: benfeitoria.alagamentos,
+      epocaOcorrencia: benfeitoria.epocaOcorrencia,
+      efluentes: benfeitoria.efluentes,
+      residuos: benfeitoria.residuos,
+      fonteEnergia: benfeitoria.fonteEnergia,
+      energiaAlimentos: benfeitoria.energiaAlimentos,
+      meiosLocomocao: benfeitoria.meiosLocomocao,
+      linhasOnibus: benfeitoria.linhasOnibus,
+      informativoPredominante: benfeitoria.informativoPredominante,
+      imovel: {
+        id: benfeitoria.imovel,
+      },
+    };
+  
+    return benfeitoriaInput;
+  };
+  
 
 
  export const useBenfeitorias = (imovelId:number)=>{
