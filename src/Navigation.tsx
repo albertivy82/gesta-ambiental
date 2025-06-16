@@ -6,7 +6,6 @@ import LogoutButton from "./context/authUtils";
 import { getUser } from "./context/userStore";
 import admUsers from "./modules/admUsers/screens/AdmUsers";
 import Aguas from "./modules/agua/screens/Agua";
-import AguaDetails from "./modules/agua/screens/AguaDetails";
 import { NovaAgua } from "./modules/agua/screens/novaAgua";
 import Atividades from "./modules/atividadeProdutiva/screens/AtividadeProdutiva";
 import AtividadeDetails from "./modules/atividadeProdutiva/screens/AtividadeProdutivaDetails";
@@ -191,7 +190,6 @@ const Navigation =() =>{
           <Stack.Screen name="RendaOutrasFontesDetails" component={RendaOutrasFontesDetails} options={{ title: 'Detalhes da Renda' }} />
           <Stack.Screen name="NovaAgua" component={NovaAgua} options={{ title: 'Cadastro de Água' }} />
           <Stack.Screen name="AguaLista" component={Aguas} options={{ title: 'Registro de Água' }} />
-          <Stack.Screen name="AguaDetails" component={AguaDetails} options={{ title: 'Detalhes da Água' }} />
           <Stack.Screen name="NovoServicoComunicacao" component={NovoServicoComunicacao} options={{ title: 'Cadastro de Serviço de Comunicação' }} />
           <Stack.Screen name="ServicosComunicacaoLista" component={ServicosComunicacao} options={{ title: 'Registro de Serviços de Comunicação' }} />
           <Stack.Screen name="ServicosComunicacaoDetails" component={ServicosComunicacaoDetails} options={{ title: 'Detalhes do Serviço de Comunicação' }} />

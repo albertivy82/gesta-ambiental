@@ -2,18 +2,17 @@ import { Escolaridade } from "../../enums/Escolaridade";
 import { EstadoCivil } from "../../enums/EstadoCivil.enum";
 import { Perfil } from "../../enums/Perfil";
 import { Sexo } from "../../enums/Sexo";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+import { SimNao } from "../../enums/simNao.enum";
 
 export interface MoradorInput{
    
-    dataNascimento: string; 
-    idade: number;
     perfil: Perfil| null| ''; 
+    dataNascimento: string;
     sexo: Sexo| null| ''; 
-    estadoCivil: EstadoCivil | null| ''; 
     escolaridade: Escolaridade|null|''; 
+    estadoCivil: EstadoCivil | null| ''; 
     ondeEstuda?: string;
-    trabalho: SimNaoTalvez|null|''; 
+    trabalho: SimNao|null|''; 
     religiao: string;
     doencas:string;
     benfeitoria?: {

@@ -1,12 +1,12 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarRenda, salvarRendaQueue } from "../../../realm/services/rendaOutrasFontes";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarRenda, salvarRendaOutrasFontes, salvarRendaQueue } from "../../../realm/services/rendaOutrasFontes";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesInput";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 
 
@@ -20,7 +20,7 @@ benfeitoria: {
 };
 
 
-export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType) => {
+export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutrasFontes?: RendaOutrasFontesType) => {
   const [novaRendaOutrasFontes, setNovaRendaOutrasFontes] = useState<RendaOutrasFontesInput>(DEFAULT_RENDA_OUTRAS_FONTES_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -56,15 +56,23 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType) => {
     return rendaOutrasFontesData;
   };
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (rendaOutrasFontes) {
+      return await enviaRendaOutrasFontesEdicao();
+    } else {
+      return await enviaRendaOutrasFontesNova();
+    }
+  };
+
+  const enviaRendaOutrasFontesNova = async () =>{
 
  
     //benfeitoria offline
         if(!benfeitoria.sincronizado && benfeitoria.id<=0){
           //benfeitoria offline
-          const rendaOutrasFontesDataQueue = objetoFila();
-          const rendaOutrasFontesQueue = await salvarRendaQueue(rendaOutrasFontesDataQueue);
-          return rendaOutrasFontesQueue;
+          const rendaOutrasFontessDataQueue = objetoFila();
+          const rendaOutrasFontessQueue = await salvarRendaQueue(rendaOutrasFontessDataQueue);
+          return rendaOutrasFontessQueue;
          
   
         }else{
@@ -76,32 +84,77 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType) => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/rendaOutrasFontes', novaRendaOutrasFontes) as RendaOutrasFontesType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
                           
                       if (response && response.id) {
                             return fetchRendaOutrasFontesAPI(response.id);
                       }
   
                     } catch (error) {
-                        const rendaOutrasFontesDataQueue = objetoFila();
-                        const rendaOutrasFontesQueue = await salvarRendaQueue(rendaOutrasFontesDataQueue);
-                        return rendaOutrasFontesQueue;
+                        const rendaOutrasFontessDataQueue = objetoFila();
+                        const rendaOutrasFontessQueue = await salvarRendaQueue(rendaOutrasFontessDataQueue);
+                        return rendaOutrasFontessQueue;
                        
                     }
                   }else{
-                    const rendaOutrasFontesDataQueue = objetoFila();
-                    const rendaOutrasFontesQueue = await salvarRendaQueue(rendaOutrasFontesDataQueue);
-                    return rendaOutrasFontesQueue;
+                    const rendaOutrasFontessDataQueue = objetoFila();
+                    const rendaOutrasFontessQueue = await salvarRendaQueue(rendaOutrasFontessDataQueue);
+                    return rendaOutrasFontessQueue;
                        
                     
                   }
         }
   }
+
+  const enviaRendaOutrasFontesEdicao= async () =>{
+    const rendaOutrasFontesCorrigida = {
+      ...novaRendaOutrasFontes,
+      benfeitoria: { id: typeof rendaOutrasFontes!.benfeitoria === 'number' ? rendaOutrasFontes!.benfeitoria : rendaOutrasFontes!.benfeitoria.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
+                    if (response && response.id) {
+                      return fetchRendaOutrasFontesAPI(response.id);
+                    }else{
+                      const local = await salvarRenda(buildRendaOutrasFontesAtualizada());
+                      return local;
+                                        }
+           } catch (error) {
+              const local = await salvarRenda(buildRendaOutrasFontesAtualizada());
+              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              return local;
+          }
+          
+          } else {
+            if (!rendaOutrasFontes!.sincronizado && rendaOutrasFontes!.idLocal) {
+             return await salvarRenda(buildRendaOutrasFontesAtualizada());
+            } else {
+             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
+            }
+            
+          }
+          
+  }
+
+  const buildRendaOutrasFontesAtualizada = (): RendaOutrasFontesType => ({
+    ...rendaOutrasFontes!,
+    ...novaRendaOutrasFontes,
+    sincronizado: rendaOutrasFontes?.sincronizado,
+    idLocal: rendaOutrasFontes?.idLocal,
+    idFather: rendaOutrasFontes?.idFather,
+});
   
    const fetchRendaOutrasFontesAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://192.168.100.28:8080/rendaOutrasFontes/${id}`);
+              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://192.168.100.28:8080/outras-fontes-de-renda/${id}`);
               if (response) {
                 const rendaOutrasFontesData = {
                     ...response,

@@ -1,6 +1,5 @@
-import { conservacaoGelo } from "../../enums/ConservacaoGelo.enum";
-import { PescariaCusteio } from "../../enums/PescariaCusteio.enum";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
+import { SimNao } from "../../enums/simNao.enum";
+
 
 export interface PescaArtesanalType {
     id: number;
@@ -22,9 +21,9 @@ export interface PescaArtesanalType {
     localPescaSafra: string;
     localDeReproducaoPeixe: string;
     periodoDefeso: string;
-    conheceDefeso: SimNaoTalvez|null|''; 
-    concordaDefeso: SimNaoTalvez|null|''; 
-    recebeDefeso: SimNaoTalvez|null|''; 
+    conheceDefeso: SimNao|null|''; 
+    concordaDefeso: SimNao|null|''; 
+    recebeDefeso: SimNao|null|''; 
     benfeitoria: {
         id: number;
     };

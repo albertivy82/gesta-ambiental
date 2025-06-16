@@ -24,7 +24,7 @@ const Benfeitorias = ()=>{
   const { imovel } = route.params;
   const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>()
   
-  console.log(" página Benfeitorias", benfeitoria, imovel)
+  
   
   useEffect(()=>{
       if(imovel){
@@ -32,7 +32,7 @@ const Benfeitorias = ()=>{
           const benfeitoriaRealm = getBenfeitorias(imovel.id);
           setBenfeitoria(benfeitoriaRealm);
         }else{
-          //tenho que pegar aqquelas com pai desincronizado
+          //tenho que pegar aquelas com pai desincronizado
           const benfeitoriaRealm = getBenfeitoriaDessincronizadas(imovel.id);
           setBenfeitoria(benfeitoriaRealm);
         }
@@ -52,8 +52,7 @@ const handleRefresh = () => {
 };
  
 const handleNovaBenfeitoria = () => {
-  const idMovel = imovel.id;
-  navigation.navigate('NovaBenfeitoria', { idMovel});
+  navigation.navigate('NovaBenfeitoria', { imovel});
 };
 
 

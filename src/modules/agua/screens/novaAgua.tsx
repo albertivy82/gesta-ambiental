@@ -13,17 +13,20 @@ import CheckboxSelector from "../../../shared/components/input/checkBox";
 import { AguaType } from "../../../shared/types/AguaType";
 
 
-export interface idParam {
- benfeitoria: BenfeitoriaType;
+export interface NovaAveParams {
+  benfeitoria: BenfeitoriaType;
+  agua?: AguaType;
 }
 
-export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate'], agua: AguaType)=>{
-  navigate('AguaDetails', {agua})
-}
+export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('AguaLista', { benfeitoria });
+};
 
 export const NovaAgua = () => {
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const { params } = useRoute<RouteProp<Record<string, NovaAveParams>, string>>();
+  const benfeitoria = params.benfeitoria ?? params.agua?.benfeitoria;
+  const agua = params.agua;
   const [loading, setLoading] = useState(false);
   const [fornecimentoAgua, setFornecimentoAgua] = useState<string>('');     
   const [outroFornecimento, SetOutroFornecimento] = useState<string>('');
@@ -36,7 +39,7 @@ export const NovaAgua = () => {
     handleArrayFieldChange,
     handleEnumChange,
     disabled
-  } = useNovaAgua(params.benfeitoria);
+  } = useNovaAgua(params.benfeitoria, agua);
 
   const abastecimentoOptions = Object.values([
     'ABASTECIMENTO PUBLICO', 'POÇO AMAZONAS',
@@ -74,7 +77,7 @@ export const NovaAgua = () => {
     try {
       const aguaSalva = await enviarRegistro();
       if (aguaSalva) {
-        detalharAgua(navigation.navigate, aguaSalva);
+        detalharAgua(navigation.navigate, benfeitoria);
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

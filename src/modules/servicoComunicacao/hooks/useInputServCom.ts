@@ -1,14 +1,14 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { salvarservicosComunicacao, salvarservicosComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoInput } from "../../../shared/types/ComunicacaoInput";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
-import { novaAve } from "../../aves/screens/Ave";
-import { salvarservicosComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
+
 
 
 export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
@@ -19,7 +19,7 @@ export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
   },
 };
 
-export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
+export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoComunicacao?: ServicosComunicacaoType) => {
   const [novoServicoComunicacao, setNovoServicoComunicacao] = useState<ServicosComunicacaoInput>(DEFAULT_SERVICOS_COMUNICACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -62,19 +62,27 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
   };
   
   
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (servicoComunicacao) {
+      return await enviaServicoComunicacaoEdicao();
+    } else {
+      return await enviaServicoComunicacaoNova();
+    }
+  };
+
+  const enviaServicoComunicacaoNova = async () =>{
 
  
     //benfeitoria offline
         if(!benfeitoria.sincronizado && benfeitoria.id<=0){
           //benfeitoria offline
-          const servComDataQueue = objetoFila();
-          const servComQueue = await salvarservicosComunicacaoQueue(servComDataQueue);
-          return servComQueue;
+          const servicoComunicacaosDataQueue = objetoFila();
+          const servicoComunicacaosQueue = await salvarservicosComunicacaoQueue(servicoComunicacaosDataQueue);
+          return servicoComunicacaosQueue;
          
   
         }else{
-          novoServicoComunicacao.benfeitoria = {id:benfeitoria.id};
+            novoServicoComunicacao.benfeitoria = {id:benfeitoria.id};
             const netInfoState = await NetInfo.fetch();
             const isConnected = await testConnection();
           
@@ -82,32 +90,77 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType) => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/servCom', novoServicoComunicacao) as ServicosComunicacaoType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/servico-de-comunicacao', novoServicoComunicacao) as ServicosComunicacaoType;
                           
                       if (response && response.id) {
-                            return fetchMoradorAPI(response.id);
+                            return fetchServicoComunicacaoAPI(response.id);
                       }
   
                     } catch (error) {
-                        const servComDataQueue = objetoFila();
-                        const servComQueue = await salvarservicosComunicacaoQueue(servComDataQueue);
-                        return servComQueue;
+                        const servicoComunicacaosDataQueue = objetoFila();
+                        const servicoComunicacaosQueue = await salvarservicosComunicacaoQueue(servicoComunicacaosDataQueue);
+                        return servicoComunicacaosQueue;
                        
                     }
                   }else{
-                    const servComDataQueue = objetoFila();
-                    const servComQueue = await salvarservicosComunicacaoQueue(servComDataQueue);
-                    return servComQueue;
+                    const servicoComunicacaosDataQueue = objetoFila();
+                    const servicoComunicacaosQueue = await salvarservicosComunicacaoQueue(servicoComunicacaosDataQueue);
+                    return servicoComunicacaosQueue;
                        
                     
                   }
         }
   }
+
+  const enviaServicoComunicacaoEdicao= async () =>{
+    const servicoComunicacaoCorrigida = {
+      ...novoServicoComunicacao,
+      benfeitoria: { id: typeof servicoComunicacao!.benfeitoria === 'number' ? servicoComunicacao!.benfeitoria : servicoComunicacao!.benfeitoria.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${servicoComunicacao!.id}`, servicoComunicacaoCorrigida) as ServicosComunicacaoType;
+                    if (response && response.id) {
+                      return fetchServicoComunicacaoAPI(response.id);
+                    }else{
+                      const local = await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
+                      return local;
+                                        }
+           } catch (error) {
+              const local = await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
+              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              return local;
+          }
+          
+          } else {
+            if (!servicoComunicacao!.sincronizado && servicoComunicacao!.idLocal) {
+             return await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
+            } else {
+             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
+            }
+            
+          }
+          
+  }
+
+  const buildServicoComunicacaoAtualizada = (): ServicosComunicacaoType => ({
+    ...servicoComunicacao!,
+    ...novoServicoComunicacao,
+    sincronizado: servicoComunicacao?.sincronizado,
+    idLocal: servicoComunicacao?.idLocal,
+    idFather: servicoComunicacao?.idFather,
+});
   
-   const fetchMoradorAPI = async(id:number) =>{
+   const fetchServicoComunicacaoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<ServicosComunicacaoType>(`http://192.168.100.28:8080/servCom/${id}`);
+              const response = await connectionAPIGet<ServicosComunicacaoType>(`http://192.168.100.28:8080/servico-de-comunicacao/${id}`);
               if (response) {
                 const servComData = {
                     ...response,

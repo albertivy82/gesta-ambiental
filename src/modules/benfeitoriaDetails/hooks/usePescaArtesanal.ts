@@ -1,16 +1,42 @@
 import NetInfo from "@react-native-community/netinfo";
-import { useEffect, useState } from "react";import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { useEffect, useState } from "react";
+import { apagarPescaArtesanalQueue, getPescaArtesanal, getPescaArtesanalDessincronizadas, salvarPescasArtesanais } from "../../../realm/services/pescaService";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { PescaArtesanalType } from "../../../shared/types/PescaArtesanal";
-import { apagarPescaArtesanalQueue, getPescaArtesanal, getPescaArtesanalDessincronizadas, salvarPescaArtesanal, salvarPescasArtesanais } from "../../../realm/services/pescaService";
+import { PescaArtesanalInput } from "../../../shared/types/PescaArtesanalInput";
 
 
-export const convertToPescaArtesanalInput = (pesca: any) => ({
-  ...pesca,
-  benfeitoria: {
-    id: pesca.benfeitoria.id,
-  }
-});
+
+export const convertToPescaArtesanalInput = (pesca: any): PescaArtesanalInput => {
+  return {
+   
+    freqPescaSemanal: pesca.freqPescaSemanal,
+    horasPorDia: pesca.horasPorDia,
+    localDaPesca: pesca.localDaPesca,
+    horarioPrefencialPesca: pesca.horarioPrefencialPesca,
+    descartePorPescaria: pesca.descartePorPescaria,
+    conservacaoPeixe: pesca.conservacaoPeixe,
+    custeio: pesca.custeio,
+    geloPorPescaria: pesca.geloPorPescaria,
+    custoGeloPorPescaria: pesca.custoGeloPorPescaria,
+    composicaoRancho: pesca.composicaoRancho,
+    custoRanchoPorViagem: pesca.custoRanchoPorViagem,
+    combustivelPorViagem: pesca.combustivelPorViagem,
+    custoCombustivelPorViagem: pesca.custoCombustivelPorViagem,
+    localDesembarque: pesca.localDesembarque,
+    pescaPorSafra: pesca.pescaPorSafra,
+    localPescaSafra: pesca.localPescaSafra,
+    localDeReproducaoPeixe: pesca.localDeReproducaoPeixe,
+    periodoDefeso: pesca.periodoDefeso,
+    conheceDefeso: pesca.conheceDefeso, 
+    concordaDefeso: pesca.concordaDefeso, 
+    recebeDefeso: pesca.recebeDefeso,
+    benfeitoria: {
+      id: pesca.benfeitoria.id,
+    },
+  };
+};
 
 export const usePescaArtesanal = (benfeitoriaId: number) => {
   const [pescaArtesanal, setPescaArtesanal] = useState<PescaArtesanalType[]>([]);
@@ -43,7 +69,7 @@ export const usePescaArtesanal = (benfeitoriaId: number) => {
 
   const fetchPescaArtesanalAPI = async () => {
     try {
-      const response = await connectionAPIGet<PescaArtesanalType[]>(`http://192.168.100.28:8080/pesca-artesanal/benfeitoria/${benfeitoriaId}`);
+      const response = await connectionAPIGet<PescaArtesanalType[]>(`http://192.168.100.28:8080/pesca-artesanal/benfeitoria-pesca-artesanal/${benfeitoriaId}`);
       const data = response.map(item => ({
         ...item,
         sincronizado: true,

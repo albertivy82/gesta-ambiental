@@ -1,8 +1,8 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { AtividadeProdutivaInput } from "../../../shared/types/AtividadeProdutivaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
@@ -18,7 +18,7 @@ export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   },
 };
 
-export const useNovaAtvProd = (benfeitoria:BenfeitoriaType)  => {
+export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: AtividadeProdutivaType)  => {
   const [novaAtividade, setNovaAtvProd] = useState<AtividadeProdutivaInput>(DEFAULT_ATIVIDADE_PRODUTIVA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -54,19 +54,27 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType)  => {
   };
   
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (atividade) {
+      return await enviaAtividadeProdutivaEdicao();
+    } else {
+      return await enviaAtividadeProdutivaNova();
+    }
+  };
+
+  const enviaAtividadeProdutivaNova = async () =>{
 
  
     //benfeitoria offline
         if(!benfeitoria.sincronizado && benfeitoria.id<=0){
           //benfeitoria offline
-          const atividadeDataQueue = objetoFila();
-          const atividadeQueue = await salvarAtividadeQueue(atividadeDataQueue);
-          return atividadeQueue;
+          const atividadesDataQueue = objetoFila();
+          const atividadesQueue = await salvarAtividadeQueue(atividadesDataQueue);
+          return atividadesQueue;
          
   
         }else{
-          novaAtividade.benfeitoria = {id:benfeitoria.id};
+            novaAtividade.benfeitoria = {id:benfeitoria.id};
             const netInfoState = await NetInfo.fetch();
             const isConnected = await testConnection();
           
@@ -74,32 +82,78 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType)  => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/atividade', novaAtividade) as AtividadeProdutivaType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/atividade-produtiva', novaAtividade) as AtividadeProdutivaType;
                           
                       if (response && response.id) {
-                            return fetchMoradorAPI(response.id);
+                            return fetchAtividadeAPI(response.id);
                       }
   
                     } catch (error) {
-                        const atividadeDataQueue = objetoFila();
-                        const atividadeQueue = await salvarAtividadeQueue(atividadeDataQueue);
-                        return atividadeQueue;
+                        const atividadesDataQueue = objetoFila();
+                        const atividadesQueue = await salvarAtividadeQueue(atividadesDataQueue);
+                        return atividadesQueue;
                        
                     }
                   }else{
-                    const atividadeDataQueue = objetoFila();
-                    const atividadeQueue = await salvarAtividadeQueue(atividadeDataQueue);
-                    return atividadeQueue;
+                    const atividadesDataQueue = objetoFila();
+                    const atividadesQueue = await salvarAtividadeQueue(atividadesDataQueue);
+                    return atividadesQueue;
                        
                     
                   }
         }
   }
+
+  const enviaAtividadeProdutivaEdicao= async () =>{
+    const atividadeCorrigida = {
+      ...novaAtividade,
+      benfeitoria: { id: typeof atividade!.benfeitoria === 'number' ? atividade!.benfeitoria : atividade!.benfeitoria.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/atividade-produtiva/${atividade!.id}`, atividadeCorrigida) as AtividadeProdutivaType;
+                    if (response && response.id) {
+                      return fetchAtividadeAPI(response.id);
+                    }else{
+                      const local = await salvarAtividade(buildAtividadeProdutivaAtualizada());
+                      return local;
+                                        }
+           } catch (error) {
+              const local = await salvarAtividade(buildAtividadeProdutivaAtualizada());
+              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              return local;
+          }
+          
+          } else {
+            if (!atividade!.sincronizado && atividade!.idLocal) {
+             return await salvarAtividade(buildAtividadeProdutivaAtualizada());
+            } else {
+             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
+            }
+            
+          }
+          
+  }
+
+  const buildAtividadeProdutivaAtualizada = (): AtividadeProdutivaType => ({
+    ...atividade!,
+    ...novaAtividade,
+    sincronizado: atividade?.sincronizado,
+    idLocal: atividade?.idLocal,
+    idFather: atividade?.idFather,
+});
   
-   const fetchMoradorAPI = async(id:number) =>{
+  
+   const fetchAtividadeAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<AtividadeProdutivaType>(`http://192.168.100.28:8080/atividade/${id}`);
+              const response = await connectionAPIGet<AtividadeProdutivaType>(`http://192.168.100.28:8080/atividade-produtiva/${id}`);
               if (response) {
                 const atividadeData = {
                     ...response,

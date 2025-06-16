@@ -82,10 +82,8 @@ console.log(entrevistado)
        
          try {
            const vegetacaoSalva = await enviarRegistro(); 
-           console.log("hendleEnviar - vegetacaoSalva", vegetacaoSalva)
-               if (vegetacaoSalva){
-                console.log("hendleEnviar - vegetacaoSalva", entrevistado.id)
-                 detalharVegetacao(navigation.navigate, entrevistado);
+             if (vegetacaoSalva){
+                  detalharVegetacao(navigation.navigate, entrevistado);
                 } else {
                  Alert.alert("Erro", "Não foi possível salvar a vegetacao. Tente novamente.");
                  navigation.goBack();

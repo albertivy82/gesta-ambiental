@@ -21,31 +21,29 @@ const RenderItem = ({ item }: { item: BenfeitoriaType}) => {
     
     return (
         <TouchableOpacity onPress={() => handleBenfeitoriaDetail(item)}>
-           <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
-                  
-                  <Text
-                  type={textTypes.BUTTON_REGULAR}
-                  color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-                   >
-                    Benfeitoria: {item.id}
-                   </Text>
-                
-                
-                <Text
-                  type={textTypes.BUTTON_REGULAR}
-                  color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-                >
-                  Função: {item.funcao}
+             <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
+              
+              <Text
+                 type={textTypes.BUTTON_REGULAR}
+                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
+               >
+                 Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
+              </Text>
+              
+              <Text
+                 type={textTypes.BUTTON_REGULAR}
+                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
+               >
+                 Tipo de Benfeitoria: {item.tipoBenfeitoria}
                 </Text>
                 
                 <Text
-                  type={textTypes.BUTTON_REGULAR}
-                  color={item.sincronizado ? theme.colors.blueTheme.blue1 : theme.colors.redTheme.red}
-                >
-                  Tipo: {item.tipoBenfeitoria}
-                 
-                </Text>
-                
+                 type={textTypes.BUTTON_REGULAR}
+                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
+               >
+                Função: {item.funcao}
+               </Text>
+               
                 
           </View>
         </TouchableOpacity>

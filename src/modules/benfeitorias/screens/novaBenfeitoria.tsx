@@ -24,6 +24,7 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
 import { imovelBody } from "../../../shared/types/imovelType";
+import Text from "../../../shared/components/text/Text";
 
 export interface imovelParam {
 imovel: imovelBody, 
@@ -177,23 +178,35 @@ export const NovaBenfeitoria=()=>{
 
     useEffect(() => {
       if (!benfeitoria) return;
-    
-      // Enums (selects diretos)
-      handleEnumChange('tipoBenfeitoria', novaBenfeitoria.tipoBenfeitoria);
-      handleEnumChange('funcao', novaBenfeitoria.funcao);
-      handleEnumChange('impermeabilizacaoSolo', novaBenfeitoria.impermeabilizacaoSolo);
-      handleEnumChange('limites', novaBenfeitoria.limites);
-      handleEnumChange('paredes', novaBenfeitoria.paredes);
-      handleEnumChange('tipoCobertura', novaBenfeitoria.tipoCobertura);
-      handleEnumChange('tipoEsquadrias', novaBenfeitoria.tipoEsquadrias);
-      handleEnumChange('origemMadeiraDaConstrucao', novaBenfeitoria.origemMadeiraDaConstrucao);
-      handleEnumChange('origemPedraDaConstrucao', novaBenfeitoria.origemPedraDaConstrucao);
-      handleEnumChange('origemAreiaDaConstrucao', novaBenfeitoria.origemAreiaDaConstrucao);
-      handleEnumChange('meiosLocomocao', novaBenfeitoria.meiosLocomocao);
-      handleOnChangeInput(novaBenfeitoria.epocaOcorrencia ?? '', 'epocaOcorrencia');
+
+      handleEnumChange('tipoBenfeitoria', benfeitoria.tipoBenfeitoria);
+      handleEnumChange('funcao', benfeitoria.funcao);
+      handleEnumChange('impermeabilizacaoSolo', benfeitoria.impermeabilizacaoSolo);
+      handleEnumChange('limites', benfeitoria.limites);
+      handleEnumChange('paredes', benfeitoria.paredes);
+      handleEnumChange('tipoCobertura', benfeitoria.tipoCobertura);
+      handleEnumChange('tipoEsquadrias', benfeitoria.tipoEsquadrias);
+      handleEnumChange('origemMadeiraDaConstrucao', benfeitoria.origemMadeiraDaConstrucao);
+      handleEnumChange('origemPedraDaConstrucao', benfeitoria.origemPedraDaConstrucao);
+      handleEnumChange('origemAreiaDaConstrucao', benfeitoria.origemAreiaDaConstrucao);
+      handleEnumChange('meiosLocomocao', benfeitoria.meiosLocomocao);
+      handleOnChangeInput(benfeitoria.epocaOcorrencia ?? '', 'epocaOcorrencia');
     }, [benfeitoria]);
     
        
+    const afastamentoDaPrincipalvelha = benfeitoria?.meiosLocomocao ?? '';
+    const areaBenfeitoriaVelha = benfeitoria?.areaBenfeitoria ?? '';
+    const pavimentosVelha = benfeitoria?.pavimentos ?? '';
+    const alagamentosVelha = benfeitoria?.alagamentos ?? '';
+    const epocaOcorrenciaVelha = benfeitoria?.epocaOcorrencia ?? '';
+    const efluentesVelha = benfeitoria?.efluentes ?? '';
+    const residuosVelha = benfeitoria?.residuos ?? '';
+    const fonteEnergiaVelha = benfeitoria?.fonteEnergia ?? '';
+    const energiaAlimentosVelha = benfeitoria?.energiaAlimentos ?? '';
+    const linhasOnibusVelha = benfeitoria?.linhasOnibus ?? '';
+    const informativoPredominanteVelha = benfeitoria?.informativoPredominante ?? '';
+    
+    
     return( 
     
     <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
@@ -212,6 +225,12 @@ export const NovaBenfeitoria=()=>{
                onValueChange={(value) => handleEnumChange('funcao', value)}
                options={optionsFuncao}
             />
+
+              {afastamentoDaPrincipalvelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteiormente:  {afastamentoDaPrincipalvelha}
+               </Text>
+              )}
 
             <CheckboxSelector
               options={vizinhoOptions}
@@ -238,6 +257,11 @@ export const NovaBenfeitoria=()=>{
               options={limitesOptions}
              />
 
+               {areaBenfeitoriaVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteiormente:  {areaBenfeitoriaVelha}
+               </Text>
+              )}
             <Input
               value={novaBenfeitoria.areaBenfeitoria?.toFixed(2) || ''}
               onChange={handleOnChangeAreaBenfeitoria}
@@ -247,6 +271,12 @@ export const NovaBenfeitoria=()=>{
               title="Área da benfeitoria (m²)"
             />
 
+
+                {pavimentosVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteiormente:  {pavimentosVelha}
+               </Text>
+                )}
              <Input
               value={novaBenfeitoria.pavimentos?.toString() || ''}
               onChange={(event)=>handleNumberChange(event, 'pavimentos')}
@@ -299,7 +329,18 @@ export const NovaBenfeitoria=()=>{
               onValueChange={(value) => handleEnumChange('origemAreiaDaConstrucao', value)}
               options={optionsOrigemMaterial}
              />
-
+              
+              
+              {alagamentosVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteriormente:  {alagamentosVelha}
+                </Text>
+              )}
+               {epocaOcorrenciaVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {epocaOcorrenciaVelha}
+                </Text>
+              )}
               <RenderPicker
                   label="Há ou já houve ocorrência de Alagamento ou Enchentes?"
                   selectedValue={alagamento}
@@ -341,6 +382,12 @@ export const NovaBenfeitoria=()=>{
               options={optionsOrigemMaterial}
              />
 
+               {efluentesVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {efluentesVelha}
+                </Text>
+              )}
+
              <CheckboxSelector
                 options={optionsEfluentes}
                 selectedValues={efluenteSanitario}
@@ -364,7 +411,11 @@ export const NovaBenfeitoria=()=>{
                       </View>
                   )}
 
-
+               {residuosVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {residuosVelha}
+                </Text>
+              )}
 
             <CheckboxSelector
                 options={optionsResiduos}
@@ -389,7 +440,11 @@ export const NovaBenfeitoria=()=>{
                       </View>
                   )}
 
-
+               {fonteEnergiaVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {fonteEnergiaVelha}
+                </Text>
+              )}
               <CheckboxSelector
                 options={optionsFonteEnergia}
                 selectedValues={fonteEnergia}
@@ -413,7 +468,11 @@ export const NovaBenfeitoria=()=>{
                       </View>
                   )}
 
-
+               {energiaAlimentosVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {energiaAlimentosVelha}
+                </Text>
+              )}
                <CheckboxSelector
                 options={optionsEnergiaAlimentos}
                 selectedValues={energiAlimento}
@@ -445,6 +504,11 @@ export const NovaBenfeitoria=()=>{
               options={optionsLocomocao}
              />
 
+              {linhasOnibusVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {linhasOnibusVelha}
+                </Text>
+              )}
              
              <RenderPicker
                   label="Existem linhas de ônibus que atendem o local?"
@@ -470,7 +534,11 @@ export const NovaBenfeitoria=()=>{
                       )}
 
 
-              
+             {informativoPredominanteVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {informativoPredominanteVelha}
+                </Text>
+              )}
               <CheckboxSelector
                 options={optionsInformativoPredominante}
                 selectedValues={meioInofrmativo}
@@ -501,7 +569,7 @@ export const NovaBenfeitoria=()=>{
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 
               ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading || disabled} />
               )}
             </View>
     

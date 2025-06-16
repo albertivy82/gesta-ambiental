@@ -44,8 +44,7 @@ const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaInput>(DEFAULT
 const [disabled, setdisable] = useState<boolean>(true);
 
           useEffect(() => {
-            console.log(novaBenfeitoria)
-                
+                            
             if (
             novaBenfeitoria.tipoBenfeitoria !== null &&
             novaBenfeitoria.funcao !== null &&
@@ -140,7 +139,7 @@ const enviaBenfeitoriaNova = async () =>{
                   try{
                      
                     const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria) as BenfeitoriaType;
-                        console.log("enviaBenfeitoriaNova", response)
+                     
                     if (response && response.id) {
                           return fetchBefeitoriaAPI(response.id);
                     }

@@ -43,8 +43,13 @@ export interface BenfeitoriaParam {
 const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
- 
-
+  const {moradores} = useMoradores(params.benfeitoria.id);
+  const {aguas} = useAguas(params.benfeitoria.id);
+  const {atividades} = useAtividadesProdutivas(params.benfeitoria.id);
+  const {creditos} = useCreditos(params.benfeitoria.id);
+  const {pescaArtesanal} = usePescaArtesanal(params.benfeitoria.id);
+  const {rendasOF} = useRendasOutrasFontes(params.benfeitoria.id);
+  const {servicos} = useServicosComunicacao(params.benfeitoria.id);
 
   
 
@@ -60,14 +65,11 @@ const BenfeitoriaDetails = () => {
       }
     };
   
-        
-
-
   return (
     
-       <ScrollView style={{ flex: 1 }}>
-        <BenfeitoriaDetailContainer>
-              <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
+<ScrollView style={{ flex: 1 }}>
+<BenfeitoriaDetailContainer>
+<View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
                 {renderField('Tipo', params.benfeitoria.tipoBenfeitoria)}
                 {renderField('Função', params.benfeitoria.funcao)}
                 {renderField('Tipo do Solo', params.benfeitoria.impermeabilizacaoSolo)}
@@ -85,10 +87,10 @@ const BenfeitoriaDetails = () => {
                 {renderField('Fonte de Enrgia para preparar alimentos', params.benfeitoria.energiaAlimentos)}
                 {renderField('Informativo predominante', params.benfeitoria.informativoPredominante)}
               
-            </View>
+</View>
 
 
-            <View style={{ flexDirection: 'row', 
+<View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 
                       padding: 10,
                       marginTop: 40, 
@@ -114,13 +116,163 @@ const BenfeitoriaDetails = () => {
                             //volta para infLocalidade
                       }} 
                       />
+
+       <TouchableOpacity onPress={() => handleDecision(moradores, "moradoresDetails", "NovoMorador")}>
+                <View style={{
+                  alignItems: 'stretch',
+                  flexDirection: 'row',
+                  padding: 10,
+                  borderWidth: 2,
+                  borderColor: theme.colors.grayTheme.gray100
+                }}>
+                  <Icones resizeMode="contain" source={require('../../../assets/images/moradores.png')} />
+                  <Text
+                    type={textTypes.BUTTON_BOLD}
+                    color={moradores.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                    style={{ marginLeft: 10 }}
+                  >
+                    {moradores.length > 0
+                      ? `Moradores cadastrados: ${moradores.length}`
+                      : 'Moradores'}
+                  </Text>
+                </View>
+       </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => handleDecision(aguas, "aguasDetails", "NovaAgua")}>
+              <View style={{
+                alignItems: 'stretch',
+                flexDirection: 'row',
+                padding: 10,
+                borderWidth: 2,
+                borderColor: theme.colors.grayTheme.gray100
+              }}>
+                <Icones resizeMode="contain" source={require('../../../assets/images/agua.png')} />
+                <Text
+                  type={textTypes.BUTTON_BOLD}
+                  color={aguas.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                  style={{ marginLeft: 10 }}
+                >
+                  {aguas.length > 0
+                    ? `Fontes de água registradas: ${aguas.length}`
+                    : 'Água'}
+                </Text>
+              </View>
+       </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => handleDecision(atividades, "AtividadesDetails", "NovaAtividade")}>
+              <View style={{
+                alignItems: 'stretch',
+                flexDirection: 'row',
+                padding: 10,
+                borderWidth: 2,
+                borderColor: theme.colors.grayTheme.gray100
+              }}>
+                <Icones resizeMode="contain" source={require('../../../assets/images/producao.png')} />
+                <Text
+                  type={textTypes.BUTTON_BOLD}
+                  color={atividades.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                  style={{ marginLeft: 10 }}
+                >
+                  {atividades.length > 0
+                    ? `Atividades Produtivas registradas: ${atividades.length}`
+                    : 'Atividades Produtivas'}
+                </Text>
+              </View>
+       </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => handleDecision(creditos, "CreditoDetails", "NovoCredito")}>
+          <View style={{
+            alignItems: 'stretch',
+            flexDirection: 'row',
+            padding: 10,
+            borderWidth: 2,
+            borderColor: theme.colors.grayTheme.gray100
+          }}>
+            <Icones resizeMode="contain" source={require('../../../assets/images/credito.png')} />
+            <Text
+              type={textTypes.BUTTON_BOLD}
+              color={creditos.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+              style={{ marginLeft: 10 }}
+            >
+              {creditos.length > 0
+                ? `Créditos: ${creditos.length}`
+                : 'Crédito'}
+            </Text>
+          </View>
+       </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => handleDecision(pescaArtesanal, "ImovelDetails", "NovoImovel")}>
+          <View style={{
+            alignItems: 'stretch',
+            flexDirection: 'row',
+            padding: 10,
+            borderWidth: 2,
+            borderColor: theme.colors.grayTheme.gray100
+          }}>
+            <Icones resizeMode="contain" source={require('../../../assets/images/pesca.png')} />
+            <Text
+              type={textTypes.BUTTON_BOLD}
+              color={pescaArtesanal.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+              style={{ marginLeft: 10 }}
+            >
+              {pescaArtesanal.length > 0
+                ? `Pesca Artesanal: ${pescaArtesanal.length}`
+                : 'Pesca Artesanal'}
+            </Text>
+          </View>
+       </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => handleDecision(rendasOF, "ImovelDetails", "NovoImovel")}>
+            <View style={{
+              alignItems: 'stretch',
+              flexDirection: 'row',
+              padding: 10,
+              borderWidth: 2,
+              borderColor: theme.colors.grayTheme.gray100
+            }}>
+              <Icones resizeMode="contain" source={require('../../../assets/images/renda.png')} />
+              <Text
+                type={textTypes.BUTTON_BOLD}
+                color={rendasOF.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                style={{ marginLeft: 10 }}
+              >
+                {rendasOF.length > 0
+                  ? `Outras rendas informadas: ${rendasOF.length}`
+                  : 'Outras Fontes de Renda'}
+              </Text>
             </View>
+       </TouchableOpacity>
+
+       <TouchableOpacity onPress={() => handleDecision(servicos, "servicosDetails", "NovoServico")}>
+              <View style={{
+                alignItems: 'stretch',
+                flexDirection: 'row',
+                padding: 10,
+                borderWidth: 2,
+                borderColor: theme.colors.grayTheme.gray100
+              }}>
+                <Icon size={30} name='mobile' color='blue' />
+                <Text
+                  type={textTypes.BUTTON_BOLD}
+                  color={servicos.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                  style={{ marginLeft: 10 }}
+                >
+                  {servicos.length > 0
+                    ? `Serviços de comunicação registrados: ${servicos.length}`
+                    : 'Serviços de Comunicação disponíveis'}
+                </Text>
+              </View>
+        </TouchableOpacity>
+
+
+
+</View>
 
 
 
      
-       </BenfeitoriaDetailContainer>
-    </ScrollView>     
+</BenfeitoriaDetailContainer>
+</ScrollView>     
    
    
   );

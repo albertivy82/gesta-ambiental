@@ -24,7 +24,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ benfeitoria, destin
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
-     // console.log("aqui",benfeitoria)
+    
       navigation.navigate(destino, {benfeitoria});
       setModalVisible(false);
       onEditSuccess();

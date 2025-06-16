@@ -5,17 +5,16 @@ import { Sexo } from "../../enums/Sexo";
 import { SimNao } from "../../enums/simNao.enum";
 
 export interface MoradorType {
-    id: number;
-    dataNascimento: string; 
-    idade: number;
-    perfil: Perfil|null|''; 
-    sexo: Sexo|null|''; 
-    estadoCivil: EstadoCivil|null|''; 
-    escolaridade: Escolaridade|null|''; 
-    ondeEstuda?: string;
-    trabalho: SimNao|null|''; 
-    religiao: string;
-    doencas:string;
+   id: number;
+   perfil: Perfil| null| ''; 
+   dataNascimento: string;
+   sexo: Sexo| null| ''; 
+   escolaridade: Escolaridade|null|''; 
+   estadoCivil: EstadoCivil | null| ''; 
+   ondeEstuda?: string;
+   trabalho: SimNao|null|''; 
+   religiao: string;
+   doencas:string;
     benfeitoria: {
         id: number;
     };

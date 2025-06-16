@@ -34,7 +34,7 @@ export const useServicosComunicacao = (benfeitoriaId: number) => {
 
           if (netInfoState.isConnected && await testConnection()) {
             try {
-              const response = await connectionAPIPost('http://192.168.100.28:8080/servico-comunicacao', input);
+              const response = await connectionAPIPost('http://192.168.100.28:8080/servico-de-comunicacao', input);
                const servComAPI = response as ServicosComunicacaoType;
               
               if (servComAPI?.id) apagarServicoComunicacaoQueue(item.idLocal!);
@@ -56,7 +56,7 @@ export const useServicosComunicacao = (benfeitoriaId: number) => {
 
   const fetchFromAPI = async () => {
     try {
-      const response = await connectionAPIGet<ServicosComunicacaoType[]>(`http://192.168.100.28:8080/servico-comunicacao/benfeitoria/${benfeitoriaId}`);
+      const response = await connectionAPIGet<ServicosComunicacaoType[]>(`http://192.168.100.28:8080/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`);
       const data = response.map((item) => ({
         ...item,
         sincronizado: true,

@@ -1,10 +1,10 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { apagarAguaQueue, getAguaDessincronizadas, getAguas, salvarAguas } from "../../../realm/services/aguasService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { AguaType } from "../../../shared/types/AguaType";
 import { AguaInput } from "../../../shared/types/AguaInput";
-import {apagarAguaQueue, getAguaDessincronizadas, getAguas, salvarAguas} from "../../../realm/services/aguasService"
+import { AguaType } from "../../../shared/types/AguaType";
 
 export const convertToAguaInput = (agua: any): AguaInput => {
   return {
@@ -23,7 +23,7 @@ export const convertToAguaInput = (agua: any): AguaInput => {
 
 export const useAguas = (benfeitoriaId: number) => {
   const [aguas, setAguas] = useState<AguaType[]>([]);
-
+ 
   const sincronizeAguaQueue = async () => {
     if (benfeitoriaId > 0) {
       const queue = getAguaDessincronizadas(benfeitoriaId);
@@ -46,23 +46,25 @@ export const useAguas = (benfeitoriaId: number) => {
   const fetchAguaRealm = () => {
     const locais = getAguas(benfeitoriaId);
     if (locais.length > 0) {
-      setAguas(prev => [...prev, ...locais]);
+      setAguas((prevAguas) => [...prevAguas, ...locais]);
     }
   };
 
   const fetchAguaAPI = async () => {
     try {
       const response = await connectionAPIGet<AguaType[]>(`http://192.168.100.28:8080/agua/benfeitoria-agua/${benfeitoriaId}`);
-      const dados = response.map(item => ({
-        ...item,
-        sincronizado: true,
-        idLocal: '',
-        idFather: '',
-      }));
-      if (dados.length > 0) {
-        await salvarAguas(dados);
-        setAguas(prev => [...prev, ...dados]);
-      }
+      
+      const aguaData = response.map(agua => ({
+                      ...agua,
+                      sincronizado: true,
+                      idLocal: '',
+                      idFather: '',
+                  }));
+                  
+                  if (aguaData && Array.isArray(aguaData) && aguaData.length > 0) {
+                      await salvarAguas(aguaData);
+                      setAguas((prevAguas) => [...prevAguas, ...aguaData]);
+                  }
     } catch (error) {
       console.error("Erro ao buscar águas da API:", error);
     }

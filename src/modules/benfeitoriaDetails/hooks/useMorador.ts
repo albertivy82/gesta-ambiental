@@ -9,12 +9,13 @@ import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instit
 
 export const convertToMoradorInput = (morador: any): MoradorInput => {
   return {
+    
+    perfil: morador.perfil,
     dataNascimento: morador.dataNascimento,
     idade: morador.idade,
-    perfil: morador.perfil,
     sexo: morador.sexo,
-    estadoCivil: morador.estadoCivil,
     escolaridade: morador.escolaridade,
+    estadoCivil: morador.estadoCivil,
     ondeEstuda: morador.ondeEstuda,
     trabalho: morador.trabalho,
     religiao: morador.religiao,
@@ -68,7 +69,7 @@ export const useMoradores = (benfeitoriaId: number) => {
   const fetchMoradoresAPI = async () => {
     try {
       const response = await connectionAPIGet<MoradorType[]>(
-        `http://192.168.100.28:8080/morador-benfeitoria/${benfeitoriaId}`
+        `http://192.168.100.28:8080/morador/benfeitoria-morador/${benfeitoriaId}`
       );
 
       const apiData = response.map((item) => ({

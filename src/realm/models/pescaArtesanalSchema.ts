@@ -17,8 +17,6 @@ export const PescaArtesanalSchema = {
         combustivelPorViagem: 'double',
         custoCombustivelPorViagem: 'double',
         localDesembarque: 'string',
-        conservacaoTipo: 'string', 
-        destinopesca: 'int[]', 
         pescaPorSafra: 'double',
         localPescaSafra: 'string',
         localDeReproducaoPeixe: 'string',
@@ -26,9 +24,6 @@ export const PescaArtesanalSchema = {
         conheceDefeso: 'string', 
         concordaDefeso: 'string', 
         recebeDefeso: 'string', 
-        quantidadePescaPorTipo: 'int[]', 
-        embarcacao: 'int[]', 
-        especies: 'int[]', 
         benfeitoria: 'int' 
     }
 }

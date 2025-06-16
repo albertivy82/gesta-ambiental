@@ -1,9 +1,9 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarCredito, salvarCreditoQueue } from "../../../realm/services/creditoService";
-import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { CreditoInput } from "../../../shared/types/CreditoInput";
@@ -17,7 +17,7 @@ export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   },
 };
 
-export const useNovoCredito = (benfeitoria: BenfeitoriaType) => {
+export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoType) => {
   const [novoCredito, setNovoCredito] = useState<CreditoInput>(DEFAULT_CREDITO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
@@ -51,15 +51,23 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType) => {
     return creditoData;
   };
 
-  const enviarRegistro = async () =>{
+  const enviarRegistro = async () => {
+    if (credito) {
+      return await enviaCreditoEdicao();
+    } else {
+      return await enviaCreditoNova();
+    }
+  };
+
+  const enviaCreditoNova = async () =>{
 
  
     //benfeitoria offline
         if(!benfeitoria.sincronizado && benfeitoria.id<=0){
           //benfeitoria offline
-          const creditoDataQueue = objetoFila();
-          const creditoQueue = await salvarCreditoQueue(creditoDataQueue);
-          return creditoQueue;
+          const creditosDataQueue = objetoFila();
+          const creditosQueue = await salvarCreditoQueue(creditosDataQueue);
+          return creditosQueue;
          
   
         }else{
@@ -78,20 +86,65 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType) => {
                       }
   
                     } catch (error) {
-                        const creditoDataQueue = objetoFila();
-                        const creditoQueue = await salvarCreditoQueue(creditoDataQueue);
-                        return creditoQueue;
+                        const creditosDataQueue = objetoFila();
+                        const creditosQueue = await salvarCreditoQueue(creditosDataQueue);
+                        return creditosQueue;
                        
                     }
                   }else{
-                    const creditoDataQueue = objetoFila();
-                    const creditoQueue = await salvarCreditoQueue(creditoDataQueue);
-                    return creditoQueue;
+                    const creditosDataQueue = objetoFila();
+                    const creditosQueue = await salvarCreditoQueue(creditosDataQueue);
+                    return creditosQueue;
                        
                     
                   }
         }
   }
+
+  const enviaCreditoEdicao= async () =>{
+    const creditoCorrigida = {
+      ...novoCredito,
+      benfeitoria: { id: typeof credito!.benfeitoria === 'number' ? credito!.benfeitoria : credito!.benfeitoria.id }
+    };
+    const netInfoState = await NetInfo.fetch();
+    const isConnected = await testConnection();
+    
+     if(netInfoState.isConnected && isConnected){
+            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+            try{
+              
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/credito/benfeitoria-credito/${credito!.id}`, creditoCorrigida) as CreditoType;
+                    if (response && response.id) {
+                      return fetchCreditoAPI(response.id);
+                    }else{
+                      const local = await salvarCredito(buildCreditoAtualizada());
+                      return local;
+                                        }
+           } catch (error) {
+              const local = await salvarCredito(buildCreditoAtualizada());
+              Alert.alert("Erro ao enviar edição", "Tente novomente online.");
+              return local;
+          }
+          
+          } else {
+            if (!credito!.sincronizado && credito!.idLocal) {
+             return await salvarCredito(buildCreditoAtualizada());
+            } else {
+             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             return null;
+            }
+            
+          }
+          
+  }
+
+  const buildCreditoAtualizada = (): CreditoType => ({
+    ...credito!,
+    ...novoCredito,
+    sincronizado: credito?.sincronizado,
+    idLocal: credito?.idLocal,
+    idFather: credito?.idFather,
+});
   
    const fetchCreditoAPI = async(id:number) =>{
   
