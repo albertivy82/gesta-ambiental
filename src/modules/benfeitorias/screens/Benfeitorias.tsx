@@ -1,15 +1,15 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
-import { getBenfeitoriaDessincronizadas, getBenfeitorias } from '../../../realm/services/benfeitoriaService';
+import { getBenfeitorias } from '../../../realm/services/benfeitoriaService';
+import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { imovelBody } from '../../../shared/types/imovelType';
 import { BenfeitoriaContainer } from '../styles/benfeitoria.style';
 import RenderItem from '../ui-components/listaBenfeitorias';
-import { Icon } from '../../../shared/components/icon/Icon';
-import { imovelBody } from '../../../shared/types/imovelType';
 
 export interface benfeitoriasParam {
    imovel: imovelBody; 
@@ -27,20 +27,13 @@ const Benfeitorias = ()=>{
   
   
   useEffect(()=>{
+    setIsLoading(true);
       if(imovel){
-        if(imovel.sincronizado){
-          const benfeitoriaRealm = getBenfeitorias(imovel.id);
+         const benfeitoriaRealm = getBenfeitorias(imovel.id);
           setBenfeitoria(benfeitoriaRealm);
-        }else{
-          //tenho que pegar aquelas com pai desincronizado
-          const benfeitoriaRealm = getBenfeitoriaDessincronizadas(imovel.id);
-          setBenfeitoria(benfeitoriaRealm);
-        }
-
-           
-        
-      }
-  }, [imovel])
+       }
+       setIsLoading(false);
+   }, [imovel])
 
 // Rola até o final da lista
 const handleScrollToEnd = () => {

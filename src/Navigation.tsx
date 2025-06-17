@@ -8,7 +8,6 @@ import admUsers from "./modules/admUsers/screens/AdmUsers";
 import Aguas from "./modules/agua/screens/Agua";
 import { NovaAgua } from "./modules/agua/screens/novaAgua";
 import Atividades from "./modules/atividadeProdutiva/screens/AtividadeProdutiva";
-import AtividadeDetails from "./modules/atividadeProdutiva/screens/AtividadeProdutivaDetails";
 import { NovaAtividade } from "./modules/atividadeProdutiva/screens/novaAtividade";
 import Aves from "./modules/aves/screens/Ave";
 import { NovaAve } from "./modules/aves/screens/novaAve";
@@ -17,7 +16,6 @@ import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
 import { NovaBenfeitoria } from "./modules/benfeitorias/screens/novaBenfeitoria";
 import Coordenadas from "./modules/coordenadas";
 import Credito from "./modules/credito/screens/Credito";
-import CreditoDetails from "./modules/credito/screens/CreditoDetails";
 import { NovoCredito } from "./modules/credito/screens/novoCredito";
 import EditUser from "./modules/editUser";
 import EntrevistadoDetails from "./modules/entrevistadoDetails/screens/EntrevistadoDetails";
@@ -45,12 +43,10 @@ import Postos from "./modules/postos/screens/Postos";
 import ProfileUser from "./modules/profileUser";
 import { NovaRendaOutrasFontes } from "./modules/rendaOutrasFontes/screens/novaRendaOutrasFontes";
 import RendaOutrasFontes from "./modules/rendaOutrasFontes/screens/RendaOutrasFontes";
-import RendaOutrasFontesDetails from "./modules/rendaOutrasFontes/screens/RendaOutrasFontesDetails";
 import { NovoReptil } from "./modules/repteis/screens/novoReptil";
 import Repteis from "./modules/repteis/screens/Reptil";
 import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoSevicoComunicacao";
 import ServicosComunicacao from "./modules/servicoComunicacao/screens/ServicoComunicacao";
-import ServicosComunicacaoDetails from "./modules/servicoComunicacao/screens/ServicoComunicacaoDetail";
 import Splash from "./modules/splash";
 import User from "./modules/User";
 import UserDetails from "./modules/userDetails";
@@ -184,17 +180,13 @@ const Navigation =() =>{
           <Stack.Screen name="VegetacaoLista" component={Vegetacao} options={{ title: 'Registro de Vegetação' }} />
           <Stack.Screen name="NovoCredito" component={NovoCredito} options={{ title: 'Cadastro de Crédito' }} />
           <Stack.Screen name="CreditoLista" component={Credito} options={{ title: 'Registro de Crédito' }} />
-          <Stack.Screen name="CreditoDetails" component={CreditoDetails} options={{ title: 'Detalhes do Crédito' }} />
           <Stack.Screen name="NovaRendaOutrasFontes" component={NovaRendaOutrasFontes} options={{ title: 'Cadastro de Outras Fontes de Renda' }} />
           <Stack.Screen name="RendaOutrasFontesLista" component={RendaOutrasFontes} options={{ title: 'Registro de Outras Fontes de Renda' }} />
-          <Stack.Screen name="RendaOutrasFontesDetails" component={RendaOutrasFontesDetails} options={{ title: 'Detalhes da Renda' }} />
           <Stack.Screen name="NovaAgua" component={NovaAgua} options={{ title: 'Cadastro de Água' }} />
           <Stack.Screen name="AguaLista" component={Aguas} options={{ title: 'Registro de Água' }} />
           <Stack.Screen name="NovoServicoComunicacao" component={NovoServicoComunicacao} options={{ title: 'Cadastro de Serviço de Comunicação' }} />
           <Stack.Screen name="ServicosComunicacaoLista" component={ServicosComunicacao} options={{ title: 'Registro de Serviços de Comunicação' }} />
-          <Stack.Screen name="ServicosComunicacaoDetails" component={ServicosComunicacaoDetails} options={{ title: 'Detalhes do Serviço de Comunicação' }} />
           <Stack.Screen name="Atividades" component={Atividades} options={{ title: 'Cadastro de Serviço de Comunicação' }} />
-          <Stack.Screen name="AtividadeDetails" component={AtividadeDetails} options={{ title: 'Registro de Serviços de Comunicação' }} />
           <Stack.Screen name="NovaAtividade" component={NovaAtividade} options={{ title: 'Detalhes do Serviço de Comunicação' }} />
           <Stack.Screen name="Morador" component={Morador} options={{ title: 'Listagem de Moradores' }} />
           <Stack.Screen name="MoradorDetails" component={MoradorDetails} options={{ title: 'Morador' }} />

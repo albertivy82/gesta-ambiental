@@ -13,7 +13,6 @@ import { EntrevistadoSchema } from '../models/entrevistadoSchema';
 import { EscolaSchema } from '../models/escolaSchema ';
 import { EspecieSchema } from '../models/especieSchema';
 import { ImovelSchema } from '../models/imoveisSchema';
-import { IndicadoConsultaPublicaSchema } from '../models/indicadoConsultaPublicaSchema';
 import { LocalidadeSchema } from "../models/localidadeSchema";
 import { MamiferosSchema } from '../models/mamiferosSchema';
 import { MoradorSchema } from '../models/moradorSchema';
@@ -24,8 +23,8 @@ import { QuantidadePescaPorTipoSchema } from '../models/quantidadePescaPorTipo';
 import { RendaOutrasFontesSchema } from '../models/rendaOutrasFontesSchema';
 import { RepteisSchema } from '../models/repteisSchema';
 import { VegetacaoSchema } from '../models/vegetacaoSchema';
-import { ViolenciaSchema } from '../models/violenciaSchema';
 import { BenfeitoriaAlimentosSchema } from '../models/benfeitoriaAlimentos';
+import { PescaArtesanalSchema } from '../models/pescaArtesanalSchema';
 
 const allSchemas = [LocalidadeSchema,
                      ImovelSchema, 
@@ -39,11 +38,9 @@ const allSchemas = [LocalidadeSchema,
                      MamiferosSchema,
                      RepteisSchema,
                      VegetacaoSchema,
-                     ViolenciaSchema,
                      PeixesSchema,
                      AguaSchema,
                      EntrevistadoSchema,
-                     IndicadoConsultaPublicaSchema,
                      QuantidadePescaPorTipoSchema,
                      EmbarcacaoSchema,
                      EspecieSchema, 
@@ -53,7 +50,8 @@ const allSchemas = [LocalidadeSchema,
                      RendaOutrasFontesSchema,
                      AtividadeProdutivaSchema,
                      OutrosServicosSchema,
-                     BenfeitoriaAlimentosSchema                     
+                     BenfeitoriaAlimentosSchema, 
+                     PescaArtesanalSchema,                     
                    ]; 
 
 export const initializeRealm =()=>{

@@ -147,3 +147,21 @@ export const apagarAtividadeProdutivaQueue = (idLocal: string) => {
     console.error('Erro ao excluir atividade produtiva da fila:', error);
   }
 };
+
+export const apagarAtividadeProdutivaSyncronizada = (atividadeProdutivaId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${atividadeProdutivaId}"`;
+            const atividadeProdutivaExcluir = realmInstance.objects<AtividadeProdutivaType>('AtividadeProdutiva').filtered(query);
+
+            if (atividadeProdutivaExcluir.length > 0) {
+
+             realmInstance.delete(atividadeProdutivaExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('apagarBenfeitoriaSyncronizado/Erro ao excluir AtividadeProdutiva da fila:', error);
+    }
+};

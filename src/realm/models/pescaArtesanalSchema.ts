@@ -24,6 +24,9 @@ export const PescaArtesanalSchema = {
         conheceDefeso: 'string', 
         concordaDefeso: 'string', 
         recebeDefeso: 'string', 
-        benfeitoria: 'int' 
+        benfeitoria: 'int?',
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?' 
     }
 }

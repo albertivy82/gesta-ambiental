@@ -44,7 +44,7 @@ const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaInput>(DEFAULT
 const [disabled, setdisable] = useState<boolean>(true);
 
           useEffect(() => {
-                            
+                            console.log(novaBenfeitoria)
             if (
             novaBenfeitoria.tipoBenfeitoria !== null &&
             novaBenfeitoria.funcao !== null &&

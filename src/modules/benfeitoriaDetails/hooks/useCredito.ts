@@ -36,7 +36,7 @@ export const useCreditos = (benfeitoriaId: number) => {
             const creditoAPI = response as CreditoType;
             if (creditoAPI.id) apagarCreditoQueue(credito.idLocal!);
           } catch (error) {
-            console.error("Erro ao sincronizar crédito:", error);
+           // console.error("Erro ao sincronizar crédito:", error);
           }
         }
       }
@@ -64,7 +64,7 @@ export const useCreditos = (benfeitoriaId: number) => {
         setCreditos(prev => [...prev, ...dados]);
       }
     } catch (error) {
-      console.error("Erro ao buscar créditos da API:", error);
+     // console.error("Erro ao buscar créditos da API:", error);
     }
   };
 

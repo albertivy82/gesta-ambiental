@@ -16,7 +16,7 @@ export const convertToAguaInput = (agua: any): AguaInput => {
     saborDagua: agua.saborDagua,
     profundidadePoco: agua.profundidadePoco,
     benfeitoria: {
-      id: agua.benfeitoria.id,
+      id: agua.benfeitoria,
     },
   };
 };
@@ -36,7 +36,7 @@ export const useAguas = (benfeitoriaId: number) => {
             const aguaAPI = response as AguaType;
             if (aguaAPI.id) apagarAguaQueue(agua.idLocal!);
           } catch (error) {
-            console.error("Erro ao sincronizar água:", error);
+            //console.error("Erro ao sincronizar água:", error);
           }
         }
       }
@@ -66,7 +66,7 @@ export const useAguas = (benfeitoriaId: number) => {
                       setAguas((prevAguas) => [...prevAguas, ...aguaData]);
                   }
     } catch (error) {
-      console.error("Erro ao buscar águas da API:", error);
+     // console.error("Erro ao buscar águas da API:", error);
     }
   };
 

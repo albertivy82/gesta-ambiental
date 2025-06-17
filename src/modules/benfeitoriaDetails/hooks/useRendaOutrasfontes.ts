@@ -31,7 +31,7 @@ export const useRendasOutrasFontes = (benfeitoriaId: number) => {
             const rendaAPI = response as RendaOutrasFontesType;
             if (rendaAPI.id) apagarRendaOutrasFontesQueue(renda.idLocal!);
           } catch (error) {
-            console.error("Erro ao sincronizar renda:", error);
+          //  console.error("Erro ao sincronizar renda:", error);
           }
         }
       }
@@ -59,7 +59,7 @@ export const useRendasOutrasFontes = (benfeitoriaId: number) => {
         setRendasOF(prev => [...prev, ...dadosAPI]);
       }
     } catch (error) {
-      console.error("Erro ao buscar rendas da API:", error);
+    //  console.error("Erro ao buscar rendas da API:", error);
     }
   };
 

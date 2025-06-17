@@ -18,6 +18,13 @@ import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
 import { apagarBenfeitiaQueue, apagarBenfeitoriaSyncronizada } from "../../../realm/services/benfeitoriaService";
+import { apagarAguaQueue, apagarAguaSyncronizada } from "../../../realm/services/aguasService";
+import { apagarAtividadeProdutivaQueue, apagarAtividadeProdutivaSyncronizada } from "../../../realm/services/atividadeProdutivaService";
+import { apagarCreditoQueue, apagarCreditoSyncronizada } from "../../../realm/services/creditoService";
+import { apagarRendaOutrasFontesQueue, apagarRendaOutrasFontesSyncronizada } from "../../../realm/services/rendaOutrasFontes";
+import { apagarServicoComunicacaoQueue, apagarServicosComunicacaoSyncronizada } from "../../../realm/services/servicosComunicacaoService";
+import { apagarPescaArtesanalQueue, apagarPescaArtesanalSyncronizada } from "../../../realm/services/pescaService";
+import { apagarMoradorQueue, apagarMoradorSyncronizada } from "../../../realm/services/moradorService";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -69,6 +76,27 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "benfeitoria":
             apagarBenfeitiaQueue(idLocal);
             break;
+          case "agua":
+            apagarAguaQueue(idLocal);
+            break;
+          case "atividade-produtiva":
+            apagarAtividadeProdutivaQueue(idLocal);
+            break;
+          case "credito":
+            apagarCreditoQueue(idLocal);
+            break;
+          case "outras-fontes-de-renda":
+            apagarRendaOutrasFontesQueue(idLocal);
+            break;
+          case "morador":
+            apagarMoradorQueue(idLocal);
+            break;
+          case "pesca-artesanal":
+            apagarPescaArtesanalQueue(idLocal);
+            break;
+          case "servico-de-comunicacao":
+            apagarServicoComunicacaoQueue(idLocal);
+            break;
         }
   
         setModalVisible(false);
@@ -116,6 +144,27 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
             case "benfeitoria":
               apagarBenfeitoriaSyncronizada(id);
               break;
+            case "agua":
+              apagarAguaSyncronizada(id);
+            break;
+            case "atividade-produtiva":
+              apagarAtividadeProdutivaSyncronizada(id);
+            break;
+            case "credito":
+              apagarCreditoSyncronizada(id);
+            break;
+            case "outras-fontes-de-renda":
+              apagarRendaOutrasFontesSyncronizada(id);
+            break;
+            case "servico-de-comunicacao":
+              apagarServicosComunicacaoSyncronizada(id);
+            break;
+            case "pesca-artesanal":
+              apagarPescaArtesanalSyncronizada(id);
+            break;
+            case "morador":
+              apagarMoradorSyncronizada(id);
+            break;
           }
   
           setModalVisible(false);

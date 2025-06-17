@@ -1,6 +1,6 @@
-import { realmInstance } from './databaseService';
 import { CreditoInput } from '../../shared/types/CreditoInput';
 import { CreditoType } from '../../shared/types/CreditoType';
+import { realmInstance } from './databaseService';
 
 export const salvarCreditos = (creditos: CreditoType[]) => {
   return new Promise<void>((resolve, reject) => {
@@ -151,4 +151,23 @@ export const apagarCreditoQueue = (idLocal: string) => {
   } catch (error) {
     console.error('Erro ao excluir crédito da fila:', error);
   }
+};
+
+
+export const apagarCreditoSyncronizada = (creditoId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${creditoId}"`;
+            const creditoExcluir = realmInstance.objects<CreditoType>('Credito').filtered(query);
+
+            if (creditoExcluir.length > 0) {
+
+             realmInstance.delete(creditoExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir crédito da fila:', error);
+    }
 };

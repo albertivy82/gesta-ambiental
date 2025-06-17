@@ -147,3 +147,22 @@ export const apagarRendaOutrasFontesQueue = (idLocal: string) => {
         console.error('Erro ao excluir renda da fila:', error);
     }
 };
+
+
+export const apagarRendaOutrasFontesSyncronizada = (rendaOutrasFontesId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${rendaOutrasFontesId}"`;
+            const rendaOutrasFontesExcluir = realmInstance.objects<RendaOutrasFontesType>('RendaOutrasFontes').filtered(query);
+
+            if (rendaOutrasFontesExcluir.length > 0) {
+
+             realmInstance.delete(rendaOutrasFontesExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir a fonte de renda selecionada da fila:', error);
+    }
+};

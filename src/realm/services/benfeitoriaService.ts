@@ -137,8 +137,6 @@ export const getBenfeitorias = (imovel:number): BenfeitoriaType[]=>{
     
     const cleanBenfeitoria = JSON.parse(JSON.stringify(benfeitorias));
 
-    console.log("getBenfeitorias", cleanBenfeitoria)
-    
     return cleanBenfeitoria as BenfeitoriaType[];
 };
 
@@ -206,7 +204,7 @@ export const apagarBenfeitoriaSyncronizada = (benfeitoriaId: number) => {
         realmInstance.write(() => {
            
             const query = `id == "${benfeitoriaId}"`;
-            const benfeitoriaExcluir = realmInstance.objects<imovelBody>('Benfeitoria').filtered(query);
+            const benfeitoriaExcluir = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query);
 
             if (benfeitoriaExcluir.length > 0) {
 

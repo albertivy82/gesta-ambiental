@@ -111,6 +111,7 @@ export const getAguas = (benfeitoriaId: number): AguaType[] => {
 };
 
 export const getAguaDessincronizadas = (benfeitoriaId: number): AguaType[] => {
+  console.log("seria o probelma aqui?")
   const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const aguasQueue = realmInstance.objects<AguaType>('Agua').filtered(query).slice();
   return JSON.parse(JSON.stringify(aguasQueue)) as AguaType[];
@@ -146,4 +147,22 @@ export const apagarAguaQueue = (idLocal: string) => {
   } catch (error) {
     console.error('Erro ao excluir água da fila:', error);
   }
+};
+
+export const apagarAguaSyncronizada = (aguaId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${aguaId}"`;
+            const aguaExcluir = realmInstance.objects<AguaType>('Agua').filtered(query);
+
+            if (aguaExcluir.length > 0) {
+
+             realmInstance.delete(aguaExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('apagarBenfeitoriaSyncronizado/Erro ao excluir benfeitoria da fila:', error);
+    }
 };

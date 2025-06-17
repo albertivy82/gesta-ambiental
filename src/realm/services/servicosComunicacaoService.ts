@@ -153,3 +153,21 @@ export const apagarServicoComunicacaoQueue = (idLocal: string) => {
     console.error('Erro ao excluir serviço de comunicação da fila:', error);
   }
 };
+
+export const apagarServicosComunicacaoSyncronizada = (servicosComunicacaoId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${servicosComunicacaoId}"`;
+            const servicosComunicacaoExcluir = realmInstance.objects<ServicosComunicacaoType>('ServicosComunicacao').filtered(query);
+
+            if (servicosComunicacaoExcluir.length > 0) {
+
+             realmInstance.delete(servicosComunicacaoExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir benfeitoria da fila:', error);
+    }
+};

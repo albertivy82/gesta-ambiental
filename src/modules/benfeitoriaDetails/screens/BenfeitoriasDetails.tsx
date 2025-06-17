@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
@@ -38,20 +38,28 @@ export interface BenfeitoriaParam {
  benfeitoria: BenfeitoriaType;
 }
 
-
+  const temporario = () => {
+       
+          Alert.alert(
+            "Atenção!",
+            "Esta categoria ainda não está disponível para edição."
+          );
+       
+      };
 
 const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
-  const {moradores} = useMoradores(params.benfeitoria.id);
-  const {aguas} = useAguas(params.benfeitoria.id);
+  const benfeitoria = params.benfeitoria;
+  const {moradores} = useMoradores(benfeitoria.id);
+  const {aguas} = useAguas(benfeitoria.id);
   const {atividades} = useAtividadesProdutivas(params.benfeitoria.id);
   const {creditos} = useCreditos(params.benfeitoria.id);
   const {pescaArtesanal} = usePescaArtesanal(params.benfeitoria.id);
   const {rendasOF} = useRendasOutrasFontes(params.benfeitoria.id);
   const {servicos} = useServicosComunicacao(params.benfeitoria.id);
 
-  
+  console.log(params.benfeitoria)
 
    const handleDecision = <T,>(
       data: T | T[],
@@ -116,8 +124,14 @@ const BenfeitoriaDetails = () => {
                             //volta para infLocalidade
                       }} 
                       />
+                
+                </View>
 
-       <TouchableOpacity onPress={() => handleDecision(moradores, "moradoresDetails", "NovoMorador")}>
+                <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
+                 
+                 </View>
+                
+                <TouchableOpacity onPress={() => handleDecision(moradores, "Morador", "NovoMorador")}>
                 <View style={{
                   alignItems: 'stretch',
                   flexDirection: 'row',
@@ -138,7 +152,7 @@ const BenfeitoriaDetails = () => {
                 </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => handleDecision(aguas, "aguasDetails", "NovaAgua")}>
+       <TouchableOpacity onPress={() => handleDecision(aguas, "AguaLista", "NovaAgua")}>
               <View style={{
                 alignItems: 'stretch',
                 flexDirection: 'row',
@@ -159,7 +173,7 @@ const BenfeitoriaDetails = () => {
               </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => handleDecision(atividades, "AtividadesDetails", "NovaAtividade")}>
+       <TouchableOpacity onPress={() => handleDecision(atividades, "Atividades", "NovaAtividade")}>
               <View style={{
                 alignItems: 'stretch',
                 flexDirection: 'row',
@@ -180,7 +194,7 @@ const BenfeitoriaDetails = () => {
               </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => handleDecision(creditos, "CreditoDetails", "NovoCredito")}>
+       <TouchableOpacity onPress={() => handleDecision(creditos, "CreditoLista", "NovoCredito")}>
           <View style={{
             alignItems: 'stretch',
             flexDirection: 'row',
@@ -201,7 +215,7 @@ const BenfeitoriaDetails = () => {
           </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => handleDecision(pescaArtesanal, "ImovelDetails", "NovoImovel")}>
+       <TouchableOpacity onPress={() => temporario()}>
           <View style={{
             alignItems: 'stretch',
             flexDirection: 'row',
@@ -222,7 +236,7 @@ const BenfeitoriaDetails = () => {
           </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => handleDecision(rendasOF, "ImovelDetails", "NovoImovel")}>
+       <TouchableOpacity onPress={() => temporario()}>
             <View style={{
               alignItems: 'stretch',
               flexDirection: 'row',
@@ -243,7 +257,7 @@ const BenfeitoriaDetails = () => {
             </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => handleDecision(servicos, "servicosDetails", "NovoServico")}>
+       <TouchableOpacity onPress={() => temporario()}>
               <View style={{
                 alignItems: 'stretch',
                 flexDirection: 'row',
@@ -263,10 +277,11 @@ const BenfeitoriaDetails = () => {
                 </Text>
               </View>
         </TouchableOpacity>
+     
 
 
 
-</View>
+
 
 
 

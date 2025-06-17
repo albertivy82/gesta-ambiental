@@ -38,7 +38,7 @@ const Entrevistados = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  const fetchEscolas = useCallback(async () => {
+  const fetchEntrevistados = useCallback(async () => {
       setIsLoading(true);
       if (localidadeId) {
         const eentrevistadosRealm = getEntrevistados(localidadeId);
@@ -48,11 +48,11 @@ const Entrevistados = () => {
     }, [localidadeId]);
 
     useEffect(() => {
-      fetchEscolas();
-    }, [fetchEscolas]);
+      fetchEntrevistados();
+    }, [fetchEntrevistados]);
 
     const handleRefresh = () => {
-      fetchEscolas();
+      fetchEntrevistados();
       handleScrollToEnd();
     };
 

@@ -1,6 +1,6 @@
 export enum tipoSoloBenfeitoriaEnum {
     Terreno_Natural = 'Terreno_Natural',
-    Vejetacao = 'Vejetacao',
+    Vegetacao = 'Vegetacao',
     Cimentado = 'Cimentado',
     Outro = 'Outro',
 }

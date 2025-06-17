@@ -5,6 +5,9 @@ export const ServicosComunicacaoSchema ={
         id: 'int',
         tipoServicoComunicacao: 'string',
         operadoraServicoComunicacao: 'string',
-        benfeitoria: 'int' 
+        benfeitoria: 'int?',
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

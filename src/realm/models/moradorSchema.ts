@@ -11,6 +11,9 @@ export const MoradorSchema = {
         ondeEstuda: 'string?',
         trabalho: 'string', 
         religiao: 'string',
-        benfeitoria: 'Benfeitoria'
+        benfeitoria: 'int?',
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

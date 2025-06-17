@@ -49,7 +49,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
                   apagarAtividadeProdutivaQueue(atividade.idLocal!);
                 }
               } catch (error) {
-                console.error("Erro na sincronização da atividade produtiva:", error);
+                //console.error("Erro na sincronização da atividade produtiva:", error);
               }
             }
           }
@@ -85,7 +85,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
         throw new Error("Dados de atividade produtiva inválidos");
       }
     } catch (error) {
-      console.error("Erro ao recuperar atividades produtivas da API:", error);
+     // console.error("Erro ao recuperar atividades produtivas da API:", error);
     }
   };
 

@@ -54,7 +54,7 @@ export const usePescaArtesanal = (benfeitoriaId: number) => {
               const data = response as PescaArtesanalType;
               if (data.id) apagarPescaArtesanalQueue(item.idLocal!);
             } catch (error) {
-              console.error('Erro ao sincronizar pesca artesanal:', error);
+             // console.error('Erro ao sincronizar pesca artesanal:', error);
             }
           }
         }
@@ -81,7 +81,7 @@ export const usePescaArtesanal = (benfeitoriaId: number) => {
         setPescaArtesanal(prev => [...prev, ...data]);
       }
     } catch (error) {
-      console.error("Erro ao recuperar pesca artesanal da API:", error);
+      //console.error("Erro ao recuperar pesca artesanal da API:", error);
     }
   };
 

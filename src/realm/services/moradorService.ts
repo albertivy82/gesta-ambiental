@@ -111,6 +111,7 @@ export const getMoradores = (benfeitoriaId: number): MoradorType[] => {
 };
 
 export const getMoradoresDessincronizados = (benfeitoriaId: number): MoradorType[] => {
+    console.log("...ou seria o probelma aqui?")
     const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const moradorQueue = realmInstance.objects<MoradorType>('Morador').filtered(query).slice();
     return JSON.parse(JSON.stringify(moradorQueue)) as MoradorType[];
@@ -142,6 +143,25 @@ export const apagarMoradorQueue = (idLocal: string) => {
             if (moradorExcluir.length > 0) {
                 realmInstance.delete(moradorExcluir);
             }
+        });
+    } catch (error) {
+        console.error('Erro ao excluir morador da fila:', error);
+    }
+};
+
+
+export const apagarMoradorSyncronizada = (moradorId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${moradorId}"`;
+            const moradorExcluir = realmInstance.objects<MoradorType>('Morador').filtered(query);
+
+            if (moradorExcluir.length > 0) {
+
+             realmInstance.delete(moradorExcluir);
+             
+            } 
         });
     } catch (error) {
         console.error('Erro ao excluir morador da fila:', error);

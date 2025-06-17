@@ -5,6 +5,9 @@ export const CreditoSchema = {
         id: 'int',
         nome: 'string',
         valor: 'double', 
-        benfeitoria: 'Benfeitoria' 
+        benfeitoria: 'int?',
+        sincronizado: 'bool',
+        idLocal: 'string?',
+        idFather: 'string?'
     }
 }

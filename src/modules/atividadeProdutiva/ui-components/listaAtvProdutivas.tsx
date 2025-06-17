@@ -1,23 +1,46 @@
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, View } from "react-native";
+import { Alert, TouchableOpacity, View } from "react-native";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
 import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
-
-export const detalharAtividade = (navigate: NavigationProp<ParamListBase>['navigate'], atividade: AtividadeProdutivaType) => {
-  navigate('AtividadeDetails', { atividade });
-}
+import { useState } from "react";
 
 const RenderItemAtividade = ({ item }: { item: AtividadeProdutivaType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-
-  const handleGoToAtividadeDetail = (atividade: AtividadeProdutivaType) => {
-    detalharAtividade(navigation.navigate, atividade);
-  }
-
+  const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
+  
+  
+      const handleAcaoAtividadeProdutiva = (atividadeProdutiva: AtividadeProdutivaType) => {
+     
+      Alert.alert(
+        'Ação sobre registro sobre a Atividade Produtiva',
+        `O que você deseja fazer com este registro"?`,
+        [
+          {
+            text: 'Editar',
+            onPress: () => {
+              navigation.navigate('NovaAtividade', { atividadeProdutiva }); // reuso da tela para edição
+            },
+          },
+          {
+            text: 'Apagar',
+            onPress: () => {
+              setMostrarModalDelete(true);
+            },
+            style: 'destructive',
+          },
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+    };
   return (
-    <TouchableOpacity onPress={() => handleGoToAtividadeDetail(item)}>
+    <TouchableOpacity onPress={() => handleAcaoAtividadeProdutiva(item)}>
       <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
         
         <Text
@@ -47,6 +70,17 @@ const RenderItemAtividade = ({ item }: { item: AtividadeProdutivaType }) => {
         >
           Faturamento/mês: R$ {item.faturamentoAtividadeMesTotal.toFixed(2)}
         </Text>
+
+        {mostrarModalDelete && (
+                  
+                  <DeleteConfirmation
+                     id={item.id}
+                     idLocal={item.idLocal}
+                     deleteEndpoint="atividade-produtiva"
+                     onDeleteSuccess={() => {
+                     setMostrarModalDelete(false);}}
+                  />
+                  )}  
 
       </View>
     </TouchableOpacity>

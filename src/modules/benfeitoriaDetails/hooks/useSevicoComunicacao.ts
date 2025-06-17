@@ -39,7 +39,7 @@ export const useServicosComunicacao = (benfeitoriaId: number) => {
               
               if (servComAPI?.id) apagarServicoComunicacaoQueue(item.idLocal!);
             } catch (error) {
-              console.error('Erro na sincronização dos serviços de comunicação:', error);
+              //console.error('Erro na sincronização dos serviços de comunicação:', error);
             }
           }
         }
@@ -68,7 +68,7 @@ export const useServicosComunicacao = (benfeitoriaId: number) => {
         setServicos((prev) => [...prev, ...data]);
       }
     } catch (error) {
-      console.error("Erro ao recuperar serviços de comunicação da API:", error);
+      //console.error("Erro ao recuperar serviços de comunicação da API:", error);
     }
   };
 

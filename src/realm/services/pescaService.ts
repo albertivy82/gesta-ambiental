@@ -147,3 +147,22 @@ export const apagarPescaArtesanalQueue = (idLocal: string) => {
         console.error('Erro ao excluir pesca artesanal da fila:', error);
     }
 };
+
+
+export const apagarPescaArtesanalSyncronizada = (pescaArtesanalId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${pescaArtesanalId}"`;
+            const pescaArtesanalExcluir = realmInstance.objects<PescaArtesanalType>('PescaArtesanal').filtered(query);
+
+            if (pescaArtesanalExcluir.length > 0) {
+
+             realmInstance.delete(pescaArtesanalExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir registro de pesca artesanal da fila:', error);
+    }
+};

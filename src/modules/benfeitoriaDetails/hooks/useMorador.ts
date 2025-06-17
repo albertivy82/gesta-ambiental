@@ -3,16 +3,14 @@ import { useEffect, useState } from "react";
 import { apagarMoradorQueue, getMoradores, getMoradoresDessincronizados, salvarMoradores } from "../../../realm/services/moradorService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { MoradorType } from "../../../shared/types/MoradorType";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
-import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instituicaoConhecidaService";
+import { MoradorType } from "../../../shared/types/MoradorType";
 
 export const convertToMoradorInput = (morador: any): MoradorInput => {
   return {
     
     perfil: morador.perfil,
     dataNascimento: morador.dataNascimento,
-    idade: morador.idade,
     sexo: morador.sexo,
     escolaridade: morador.escolaridade,
     estadoCivil: morador.estadoCivil,
@@ -21,7 +19,7 @@ export const convertToMoradorInput = (morador: any): MoradorInput => {
     religiao: morador.religiao,
     doencas: morador.doencas,
     benfeitoria: {
-      id: morador.benfeitoria.id,
+      id: morador.benfeitoria,
     },
   };
 };
@@ -46,11 +44,11 @@ export const useMoradores = (benfeitoriaId: number) => {
                 const moradorAPI = response as MoradorType;
 
                 if (moradorAPI.id) {
-                  setIdMoradorFromApiOnInstituicao(moradorAPI.id, novoMoradorInput.idLocal!)
+                 // setIdMoradorFromApiOnInstituicao(moradorAPI.id, novoMoradorInput.idLocal!)
                   apagarMoradorQueue(morador.idLocal!);
                 }
               } catch (error) {
-                console.error('Erro na sincronização de morador:', error);
+                //console.error('Erro na sincronização de morador:', error);
               }
             }
           }
@@ -86,7 +84,7 @@ export const useMoradores = (benfeitoriaId: number) => {
         throw new Error('Dados de moradores inválidos');
       }
     } catch (error) {
-      console.error('Erro ao recuperar moradores da API:', error);
+      //console.error('Erro ao recuperar moradores da API:', error);
     }
   };
 

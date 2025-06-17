@@ -1,24 +1,49 @@
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, TouchableOpacity, View } from "react-native";
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 
 
-export const detalharServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], servicoComunicacao: ServicosComunicacaoType) => {
-    navigate('ServicoComunicacaoDetails', { servicoComunicacao })
-}
-
 const RenderItemServicoComunicacao = ({ item }: { item: ServicosComunicacaoType }) => {
-    const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
+  
+  
+      const handleAcaoServicosComunicacao = (servicosComunicacao: ServicosComunicacaoType) => {
+     
+      Alert.alert(
+        'Ação sobre registro sobre serviços de comunicação',
+        `O que você deseja fazer com este registro"?`,
+        [
+          {
+            text: 'Editar',
+            onPress: () => {
+              navigation.navigate('NovoServicoComunicacao', { servicosComunicacao }); // reuso da tela para edição
+            },
+          },
+          {
+            text: 'Apagar',
+            onPress: () => {
+              setMostrarModalDelete(true);
+            },
+            style: 'destructive',
+          },
+          {
+            text: 'Cancelar',
+            style: 'cancel',
+          },
+        ],
+        { cancelable: true }
+      );
+    };
 
-    const handleGoToServicoComunicacaoDetail = (servicoComunicacao: ServicosComunicacaoType) => {
-        detalharServicoComunicacao(navigation.navigate, servicoComunicacao);
-    }
 
     return (
-        <TouchableOpacity onPress={() => handleGoToServicoComunicacaoDetail(item)}>
+        <TouchableOpacity onPress={() => handleAcaoServicosComunicacao(item)}>
             <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
                 <Text
                     type={textTypes.BUTTON_REGULAR}
@@ -40,6 +65,18 @@ const RenderItemServicoComunicacao = ({ item }: { item: ServicosComunicacaoType 
                 >
                     Operadora: {item.operadoraServicoComunicacao}
                 </Text>
+
+
+                {mostrarModalDelete && (
+                  
+                  <DeleteConfirmation
+                     id={item.id}
+                     idLocal={item.idLocal}
+                     deleteEndpoint="servico-de-comunicacao"
+                     onDeleteSuccess={() => {
+                     setMostrarModalDelete(false);}}
+                  />
+                  )}  
             </View>
         </TouchableOpacity>
     );
