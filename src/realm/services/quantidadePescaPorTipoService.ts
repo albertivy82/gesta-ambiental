@@ -111,7 +111,7 @@ export const getQtdPescaPorTipoPesca = (pescaArtesanalId: number): QuantidadePes
     return JSON.parse(JSON.stringify(destinosPesca)) as QuantidadePescaPorTipoType[];
 };
 
-export const getDestinosPescaDessincronizados = (pescaArtesanalId: number): QuantidadePescaPorTipoType[] => {
+export const getQuantidadesPescaPorTipoDessincronizados = (pescaArtesanalId: number): QuantidadePescaPorTipoType[] => {
     const query = `pescaArtesanal == "${pescaArtesanalId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const qtdPptipoQueue = realmInstance.objects<QuantidadePescaPorTipoType>('QuantidadePescaPorTipo').filtered(query).slice();
     return JSON.parse(JSON.stringify(qtdPptipoQueue)) as QuantidadePescaPorTipoType[];
@@ -135,7 +135,7 @@ export const setIdPescaArtesanalFromApiOnQtdPptipo = (idPescaArtesanalApi: numbe
     }
 };
 
-export const apagarQtdPptipoQueue = (idLocal: string) => {
+export const apagarPescaPorTipoQueue = (idLocal: string) => {
     try {
         realmInstance.write(() => {
             const query = `idLocal == "${idLocal}"`;
@@ -147,4 +147,18 @@ export const apagarQtdPptipoQueue = (idLocal: string) => {
     } catch (error) {
         console.error('Erro ao excluir qtdPptipo da fila:', error);
     }
+};
+
+export const apagarQuantidadePescaPorTipoSyncronizada = (quantidadePescaPorTipoId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${quantidadePescaPorTipoId}`;
+      const quantidadePescaPorTipoExcluir = realmInstance.objects<QuantidadePescaPorTipoType>("QuantidadePescaPorTipo").filtered(query);
+      if (quantidadePescaPorTipoExcluir.length > 0) {
+        realmInstance.delete(quantidadePescaPorTipoExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir quantidadePescaPorTipo sincronizada:", error);
+  }
 };

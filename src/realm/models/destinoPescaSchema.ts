@@ -3,7 +3,7 @@ export const DestinoPescaSchema = {
     primaryKey: 'id',
     properties: {
         id: 'int',
-        destinacao: 'string', 
+        finalidade: 'string', 
         quantidade: 'double',
         destino: 'string', 
         destinoFixo: 'string', 

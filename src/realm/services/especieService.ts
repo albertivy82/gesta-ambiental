@@ -147,3 +147,18 @@ export const apagarEspecieQueue = (idLocal: string) => {
         console.error('Erro ao excluir especie da fila:', error);
     }
 };
+
+
+export const apagarEspecieSyncronizada = (especieId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${especieId}`;
+      const especieExcluir = realmInstance.objects<EspecieType>("Especie").filtered(query);
+      if (especieExcluir.length > 0) {
+        realmInstance.delete(especieExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir especie sincronizada:", error);
+  }
+};

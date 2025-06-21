@@ -3,6 +3,7 @@ import { TipoBarco } from "../../enums/tipoBarco.enum";
 
 export interface EmbarcacaoType {
     id: number;
+    numeracao: string;
     tipoBarco: TipoBarco;
     tipoCasco: TipoCasco;
     pescaArtesanal: {

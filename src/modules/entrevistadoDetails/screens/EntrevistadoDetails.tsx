@@ -240,7 +240,7 @@ const EntrevistadoDetails = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => handleDecision(peixes, "PeixesLista", "NovoPeixe")}>
+      <TouchableOpacity onPress={() => handleDecision(peixes, "PeixesLista", "NovoPeixe")}>
             <View style={{
               alignItems: 'stretch',
               flexDirection: 'row',

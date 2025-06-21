@@ -5,6 +5,7 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
 import { MoradorType } from "../../../shared/types/MoradorType";
+import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instituicaoConhecidaService";
 
 export const convertToMoradorInput = (morador: any): MoradorInput => {
   return {
@@ -44,7 +45,7 @@ export const useMoradores = (benfeitoriaId: number) => {
                 const moradorAPI = response as MoradorType;
 
                 if (moradorAPI.id) {
-                 // setIdMoradorFromApiOnInstituicao(moradorAPI.id, novoMoradorInput.idLocal!)
+                  setIdMoradorFromApiOnInstituicao(moradorAPI.id, novoMoradorInput.idLocal!)
                   apagarMoradorQueue(morador.idLocal!);
                 }
               } catch (error) {

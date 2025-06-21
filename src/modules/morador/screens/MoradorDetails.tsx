@@ -8,6 +8,9 @@ import { MoradorType } from '../../../shared/types/MoradorType';
 import { renderField } from '../../../shared/components/input/renderFilds';
 import { MoradorDetailContainer } from '../styles/morador.style';
 import { Icones } from '../../entrevistadoDetails/styles/EntrevistadoDetails.style';
+import EditConfirmation from '../ui-components/UseEditMorador';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+import { useParticipacaoInstituicoes } from '../hooks/useParticipacaoInstituicao';
 
 
 
@@ -36,8 +39,8 @@ export interface MoradorParam {
 const MoradorDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, MoradorParam>>>();
-  let ParticipacaoInstituicao: string[];
-    
+  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(params.morador.id);
+  
 
    const handleDecision = <T,>(
       data: T | T[],
@@ -50,7 +53,7 @@ const MoradorDetails = () => {
         handleNewEntry(navigation.navigate, newRoute, params.morador);
       }
     };
-  
+  // {//source={require('../../../assets/images/instituicoes.png')}
    
   return (
     
@@ -69,52 +72,38 @@ const MoradorDetails = () => {
             </View>
                    
 
-              <View style={{ flexDirection: 'row', 
+            <View style={{ flexDirection: 'row', 
                       justifyContent: 'space-around', 
                       padding: 10,
-                      
-                      borderWidth: 2, 
-                      borderColor: theme.colors.grayTheme.gray100 
-                    }}>
+                      marginTop: 40, 
+                      borderWidth: 5, 
+                      borderColor: "#808080", 
+                      backgroundColor: '#000000'
+                    }}>                     
+                     <EditConfirmation 
+                      morador={params.morador} 
+                      destino="NovoMorador" 
+                      onEditSuccess={() => {
+                       
+                      }} 
+                      />
 
-                    <TouchableOpacity onPress={() =>null}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='bin' color='red' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Apagar Morador</Text>
-                        </View>
-                    </TouchableOpacity>
+                      <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#9b9999' }} />
+                              
+                      <DeleteConfirmation 
+                      id={params.morador.id} 
+                      idLocal={params.morador.idLocal}
+                      deleteEndpoint="morador" 
+                      onDeleteSuccess={() => {
+                            //volta para infLocalidade
+                      }} 
+                      />
+                
+                </View>
+               
 
-                    <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: theme.colors.grayTheme.gray100 }} />
-
-
-                    <TouchableOpacity onPress={() => null}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Icon size={40} name='pencil2' color='blue' />
-                            <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.blueTheme.blue1}>Editar Morador</Text>
-                        </View>
-                    </TouchableOpacity>
-
-
-                    <TouchableOpacity  onPress={() => {handleDecision(ParticipacaoInstituicao!, "moradoresDetails", "NovoMorador")}}>
-                          
-                          {ParticipacaoInstituicao!.length >0? (
-     
-                           <Text type={textTypes.BUTTON_BOLD} color={theme.colors.whiteTheme.white}>
-                           Participação em que participa: {ParticipacaoInstituicao!.length}
-                           </Text>
-     
-                          ):( 
-                              <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                                padding: 10,
-                                borderWidth: 2, 
-                                borderColor: theme.colors.grayTheme.gray100
-                              }}>
-                              <Icones resizeMode="contain" source={require('../../../assets/images/instituicoes.png')} />
-                              <Text type={textTypes.BUTTON_BOLD} color={theme.colors.blueTheme.blue1}>Instituições +</Text>
-                              </View>
-                          )}
-            </TouchableOpacity>
-               </View>
+                    
+              
                
               
       

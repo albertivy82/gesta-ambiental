@@ -6,7 +6,7 @@ import { SimNao } from "../../enums/simNao.enum";
 
 export interface DestinoPescaType {
     id: number;
-    finalidadePesca: FinalidadePesca; 
+    finalidade: FinalidadePesca; 
     quantidade: number;
     destino: DestinoPesca; 
     destinoFixo: SimNao; 

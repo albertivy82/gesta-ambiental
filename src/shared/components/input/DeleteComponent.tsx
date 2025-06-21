@@ -25,6 +25,11 @@ import { apagarRendaOutrasFontesQueue, apagarRendaOutrasFontesSyncronizada } fro
 import { apagarServicoComunicacaoQueue, apagarServicosComunicacaoSyncronizada } from "../../../realm/services/servicosComunicacaoService";
 import { apagarPescaArtesanalQueue, apagarPescaArtesanalSyncronizada } from "../../../realm/services/pescaService";
 import { apagarMoradorQueue, apagarMoradorSyncronizada } from "../../../realm/services/moradorService";
+import { apagarParticipacaoInstituicaoQueue, apagarParticipacaoInstituicaoSyncronizada } from "../../../realm/services/ParticipacaoInstituicaoService";
+import { apagarEspecieQueue, apagarEspecieSyncronizada } from "../../../realm/services/especieService";
+import { apagarEmbarcacaoQueue, apagarEmbarcacaoSyncronizada } from "../../../realm/services/embarcacaoService";
+import { apagarDestinoPescaQueue, apagarDestinoPescaSyncronizada } from "../../../realm/services/destinoPescaService";
+import { apagarPescaPorTipoQueue, apagarQuantidadePescaPorTipoSyncronizada } from "../../../realm/services/quantidadePescaPorTipoService";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -97,6 +102,22 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "servico-de-comunicacao":
             apagarServicoComunicacaoQueue(idLocal);
             break;
+          case "participacao-instituicao":
+            apagarParticipacaoInstituicaoQueue(idLocal);
+            break;
+          case "quantidade-pesca-por-tipo":
+            apagarPescaPorTipoQueue(idLocal);
+            break;
+          case "especie":
+            apagarEspecieQueue(idLocal);
+            break;
+          case "embarcacao":
+            apagarEmbarcacaoQueue(idLocal);
+            break;
+          case "destino-pesca":
+            apagarDestinoPescaQueue(idLocal);
+            break;
+            
         }
   
         setModalVisible(false);
@@ -164,6 +185,21 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
             break;
             case "morador":
               apagarMoradorSyncronizada(id);
+            break;
+            case "participacao-instituicao":
+              apagarParticipacaoInstituicaoSyncronizada(id);
+            break;
+            case "quantidade-pesca-por-tipo":
+              apagarQuantidadePescaPorTipoSyncronizada(id);
+            break;
+            case "especie":
+              apagarEspecieSyncronizada(id);
+            break;
+            case "embarcacao":
+              apagarEmbarcacaoSyncronizada(id);
+            break;
+            case "destino-pesca":
+             apagarDestinoPescaSyncronizada(id);
             break;
           }
   

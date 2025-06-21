@@ -129,9 +129,9 @@ const fetchEntrevistadosFromAPI = async () => {
                await salvarEntrevistados(entrevistadoData)
                const contagem = entrevistadoData.length;
                 setContagemEntrevistados(contagem);
-          } else {
-                throw new Error('Dados de entrevistados Inválidos');
-          }
+                  } else {
+                        throw new Error('Dados de entrevistados Inválidos');
+                  }
 
       } catch (error) {
         console.log("CONTAGEM DE ENTREVISTADOS-ERRO!!!:", error);

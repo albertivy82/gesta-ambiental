@@ -2,7 +2,7 @@ import { TipoCasco } from "../../enums/TipoCasco.enum";
 import { TipoBarco } from "../../enums/tipoBarco.enum";
 
 export interface EmbarcacaoInput {
-    id: number;
+    numeracao: string;
     tipoBarco: TipoBarco;
     tipoCasco: TipoCasco;
     pescaArtesanal: {

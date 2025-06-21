@@ -7,9 +7,7 @@ import { VegetacaoInput } from "../../../shared/types/VegetacaoInput";
 import { VegetacaoType } from "../../../shared/types/VegetacaoType";
 
 export const convertToVegetacaoInput = (vegetacao: any) => {
-    console.log("vegetação enviada para conversão",vegetacao)
-    console.log(typeof vegetacao.entrevistado);           // "object"
-    console.log(typeof vegetacao.entrevistado.id);
+    
     const vegetacaoInput: VegetacaoInput = {
         especie: vegetacao.especie,
         usoMedicinal: vegetacao.usoMedicinal,

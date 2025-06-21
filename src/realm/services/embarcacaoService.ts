@@ -104,13 +104,13 @@ export const salvarEmbarcacao= (embarcacao:EmbarcacaoType): Promise<EmbarcacaoTy
 };
 
 
-export const getEmbarcacao = (pescaArtesanalId: number): EmbarcacaoType[] => {
+export const getEmbarcacoes = (pescaArtesanalId: number): EmbarcacaoType[] => {
     const query = `pescaArtesanal == ${pescaArtesanalId}`;
     const embarcacaos = realmInstance.objects<EmbarcacaoType>('Embarcacao').filtered(query).slice();
     return JSON.parse(JSON.stringify(embarcacaos)) as EmbarcacaoType[];
 };
 
-export const getEmbarcacaosDessincronizados = (pescaArtesanalId: number): EmbarcacaoType[] => {
+export const getEmbarcacoesDessincronizadas = (pescaArtesanalId: number): EmbarcacaoType[] => {
     const query = `pescaArtesanal == "${pescaArtesanalId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const embarcacaoQueue = realmInstance.objects<EmbarcacaoType>('Embarcacao').filtered(query).slice();
     return JSON.parse(JSON.stringify(embarcacaoQueue)) as EmbarcacaoType[];
@@ -146,4 +146,18 @@ export const apagarEmbarcacaoQueue = (idLocal: string) => {
     } catch (error) {
         console.error('Erro ao excluir embarcacao da fila:', error);
     }
+};
+
+export const apagarEmbarcacaoSyncronizada = (embarcacaoId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${embarcacaoId}`;
+      const embarcacaoExcluir = realmInstance.objects<EmbarcacaoType>("Embarcacao").filtered(query);
+      if (embarcacaoExcluir.length > 0) {
+        realmInstance.delete(embarcacaoExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir embarcacao sincronizada:", error);
+  }
 };

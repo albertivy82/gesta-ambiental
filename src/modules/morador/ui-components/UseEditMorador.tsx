@@ -6,15 +6,15 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { testConnection } from '../../../shared/functions/connection/testConnection';
-import { imovelBody } from '../../../shared/types/imovelType';
+import { MoradorType } from '../../../shared/types/MoradorType';
 
 interface EditConfirmationProps {
-  imovel: imovelBody;
+  morador: MoradorType;
   destino: string;
   onEditSuccess: () => void;
 }
 
-const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, onEditSuccess }) => {
+const EditConfirmation: React.FC<EditConfirmationProps> = ({ morador, destino, onEditSuccess }) => {
 
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -24,9 +24,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
-     console.log("aqui",imovel)
-      navigation.navigate(destino, {imovel});
-      
+     // console.log("aqui",morador)
+      navigation.navigate(destino, {morador});
       setModalVisible(false);
       onEditSuccess();
     } catch (error) {
@@ -65,7 +64,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
           <Icon size={40} name='pencil2' color={disable ? '#aaa' : "#ff4500"} />
           <Text 
             type={textTypes.PARAGRAPH_LIGHT} 
-            color={disable ? "#aaa" : "#ff4500"} 
+            color={disable ? "#070707" : "#ff4500"} 
             style={{ alignItems: 'baseline' }}
           >
             Editar Item
@@ -87,14 +86,14 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
             borderRadius: 10, 
             alignItems: 'center'
           }}>
-            <Text type={textTypes.PARAGRAPH_LIGHT}>Deseja realmente editar este item?</Text>
+            <Text type={textTypes.PARAGRAPH_LIGHT} color="#030303">Deseja realmente editar este item?</Text>
             
             {loading ? (
               <ActivityIndicator size="large" color="#ff4500" />
             ) : (
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 10 }}>
                 <TouchableOpacity onPress={() => setModalVisible(false)} style={{ padding: 10 }}>
-                  <Text type={textTypes.BUTTON_REGULAR} color="#888">Cancelar</Text>
+                  <Text type={textTypes.BUTTON_REGULAR} color="#0c0c0c">Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleConfirmEdit} style={{ padding: 10 }}>
                   <Text type={textTypes.BUTTON_REGULAR} color="#ff4500">Confirmar</Text>

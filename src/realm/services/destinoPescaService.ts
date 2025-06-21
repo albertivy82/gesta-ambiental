@@ -147,3 +147,18 @@ export const apagarDestinoPescaQueue = (idLocal: string) => {
         console.error('Erro ao excluir destinoPesca da fila:', error);
     }
 };
+
+
+export const apagarDestinoPescaSyncronizada = (destinoPescaId: number) => {
+  try {
+    realmInstance.write(() => {
+      const query = `id == ${destinoPescaId}`;
+      const destinoPescaExcluir = realmInstance.objects<DestinoPescaType>("DestinoPesca").filtered(query);
+      if (destinoPescaExcluir.length > 0) {
+        realmInstance.delete(destinoPescaExcluir);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao excluir destinoPesca sincronizada:", error);
+  }
+};

@@ -131,7 +131,7 @@ const BenfeitoriaDetails = () => {
                  
                  </View>
                 
-                <TouchableOpacity onPress={() => handleDecision(moradores, "Morador", "NovoMorador")}>
+       <TouchableOpacity onPress={() => handleDecision(moradores, "MoradorDetails", "NovoMorador")}>
                 <View style={{
                   alignItems: 'stretch',
                   flexDirection: 'row',
@@ -277,15 +277,7 @@ const BenfeitoriaDetails = () => {
                 </Text>
               </View>
         </TouchableOpacity>
-     
-
-
-
-
-
-
-
-     
+      
 </BenfeitoriaDetailContainer>
 </ScrollView>     
    
