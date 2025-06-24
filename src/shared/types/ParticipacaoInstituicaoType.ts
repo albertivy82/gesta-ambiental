@@ -5,7 +5,7 @@ import { Instituicao } from "../../enums/Instituicao.enum";
 
 export interface ParticipacaoInstituicaoType {
     id: number;
-    instituicao: Instituicao;
+    instituicao: string;
     tipoDeRgistro: string;
     Registro: string;
     morador: {

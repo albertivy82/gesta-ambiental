@@ -5,9 +5,8 @@ export interface EspecieType {
     id: number;
     especie: string;
     quantidadePescada: number;
-    quantidadeDaPesca: TamanhoPesca;
-    tamanhoDaPesca: TamanhoPesca;
-    exploracaoNivel: Exploracao;
+    tamanhoDaPesca: TamanhoPesca|''|null;
+    exploracaoNivel: Exploracao|''|null;
     precoVendaMedioKg: number;
     importancia: string;
     mesesMaiorOcorrencia: string;

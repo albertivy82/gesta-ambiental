@@ -5,7 +5,6 @@ export const EspecieSchema = {
         id: 'int',
         especie: 'string',
         quantidadePescada: 'double',
-        quantidadeDaPesca: 'string', 
         tamanhoDaPesca: 'string', 
         exploracaoNivel: 'string', 
         precoVendaMedioKg: 'double',

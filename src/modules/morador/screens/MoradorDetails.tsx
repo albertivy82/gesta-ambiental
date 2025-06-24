@@ -1,16 +1,15 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { MoradorType } from '../../../shared/types/MoradorType';
-import { renderField } from '../../../shared/components/input/renderFilds';
-import { MoradorDetailContainer } from '../styles/morador.style';
-import { Icones } from '../../entrevistadoDetails/styles/EntrevistadoDetails.style';
-import EditConfirmation from '../ui-components/UseEditMorador';
-import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import { useParticipacaoInstituicoes } from '../hooks/useParticipacaoInstituicao';
+import { MoradorDetailContainer } from '../styles/morador.style';
+import EditConfirmation from '../ui-components/UseEditMorador';
 
 
 
@@ -42,18 +41,18 @@ const MoradorDetails = () => {
   const {participacaoInsituicaoes} = useParticipacaoInstituicoes(params.morador.id);
   
 
-   const handleDecision = <T,>(
-      data: T | T[],
-      detailRoute: string,
-      newRoute: string
-    ) => {
-      if (Array.isArray(data) ? data.length > 0 : !!data) {
-        handleNavigation(navigation.navigate, detailRoute, data);
-      } else {
-        handleNewEntry(navigation.navigate, newRoute, params.morador);
-      }
-    };
-  // {//source={require('../../../assets/images/instituicoes.png')}
+  const handleDecision = (
+        data: any[] | undefined,
+        detailRoute: string,
+        newRoute: string
+      ) => {
+        if (data && data.length > 0) {
+          handleNavigation(navigation.navigate, detailRoute, data);
+        } else {
+          handleNewEntry(navigation.navigate, newRoute, params.morador);
+        }
+  };
+  
    
   return (
     
@@ -102,7 +101,30 @@ const MoradorDetails = () => {
                 </View>
                
 
-                    
+                <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
+                 
+                 </View>
+                       
+                <TouchableOpacity onPress={() => handleDecision(participacaoInsituicaoes, "ParticipacaoInstituicaoLista", "NovaPariticapaInstituicao")}>
+                      <View style={{
+                        alignItems: 'stretch',
+                        flexDirection: 'row',
+                        padding: 10,
+                        borderWidth: 2,
+                        borderColor: theme.colors.grayTheme.gray100
+                      }}>
+                        <Icon size={30} name='flag' color='green' />
+                        <Text
+                          type={textTypes.BUTTON_BOLD}
+                          color={participacaoInsituicaoes.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
+                          style={{ marginLeft: 10 }}
+                        >
+                          {participacaoInsituicaoes.length > 0
+                            ? `Participação em Instituição: ${participacaoInsituicaoes.length}`
+                            : 'Registro de Participação em Instituição: '}
+                        </Text>
+                      </View>
+                </TouchableOpacity>          
               
                
               

@@ -2,8 +2,8 @@ import { TipoPescaArtesanal } from "../../enums/tipoPescaArtesanal.enum";
 
 export interface QuantidadePescaPorTipoType {
     id: number;
+    tipoPesca: TipoPescaArtesanal|''|null ; 
     quantidadePesca: number;
-    tipoPesca: TipoPescaArtesanal ; 
     pescaArtesanal: {
         id: number; 
     }

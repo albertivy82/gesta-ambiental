@@ -1,5 +1,5 @@
 import { styled } from "styled-components/native"; 
-export const PescaArtesanalDetailContainer = styled.View`
+export const ParticipacaoInstituicaoDetailContainer = styled.View`
 
     height: 100%;
     width: 100%;

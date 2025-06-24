@@ -57,6 +57,8 @@ import Text from "./shared/components/text/Text";
 import { textTypes } from "./shared/components/text/textTypes";
 import { theme } from "./shared/themes/theme";
 import { UserBody } from "./shared/types/userBody";
+import { NovaParticipacaoInstituicao } from "./modules/participacaoInsituicao/screens/novaParticipacaoInstituicao";
+import ParticipacaoInstituicao from "./modules/participacaoInsituicao/screens/ParticipacaoInstituicao";
 
 
 
@@ -191,6 +193,8 @@ const Navigation =() =>{
           <Stack.Screen name="Morador" component={Morador} options={{ title: 'Listagem de Moradores' }} />
           <Stack.Screen name="MoradorDetails" component={MoradorDetails} options={{ title: 'Morador' }} />
           <Stack.Screen name="NovoMorador" component={NovoMorador} options={{ title: 'Cadastro de Morador' }} />
+          <Stack.Screen name="NovaParticipacaoInstituicao" component={NovaParticipacaoInstituicao} options={{ title: 'Instituição' }} />
+          <Stack.Screen name="ParticipacaoInstituicao" component={ParticipacaoInstituicao} options={{ title: 'Instituições' }} />
          </Stack.Navigator>
       </NavigationContainer>
     );
