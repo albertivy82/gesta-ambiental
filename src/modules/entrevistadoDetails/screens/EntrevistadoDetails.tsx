@@ -8,22 +8,10 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
-import { useAves } from '../hooks/useAve';
-import { useFauna } from '../hooks/usefauna';
-import { useImovel } from '../hooks/useImovel';
-import { useMamiferos } from '../hooks/useMamifero';
-import { usePeixes } from '../hooks/usePeixe';
-import { useReptil } from '../hooks/UseReptil';
-import { useVegetacoes } from '../hooks/useVegetacao';
-import { EntrevistadoDetailContainer, Icones } from '../styles/EntrevistadoDetails.style';
-import EditConfirmation from '../ui-component/UseEditEntrevistado';
 import { imovelBody } from '../../../shared/types/imovelType';
-import { getRepteis } from '../../../realm/services/repteisService';
-import { getAves } from '../../../realm/services/avesService';
-import { getFauna } from '../../../realm/services/faunaService';
-import { getMamiferos } from '../../../realm/services/mamiferosService';
-import { getPeixes } from '../../../realm/services/peixesService';
-import { getVegetacoes } from '../../../realm/services/vegetacaoService';
+import { useImovel } from '../hooks/useImovel';
+import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
+import EditConfirmation from '../ui-component/UseEditEntrevistado';
 import { getImovel } from '../../../realm/services/imovelService';
 
 
@@ -62,12 +50,7 @@ const EntrevistadoDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, EntrevistadoParam>>>();
   const {imovelPresente} = useImovel(params.entrevistado.id);
-  const {vegetacao} = useVegetacoes(params.entrevistado.id);
-  const {fauna} = useFauna(params.entrevistado.id);
-  const {peixes} = usePeixes(params.entrevistado.id);
-  const {mamiferos} = useMamiferos(params.entrevistado.id);
-  const {aves} = useAves(params.entrevistado.id);
-  const {reptil} = useReptil(params.entrevistado.id);
+
 
  
    // Alerta caso não haja imóveis
@@ -82,28 +65,11 @@ const EntrevistadoDetails = () => {
 
   useFocusEffect(
       useCallback(() => {
-        getRepteis(params.entrevistado.id);
-        getAves(params.entrevistado.id);
-        getFauna(params.entrevistado.id);
-        getMamiferos(params.entrevistado.id);
-        getPeixes(params.entrevistado.id);
-        getVegetacoes(params.entrevistado.id);
         getImovel(params.entrevistado.id);
       }, [params.entrevistado.id])
     );
 
-  useEffect(() => {
-    if ([fauna, vegetacao, peixes, mamiferos, aves].some((arr) => arr.length === 0)) {
-      Alert.alert(
-        "Atenção!",
-        "Tem itens sobre a biodiversidade que não foram coletados. Confira os itens no final da página."
-      );
-    }
-  }, [fauna, vegetacao, peixes, mamiferos, aves]);
-
-  /**
-   * Método genérico para decisão de navegação
-   */
+ 
   const handleDecision = (
     data: any[] | undefined,
     detailRoute: string,
@@ -217,126 +183,7 @@ const EntrevistadoDetails = () => {
                   )}
         </TouchableOpacity>
 
-         
-
-        <TouchableOpacity onPress={() => handleDecision(vegetacao, "VegetacaoLista", "NovaVegetacao")}>
-          <View style={{
-            alignItems: 'stretch',
-            flexDirection: 'row',
-            padding: 10,
-            borderWidth: 2,
-            borderColor: theme.colors.grayTheme.gray100
-          }}>
-            <Icon size={30} name='leaf' color='green' />
-            <Text
-              type={textTypes.BUTTON_BOLD}
-              color={vegetacao.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-              style={{ marginLeft: 10 }}
-            >
-              {vegetacao.length > 0
-                ? `Vegetações registradas: ${vegetacao.length}`
-                : 'Vegetação'}
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => handleDecision(peixes, "PeixesLista", "NovoPeixe")}>
-            <View style={{
-              alignItems: 'stretch',
-              flexDirection: 'row',
-              padding: 10,
-              borderWidth: 2,
-              borderColor: theme.colors.grayTheme.gray100
-            }}>
-              <Icones resizeMode="contain" source={require('../../../assets/images/peixes.png')} />
-              <Text
-                type={textTypes.BUTTON_BOLD}
-                color={peixes.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-                style={{ marginLeft: 10 }}
-              >
-                {peixes.length > 0 ? `Peixes registrados: ${peixes.length}` : 'Peixes'}
-              </Text>
-            </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => handleDecision(mamiferos, "Mamiferos", "NovoMamifero")}>
-        <View style={{
-          alignItems: 'stretch',
-          flexDirection: 'row',
-          padding: 10,
-          borderWidth: 2,
-          borderColor: theme.colors.grayTheme.gray100
-        }}>
-          <Icones resizeMode="contain" source={require('../../../assets/images/macaco.png')} />
-          <Text
-            type={textTypes.BUTTON_BOLD}
-            color={mamiferos.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-            style={{ marginLeft: 10 }}
-          >
-            {mamiferos.length > 0 ? `Mamíferos registrados: ${mamiferos.length}` : 'Mamíferos'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => handleDecision(fauna, "FaunaLista", "NovaFauna")}>
-        <View style={{
-          alignItems: 'stretch',
-          flexDirection: 'row',
-          padding: 10,
-          borderWidth: 2,
-          borderColor: theme.colors.grayTheme.gray100
-        }}>
-          <Icones resizeMode="contain" source={require('../../../assets/images/fauna.png')} />
-          <Text
-            type={textTypes.BUTTON_BOLD}
-            color={fauna.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-            style={{ marginLeft: 10 }}
-          >
-            {fauna.length > 0 ? `Fauna registrada: ${fauna.length}` : 'Fauna'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => handleDecision(aves, "AvesLista", "NovaAve")}>
-        <View style={{
-          alignItems: 'stretch',
-          flexDirection: 'row',
-          padding: 10,
-          borderWidth: 2,
-          borderColor: theme.colors.grayTheme.gray100
-        }}>
-          <Icones resizeMode="contain" source={require('../../../assets/images/aves.png')} />
-          <Text
-            type={textTypes.BUTTON_BOLD}
-            color={aves.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-            style={{ marginLeft: 10 }}
-          >
-            {aves.length > 0 ? `Aves registradas: ${aves.length}` : 'Aves'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => handleDecision(reptil, "RepteisLista", "NovoReptil")}>
-        <View style={{
-          alignItems: 'stretch',
-          flexDirection: 'row',
-          padding: 10,
-          borderWidth: 2,
-          borderColor: theme.colors.grayTheme.gray100
-        }}>
-          <Icones resizeMode="contain" source={require('../../../assets/images/reptil.png')} />
-          <Text
-            type={textTypes.BUTTON_BOLD}
-            color={reptil.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-            style={{ marginLeft: 10 }}
-          >
-            {reptil.length > 0 ? `Répteis registrados: ${reptil.length}` : 'Répteis'}
-          </Text>
-        </View>
-      </TouchableOpacity>
-
-
-              
+                   
      
        </EntrevistadoDetailContainer>
     </ScrollView>     
