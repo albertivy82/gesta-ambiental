@@ -2,34 +2,23 @@ import NetInfo from "@react-native-community/netinfo";
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
-import { apagarAveSyncronizada } from "../../../realm/services/avesService";
+import { apagarAguaQueue, apagarAguaSyncronizada } from "../../../realm/services/aguasService";
+import { apagarAtividadeProdutivaQueue, apagarAtividadeProdutivaSyncronizada } from "../../../realm/services/atividadeProdutivaService";
+import { apagarBenfeitiaQueue, apagarBenfeitoriaSyncronizada } from "../../../realm/services/benfeitoriaService";
+import { apagarCreditoQueue, apagarCreditoSyncronizada } from "../../../realm/services/creditoService";
 import { apagarEntrevistadoQueue, apagarEntrevistadoSyncronizado } from "../../../realm/services/entrevistado";
 import { apagarEscolaQueue, apagarEscolaSyncronizada } from "../../../realm/services/escolaService";
-import { apagarFaunaQueue, apagarFaunaSyncronizada } from "../../../realm/services/faunaService";
 import { apagarImovelQueue, apagarImovelSyncronizado } from '../../../realm/services/imovelService';
-import { apagarMamiferoQueue, apagarMamiferoSyncronizado } from "../../../realm/services/mamiferosService";
-import { apagarPeixeQueue, apagarPeixeSyncronizado } from "../../../realm/services/peixesService";
+import { apagarMoradorQueue, apagarMoradorSyncronizada } from "../../../realm/services/moradorService";
+import { apagarParticipacaoInstituicaoQueue, apagarParticipacaoInstituicaoSyncronizada } from "../../../realm/services/ParticipacaoInstituicaoService";
 import { apagarPostoQueue, apagarPostoSaudeSyncronizado } from '../../../realm/services/postoService';
-import { apagarReptilQueue, apagarReptilSyncronizado } from "../../../realm/services/repteisService";
-import { apagarVegetacaoQueue, apagarVegetacaoSyncronizada } from "../../../realm/services/vegetacaoService";
+import { apagarRendaOutrasFontesQueue, apagarRendaOutrasFontesSyncronizada } from "../../../realm/services/rendaOutrasFontes";
+import { apagarServicoComunicacaoQueue, apagarServicosComunicacaoSyncronizada } from "../../../realm/services/servicosComunicacaoService";
 import { connectionAPIDelete } from '../../../shared/functions/connection/connectionAPI';
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
-import { apagarBenfeitiaQueue, apagarBenfeitoriaSyncronizada } from "../../../realm/services/benfeitoriaService";
-import { apagarAguaQueue, apagarAguaSyncronizada } from "../../../realm/services/aguasService";
-import { apagarAtividadeProdutivaQueue, apagarAtividadeProdutivaSyncronizada } from "../../../realm/services/atividadeProdutivaService";
-import { apagarCreditoQueue, apagarCreditoSyncronizada } from "../../../realm/services/creditoService";
-import { apagarRendaOutrasFontesQueue, apagarRendaOutrasFontesSyncronizada } from "../../../realm/services/rendaOutrasFontes";
-import { apagarServicoComunicacaoQueue, apagarServicosComunicacaoSyncronizada } from "../../../realm/services/servicosComunicacaoService";
-import { apagarPescaArtesanalQueue, apagarPescaArtesanalSyncronizada } from "../../../realm/services/pescaService";
-import { apagarMoradorQueue, apagarMoradorSyncronizada } from "../../../realm/services/moradorService";
-import { apagarParticipacaoInstituicaoQueue, apagarParticipacaoInstituicaoSyncronizada } from "../../../realm/services/ParticipacaoInstituicaoService";
-import { apagarEspecieQueue, apagarEspecieSyncronizada } from "../../../realm/services/especieService";
-import { apagarEmbarcacaoQueue, apagarEmbarcacaoSyncronizada } from "../../../realm/services/embarcacaoService";
-import { apagarDestinoPescaQueue, apagarDestinoPescaSyncronizada } from "../../../realm/services/destinoPescaService";
-import { apagarPescaPorTipoQueue, apagarQuantidadePescaPorTipoSyncronizada } from "../../../realm/services/quantidadePescaPorTipoService";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -60,24 +49,6 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "entrevistado":
             apagarEntrevistadoQueue(idLocal);
             break;
-          case "vegetacao":
-            apagarVegetacaoQueue(idLocal);
-            break;
-          case "ave":
-            apagarPeixeQueue(idLocal);
-            break;
-          case "fauna":
-            apagarFaunaQueue(idLocal);
-            break;
-          case "reptil":
-            apagarReptilQueue(idLocal);
-            break;
-          case "mamifero":
-            apagarMamiferoQueue(idLocal);
-            break;
-          case "peixe":
-            apagarPeixeQueue(idLocal);
-            break;
           case "benfeitoria":
             apagarBenfeitiaQueue(idLocal);
             break;
@@ -96,28 +67,13 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           case "morador":
             apagarMoradorQueue(idLocal);
             break;
-          case "pesca-artesanal":
-            apagarPescaArtesanalQueue(idLocal);
-            break;
           case "servico-de-comunicacao":
             apagarServicoComunicacaoQueue(idLocal);
             break;
           case "participacao-instituicao":
             apagarParticipacaoInstituicaoQueue(idLocal);
             break;
-          case "quantidade-pesca-por-tipo":
-            apagarPescaPorTipoQueue(idLocal);
-            break;
-          case "especie":
-            apagarEspecieQueue(idLocal);
-            break;
-          case "embarcacao":
-            apagarEmbarcacaoQueue(idLocal);
-            break;
-          case "destino-pesca":
-            apagarDestinoPescaQueue(idLocal);
-            break;
-            
+                     
         }
   
         setModalVisible(false);
@@ -144,24 +100,6 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
             case "entrevistado":
               apagarEntrevistadoSyncronizado(id);
               break;
-            case "vegetacao":
-              apagarVegetacaoSyncronizada(id);
-              break;
-            case "ave":
-              apagarAveSyncronizada(id);
-              break;
-            case "fauna":
-              apagarFaunaSyncronizada(id);
-              break;
-            case "reptil":
-              apagarReptilSyncronizado(id);
-              break;
-            case "mamifero":
-              apagarMamiferoSyncronizado(id);
-              break;
-            case "peixe":
-              apagarPeixeSyncronizado(id);
-              break;
             case "benfeitoria":
               apagarBenfeitoriaSyncronizada(id);
               break;
@@ -180,26 +118,11 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
             case "servico-de-comunicacao":
               apagarServicosComunicacaoSyncronizada(id);
             break;
-            case "pesca-artesanal":
-              apagarPescaArtesanalSyncronizada(id);
-            break;
             case "morador":
               apagarMoradorSyncronizada(id);
             break;
             case "participacao-instituicao":
               apagarParticipacaoInstituicaoSyncronizada(id);
-            break;
-            case "quantidade-pesca-por-tipo":
-              apagarQuantidadePescaPorTipoSyncronizada(id);
-            break;
-            case "especie":
-              apagarEspecieSyncronizada(id);
-            break;
-            case "embarcacao":
-              apagarEmbarcacaoSyncronizada(id);
-            break;
-            case "destino-pesca":
-             apagarDestinoPescaSyncronizada(id);
             break;
           }
   

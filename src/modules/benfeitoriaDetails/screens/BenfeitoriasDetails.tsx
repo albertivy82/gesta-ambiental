@@ -1,21 +1,20 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
-import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
-import { useMoradores } from '../hooks/useMorador';
-import { useAtividadesProdutivas } from '../hooks/useAtividadeProdutiva';
-import { useServicosComunicacao } from '../hooks/useSevicoComunicacao';
 import { useAguas } from '../hooks/useAgua';
+import { useAtividadesProdutivas } from '../hooks/useAtividadeProdutiva';
 import { useCreditos } from '../hooks/useCredito';
+import { useMoradores } from '../hooks/useMorador';
 import { useRendasOutrasFontes } from '../hooks/useRendaOutrasfontes';
-import { usePescaArtesanal } from '../hooks/usePescaArtesanal';
-import { renderField } from '../../../shared/components/input/renderFilds';
+import { useServicosComunicacao } from '../hooks/useSevicoComunicacao';
+import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
 import EditConfirmation from '../ui-components/UseEditBenfeitoria';
-import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 
 
 export const handleNavigation = <T,>(
@@ -55,7 +54,6 @@ const BenfeitoriaDetails = () => {
   const {aguas} = useAguas(benfeitoria.id);
   const {atividades} = useAtividadesProdutivas(params.benfeitoria.id);
   const {creditos} = useCreditos(params.benfeitoria.id);
-  const {pescaArtesanal} = usePescaArtesanal(params.benfeitoria.id);
   const {rendasOF} = useRendasOutrasFontes(params.benfeitoria.id);
   const {servicos} = useServicosComunicacao(params.benfeitoria.id);
 
@@ -215,28 +213,7 @@ const BenfeitoriaDetails = () => {
           </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => temporario()}>
-          <View style={{
-            alignItems: 'stretch',
-            flexDirection: 'row',
-            padding: 10,
-            borderWidth: 2,
-            borderColor: theme.colors.grayTheme.gray100
-          }}>
-            <Icones resizeMode="contain" source={require('../../../assets/images/pesca.png')} />
-            <Text
-              type={textTypes.BUTTON_BOLD}
-              color={pescaArtesanal.length > 0 ? theme.colors.grayTheme.gray80 : theme.colors.blueTheme.blue1}
-              style={{ marginLeft: 10 }}
-            >
-              {pescaArtesanal.length > 0
-                ? `Pesca Artesanal: ${pescaArtesanal.length}`
-                : 'Pesca Artesanal'}
-            </Text>
-          </View>
-       </TouchableOpacity>
-
-       <TouchableOpacity onPress={() => temporario()}>
+      <TouchableOpacity onPress={() => temporario()}>
             <View style={{
               alignItems: 'stretch',
               flexDirection: 'row',

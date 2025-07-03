@@ -11,7 +11,6 @@ import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/c
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-import { setIdBenfeitoriaFromApiOnPesca } from "../../../realm/services/pescaService";
 
 export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput => {
     const benfeitoriaInput: BenfeitoriaInput = {
@@ -77,7 +76,6 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                                     setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnPesca(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     apagarBenfeitiaQueue(benfeitoria.idLocal!)
                                     console.log("benfeitpria. ponto de sisncronização 6", )
                                 }
