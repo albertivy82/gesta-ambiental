@@ -53,13 +53,10 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
        };
 
     return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
         <AtividadeDetailContainer>
-          
-     
-
             <RenderPicker
-               label="Consome a ave em casa?"
+               label="A qual ramo pertence a atividade?"
                selectedValue={novaAtividade.atividade}
                onValueChange={(value) => handleEnumChange('atividade', value)}
                options={atividadeOptions}

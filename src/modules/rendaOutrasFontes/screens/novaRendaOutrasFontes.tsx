@@ -2,14 +2,13 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SimNao } from "../../../enums/simNao.enum";
+import { FontesRenda } from "../../../enums/fontesRenda.enum";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
-import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
-import { FontesRenda } from "../../../enums/fontesRenda.enum";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
+import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
+import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
 
 export interface idParam {
   benfeitoria: BenfeitoriaType;
@@ -70,10 +69,10 @@ export const NovaRendaOutrasFontes = () => {
         
        
       <RenderPicker
-       label="Escolha o tipo de fornecimento de água?"
+       label="Selecione uma fonte de renda"
        selectedValue={fonteRenda}
        onValueChange={(value) => {
-       setFonteRenda(value ?? ''); 
+       setFonteRenda(value ?? 'OUTROS'); 
           if (value !== '') {
            SetOutraFonte('');
            }

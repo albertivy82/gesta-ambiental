@@ -9,12 +9,13 @@ import { formatDateForApi } from "../../../shared/functions/data";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { Alert } from "react-native";
+import { parseOnlyNumeric } from "../../../shared/functions/onlyNumeric";
 
 export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
 
   nome: '',
   naturalidade: '',
-  nascimentoData: '',
+  nascimentoData: 0,
   sexo: null,
   apelido: '',
   escolaridade: null,
@@ -57,11 +58,11 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-     
+     console.log( novoEntrevistado.nascimentoData)
       if (
           novoEntrevistado.nome !== '' && 
           novoEntrevistado.naturalidade !== '' && 
-          novoEntrevistado.nascimentoData !== '' &&
+          novoEntrevistado.nascimentoData >= 18 &&
           novoEntrevistado.sexo !== null &&
           novoEntrevistado.apelido !== '' && 
           novoEntrevistado.escolaridade !== null &&
@@ -86,10 +87,8 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
           novoEntrevistado.conheceUcProposta !== null &&
           novoEntrevistado.conheceAreaUc !== null &&
           novoEntrevistado.utilizaAreaUc !== '' &&
-          novoEntrevistado.propostaMelhorarArea !== '' &&
-          novoEntrevistado.indicadoConsultaPublica !== '' &&
-          novoEntrevistado.contatoIndicadoConsultaPublica!== ''
-          
+          novoEntrevistado.propostaMelhorarArea !== ''
+             
       ) {
         
           setDisabled(false);
@@ -247,6 +246,7 @@ const handleEnumChange = (field: keyof EntrevistadoInput, value: any) => {
   }));
 };
 
+
 const handleNumberChange = (
   event: NativeSyntheticEvent<TextInputChangeEventData>, 
   field: keyof EntrevistadoInput
@@ -259,6 +259,13 @@ const handleNumberChange = (
   }));
 };
 
+const handleSetNumber = (value: number, field: keyof EntrevistadoInput) => {
+  setnovoEntrevistado((current) => ({
+    ...current,
+    [field]: value,
+  }));
+};
+
 
 return {
       novoEntrevistado,
@@ -268,6 +275,7 @@ return {
       handleEnumChange,
       handleArrayFieldChange,
       handleNumberChange,
+      handleSetNumber,
       disabled,
     };
 };

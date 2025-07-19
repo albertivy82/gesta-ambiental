@@ -110,9 +110,9 @@ export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput): Promis
                         id: Id(), 
                         localidade: entrevistado.localidade.id,
                     };
-                    //console.log('salvarImovelqueue', entrevistadoPadrao)
+                    console.log('salvarImovelqueue', entrevistadoPadrao)
                     entrevistadoSalvo = realmInstance.create('Entrevistado', entrevistadoPadrao, true);
-                    //console.log('salvarImovelQueue - Ok!')
+                    console.log('salvarImovelQueue - Ok!')
                 });
                 if(entrevistadoSalvo){
                     const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistadoSalvo));

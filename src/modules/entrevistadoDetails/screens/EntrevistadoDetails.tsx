@@ -89,7 +89,7 @@ const EntrevistadoDetails = () => {
               <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
             {renderField('Nome', params.entrevistado.nome)}
             {renderField('Naturalidade', params.entrevistado.naturalidade)}
-            {renderField('Data de Nascimento', params.entrevistado.nascimentoData)}
+            {renderField('Idade do entrevistado', params.entrevistado.nascimentoData?.toString())}
             {renderField('Sexo', params.entrevistado.sexo)}
             {renderField('Apelido', params.entrevistado.apelido)}
             {renderField('Escolaridade', params.entrevistado.escolaridade)}
@@ -98,10 +98,10 @@ const EntrevistadoDetails = () => {
             {renderField('Morador do imóvel', params.entrevistado.morador)}
             {renderField('Data de Chegada', params.entrevistado.dataChegada)}
             {renderField('Pretende Mudar', params.entrevistado.pretendeMudar)}
-            {renderField('Motivo de Querer Mudar-se', params.entrevistado.motivoVontadeMudanca)}
-            {renderField('Relação com a Área do Imóvel', params.entrevistado.relacaoAreaImovel)}
+            {renderField('Motivo de querer mudar-se', params.entrevistado.motivoVontadeMudanca)}
+            {renderField('Relação com a área do Imóvel', params.entrevistado.relacaoAreaImovel)}
             {renderField('Relação com os Vizinhos', params.entrevistado.relacaoVizinhos)}
-            {renderField('Tipo de Alimentação', params.entrevistado.tipoAlimentacao)}
+            {renderField('Tipo de Alimentação mais frequente', params.entrevistado.tipoAlimentacao)}
             {renderField('Locais de Compras', params.entrevistado.localCompras)}
             {renderField('Como Cuida da Saúde da Família', params.entrevistado.comoCuidaSaudeFamilia)} 
             {renderField('Quantos assaltos já sofreu:', params.entrevistado.sofreuAssaltos?.toString())}

@@ -55,14 +55,14 @@ export const NovoServicoComunicacao = () => {
         
   
         <RenderPicker
-          label="O serviço de comunicação é utilizado para fins comerciais?"
+          label="Selecione o tipo de serviço de comunicação informado"
           selectedValue={novoServicoComunicacao.tipoServicoComunicacao}
           onValueChange={(value) => handleEnumChange('tipoServicoComunicacao', value)}
           options={servicosOptions}
         />
 
         <RenderPicker
-          label="Qual a"
+          label="Selecione a operadora"
           selectedValue={novoServicoComunicacao.operadoraServicoComunicacao}
           onValueChange={(value) => handleEnumChange('operadoraServicoComunicacao', value)}
           options={operadoraOptions}

@@ -213,7 +213,7 @@ const BenfeitoriaDetails = () => {
           </View>
        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => temporario()}>
+      <TouchableOpacity onPress={() => handleDecision(rendasOF, "RendaOutrasFontesLista", "NovaRendaOutrasFontes")}>
             <View style={{
               alignItems: 'stretch',
               flexDirection: 'row',
@@ -234,7 +234,7 @@ const BenfeitoriaDetails = () => {
             </View>
        </TouchableOpacity>
 
-       <TouchableOpacity onPress={() => temporario()}>
+       <TouchableOpacity onPress={() => handleDecision(servicos, "ServicosComunicacaoLista", "NovoServicoComunicacao")}>
               <View style={{
                 alignItems: 'stretch',
                 flexDirection: 'row',

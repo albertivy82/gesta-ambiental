@@ -7,7 +7,7 @@ import { SimNao } from "../../enums/simNao.enum";
 export interface MoradorType {
    id: number;
    perfil: Perfil| null| ''; 
-   dataNascimento: string;
+   dataNascimento: number;
    sexo: Sexo| null| ''; 
    escolaridade: Escolaridade|null|''; 
    estadoCivil: EstadoCivil | null| ''; 

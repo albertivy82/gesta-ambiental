@@ -96,7 +96,7 @@ export const NovaAgua = () => {
 
        
       <RenderPicker
-       label="Escolha o tipo de fornecimento de água?"
+       label="Qual o tipo de fornecimento de água da moradia?"
        selectedValue={fornecimentoAgua}
        onValueChange={(value) => {
        setFornecimentoAgua(value ?? ''); 

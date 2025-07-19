@@ -17,7 +17,7 @@ export interface MoradorParams {
 }
 
 export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovoImovel', { benfeitoriaId });
+  navigate('NovoMorador', { benfeitoriaId });
 }
 
 const Morador = () => {

@@ -194,7 +194,7 @@ export const NovoImovel = () => {
               onChange={(event)=> handleOnChangeInput(event, 'referencial')}
               placeholder="Informe uma referência para o imóvel"
               margin="15px 10px 30px 5px"
-              title="Referencial:"
+              title="Informe algum referencial para o imóvel:"
               onSubmitEditing={()=>areaImovelInput.current?.focus()}
               ref={referencialInput}/>
 

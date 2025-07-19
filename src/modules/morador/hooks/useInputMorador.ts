@@ -13,7 +13,7 @@ import { MoradorType } from "../../../shared/types/MoradorType";
 export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   
   perfil: null,
-  dataNascimento: '',
+  dataNascimento: 0,
   sexo: null,
   escolaridade: null,
   estadoCivil: null,
@@ -35,7 +35,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
   useEffect(() => {
     console.log(novoMorador);
     if (
-      novoMorador.dataNascimento !== '' &&
+      novoMorador.dataNascimento <0 &&
       novoMorador.perfil !== '' &&
       novoMorador.sexo !== '' &&
       novoMorador.estadoCivil !== null &&
@@ -240,6 +240,18 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
               }));
   };
 
+  const handleNumberChange = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>, 
+    field: keyof MoradorInput
+  ) => {
+    let value = event.nativeEvent.text.replace(/\D/g, ''); // Remove caracteres não numéricos
+  
+    setNovaMorador((current) => ({
+      ...current,
+      [field]: value ? parseInt(value, 10) : 0, // Garante que seja um número inteiro
+    }));
+  };
+
 
   return {
     novoMorador,
@@ -248,6 +260,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
     handleArrayFieldChange,
     handleOnChangeData,
     enviarRegistro,
+    handleNumberChange,
     disabled,
 };
   

@@ -60,7 +60,6 @@ const [disabled, setdisable] = useState<boolean>(true);
             novaBenfeitoria.origemPedraDaConstrucao !== null &&
             novaBenfeitoria.origemAreiaDaConstrucao !== null &&
             novaBenfeitoria.alagamentos !== '' &&
-            novaBenfeitoria.epocaOcorrencia !== '' &&
             novaBenfeitoria.efluentes !== '' &&
             novaBenfeitoria.residuos !== '' &&
             novaBenfeitoria.fonteEnergia !== '' &&

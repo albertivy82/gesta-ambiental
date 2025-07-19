@@ -84,7 +84,7 @@ export const NovoPosto = ()=>{
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
               placeholder="Informe o nome do posto"
               margin="0px 0px 16px 0px"
-              title="Posto:"
+              title="Nome do Posto:"
               />
 
       <RenderPicker

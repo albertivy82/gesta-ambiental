@@ -45,6 +45,7 @@ export const NovoEntrevistado = ()=>{
           handleArrayFieldChange,
           handleEnumChange,
           handleNumberChange,
+          handleSetNumber,
           disabled} = useNovoEntrevistado(localidadeId!, entrevistado);
          
     
@@ -96,7 +97,7 @@ export const NovoEntrevistado = ()=>{
             // Campos numéricos
             handleNumberChange({ nativeEvent: { text: entrevistado.sofreuAssaltos?.toString() ?? '' } } as any, 'sofreuAssaltos');
             handleNumberChange({ nativeEvent: { text: entrevistado.presenciouAssalto?.toString() ?? '' } } as any, 'presenciouAssalto');
-          
+            handleNumberChange({ nativeEvent: { text: entrevistado.nascimentoData?.toString() ?? '' } } as any, 'nascimentoData');
           }, [entrevistado]);
 
           const valorSalvoUsoArea = entrevistado?.utilizaAreaUc ?? '';
@@ -105,13 +106,20 @@ export const NovoEntrevistado = ()=>{
           const valorSalvoTipoAlimentacao = entrevistado?.tipoAlimentacao ?? '';
           const valorSalvoLocalCompras = entrevistado?.localCompras ?? '';
           const valorSalvoServicosDeficitarios = entrevistado?.servicosDeficitarios ?? '';
-          const valorSalvoNascimento = entrevistado?.nascimentoData ? formatDateForApi(new Date(entrevistado.nascimentoData)) : '';
-          const valorSalvoDataChegada = entrevistado?.dataChegada   ? formatarData(new Date(entrevistado.dataChegada)) : '';
           
           
             
    
-    const sexoOptions = Object.values(Sexo);
+    const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
+    const tempomordiaOptions = Object.values([
+    'Entre 1 e 5 anos',
+    'Entre 6 e 10 anos',
+    'Entre 11 e 15 anos',
+    'Entre 16 e  20 anos',
+    'Entre 21 e 25 anos',
+    'Entre 26 e 30 anos',
+    'Acima de 30 anos']);
+    
     const saudeOptions = Object.values(AtendimentoSaude);
     const sexoEscolaridade = Object.values(Escolaridade);
     const simNaoOptions = Object.values(SimNao);
@@ -120,12 +128,12 @@ export const NovoEntrevistado = ()=>{
     const alimentacaoOptions = Object.values(Alimentacao);
     const comprasOptions = Object.values(Compras);
     const servicosOptions = Object.values(ServicoPublicos);
+    const sexoOptions = Object.values(Sexo);
     
     
     const nomeInput = useRef<TextInput>(null);
     const naturalidadeInput = useRef<TextInput>(null);
     const apelidoInput = useRef<TextInput>(null);
-    const religiaoInput = useRef<TextInput>(null);
     const relacaoAreaInput = useRef<TextInput>(null);
     const relacaoVizinhoInput = useRef<TextInput>(null);
     const propostaMelhoriaInput = useRef<TextInput>(null);
@@ -161,6 +169,7 @@ export const NovoEntrevistado = ()=>{
     const [conheceInstituicao, setConheceInstituicao] = useState<string>('');     
     const [quaisConhece, SetQuaisConhece] = useState<string>('');
     
+    const [idade, setIdade] = useState<number>();
 
     useEffect(()=>{
       const consolidaDados = [
@@ -215,6 +224,9 @@ export const NovoEntrevistado = ()=>{
     
     },[cuidadoMedico, outrosCuidados ])
 
+    useEffect(()=>{
+       handleSetNumber(idade!,'nascimentoData');
+    },[idade])
 
     useEffect(() => {
       const consolidaDados = conheceInstituicao === 'SIM' 
@@ -247,6 +259,7 @@ export const NovoEntrevistado = ()=>{
          }
     };
     
+    
 
     
 
@@ -273,16 +286,23 @@ export const NovoEntrevistado = ()=>{
               ref={naturalidadeInput}
               />
 
-              {valorSalvoNascimento && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                  Data de nascimento salva (ano/mês/dia): {valorSalvoNascimento}
+              <Input
+                value={idade?.toString() || ''}
+                onChangeText={(text) => {
+                  const num = parseInt(text.replace(/\D/g, ''), 10);
+                  setIdade(isNaN(num) ? undefined : num);
+                }}
+                keyboardType="numeric"
+                placeholder="Digite sua idade"
+                title="Qual sua idade?"
+              />
+
+             {Number(novoEntrevistado.nascimentoData) < 18 && (
+                <Text style={{ fontStyle: 'italic', color: 'grey', marginTop: 8 }}>
+                     O entrevistado precisa ter 18 anos ou mais
                 </Text>
               )}
-
-              <DateSelector
-                label="Data de nascimento"
-                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'nascimentoData')}
-              />
+            
 
             <RenderPicker
               label="Sexo"
@@ -314,13 +334,11 @@ export const NovoEntrevistado = ()=>{
                 options={estadoCivilOptions}
               />
 
-            <Input 
-              value={novoEntrevistado.religiao} 
-              onChange={(event)=> handleOnChangeInput(event, 'religiao')}
-              placeholder="Qual a sua religião"
-              margin="15px 10px 30px 5px"
-              title="Qual a sua religião?"
-              ref={religiaoInput}
+              <RenderPicker
+              label="Qual a sua religião"
+              selectedValue={novoEntrevistado.religiao}
+               onValueChange={(value) => handleEnumChange('religiao', value)}
+               options={religiaoOptions}
               />
 
             <RenderPicker
@@ -329,15 +347,12 @@ export const NovoEntrevistado = ()=>{
                 onValueChange={(value) => handleEnumChange('morador', value)}
                 options={simNaoOptions}
               />
-            
-            {valorSalvoDataChegada && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                  Data de chegada salva (ano/mês/dia): {valorSalvoDataChegada}
-                </Text>
-              )}
-            <DateSelector
-                label="Data de Chegada no Local"
-                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataChegada')}
+           
+             <RenderPicker
+                label="Há quanto tempo você reside neste local?"
+                selectedValue={novoEntrevistado.dataChegada}
+                onValueChange={(value) => handleEnumChange('dataChegada', value)}
+                options={tempomordiaOptions}
               />
 
                 <RenderPicker
@@ -366,7 +381,7 @@ export const NovoEntrevistado = ()=>{
               onChange={(event)=> handleOnChangeInput(event, 'relacaoAreaImovel')}
               placeholder="Relação do entrevistado com a área do imóvel"
               margin="15px 10px 30px 5px"
-              title="Relação com a área"
+              title="Como você define a sua relação com o local onde você mora?"
               ref={relacaoAreaInput}
               onSubmitEditing={() => relacaoVizinhoInput.current?.focus()}
               />
@@ -376,7 +391,7 @@ export const NovoEntrevistado = ()=>{
                   onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
                   placeholder="Relação do entrevistado com a vizinhança"
                   margin="15px 10px 30px 5px"
-                  title="Relação com a vizinhança"
+                  title="Como você é a sua relação com a vizinhança?"
                   ref={relacaoVizinhoInput}
               />
 
@@ -391,7 +406,9 @@ export const NovoEntrevistado = ()=>{
             <CheckboxSelector
                 options={alimentacaoOptions}
                 selectedValues={alimentacoInformada}
-                label="Selecione as opções de Alimentação"
+                label="Quais alimentos você consome com mais frequência no dia a dia?
+                Selecione as opções que se aplicam."
+
                 onSave={(selectedValues) => {
                     setAlimentacoInformada(selectedValues);
                     if (!selectedValues.includes('OUTRAS')) {
@@ -609,21 +626,21 @@ export const NovoEntrevistado = ()=>{
 
               
               <RenderPicker
-                label="Já ouviu falar de UC?"
+                label="Já ouviu falar de Unidades de Conservação?"
                 selectedValue={novoEntrevistado.conheceUcs}
                 onValueChange={(value) => handleEnumChange('conheceUcs', value)}
                 options={simNaoOptions}
               />
 
               <RenderPicker
-                label="Conhece a proposta de UC para área?"
+                label="Conhece a proposta da Unidade de Conservação no local?"
                 selectedValue={novoEntrevistado.conheceUcProposta}
                 onValueChange={(value) => handleEnumChange('conheceUcProposta', value)}
                 options={simNaoOptions}
               />
 
               <RenderPicker
-                label="Conhece a Área onde a UC pode ser implantada?"
+                label="Conhece a Área onde a Unidade de Conservação pode ser implantada?"
                 selectedValue={novoEntrevistado.conheceAreaUc}
                 onValueChange={(value) => handleEnumChange('conheceAreaUc', value)}
                 options={simNaoOptions}
@@ -638,7 +655,7 @@ export const NovoEntrevistado = ()=>{
                 )}
        
                 <RenderPicker
-                  label="Utiliza a área?"
+                  label="Você utiliza essa área?"
                   selectedValue={usoArea}
                   onValueChange={(value) => {
                     setUsoArea(value ?? ''); 
@@ -676,11 +693,11 @@ export const NovoEntrevistado = ()=>{
             onChange={(event) => handleOnChangeInput(event, 'indicadoConsultaPublica')}
             placeholder=" "
             margin="15px 10px 30px 5px"
-            title="Indicação de Nome para Participar da Consulta Pública"
+            title="Indicação de um nome para Participar da Consulta Pública"
             ref={indicadoConsultaInput}
             onSubmitEditing={() => contatoConsultaInput.current?.focus()}
           />
-
+         
           <Input 
             value={novoEntrevistado.contatoIndicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'contatoIndicadoConsultaPublica')}

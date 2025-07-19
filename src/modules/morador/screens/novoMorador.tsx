@@ -2,20 +2,18 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SimNao } from "../../../enums/simNao.enum";
+import { Escolaridade } from "../../../enums/Escolaridade";
+import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
+import { Molestias } from "../../../enums/molestias.enum";
+import { Perfil } from "../../../enums/Perfil";
+import { Sexo } from "../../../enums/Sexo";
+import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { MoradorType } from "../../../shared/types/MoradorType";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
-import DateSelector from "../../../shared/components/input/DateSelector";
-import { Perfil } from "../../../enums/Perfil";
-import { Sexo } from "../../../enums/Sexo";
-import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
-import { Escolaridade } from "../../../enums/Escolaridade";
-import CheckboxSelector from "../../../shared/components/input/checkBox";
-import { Molestias } from "../../../enums/molestias.enum";
-import { MoradorType } from "../../../shared/types/MoradorType";
 
 
 
@@ -38,13 +36,12 @@ export const NovoMorador = ()=>{
    const [trabalha, setTrabalha] = useState<string>('');     
    const [ondeTrabalha, SetOndeTrabalha] = useState<string>('');
    const [religiao, setReligiao] = useState<string>('');     
-   const [qualReligiao, SetQualReligiao] = useState<string>('');
    const [doencaInformada, setDoencaInformada] = useState<string[]>([]);  
    const {  novoMorador,
             handleEnumChange,
             handleArrayFieldChange,
-            handleOnChangeData,
             enviarRegistro,
+            handleNumberChange,
             disabled
           } = useNovoMorador(params.Benfeitoria);
 
@@ -67,14 +64,6 @@ export const NovoMorador = ()=>{
   
    }, [trabalha, ondeEstuda]);
 
-  useEffect(() => {
-    const consolidaDados = religiao === 'SIM' 
-      ? (qualReligiao ? [`Qual: ${qualReligiao}`] : [])  
-      : ['NÃO']; 
-
-    handleArrayFieldChange('religiao', consolidaDados);
-
-  }, [religiao, qualReligiao]);
 
   useEffect(()=>{
    
@@ -82,7 +71,7 @@ export const NovoMorador = ()=>{
   
   },[doencaInformada])
    
-  
+  const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
   const perfilOptions =  Object.values(Perfil);
   const sexoOptions =  Object.values(Sexo);
   const estadoCivilOptions =  Object.values(EstadoCivil);
@@ -113,10 +102,14 @@ export const NovoMorador = ()=>{
         <MoradorDetailContainer>
           
       
-             <DateSelector   
-                label="Data de nascimento"
-                onDateChange={(selectedDate) => handleOnChangeData(selectedDate, 'dataNascimento')}
-              />
+              <Input
+                value={novoMorador.dataNascimento?.toString() || ''}
+                onChange={(event) => handleNumberChange(event, 'dataNascimento')}
+                keyboardType="numeric"
+                placeholder="..."
+                margin="15px 10px 30px 5px"
+                title="idade do morador: "
+               />
 
 
               <RenderPicker
@@ -149,7 +142,7 @@ export const NovoMorador = ()=>{
               />
 
              <RenderPicker
-                  label="Estuda?"
+                  label="O morador estuda?"
                   selectedValue={estuda}
                   onValueChange={(value) => {
                     setEstuda(value ?? ''); 
@@ -171,31 +164,8 @@ export const NovoMorador = ()=>{
                       </View>
                  )}
 
-                <RenderPicker
-                  label="Trabalha?"
-                  selectedValue={trabalha}
-                  onValueChange={(value) => {
-                    setTrabalha(value ?? ''); 
-                    if (value !== 'SIM') {
-                      SetOndeTrabalha('');
-                    }
-                  }}
-                  options={['SIM', 'NÃO']}
-                 />
-                    {trabalha.includes('SIM') && (
-                      <View style={{ marginTop: 10 }}>
-                      <Input
-                      value={ondeTrabalha}
-                      onChangeText={SetOndeTrabalha}
-                      placeholder="..."
-                      margin="15px 10px 30px 5px"
-                      title="Onde trabalha?"
-                       />
-                      </View>
-                 )}
-
-                  <RenderPicker
-                  label="Trabalha?"
+               <RenderPicker
+                  label="O morador trabalha?"
                   selectedValue={trabalha}
                   onValueChange={(value) => {
                     setTrabalha(value ?? ''); 
@@ -218,32 +188,17 @@ export const NovoMorador = ()=>{
                  )}
                
                <RenderPicker
-                  label="O morador possui religião?"
-                  selectedValue={religiao}
-                  onValueChange={(value) => {
-                    setReligiao(value ?? ''); 
-                    if (value !== 'SIM') {
-                      SetQualReligiao('');
-                    }
-                  }}
-                  options={['SIM', 'NÃO']}
+                  label="Qual a religião do morador?"
+                  selectedValue={novoMorador.religiao}
+                  onValueChange={(value) => handleEnumChange('religiao', value)}
+                  options={religiaoOptions}
                  />
-                    {religiao.includes('SIM') && (
-                      <View style={{ marginTop: 10 }}>
-                      <Input
-                      value={qualReligiao}
-                      onChangeText={SetQualReligiao}
-                      placeholder="..."
-                      margin="15px 10px 30px 5px"
-                      title="Qual?"
-                       />
-                      </View>
-                 )}
+                  
 
                 <CheckboxSelector
                 options={molestiasOptions}
                 selectedValues={doencaInformada}
-                label="Selecione as opções de Alimentação"
+                label="O morador ja apresentou alguma das doenças abaixo?"
                 onSave={(selectedValues) => {
                     setDoencaInformada(selectedValues);
                 }}

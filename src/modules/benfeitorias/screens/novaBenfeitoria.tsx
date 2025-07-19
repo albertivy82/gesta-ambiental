@@ -109,15 +109,16 @@ export const NovaBenfeitoria=()=>{
     
     },[fonteEnergia, outrasFontes])
 
-    useEffect(()=>{
+    useEffect(() => {
       const consolidaDados = [
         ...energiAlimento.filter((item) => item !== 'Outros'),
         ...(outrasEnergias ? [`Outros: ${outrasEnergias}`] : []),
       ];
-
+    
       handleArrayFieldChange('energiaAlimentos', consolidaDados);
     
-    },[fonteEnergia, outrasEnergias])
+    }, [energiAlimento, outrasEnergias]); // <- corrigido
+    
 
     useEffect(() => {
       const consolidaDados = linhaOnibus === 'SIM' 
@@ -309,14 +310,14 @@ export const NovaBenfeitoria=()=>{
              />
 
              <RenderPicker
-              label="Qual Origem da madeira utilizada na construção?"
+              label="Qual é a origem da madeira utilizada na construção?"
               selectedValue={novaBenfeitoria.origemMadeiraDaConstrucao}
               onValueChange={(value) => handleEnumChange('origemMadeiraDaConstrucao', value)}
               options={optionsOrigemMaterial}
              />
 
              <RenderPicker
-              label="Qual Origem da pedra utilizada na construção?"
+              label="Qual é a origem da pedra utilizada na construção?"
               selectedValue={novaBenfeitoria.origemPedraDaConstrucao}
               onValueChange={(value) => handleEnumChange('origemPedraDaConstrucao', value)}
               options={optionsOrigemMaterial}
@@ -324,7 +325,7 @@ export const NovaBenfeitoria=()=>{
 
 
              <RenderPicker
-              label="Qual Origem da areia utilizada na construção?"
+              label="Qual é a origem da areia utilizada na construção?"
               selectedValue={novaBenfeitoria.origemAreiaDaConstrucao}
               onValueChange={(value) => handleEnumChange('origemAreiaDaConstrucao', value)}
               options={optionsOrigemMaterial}
@@ -352,7 +353,7 @@ export const NovaBenfeitoria=()=>{
                   }}
                   options={['SIM', 'NÃO']}
               />
-                    {alagamento.includes('SIM') && (
+                    {alagamento === 'SIM' && (
                       <View style={{ marginTop: 10 }}>
                             <RenderPicker
                             label="Qual é a ocorrência"
@@ -375,13 +376,7 @@ export const NovaBenfeitoria=()=>{
                     </View>
                     )}
 
-             <RenderPicker
-              label="Qual Origem da pedra utilizada na construção?"
-              selectedValue={novaBenfeitoria.origemPedraDaConstrucao}
-              onValueChange={(value) => handleEnumChange('origemPedraDaConstrucao', value)}
-              options={optionsOrigemMaterial}
-             />
-
+           
                {efluentesVelha && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
                   Informação dada anteriormente:  {efluentesVelha}
@@ -391,15 +386,15 @@ export const NovaBenfeitoria=()=>{
              <CheckboxSelector
                 options={optionsEfluentes}
                 selectedValues={efluenteSanitario}
-                label="Qual o destino dos efluentes sanitários?"
+                label="Qual é o destino dos efluentes sanitários?"
                 onSave={(selectedValues) => {
                     setEfluenteSanitário(selectedValues);
-                    if (!selectedValues.includes('Outros')) {
+                    if (!selectedValues.includes('Outro')) {
                         SetOutrosDestinos('');
                     }
                 }}
               />
-                  {efluenteSanitario.includes('Outros') && (
+              {efluenteSanitario.includes('Outro') && (
                       <View style={{ marginTop: 10 }}>
                           <Input
                               value={outrosDestinos}
@@ -420,7 +415,7 @@ export const NovaBenfeitoria=()=>{
             <CheckboxSelector
                 options={optionsResiduos}
                 selectedValues={residuosSolidos}
-                label="Qual o destino do lixo?"
+                label="Qual é o destino do lixo produzido?"
                 onSave={(selectedValues) => {
                     setResiduosSolidos(selectedValues);
                     if (!selectedValues.includes('Outro')) {
@@ -435,7 +430,7 @@ export const NovaBenfeitoria=()=>{
                               onChangeText={SetOutrosDescartes}
                               placeholder="Separe as informações por vírgula"
                               margin="15px 10px 30px 5px"
-                              title="Qual?"
+                              title="Qual é o destino?"
                           />
                       </View>
                   )}

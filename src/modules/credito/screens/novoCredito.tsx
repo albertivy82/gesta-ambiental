@@ -1,10 +1,8 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { SimNao } from "../../../enums/simNao.enum";
 import Input from "../../../shared/components/input/input";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovoCredito } from "../hooks/useInputCredito";
 import { CreditoDetailContainer } from "../styles/credito.style";
@@ -50,7 +48,7 @@ export const NovoCredito = () => {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <CreditoDetailContainer>
         
         <Input 
@@ -58,7 +56,7 @@ export const NovoCredito = () => {
           onChange={(event) => handleOnChangeInput(event, 'tipoCredito')}
           placeholder="..."
           margin="15px 10px 30px 5px"
-          title="Linha crédito acessada:"
+          title="Informe qual é a linha crédito acessada pelos moradores da casa:"
         />
         
          <Input
