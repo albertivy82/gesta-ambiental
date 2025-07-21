@@ -25,6 +25,7 @@ import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
 import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
 import { imovelBody } from "../../../shared/types/imovelType";
 import Text from "../../../shared/components/text/Text";
+import { theme } from "../../../shared/themes/theme";
 
 export interface imovelParam {
 imovel: imovelBody, 
@@ -155,9 +156,6 @@ export const NovaBenfeitoria=()=>{
     const optionsEnergiaAlimentos = Object.values(EnergiaAlimentos)
     const optionsInformativoPredominante = Object.values(InformativoPredominante)
       
-    
-
-
     const handleEnviar = async () => {
       setLoading(true);
     
@@ -268,6 +266,7 @@ export const NovaBenfeitoria=()=>{
               onChange={handleOnChangeAreaBenfeitoria}
               keyboardType='numeric'
               placeholder="Área em m²"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Área da benfeitoria (m²)"
             />
@@ -283,6 +282,7 @@ export const NovaBenfeitoria=()=>{
               onChange={(event)=>handleNumberChange(event, 'pavimentos')}
               keyboardType='numeric'
               placeholder="Área em m²"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Nº de pavimentos (térreo e altos):"
             />
@@ -485,6 +485,7 @@ export const NovaBenfeitoria=()=>{
                               value={outrasEnergias}
                               onChangeText={SetOutrasEnergias}
                               placeholder="Separe as informações por vírgula"
+                              placeholderTextColor={theme.colors.grayTheme.gray80}
                               margin="15px 10px 30px 5px"
                               title="Qual?"
                           />

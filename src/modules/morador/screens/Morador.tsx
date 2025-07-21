@@ -9,11 +9,12 @@ import { theme } from '../../../shared/themes/theme';
 import { MoradorType } from '../../../shared/types/MoradorType';
 import { MoradorDetailContainer } from '../styles/morador.style';
 import RenderItemMorador from '../ui-components/listaMoradores';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
 
 
-export interface MoradorParams {
-  morador: MoradorType;
+export interface BenfeitoriaParams {
+  benfeitoria: BenfeitoriaType;
 }
 
 export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
@@ -22,38 +23,32 @@ export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], ben
 
 const Morador = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, MoradorParams>, 'Imovel'>>();
-  const { morador } = route.params;
-  const flatListRef = useRef<FlatList>(null);
+  const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
+  const { benfeitoria } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
+    const flatListRef = useRef<FlatList>(null);
   const [moradors, setMorador] = useState<MoradorType[]>([]);
+ 
+  useEffect(()=>{
+      setIsLoading(true);
+        if(benfeitoria){
+           const benfeitoriaRealm = getMoradores(benfeitoria.id);
+            setMorador(benfeitoriaRealm);
+         }
+         setIsLoading(false);
+     }, [benfeitoria])
   
-
-  // Carrega a lista inicial de imóveis
-  const fetchMorador = async () => {
-    if (morador.benfeitoria.id) {
-      const imovelRealm = getMoradores(morador.benfeitoria.id);
-      setMorador(imovelRealm);
-    }
-   
-  };
-
-  useEffect(() => {
-    fetchMorador();
-  }, [fetchMorador]);
-
   // Rola até o final da lista
-  const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
+const handleScrollToEnd = () => {
+  flatListRef.current?.scrollToEnd({ animated: true });
+};  
 
-  // Atualiza a lista de imóveis
-  const handleRefresh = () => {
-    fetchMorador();
-    handleScrollToEnd();
-  };
+const handleRefresh = () => {
+   handleScrollToEnd();
+};
 
   const handleNovoMorador = () => {
-    novaAve(navigation.navigate, morador.benfeitoria.id);
+    novaAve(navigation.navigate, benfeitoria.id);
   };
 
   return (
@@ -106,7 +101,7 @@ const Morador = () => {
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoMorador}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
-            Add Ave
+            Add Morador
           </Text>
         </TouchableOpacity>
       </View>

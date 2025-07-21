@@ -154,8 +154,8 @@ const Navigation =() =>{
           <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
           <Stack.Screen name="Postos" component={Postos} options={{title: 'Postos'}} />
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
-          <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Ecolas'}} />
-          <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Ecolas'}} />
+          <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Escolas'}} />
+          <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Escolas'}} />
           <Stack.Screen name="NovoCredito" component={NovoCredito} options={{ title: 'Cadastro de Crédito' }} />
           <Stack.Screen name="CreditoLista" component={Credito} options={{ title: 'Registro de Crédito' }} />
           <Stack.Screen name="NovaRendaOutrasFontes" component={NovaRendaOutrasFontes} options={{ title: 'Cadastro de Outras Fontes de Renda' }} />
@@ -164,8 +164,8 @@ const Navigation =() =>{
           <Stack.Screen name="AguaLista" component={Aguas} options={{ title: 'Registro de Água' }} />
           <Stack.Screen name="NovoServicoComunicacao" component={NovoServicoComunicacao} options={{ title: 'Cadastro de Serviço de Comunicação' }} />
           <Stack.Screen name="ServicosComunicacaoLista" component={ServicosComunicacao} options={{ title: 'Registro de Serviços de Comunicação' }} />
-          <Stack.Screen name="Atividades" component={Atividades} options={{ title: 'Cadastro de Serviço de Comunicação' }} />
-          <Stack.Screen name="NovaAtividade" component={NovaAtividade} options={{ title: 'Detalhes do Serviço de Comunicação' }} />
+          <Stack.Screen name="Atividades" component={Atividades} options={{ title: 'Atividade Produtiva' }} />
+          <Stack.Screen name="NovaAtividade" component={NovaAtividade} options={{ title: 'Cadastro de Atividade Produtiva' }} />
           <Stack.Screen name="Morador" component={Morador} options={{ title: 'Listagem de Moradores' }} />
           <Stack.Screen name="MoradorDetails" component={MoradorDetails} options={{ title: 'Morador' }} />
           <Stack.Screen name="NovoMorador" component={NovoMorador} options={{ title: 'Cadastro de Morador' }} />

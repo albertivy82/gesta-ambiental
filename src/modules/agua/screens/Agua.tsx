@@ -9,10 +9,12 @@ import { theme } from '../../../shared/themes/theme';
 import { AguaType } from '../../../shared/types/AguaType';
 import { AguaDetailContainer } from '../styles/agua.style';
 import RenderItemAgua from '../ui-components/listaAgua';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
 
-export interface AguaParams {
-  aguas: AguaType;
+
+export interface BenfeitoriaParams {
+  benfeitoria: BenfeitoriaType;
 }
 
 export const novaAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
@@ -21,33 +23,36 @@ export const novaAgua = (navigate: NavigationProp<ParamListBase>['navigate'], be
 
 const Aguas = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, AguaParams>>>();
-  const { aguas } = route.params;
+  const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
+  const { benfeitoria } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
-  const [aguass, setAguas] = useState<AguaType[]>([]);
+  const [aguas, setAguas] = useState<AguaType[]>([]);
 
-  const fetchAguas = async () => {
-    if (aguas.benfeitoria.id) {
-      const imovelRealm = getAguas(aguas.benfeitoria.id);
-      setAguas(imovelRealm);
-    }
-  };
+ 
+  useEffect(()=>{
+        setIsLoading(true);
+          if(benfeitoria){
+             const benfeitoriaRealm = getAguas(benfeitoria.id);
+             setAguas(benfeitoriaRealm);
+             console.log(benfeitoria.id, benfeitoriaRealm)
+           }
+          
+           setIsLoading(false);
+  }, [benfeitoria])
 
-  useEffect(() => {
-    fetchAguas();
-  }, [fetchAguas]);
+ 
 
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
   const handleRefresh = () => {
-    fetchAguas();
     handleScrollToEnd();
   };
 
   const handleNovaAgua = () => {
-    novaAgua(navigation.navigate, aguas.benfeitoria.id);
+    novaAgua(navigation.navigate, benfeitoria.id);
   };
 
   return (
@@ -106,8 +111,8 @@ const Aguas = () => {
 
       <FlatList
         ref={flatListRef}
-        data={aguass}
-        extraData={aguass}
+        data={aguas}
+        extraData={aguas}
         renderItem={({ item }) => <RenderItemAgua item={item} />}
         keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
       />

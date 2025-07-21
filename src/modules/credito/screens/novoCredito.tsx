@@ -6,46 +6,55 @@ import Input from "../../../shared/components/input/input";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovoCredito } from "../hooks/useInputCredito";
 import { CreditoDetailContainer } from "../styles/credito.style";
+import { CreditoType } from "../../../shared/types/CreditoType";
 
 
-export interface idParam {
+export interface NovoCreditoParams {
   benfeitoria: BenfeitoriaType;
+  credito?: CreditoType;
 }
 
-export const NovoCredito = () => {
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const [loading, setLoading] = useState(false);
-  
+export const detalharCredito = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('CreditoLista', { benfeitoria });
+};
 
-  const {  
+export const NovoCredito = () => {
+ const navigation = useNavigation<NavigationProp<ParamListBase>>();
+   const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
+   const benfeitoria = params.benfeitoria ?? params.credito?.benfeitoria;
+   const credito = params.credito;
+   const [loading, setLoading] = useState(false); 
+   const {  
     novoCredito,
     handleOnChangeRendimentoMensal,
     handleOnChangeInput,
+    enviarRegistro,
     disabled
   } = useNovoCredito(params.benfeitoria);
 
  
 
-  
-    
   const handleEnviar = async () => {
-    setLoading(true);
-    try {
-      const creditoSalvo = true; // await enviarRegistro(); 
-      if (creditoSalvo) {
-        // detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
-      } else {
-        Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
-        navigation.goBack();
-      }
-    } catch (error) {
-      console.error("Erro no envio:", error);
-      Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-    } finally {
-      setLoading(false);
-    }
-  };
+           setLoading(true);
+         
+           try {
+             const creditoSalva = await enviarRegistro(); 
+             console.log(creditoSalva);
+                 if (creditoSalva){
+                  detalharCredito(navigation.navigate, benfeitoria);
+                 } else {
+                   Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
+                   navigation.goBack();
+                 }
+           } catch (error) {
+             console.error("Erro no envio:", error);
+             Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+           } finally {
+             setLoading(false);
+           }
+         };
+
+  //const valorSalvo = credito?. credito.faturamentoAtividadeMesTotal.toFixed(2) : '';
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>

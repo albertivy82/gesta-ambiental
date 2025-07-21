@@ -10,6 +10,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { LocalidadeType } from "../../../shared/types/LocalidadeType";
 import { SimNao } from "../../../enums/simNao.enum";
 import { PostoType } from "../../../shared/types/postoTypes";
+import { theme } from "../../../shared/themes/theme";
 
 
 export interface NovoPostoParams {
@@ -83,6 +84,7 @@ export const NovoPosto = ()=>{
               value={novoPosto.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
               placeholder="Informe o nome do posto"
+               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="0px 0px 16px 0px"
               title="Nome do Posto:"
               />

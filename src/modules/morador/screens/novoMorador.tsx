@@ -14,13 +14,16 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { MoradorType } from "../../../shared/types/MoradorType";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
+import { theme } from "../../../shared/themes/theme";
+import Text from "../../../shared/components/text/Text";
 
 
 
 
 
-export interface idParam {
-  Benfeitoria: BenfeitoriaType;
+export interface NovoMoradorParams {
+  benfeitoria: BenfeitoriaType;
+  morador?: MoradorType;
 }
 
 export const detalharMorador = (navigate: NavigationProp<ParamListBase>['navigate'], morador: MoradorType)=>{
@@ -28,24 +31,26 @@ export const detalharMorador = (navigate: NavigationProp<ParamListBase>['navigat
 }
 
 export const NovoMorador = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
+   const { params } = useRoute<RouteProp<Record<string, NovoMoradorParams>, string>>();
+   const benfeitoria = params.benfeitoria ?? params.morador?.benfeitoria;
+   const morador = params.morador;
    const [loading, setLoading] = useState(false); 
    const [estuda, setEstuda] = useState<string>('');     
    const [ondeEstuda, SetOndeEstuda] = useState<string>('');
    const [trabalha, setTrabalha] = useState<string>('');     
    const [ondeTrabalha, SetOndeTrabalha] = useState<string>('');
-   const [religiao, setReligiao] = useState<string>('');     
    const [doencaInformada, setDoencaInformada] = useState<string[]>([]);  
+   const [idade, setIdade] = useState<number>();
    const {  novoMorador,
             handleEnumChange,
             handleArrayFieldChange,
             enviarRegistro,
-            handleNumberChange,
+            handleSetNumber,
             disabled
-          } = useNovoMorador(params.Benfeitoria);
+          } = useNovoMorador(benfeitoria, morador);
 
-
+          
   useEffect(() => {
         const consolidaDados = estuda === 'SIM' 
           ? (ondeEstuda ? [`onde estuda: ${ondeEstuda}`] : [])  
@@ -70,6 +75,10 @@ export const NovoMorador = ()=>{
     handleArrayFieldChange('doencas', doencaInformada);
   
   },[doencaInformada])
+
+  useEffect(()=>{
+    handleSetNumber(idade!,'dataNascimento');
+ },[idade])
    
   const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
   const perfilOptions =  Object.values(Perfil);
@@ -97,19 +106,40 @@ export const NovoMorador = ()=>{
          }
        };
 
+
+       useEffect(() => {
+        if (!morador) return;
+      
+        handleEnumChange('perfil', morador.perfil);
+        handleEnumChange('sexo', morador.sexo);
+        handleEnumChange('estadoCivil', morador.estadoCivil);
+        handleEnumChange('escolaridade', morador.escolaridade);
+        handleEnumChange('religiao', morador.religiao);
+        setIdade(morador.dataNascimento);
+        
+      }, [morador]);
+
+      const estudaVelho = morador?.ondeEstuda  ?? '';
+      const trabalhoVelho = morador?.trabalho ?? '';
+      const doencasVelhas = morador?.doencas ?? '';
+
+
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
         <MoradorDetailContainer>
           
       
-              <Input
-                value={novoMorador.dataNascimento?.toString() || ''}
-                onChange={(event) => handleNumberChange(event, 'dataNascimento')}
+               <Input
+                value={idade?.toString() || ''}
+                onChangeText={(text) => {
+                  const num = parseInt(text.replace(/\D/g, ''), 10);
+                  setIdade(isNaN(num) ? undefined : num);
+                }}
                 keyboardType="numeric"
-                placeholder="..."
-                margin="15px 10px 30px 5px"
-                title="idade do morador: "
-               />
+                placeholder="Digite a idade do morador"
+                placeholderTextColor={theme.colors.grayTheme.gray80}
+                title="Qual sua idade?"
+              />
 
 
               <RenderPicker
@@ -141,7 +171,13 @@ export const NovoMorador = ()=>{
                options={escolaridadeOptions}
               />
 
-             <RenderPicker
+               {estudaVelho && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteiormente:  {estudaVelho}
+               </Text>
+                )}
+
+                <RenderPicker
                   label="O morador estuda?"
                   selectedValue={estuda}
                   onValueChange={(value) => {
@@ -159,10 +195,16 @@ export const NovoMorador = ()=>{
                       onChangeText={SetOndeEstuda}
                       placeholder="..."
                       margin="15px 10px 30px 5px"
-                      title="Onde Etuda?"
+                      title="Onde Estuda?"
                        />
                       </View>
                  )}
+
+                {trabalhoVelho && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteiormente:  {trabalhoVelho}
+               </Text>
+                )}
 
                <RenderPicker
                   label="O morador trabalha?"
@@ -194,7 +236,11 @@ export const NovoMorador = ()=>{
                   options={religiaoOptions}
                  />
                   
-
+                {doencasVelhas && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                 Informação dada anteiormente:  {doencasVelhas}
+               </Text>
+                )}
                 <CheckboxSelector
                 options={molestiasOptions}
                 selectedValues={doencaInformada}

@@ -83,7 +83,7 @@ const InfLocalidade = () => {
       );
 
        //BLOCO ESCOLAS
-       const  handleGerenciaEscolas =  (localidadeId: number, contagemEntrevistados: number) =>{
+       const  handleGerenciaEscolas =  (localidadeId: number, contagemEscolas: number) =>{
         if(contagemEscolas>0){
           escolasDaLocalidade(navigation.navigate, localidadeId);
         }else{
@@ -92,8 +92,8 @@ const InfLocalidade = () => {
       }
 
       //BLOCO POSTOS
-       const  handleGerenciaPostos =  (localidadeId: number, contagemEntrevistados: number) =>{
-        if(contagemEntrevistados>0){
+       const  handleGerenciaPostos =  (localidadeId: number, contagemPostos: number) =>{
+        if(contagemPostos>0){
           postosDaLocalidade(navigation.navigate, localidadeId);
         }else{
           NovoPostoDaLocalidade(navigation.navigate, localidadeId);

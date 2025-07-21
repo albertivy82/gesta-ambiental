@@ -8,10 +8,12 @@ import { theme } from '../../../shared/themes/theme';
 import { CreditoType } from '../../../shared/types/CreditoType';
 import { CreditoDetailContainer } from '../styles/credito.style';
 import RenderItemCredito from '../ui-components/listaCredito';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { getCreditos } from '../../../realm/services/creditoService';
 
 
-export interface CreditoParams {
-  credito: CreditoType;
+export interface BenfeitoriaParams {
+  benfeitoria: BenfeitoriaType;
 }
 
 export const novoCredito = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
@@ -20,22 +22,23 @@ export const novoCredito = (navigate: NavigationProp<ParamListBase>['navigate'],
 
 const Credito = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, CreditoParams>, 'Imovel'>>();
-  const { credito } = route.params;
+  const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
+  const { benfeitoria } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
 
-  // Carrega a lista inicial de créditos
-  const fetchCreditos = async () => {
-    if (credito.benfeitoria.id) {
-      // const creditoRealm = getCreditos(credito.benfeitoria.id);
-      // setCreditos(creditoRealm);
-    }
-  };
-
-  useEffect(() => {
-    fetchCreditos();
-  }, [fetchCreditos]);
+  useEffect(()=>{
+         setIsLoading(true);
+           if(benfeitoria){
+              const creitoRealm = getCreditos(benfeitoria.id);
+              setCreditos(creitoRealm);
+              console.log(benfeitoria.id, creitoRealm)
+            }
+           
+            setIsLoading(false);
+   }, [benfeitoria])
+ 
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -44,12 +47,11 @@ const Credito = () => {
 
   // Atualiza a lista de créditos
   const handleRefresh = () => {
-    fetchCreditos();
     handleScrollToEnd();
   };
 
   const handleNovoCredito = () => {
-    novoCredito(navigation.navigate, credito.benfeitoria.id);
+    novoCredito(navigation.navigate, benfeitoria.id);
   };
 
   return (

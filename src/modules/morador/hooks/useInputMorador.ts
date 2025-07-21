@@ -71,7 +71,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
         sincronizado: false,  
         idLocal: uuidv4(),
   };
-  
+  console.log(benfeitoria.id);
     if (benfeitoria.id > 0) {
         moradorData.benfeitoria!.id = benfeitoria.id;
         moradorData.idFather = "";
@@ -104,7 +104,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
           const moradorsQueue = await salvarMoradorQueue(moradorsDataQueue);
           return moradorsQueue;
          
-  
+         
         }else{
             novoMorador.benfeitoria = {id:benfeitoria.id};
             const netInfoState = await NetInfo.fetch();
@@ -113,7 +113,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
                   if(netInfoState.isConnected && isConnected){
                     
                     try{
-                       
+                      
                       const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador) as MoradorType;
                           
                       if (response && response.id) {
@@ -252,6 +252,13 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
     }));
   };
 
+  const handleSetNumber = (value: number, field: keyof MoradorInput) => {
+    setNovaMorador((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
 
   return {
     novoMorador,
@@ -261,6 +268,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
     handleOnChangeData,
     enviarRegistro,
     handleNumberChange,
+    handleSetNumber,
     disabled,
 };
   

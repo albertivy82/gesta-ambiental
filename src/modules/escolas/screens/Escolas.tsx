@@ -21,8 +21,8 @@ export const novaEscola = (navigate: NavigationProp<ParamListBase>['navigate'], 
 
 const Escolas = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, EscolasParam>, 'Imovel'>>();
-  const { localidadeId } = route.params;
+   const route = useRoute<RouteProp<Record<string, EscolasParam>, 'Localidade'>>();
+   const { localidadeId } = route.params;
   const {contagemEscolas} = useEscolas(localidadeId);
   const flatListRef = useRef<FlatList>(null);
 
@@ -55,8 +55,8 @@ const Escolas = () => {
     handleScrollToEnd();
   };
 
-  const handleNovoImovel = () => {
-    novaEscola(navigation.navigate, localidadeId);
+  const handleNovaEscola = () => {
+    navigation.navigate('NovaEscola', { localidadeId: localidadeId });
   };
 
   return (
@@ -108,7 +108,7 @@ const Escolas = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         {/* Botão "Adicionar Imóvel" */}
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoImovel}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaEscola}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
             Add Escola

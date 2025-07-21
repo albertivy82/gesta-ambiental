@@ -20,9 +20,9 @@ import EditConfirmation from '../ui-components/UseEditBenfeitoria';
 export const handleNavigation = <T,>(
   navigate: NavigationProp<ParamListBase>['navigate'], 
   route: string, 
-  data: T | T[]
+  benfeitoria: BenfeitoriaType
 ) => {
-  navigate(route, { data });
+  navigate(route, { benfeitoria });
 };
 
 export const handleNewEntry = (
@@ -37,14 +37,7 @@ export interface BenfeitoriaParam {
  benfeitoria: BenfeitoriaType;
 }
 
-  const temporario = () => {
-       
-          Alert.alert(
-            "Atenção!",
-            "Esta categoria ainda não está disponível para edição."
-          );
-       
-      };
+
 
 const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -56,8 +49,7 @@ const BenfeitoriaDetails = () => {
   const {creditos} = useCreditos(params.benfeitoria.id);
   const {rendasOF} = useRendasOutrasFontes(params.benfeitoria.id);
   const {servicos} = useServicosComunicacao(params.benfeitoria.id);
-
-  console.log(params.benfeitoria)
+  
 
    const handleDecision = <T,>(
       data: T | T[],
@@ -65,9 +57,9 @@ const BenfeitoriaDetails = () => {
       newRoute: string
     ) => {
       if (Array.isArray(data) ? data.length > 0 : !!data) {
-        handleNavigation(navigation.navigate, detailRoute, data);
+        handleNavigation(navigation.navigate, detailRoute, benfeitoria);
       } else {
-        handleNewEntry(navigation.navigate, newRoute, params.benfeitoria);
+         handleNewEntry(navigation.navigate, newRoute, benfeitoria);
       }
     };
   
@@ -129,7 +121,7 @@ const BenfeitoriaDetails = () => {
                  
                  </View>
                 
-       <TouchableOpacity onPress={() => handleDecision(moradores, "MoradorDetails", "NovoMorador")}>
+       <TouchableOpacity onPress={() => handleDecision(moradores, "Morador", "NovoMorador")}>
                 <View style={{
                   alignItems: 'stretch',
                   flexDirection: 'row',

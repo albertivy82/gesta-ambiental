@@ -45,7 +45,7 @@ export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput
     indicadoConsultaPublica: entrevistado.indicadoConsultaPublica,
     contatoIndicadoConsultaPublica: entrevistado.contatoIndicadoConsultaPublica,
         localidade: {
-            id: entrevistado.localidade.id,
+            id: entrevistado.localidade,
         },
     };
   };
@@ -72,13 +72,15 @@ export const useEntrevistados = (localidadeId: number) =>{
     const EntrevistadoQueue = getEntrevistadosDessincronizados(localidadeId);
     if (EntrevistadoQueue.length > 0) {
         for (const entrevistado of EntrevistadoQueue) {
+        
             const novoEntrevistadoIput = convertToEntrevistadoInput(entrevistado);
-            //console.log(novoImoveIput);
+            
             const netInfoState = await NetInfo.fetch();
             if (netInfoState.isConnected) {
                 const isConnected = await testConnection();
                 if (isConnected) {
                     try {
+                     
                         const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoIput);
                         const EntrevistadoAPI = response as EntrevistadoType;
                        

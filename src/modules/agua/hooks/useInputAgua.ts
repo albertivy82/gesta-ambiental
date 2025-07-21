@@ -7,7 +7,7 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { AguaInput } from "../../../shared/types/AguaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { AguaType } from "../../../shared/types/AguaType";
-import { Alert } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 export const DEFAULT_AGUA_INPUT: AguaInput = {
   tipoDeFornecimento: '',
@@ -193,11 +193,28 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
           }));
   };
 
+   const handleOnChangeProfundidade = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      let value = event.nativeEvent.text;
+    
+      // Remove qualquer caractere não numérico
+      value = value.replace(/\D/g, '');
+    
+      // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+      const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
+    
+      // Atualiza o estado com o valor formatado como número
+      setNovaAgua((currentImovel) => ({
+        ...currentImovel,
+        profundidadePoco: parseFloat(formattedValue), // Salva como número para enviar à API
+      }));
+    };
+
   return {
     novaAgua,
     enviarRegistro,
     handleArrayFieldChange,
     handleEnumChange,
+    handleOnChangeProfundidade,
     disabled,
   };
 };

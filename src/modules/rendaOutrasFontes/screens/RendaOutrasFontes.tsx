@@ -1,17 +1,19 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getRendaOutrasFontes } from '../../../realm/services/rendaOutrasFontes';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { CreditoType } from '../../../shared/types/CreditoType';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { RendaOutrasFontesType } from '../../../shared/types/rendaOutrasFontesType';
 import { RendaOutrasFontesDetailContainer } from '../styles/rendaOutrasFontes.style';
 import RenderItemRendaOutrasFontes from '../ui-components/listaRendasOutrasFontes';
 
 
-export interface CreditoParams {
-  credito: CreditoType;
+export interface BenfeitoriaParams {
+  benfeitoria: BenfeitoriaType;
 }
 
 export const novoCredito = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
@@ -19,23 +21,24 @@ export const novoCredito = (navigate: NavigationProp<ParamListBase>['navigate'],
 }
 
 const RendaOutrasFontes = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, CreditoParams>, 'Imovel'>>();
-  const { credito } = route.params;
-  const flatListRef = useRef<FlatList>(null);
-  const [creditos, setCreditos] = useState<CreditoType[]>([]);
+ const navigation = useNavigation<NavigationProp<ParamListBase>>();
+ const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
+ const { benfeitoria } = route.params;
+ const [isLoading, setIsLoading] = useState(false);
+ const flatListRef = useRef<FlatList>(null);
+ const [creditos, setCreditos] = useState<RendaOutrasFontesType[]>([]);
 
-  // Carrega a lista inicial de créditos
-  const fetchCreditos = async () => {
-    if (credito.benfeitoria.id) {
-      // const creditoRealm = getCreditos(credito.benfeitoria.id);
-      // setCreditos(creditoRealm);
-    }
-  };
-
-  useEffect(() => {
-    fetchCreditos();
-  }, [fetchCreditos]);
+   useEffect(()=>{
+          setIsLoading(true);
+            if(benfeitoria){
+               const rendasRealm = getRendaOutrasFontes(benfeitoria.id);
+               setCreditos(rendasRealm);
+               console.log(benfeitoria.id, rendasRealm)
+             }
+            
+             setIsLoading(false);
+    }, [benfeitoria])
+  
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -44,12 +47,11 @@ const RendaOutrasFontes = () => {
 
   // Atualiza a lista de créditos
   const handleRefresh = () => {
-    fetchCreditos();
     handleScrollToEnd();
   };
 
   const handleNovoCredito = () => {
-    novoCredito(navigation.navigate, credito.benfeitoria.id);
+    novoCredito(navigation.navigate, benfeitoria.id);
   };
 
   return (

@@ -9,47 +9,48 @@ import { ServicoComunicacaoDetailContainer } from '../styles/servicoComunicacao.
 import { getServicosComunicacao } from '../../../realm/services/servicosComunicacaoService';
 import { ServicosComunicacaoType } from '../../../shared/types/ComunicacaoType';
 import RenderItemServicoComunicacao from '../ui-components/listaServicoComunicacao';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
-export interface ServicosComunicacaoParams {
-  servicoComunicacao: ServicosComunicacaoType;
+export interface BenfeitoriaParams {
+  benfeitoria: BenfeitoriaType;
 }
 
 export const novoServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovoImovel', { benfeitoriaId });
+  navigate('NovoServicoComunicacao', { benfeitoriaId });
 }
 
 const ServicosComunicacao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, ServicosComunicacaoParams>, 'Imovel'>>();
-  const { servicoComunicacao } = route.params;
+  const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
+  const { benfeitoria } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [servicosComunicacao, setServicosComunicacao] = useState<ServicosComunicacaoType[]>([]);
 
-  // Carrega a lista inicial de serviços de comunicação
-  const fetchServicosComunicacao = async () => {
-    if (servicoComunicacao.benfeitoria.id) {
-      const servicosRealm = getServicosComunicacao(servicoComunicacao.benfeitoria.id);
-      setServicosComunicacao(servicosRealm);
-    }
-  };
+  useEffect(()=>{
+           setIsLoading(true);
+             if(benfeitoria){
+                const creitoRealm = getServicosComunicacao(benfeitoria.id);
+                setServicosComunicacao(creitoRealm);
+                console.log(benfeitoria.id, creitoRealm)
+              }
+             
+              setIsLoading(false);
+     }, [benfeitoria])
+   
 
-  useEffect(() => {
-    fetchServicosComunicacao();
-  }, [fetchServicosComunicacao]);
-
-  // Rola até o final da lista
+    // Rola até o final da lista
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
   // Atualiza a lista de serviços de comunicação
   const handleRefresh = () => {
-    fetchServicosComunicacao();
-    handleScrollToEnd();
+       handleScrollToEnd();
   };
 
   const handleNovoServicoComunicacao = () => {
-    novoServicoComunicacao(navigation.navigate, servicoComunicacao.benfeitoria.id);
+    novoServicoComunicacao(navigation.navigate, benfeitoria.id);
   };
 
   return (

@@ -11,9 +11,10 @@ import { QualidadeAguaEnum } from "../../../enums/qualidadeAgua.enum";
 import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import { AguaType } from "../../../shared/types/AguaType";
+import { theme } from "../../../shared/themes/theme";
 
 
-export interface NovaAveParams {
+export interface NovaAguaParams {
   benfeitoria: BenfeitoriaType;
   agua?: AguaType;
 }
@@ -24,7 +25,7 @@ export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate']
 
 export const NovaAgua = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const { params } = useRoute<RouteProp<Record<string, NovaAveParams>, string>>();
+  const { params } = useRoute<RouteProp<Record<string, NovaAguaParams>, string>>();
   const benfeitoria = params.benfeitoria ?? params.agua?.benfeitoria;
   const agua = params.agua;
   const [loading, setLoading] = useState(false);
@@ -38,8 +39,9 @@ export const NovaAgua = () => {
     enviarRegistro,
     handleArrayFieldChange,
     handleEnumChange,
+    handleOnChangeProfundidade,
     disabled
-  } = useNovaAgua(params.benfeitoria, agua);
+  } = useNovaAgua(benfeitoria, agua);
 
   const abastecimentoOptions = Object.values([
     'ABASTECIMENTO PUBLICO', 'POÇO AMAZONAS',
@@ -101,7 +103,7 @@ export const NovaAgua = () => {
        onValueChange={(value) => {
        setFornecimentoAgua(value ?? ''); 
           if (value !== '') {
-           SetOutroFornecimento('OUTRO:');
+           SetOutroFornecimento('');
            }
         }}
         options={abastecimentoOptions}
@@ -125,26 +127,6 @@ export const NovaAgua = () => {
                options={qualidadeOptions}
               />
 
-             <RenderPicker
-              label="Cor da água"
-              selectedValue={novaAgua.corDagua}
-               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
-               options={corOptions}
-              />
-              
-              <RenderPicker
-              label="Cheiro da água"
-              selectedValue={novaAgua.cheiroDagua}
-               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
-               options={cheiroOptions}
-              />
-              
-              <RenderPicker
-              label="Sabor da água"
-              selectedValue={novaAgua.saborDagua}
-               onValueChange={(value) => handleEnumChange('qualidadeDaAgua', value)}
-               options={saborOptions}
-              />
 
             <CheckboxSelector
                 options={tratamentoOptions}
@@ -152,12 +134,12 @@ export const NovaAgua = () => {
                 label="Qual o método utilizado para tratamento da água"
                 onSave={(selectedValues) => {
                     setTratamentoAgua(selectedValues);
-                    if (!selectedValues.includes('OUTRO')) {
+                    if (!selectedValues.includes('OUTROS')) {
                         setOutrosTratamentos('');
                     }
                 }}
             />
-            {tratamentoAgua.includes('OUTRO') && (
+            {tratamentoAgua.includes('OUTROS') && (
                 <View style={{ marginTop: 10 }}>
                     <Input
                         value={outrosTratamentos}
@@ -169,18 +151,43 @@ export const NovaAgua = () => {
                 </View>
             )}
 
-            {fornecimentoAgua.includes('POÇO AMAZONAS') 
-            ||fornecimentoAgua.includes('POÇO ARTESIANO') &&
-            ( <View style={{ marginTop: 10 }}>
-              <Input
-                  value={outrosTratamentos}
-                  onChangeText={setOutrosTratamentos}
-                  placeholder="..."
-                  margin="15px 10px 30px 5px"
-                  title="Informe qual:"
+
+             <RenderPicker
+              label="Cor da água"
+              selectedValue={novaAgua.corDagua}
+               onValueChange={(value) => handleEnumChange('corDagua', value)}
+               options={corOptions}
               />
-             </View>)
-            }
+              
+              <RenderPicker
+              label="Cheiro da água"
+              selectedValue={novaAgua.cheiroDagua}
+               onValueChange={(value) => handleEnumChange('cheiroDagua', value)}
+               options={cheiroOptions}
+              />
+              
+              <RenderPicker
+              label="Sabor da água"
+              selectedValue={novaAgua.saborDagua}
+               onValueChange={(value) => handleEnumChange('saborDagua', value)}
+               options={saborOptions}
+              />
+
+           
+          {fornecimentoAgua.includes('POÇO') && (
+            <View style={{ marginTop: 10 }}>
+              <Input
+                value={novaAgua.profundidadePoco?.toString() || ''}
+                onChange={handleOnChangeProfundidade}
+                keyboardType='decimal-pad'
+                placeholder="Ex: 10.5"
+                placeholderTextColor={theme.colors.grayTheme.gray80}
+                margin="15px 10px 30px 5px"
+                title="Profundidade do Poço"
+              />
+            </View>
+          )}
+
 
         <View style={{ marginTop: 40 }}>
           {loading ? (

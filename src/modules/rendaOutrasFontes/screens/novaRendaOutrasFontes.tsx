@@ -64,7 +64,7 @@ export const NovaRendaOutrasFontes = () => {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <RendaOutrasFontesDetailContainer>
         
        

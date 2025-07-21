@@ -9,6 +9,7 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { EscolaType } from "../../../shared/types/EscolaType";
 import { useNovaEscola } from "../hooks/useNovaEscola";
 import { EscolaContainer } from "../styles/Escolas.style";
+import { theme } from "../../../shared/themes/theme";
 
 
 
@@ -85,6 +86,7 @@ export const NovaEscola = ()=>{
               value={novaEscola.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
               placeholder="Nome da Escola:"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Nome:"
         />

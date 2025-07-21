@@ -164,6 +164,7 @@ export const NovoImovel = () => {
               value={novoImovel.rua} 
               onChange={(event)=> handleOnChangeInput(event, 'rua')}
               placeholder="Informe a rua do imóvel"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Rua:"
               onSubmitEditing={()=>numeroInput.current?.focus()}
@@ -173,6 +174,7 @@ export const NovoImovel = () => {
               value={novoImovel.numero} 
               onChange={(event)=> handleOnChangeInput(event, 'numero')}
               placeholder="Imforme o número do Imóvel"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Número:"
               onSubmitEditing={()=>bairroInput.current?.focus()}
@@ -182,6 +184,7 @@ export const NovoImovel = () => {
               value={novoImovel.bairro} 
               onChange={(event)=> handleOnChangeInput(event, 'bairro')}
               placeholder="Informe o bairro imóvel"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Bairro:"
               onSubmitEditing={()=>referencialInput.current?.focus()}
@@ -193,6 +196,7 @@ export const NovoImovel = () => {
               value={novoImovel.referencial} 
               onChange={(event)=> handleOnChangeInput(event, 'referencial')}
               placeholder="Informe uma referência para o imóvel"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Informe algum referencial para o imóvel:"
               onSubmitEditing={()=>areaImovelInput.current?.focus()}
@@ -221,6 +225,7 @@ export const NovoImovel = () => {
               onChange={handleOnChangeAreaImovel}
               keyboardType='numeric'
               placeholder="Área em m²"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Área do Imóvel (m²)"
               ref={areaImovelInput}
@@ -263,6 +268,7 @@ export const NovoImovel = () => {
                             value={outrasVizinhosConfinantes}
                             onChangeText={setOutrasVizinhosConfinantes}
                             placeholder="Separe as informações por vírgula"
+                            placeholderTextColor={theme.colors.grayTheme.gray80}
                             margin="15px 10px 30px 5px"
                             title="Informe quais:"
                         />
@@ -297,6 +303,7 @@ export const NovoImovel = () => {
               value={novoImovel.linhasDeBarco} 
               onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
               placeholder="Se houver, informe as linhas de barco do local"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Há linhas de barco no local?"
               ref={linhaBarcoInput}
@@ -332,6 +339,7 @@ export const NovoImovel = () => {
                         value={outrasInformadas}
                         onChangeText={SetOutrasInformadas}
                         placeholder="Separe as informações por vírgula"
+                        placeholderTextColor={theme.colors.grayTheme.gray80}
                         margin="15px 10px 30px 5px"
                         title="Informe quais:"
                     />
@@ -376,6 +384,7 @@ export const NovoImovel = () => {
                             value={outrosEquipamentosUrbanos}
                             onChangeText={setOutrosEquipamentosUrbanos}
                             placeholder="Se não souber, infomar 'não sabe'"
+                            placeholderTextColor={theme.colors.grayTheme.gray80}
                             margin="15px 10px 30px 5px"
                             title="Informe quais:"
                         />
@@ -395,7 +404,8 @@ export const NovoImovel = () => {
              <Input 
               value={novoImovel.programaInfraSaneamento} 
               onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
-              placeholder="Conhece algum destinado para a área"
+              placeholder="Conhece algum destinado para a área?"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Programas de Infraestrutura e Saneamento:"
               />

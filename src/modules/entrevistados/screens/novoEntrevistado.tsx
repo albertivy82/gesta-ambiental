@@ -20,6 +20,7 @@ import { EntrevistadoContainer } from "../styles/entrevistado.style";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import Text from "../../../shared/components/text/Text";
 import { formatarData, formatDateForApi } from "../../../shared/functions/data";
+import { theme } from "../../../shared/themes/theme";
 
 
 export interface NovoEntrevistadoParams {
@@ -57,9 +58,9 @@ export const NovoEntrevistado = ()=>{
             handleOnChangeInput(entrevistado.naturalidade, 'naturalidade');
             handleOnChangeInput(entrevistado.apelido, 'apelido');
             handleOnChangeInput(entrevistado.religiao, 'religiao');
+            setIdade(entrevistado.nascimentoData);
           
             // Datas
-            handleOnChangeData(new Date(entrevistado.nascimentoData), 'nascimentoData');
             handleOnChangeData(new Date(entrevistado.dataChegada), 'dataChegada');
           
             // Enums
@@ -272,6 +273,7 @@ export const NovoEntrevistado = ()=>{
               value={novoEntrevistado.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
               placeholder="Nome do entrevistado"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Nome:"
               ref={nomeInput}
@@ -281,6 +283,7 @@ export const NovoEntrevistado = ()=>{
               value={novoEntrevistado.naturalidade} 
               onChange={(event)=> handleOnChangeInput(event, 'naturalidade')}
               placeholder="naturalidade"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Naturalidade:"
               ref={naturalidadeInput}
@@ -293,7 +296,8 @@ export const NovoEntrevistado = ()=>{
                   setIdade(isNaN(num) ? undefined : num);
                 }}
                 keyboardType="numeric"
-                placeholder="Digite sua idade"
+                placeholder="Idade do entrevistado"
+                placeholderTextColor={theme.colors.grayTheme.gray80}
                 title="Qual sua idade?"
               />
 
@@ -315,6 +319,7 @@ export const NovoEntrevistado = ()=>{
               value={novoEntrevistado.apelido} 
               onChange={(event)=> handleOnChangeInput(event, 'apelido')}
               placeholder="como é mais conhecido na região"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Apelido:"
               ref={apelidoInput}
@@ -380,6 +385,7 @@ export const NovoEntrevistado = ()=>{
               value={novoEntrevistado.relacaoAreaImovel} 
               onChange={(event)=> handleOnChangeInput(event, 'relacaoAreaImovel')}
               placeholder="Relação do entrevistado com a área do imóvel"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Como você define a sua relação com o local onde você mora?"
               ref={relacaoAreaInput}
@@ -390,6 +396,7 @@ export const NovoEntrevistado = ()=>{
                   value={novoEntrevistado.relacaoVizinhos} 
                   onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
                   placeholder="Relação do entrevistado com a vizinhança"
+                  placeholderTextColor={theme.colors.grayTheme.gray80}
                   margin="15px 10px 30px 5px"
                   title="Como você é a sua relação com a vizinhança?"
                   ref={relacaoVizinhoInput}
@@ -527,6 +534,7 @@ export const NovoEntrevistado = ()=>{
                 onChange={(event) => handleNumberChange(event, 'sofreuAssaltos')}
                 keyboardType="numeric"
                 placeholder="Área em m²"
+                placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
                 title="Já sofreu Assaltos nesse local"
                 ref={sofreuAssaltosInput}
@@ -538,6 +546,7 @@ export const NovoEntrevistado = ()=>{
                 onChange={(event) => handleNumberChange(event, 'presenciouAssalto')}
                 keyboardType="numeric"
                 placeholder="Quantas vezes?"
+                placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
                 title="Já presenciou Assaltos nesse local"
                 ref={presenciouAssaltosInput}
@@ -548,6 +557,7 @@ export const NovoEntrevistado = ()=>{
                 value={novoEntrevistado.problemasDeViolenciaLocal}
                 onChange={(event) => handleOnChangeInput(event, 'problemasDeViolenciaLocal')}
                 placeholder="Separe por vírgulas se houver mais de um relato"
+                placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
                 title="Quais os problemas de violência aqui no local?"
                 ref={violenciaLocalInput}

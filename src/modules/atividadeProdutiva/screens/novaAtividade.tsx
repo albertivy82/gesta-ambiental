@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { AtividadesProdutivas } from "../../../enums/AtividadesProdutivas.enum";
@@ -9,19 +9,23 @@ import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAtvProd } from "../hooks/useInputAtvProd";
 import { AtividadeDetailContainer } from "../styles/ativdade.style";
+import Text from "../../../shared/components/text/Text";
 
 
-export interface idParam {
+export interface NovaAtividadeParams {
   benfeitoria: BenfeitoriaType;
+  atividadeProdutiva?: AtividadeProdutivaType;
 }
 
-export const detalharAtividadeProdutiva = (navigate: NavigationProp<ParamListBase>['navigate'], atividadeProdutiva: AtividadeProdutivaType)=>{
-  navigate('AtividadeProdutivaDetails', {atividadeProdutiva})
-}
+export const detalharAtividadeProdutiva = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('Atividades', { benfeitoria });
+};
 
-export const NovaAtividade = ()=>{
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
+export const NovaAtividade = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const { params } = useRoute<RouteProp<Record<string, NovaAtividadeParams>, string>>();
+  const benfeitoria = params.benfeitoria ?? params.atividadeProdutiva?.benfeitoria;
+  const atividadeProdutiva = params.atividadeProdutiva;
   const [loading, setLoading] = useState(false); 
   const { novaAtividade,
     enviarRegistro,
@@ -29,8 +33,9 @@ export const NovaAtividade = ()=>{
           handleNumberChange,
           handleOnChangeRendimentoMensal,
           disabled
-          } = useNovaAtvProd(params.benfeitoria);
+          } = useNovaAtvProd(benfeitoria, atividadeProdutiva);
 
+         
 const atividadeOptions =  Object.values(AtividadesProdutivas);
     
     const handleEnviar = async () => {
@@ -38,8 +43,9 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
        
          try {
            const atividadeSalva = await enviarRegistro(); 
+           console.log(atividadeSalva);
                if (atividadeSalva){
-                 detalharAtividadeProdutiva(navigation.navigate, atividadeSalva);
+                 detalharAtividadeProdutiva(navigation.navigate, benfeitoria);
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
                  navigation.goBack();
@@ -52,6 +58,14 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
          }
        };
 
+       useEffect(() => {
+        if (!atividadeProdutiva) return;
+           handleEnumChange('atividade', atividadeProdutiva.atividade);
+       
+        }, [atividadeProdutiva]);
+
+        const valorSalvoPessoas = atividadeProdutiva?.pessoasEnvolvidas ? atividadeProdutiva.pessoasEnvolvidas.toFixed(2) : '';
+        const valorSalvoRendimento = atividadeProdutiva?.faturamentoAtividadeMesTotal ? atividadeProdutiva.faturamentoAtividadeMesTotal.toFixed(2) : '';
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
         <AtividadeDetailContainer>
@@ -63,6 +77,11 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
             />
 
 
+              {valorSalvoPessoas && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação cadastrada anteriormente: {valorSalvoPessoas}
+                </Text>
+              )}
 
             <Input
               value={novaAtividade.pessoasEnvolvidas?.toString() || ''}
@@ -73,7 +92,11 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
               title="Quantas pessoas de sua residência estão envolvidas na atividade?"
              />
 
-             
+             {valorSalvoRendimento && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação cadastrada anteriormente: {valorSalvoRendimento}
+                </Text>
+              )}
             <Input
               value={novaAtividade.faturamentoAtividadeMesTotal?.toFixed(2) || ''}
               onChange={handleOnChangeRendimentoMensal}
@@ -83,8 +106,7 @@ const atividadeOptions =  Object.values(AtividadesProdutivas);
               title="Informe o rendimento mensal aproximado da atividade"
             />
 
-              
-         
+                       
              <View style={{ marginTop: 40 }}>
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 

@@ -9,44 +9,48 @@ import RenderItemAtividade from '../ui-components/listaAtvProdutivas';
 import { AtividadeProdutivaType } from '../../../shared/types/AtividadeProdutiva';
 import { AtividadeDetailContainer } from '../styles/ativdade.style';
 import { getAtividadesProdutivas } from '../../../realm/services/atividadeProdutivaService';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
-export interface AtividadesParams {
-  atividade: AtividadeProdutivaType;
+export interface BenfeitoriaParams {
+  benfeitoria: BenfeitoriaType;
 }
 
 export const novaAtividade = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovoImovel', { benfeitoriaId });
+  navigate('NovaAtividade', { benfeitoriaId });
 }
 
 const Atividades = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, AtividadesParams>>>();
-  const { atividade } = route.params;
+  const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>>>();
+  const { benfeitoria } = route.params;
   const flatListRef = useRef<FlatList>(null);
+   const [isLoading, setIsLoading] = useState(false);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
 
-  const fetchAtividades = async () => {
-    if (atividade.benfeitoria.id) {
-      const imovelRealm = getAtividadesProdutivas(atividade.benfeitoria.id);
-      setAtividades(imovelRealm);
-    }
-  };
+   useEffect(()=>{
+        setIsLoading(true);
+          if(benfeitoria){
+            const atividadesRealm = getAtividadesProdutivas(benfeitoria.id);
+            setAtividades(atividadesRealm);
+           }
+           setIsLoading(false);
+  }, [benfeitoria])
 
-  useEffect(() => {
-    fetchAtividades();
-  }, [fetchAtividades]);
 
-  const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
 
-  const handleRefresh = () => {
-    fetchAtividades();
-    handleScrollToEnd();
-  };
+   // Rola até o final da lista
+const handleScrollToEnd = () => {
+  flatListRef.current?.scrollToEnd({ animated: true });
+};  
+
+const handleRefresh = () => {
+   handleScrollToEnd();
+};
+
+ 
 
   const handleNovaAtividade = () => {
-    novaAtividade(navigation.navigate, atividade.benfeitoria.id);
+    novaAtividade(navigation.navigate, benfeitoria.id);
   };
 
   return (
@@ -63,9 +67,9 @@ const Atividades = () => {
         <Text
           type={textTypes.TITLE_BOLD}
           color={theme.colors.whiteTheme.white}
-          margin="0px 0px 0px 30px"
+          margin="0px 0px 0px 10px"
         >
-          ATIVIDADES PRODUTIVAS
+        ATIVIDADES PRODUTIVAS
         </Text>
       </View>
 

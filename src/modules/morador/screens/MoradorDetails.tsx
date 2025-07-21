@@ -38,6 +38,7 @@ export interface MoradorParam {
 const MoradorDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, MoradorParam>>>();
+  console.log("***************", params);
   const {participacaoInsituicaoes} = useParticipacaoInstituicoes(params.morador.id);
   
 
@@ -60,7 +61,7 @@ const MoradorDetails = () => {
         <MoradorDetailContainer>
               <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
                 {renderField('Perfil', params.morador.perfil)}  
-                {renderField('ata de nascimento', params.morador.dataNascimento)}
+                {renderField('ata de nascimento', params.morador.dataNascimento.toString())}
                 {renderField('Sexo', params.morador.sexo)}
                 {renderField('Escolaridade', params.morador.escolaridade)}
                 {renderField('Estado civil', params.morador.estadoCivil)}

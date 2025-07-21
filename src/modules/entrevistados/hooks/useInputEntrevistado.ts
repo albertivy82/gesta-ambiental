@@ -58,7 +58,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const [disabled, setDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-     console.log( novoEntrevistado.nascimentoData)
+     
       if (
           novoEntrevistado.nome !== '' && 
           novoEntrevistado.naturalidade !== '' && 
@@ -135,7 +135,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
             objetoFila();
           }
       } else {
-          console.log("seInputEntrevistado.ts-enviarEntrevistado, deveria salava na fila, mas se perdeu");
+         
           return objetoFila();
                   
       }
