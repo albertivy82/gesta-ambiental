@@ -1,10 +1,9 @@
-import { AtividadesProdutivas } from "../../enums/AtividadesProdutivas.enum";
 
 export interface AtividadeProdutivaType {
     id: number;
-    atividade: AtividadesProdutivas|null|'';
+    atividade: string;
     pessoasEnvolvidas: number;
-    faturamentoAtividadeMesTotal: number; 
+    faturamentoAtividadeMesTotal: string;
     benfeitoria: {
         id: number;
     };

@@ -6,6 +6,7 @@ import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesI
 import { apagarRendaOutrasFontesQueue, getRendaOutrasFontes, getRendaOutrasFontesDessincronizadas, salvarRendaOutrasFontes } from "../../../realm/services/rendaOutrasFontes";
 
 export const convertToRendaOFInput = (renda: any): RendaOutrasFontesInput => {
+  console.log(renda.benfeitoria.id);
   return {
     fonte: renda.fonte,
     beneficiarios: renda.beneficiarios,
@@ -24,10 +25,10 @@ export const useRendasOutrasFontes = (benfeitoriaId: number) => {
       const queue = getRendaOutrasFontesDessincronizadas(benfeitoriaId);
       for (const renda of queue) {
         const rendaInput = convertToRendaOFInput(renda);
-        const netInfo = await NetInfo.fetch();
-        if (netInfo.isConnected && (await testConnection())) {
+        const isConnected = await testConnection();
+        if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://192.168.100.28:8080/outras-fontes-de-renda', rendaInput);
+            const response = await connectionAPIPost('http://177.74.56.24/outras-fontes-de-renda', rendaInput);
             const rendaAPI = response as RendaOutrasFontesType;
             if (rendaAPI.id) apagarRendaOutrasFontesQueue(renda.idLocal!);
           } catch (error) {
@@ -47,7 +48,7 @@ export const useRendasOutrasFontes = (benfeitoriaId: number) => {
 
   const fetchRendasAPI = async () => {
     try {
-      const response = await connectionAPIGet<RendaOutrasFontesType[]>(`http://192.168.100.28:8080/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${benfeitoriaId}`);
+      const response = await connectionAPIGet<RendaOutrasFontesType[]>(`http://177.74.56.24/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${benfeitoriaId}`);
       const dadosAPI = response.map(renda => ({
         ...renda,
         sincronizado: true,

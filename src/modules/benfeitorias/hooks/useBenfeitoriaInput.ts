@@ -53,6 +53,7 @@ const [disabled, setdisable] = useState<boolean>(true);
             novaBenfeitoria.limites !== '' &&
             novaBenfeitoria.areaBenfeitoria > 1 &&
             novaBenfeitoria.pavimentos > 0 &&
+            novaBenfeitoria.pavimentos < 20 &&
             novaBenfeitoria.paredes !== null &&
             novaBenfeitoria.tipoCobertura !== null &&
             novaBenfeitoria.tipoEsquadrias !== null &&
@@ -110,6 +111,7 @@ const objetoFila = () => {
 
 const enviarRegistro = async () => {
   if (benfeitoria) {
+  
       return await enviaBenfeitoriaEdicao();
   } else {
      return await enviaBenfeitoriaNova();
@@ -130,14 +132,14 @@ const enviaBenfeitoriaNova = async () =>{
 
       }else{
           novaBenfeitoria.imovel = {id:imovel.id};;
-          const netInfoState = await NetInfo.fetch();
+         
           const isConnected = await testConnection();
-        
-                if(netInfoState.isConnected && isConnected){
+          
+                if(isConnected){
                   
                   try{
                      
-                    const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria) as BenfeitoriaType;
+                    const response = await connectionAPIPost('http://177.74.56.24/benfeitoria', novaBenfeitoria) as BenfeitoriaType;
                      
                     if (response && response.id) {
                           return fetchBefeitoriaAPI(response.id);
@@ -163,15 +165,17 @@ const enviaBenfeitoriaNova = async () =>{
 const enviaBenfeitoriaEdicao= async () =>{
   const benfeitoriaCorrigida = {
     ...novaBenfeitoria,
-    entrevistado: { id: typeof benfeitoria!.imovel === 'number' ? benfeitoria!.imovel : benfeitoria!.imovel.id }
+    imovel: { id: typeof benfeitoria!.imovel === 'number' ? benfeitoria!.imovel : benfeitoria!.imovel.id }
   };
-  const netInfoState = await NetInfo.fetch();
+  
+  
   const isConnected = await testConnection();
-   if(netInfoState.isConnected && isConnected){
+   if(isConnected){
+    
           //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
           try{
             
-            const response = await connectionAPIPut(`http://192.168.100.28:8080/benfeitoria/${benfeitoria!.id}`, benfeitoriaCorrigida) as BenfeitoriaType;
+            const response = await connectionAPIPut(`http://177.74.56.24/benfeitoria/${benfeitoria!.id}`, benfeitoriaCorrigida) as BenfeitoriaType;
                 if (response && response.id) {
                 return fetchBefeitoriaAPI(response.id);
                 }else{
@@ -208,7 +212,7 @@ const buildBenfeitoriaAtualizada = (): BenfeitoriaType => ({
  const fetchBefeitoriaAPI = async(id:number) =>{
 
         try{
-            const response = await connectionAPIGet<BenfeitoriaType>(`http://192.168.100.28:8080/benfeitoria/${id}`);
+            const response = await connectionAPIGet<BenfeitoriaType>(`http://177.74.56.24/benfeitoria/${id}`);
             if (response) {
               const bftData = {
                   ...response,

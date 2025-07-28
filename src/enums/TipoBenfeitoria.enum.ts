@@ -1,6 +1,6 @@
 export enum TipoBenfeitoria {
     Residencia =  'Residencia',
-    Vareneio = 'Vareneio',
+    Vareneio = 'Varaneio',
     Comercio = 'Comercio',
     SemUso = 'SemUso',
     Nao_Informado = 'Nao_Informado',

@@ -12,8 +12,8 @@ import DeleteConfirmation from "../../../shared/components/input/DeleteComponent
 const RenderItemParticipacaoInstituicao = ({ item }: { item: ParticipacaoInstituicaoType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
-  
-  
+ 
+ 
   
     const handleAcaoParticipacaoInstituicao = (vegetacao: ParticipacaoInstituicaoType) => {
      
@@ -50,7 +50,7 @@ const RenderItemParticipacaoInstituicao = ({ item }: { item: ParticipacaoInstitu
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
         </Text>
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Instituição: {item.instituicao}</Text>
-        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Tipo de registro: {item.tipoDeRgistro}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Tipo de registro: {item.tipoDeRegistro}</Text>
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Número de registro: {item.Registro}</Text>
        
         {mostrarModalDelete && (

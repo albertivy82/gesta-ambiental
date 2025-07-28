@@ -1,17 +1,16 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
+import { salvarParticipacaoInstituicao, salvarParticipacaoInstituicaoQueue } from "../../../realm/services/ParticipacaoInstituicaoService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { MoradorType } from "../../../shared/types/MoradorType";
-import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
 import { ParticipacaoInstituicaoInput } from "../../../shared/types/ParticipacaoInstituicaoInput";
-import { salvarParticipacaoInstituicao, salvarParticipacaoInstituicaoQueue } from "../../../realm/services/ParticipacaoInstituicaoService";
+import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
 
 export const DEFAULT_VEGETACAO_INPUT: ParticipacaoInstituicaoInput = {
   instituicao: '',
-  tipoDeRgistro: '',
+  tipoDeRegistro: '',
   Registro: '',
   morador: {
     id: 0,
@@ -25,7 +24,7 @@ export const useNovaParticipacaoInstituicao = (morador:MoradorType, participacao
   useEffect(() => {
     if (
       novaParticipacaoInstituicao.instituicao !== '' &&
-      novaParticipacaoInstituicao.tipoDeRgistro !== '' &&
+      novaParticipacaoInstituicao.tipoDeRegistro !== '' &&
       novaParticipacaoInstituicao.Registro !== ''
     ) {
       setDisabled(false);
@@ -55,7 +54,7 @@ const objetoFila = () => {
 
     const enviarRegistro = async () => {
       if (participacaoInstituicao) {
-        console.log('enviaParticipacaoInstituicaoEdicao', participacaoInstituicao)
+        
         return await enviaParticipacaoInstituicaoEdicao();
       } else {
          return await enviaParticipacaoInstituicaoNovo();
@@ -75,14 +74,14 @@ const objetoFila = () => {
     
           }else{
               novaParticipacaoInstituicao.morador = {id:morador.id};
-              const netInfoState = await NetInfo.fetch();
+             
               const isConnected = await testConnection();
             
-                    if(netInfoState.isConnected && isConnected){
+                    if(isConnected){
                       
                       try{
                          
-                        const response = await connectionAPIPost('http://192.168.100.28:8080/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
+                        const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
                             
                         if (response && response.id) {
                               return fetchParticipacaoInstituicaoAPI(response.id);
@@ -109,13 +108,13 @@ const objetoFila = () => {
         ...novaParticipacaoInstituicao,
         morador: { id: typeof participacaoInstituicao!.morador === 'number' ? participacaoInstituicao!.morador : participacaoInstituicao!.morador.id }
       };
-      const netInfoState = await NetInfo.fetch();
+     
       const isConnected = await testConnection();
-       if(netInfoState.isConnected && isConnected){
+       if(isConnected){
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 
-                const response = await connectionAPIPut(`http://192.168.100.28:8080/participacaoInstituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
+                const response = await connectionAPIPut(`http://177.74.56.24/participacaoInstituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
                     if (response && response.id) {
                     return fetchParticipacaoInstituicaoAPI(response.id);
                     }else{
@@ -152,7 +151,7 @@ const objetoFila = () => {
      const fetchParticipacaoInstituicaoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`http://192.168.100.28:8080/participacaoInstituicao/${id}`);
+                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`http://177.74.56.24/participacaoInstituicao/${id}`);
                 if (response) {
                   const participacaoInstituicaoData = {
                       ...response,

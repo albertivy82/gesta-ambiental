@@ -12,6 +12,7 @@ import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import { AguaType } from "../../../shared/types/AguaType";
 import { theme } from "../../../shared/themes/theme";
+import Text from "../../../shared/components/text/Text";
 
 
 export interface NovaAguaParams {
@@ -92,11 +93,25 @@ export const NovaAgua = () => {
     }
   };
 
+  useEffect(() => {
+    if (!agua) return;
+    handleEnumChange( 'qualidadeDaAgua', agua.qualidadeDaAgua);
+    handleEnumChange( 'qualidadeDaAgua', agua.corDagua);
+    handleEnumChange( 'qualidadeDaAgua', agua.saborDagua);
+    handleEnumChange( 'qualidadeDaAgua', agua.cheiroDagua);
+  }, [agua]);
+                  
+  const tipoFornecimento = agua?.tipoDeFornecimento ? agua.tipoDeFornecimento : '';
+  const profundidade = agua?.profundidadePoco ? agua.profundidadePoco.toFixed(2)  : '';
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+    <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
       <AguaDetailContainer>
 
-       
+      {tipoFornecimento && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  área informada anteriormente: {tipoFornecimento}
+                </Text>
+        )}
       <RenderPicker
        label="Qual o tipo de fornecimento de água da moradia?"
        selectedValue={fornecimentoAgua}
@@ -173,7 +188,11 @@ export const NovaAgua = () => {
                options={saborOptions}
               />
 
-           
+          {profundidade && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  área informada anteriormente: {profundidade}
+                </Text>
+           )}
           {fornecimentoAgua.includes('POÇO') && (
             <View style={{ marginTop: 10 }}>
               <Input

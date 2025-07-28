@@ -17,8 +17,8 @@ export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;
 }
 
-export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovoMorador', { benfeitoriaId });
+export const novaAve = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('NovoMorador', { benfeitoria });
 }
 
 const Morador = () => {
@@ -48,7 +48,8 @@ const handleRefresh = () => {
 };
 
   const handleNovoMorador = () => {
-    novaAve(navigation.navigate, benfeitoria.id);
+    console.log(benfeitoria)
+    novaAve(navigation.navigate, benfeitoria);
   };
 
   return (

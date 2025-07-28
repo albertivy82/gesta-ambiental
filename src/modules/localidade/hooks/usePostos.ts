@@ -28,12 +28,11 @@ export const usePostos = (localidadeId: number) => {
         if (postosQueue.length > 0) {
             for (const posto of postosQueue) {
                 const novoPostoInput = convertToPostoInput(posto);
-                const netInfoState = await NetInfo.fetch();
-                if (netInfoState.isConnected) {
-                    const isConnected = await testConnection();
+               
+               const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://192.168.100.28:8080/posto', novoPostoInput);
+                            const response = await connectionAPIPost('http://177.74.56.24/posto', novoPostoInput);
                             const postoAPI = response as PostoType;
                            
                             if (postoAPI.id) {
@@ -43,7 +42,7 @@ export const usePostos = (localidadeId: number) => {
                             console.error('Erro na sincronização do posto:', error);
                         }
                     }
-                }
+              
             }
         }
     };
@@ -58,12 +57,12 @@ export const usePostos = (localidadeId: number) => {
 
     const fetchPostosFromAPI = async () => {
 
-        const netInfoState = await NetInfo.fetch();
-        if (netInfoState.isConnected) {
+       
+       
             const isConnected = await testConnection();
             if (isConnected) {
           try {
-              const postosAPI = await connectionAPIGet<PostoType[]>(`http://192.168.100.28:8080/posto-de-saude/localidade-posto/${localidadeId}`);
+              const postosAPI = await connectionAPIGet<PostoType[]>(`http://177.74.56.24/posto-de-saude/localidade-posto/${localidadeId}`);
               
               const postoData: PostoType[] = postosAPI.map(posto => ({
                 ...posto,
@@ -84,7 +83,7 @@ export const usePostos = (localidadeId: number) => {
           } catch (error) {
             console.log("CONTAGEM DE POSTOS-ERRO!!!:", error);
           }
-        }}
+        }
           
     };
 

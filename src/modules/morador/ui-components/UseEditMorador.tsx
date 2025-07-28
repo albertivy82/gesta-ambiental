@@ -20,7 +20,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ morador, destino, o
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disable, setDisable] = useState<boolean>(false);
-
+console.log("por que o didabela não altera?", disable)
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
@@ -38,8 +38,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ morador, destino, o
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const netInfoState = await NetInfo.fetch();
-        if (!netInfoState.isConnected && !(await testConnection())) {
+       
+        if (!!(await testConnection())) {
           setDisable(true);
         } else {
           setDisable(false);

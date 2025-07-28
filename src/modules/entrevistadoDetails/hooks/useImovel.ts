@@ -46,12 +46,12 @@ export const useImovel = (idEntrevistado: number) => {
   
       if (imovelQueue) {
         const novoImovelInput = convertToImovelInput(imovelQueue);
-        const netInfoState = await NetInfo.fetch();
-        if (netInfoState.isConnected) {
+       
+       
           const isConnected = await testConnection();
           if (isConnected) {
             try {
-              const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovelInput);
+              const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovelInput);
               const imovelAPI = response as imovelBody;
   
               if (imovelAPI.id) {
@@ -60,10 +60,10 @@ export const useImovel = (idEntrevistado: number) => {
                 fetchImovelRealm();
               }
             } catch (error) {
-              Alert.alert('Há imóveis com problemas de sincronização com a API: '+ error);
+              console.log('Há imóveis com problemas de sincronização com a API: '+ error);
             }
           }
-        }
+        
       }
     };
   
@@ -79,7 +79,7 @@ export const useImovel = (idEntrevistado: number) => {
     const fetchImovelAPI = async () => {
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `http://192.168.100.28:8080/imovel/imovel-entrevistado/${idEntrevistado}`
+          `http://177.74.56.24/imovel/imovel-entrevistado/${idEntrevistado}`
         );
   
         if (response as imovelBody && response.id) {
@@ -96,7 +96,7 @@ export const useImovel = (idEntrevistado: number) => {
           throw new Error('Dados de imóvel inválidos');
         }
       } catch (error) {
-        Alert.alert('Não foi possível recuperar Imóveis da Apí: '+ error);
+        console.log('Não foi possível recuperar Imóveis da Apí: '+ error);
       }
     };
   

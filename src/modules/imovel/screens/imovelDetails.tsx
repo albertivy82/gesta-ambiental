@@ -24,7 +24,7 @@ const ImovelDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const imovel = params.imovel;
   const {benfeitoria} = useBenfeitorias(params.imovel.id);
- 
+ console.log("CONTAGEMMMMMMM",benfeitoria);
   const handleDecision = (benfeitoria: BenfeitoriaType[]) => {
       if (Array.isArray(benfeitoria) ? benfeitoria.length > 0 : !!benfeitoria) {
         console.log(benfeitoria)
@@ -34,17 +34,7 @@ const ImovelDetails = () => {
       }
     };
 
-    useEffect(() => {
-        if (benfeitoria.length == 0) {
-          Alert.alert(
-            "Atenção!",
-            "Este imovel ainda não apresenta dados de benfeirias coletados. Confira os itens no final da página."
-          );
-        }
-      }, [benfeitoria]);
     
-  
-  
 
   return (
     
@@ -119,7 +109,7 @@ const ImovelDetails = () => {
                       style={{ marginLeft: 10 }}
                     >
                       {benfeitoria.length > 0
-                        ? `Benfeitorias registradas: ${benfeitoria.length}`
+                        ? `Listagem de Benfeitorias`
                         : ' + Benfeitorias'}
                     </Text>
                   </View>

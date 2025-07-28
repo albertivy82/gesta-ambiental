@@ -1,4 +1,3 @@
-import { Escolaridade } from "../../enums/Escolaridade";
 import { EstadoCivil } from "../../enums/EstadoCivil.enum";
 import { Perfil } from "../../enums/Perfil";
 import { Sexo } from "../../enums/Sexo";
@@ -9,7 +8,7 @@ export interface MoradorType {
    perfil: Perfil| null| ''; 
    dataNascimento: number;
    sexo: Sexo| null| ''; 
-   escolaridade: Escolaridade|null|''; 
+   escolaridade: string; 
    estadoCivil: EstadoCivil | null| ''; 
    ondeEstuda?: string;
    trabalho: SimNao|null|''; 

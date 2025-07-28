@@ -18,7 +18,7 @@ export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
   nascimentoData: 0,
   sexo: null,
   apelido: '',
-  escolaridade: null,
+  escolaridade: '',
   estadoCivil: null,
   religiao: '',
   morador: null,
@@ -65,7 +65,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
           novoEntrevistado.nascimentoData >= 18 &&
           novoEntrevistado.sexo !== null &&
           novoEntrevistado.apelido !== '' && 
-          novoEntrevistado.escolaridade !== null &&
+          novoEntrevistado.escolaridade !== '' &&
           novoEntrevistado.estadoCivil !== null &&
           novoEntrevistado.religiao !== '' &&
           novoEntrevistado.morador !== null &&
@@ -122,11 +122,11 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
   const enviaEntrevistadoNovo = async () => {
    
     novoEntrevistado.localidade.id = id;
-    const netInfoState = await NetInfo.fetch();
+   
     const isConnected = await testConnection();
-      if (netInfoState.isConnected && isConnected) {
+      if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado) as EntrevistadoType;
+            const response = await connectionAPIPost('http://177.74.56.24/entrevistado', novoEntrevistado) as EntrevistadoType;
             if (response && response.id) {
               return fetchEntrevistadoAPI(response.id);
              }
@@ -147,14 +147,15 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
         ...novoEntrevistado,
         localidade: { id: typeof entrevistado!.localidade === 'number' ? entrevistado!.localidade : entrevistado!.localidade.id }
       };
-      const netInfoState = await NetInfo.fetch();
+     
       const isConnected = await testConnection();
       
-       if(netInfoState.isConnected && isConnected){
+       if(isConnected){
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
-                
-                const response = await connectionAPIPut(`http://192.168.100.28:8080/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
+                console.log("enviando para edição", entrevistadoCorrigido)
+                const response = await connectionAPIPut(`http://177.74.56.24/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
+                console.log("recebendo edição", response)
                 if (response && response.id) {
                      return fetchEntrevistadoAPI(response.id);
                 }else{
@@ -187,7 +188,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const fetchEntrevistadoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<EntrevistadoType>(`http://192.168.100.28:8080/entrevistado/${id}`);
+                const response = await connectionAPIGet<EntrevistadoType>(`http://177.74.56.24/entrevistado/${id}`);
                 if (response) {
                   const bftData = {
                       ...response,

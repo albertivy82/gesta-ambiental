@@ -44,12 +44,14 @@ const RenderItemAgua = ({ item }: { item: AguaType }) => {
   return (
     <TouchableOpacity onPress={() => handleAcaoAgua(item)}>
       <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
-        <Text
+
+
+          <Text
           type={textTypes.BUTTON_REGULAR}
           color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
-        >
+           >
           Situação: {item.sincronizado ? 'Sincronizado' : 'Não Sincronizado'}
-        </Text>
+          </Text>
 
         <Text
           type={textTypes.BUTTON_REGULAR}
@@ -63,43 +65,46 @@ const RenderItemAgua = ({ item }: { item: AguaType }) => {
           color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
         >
           Qualidade da Água: {item.qualidadeDaAgua}
-        </Text>
+         </Text>
 
-          <Text
+         <Text
           type={textTypes.BUTTON_REGULAR}
           color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
           >
           Método de tratamento da Água: {item.metodoTratamento}
           </Text>
-          
+
           <Text
-          type={textTypes.BUTTON_REGULAR}
-          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+           type={textTypes.BUTTON_REGULAR}
+            color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
           >
-          cor da Água: {item.corDagua}
+            Cor da Água: {item.corDagua}
           </Text>
 
           <Text
-          type={textTypes.BUTTON_REGULAR}
-          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+            type={textTypes.BUTTON_REGULAR}
+            color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
           >
-          cor da Água: {item.cheiroDagua}
+            Cheiro da Água: {item.cheiroDagua}
           </Text>
 
           <Text
-          type={textTypes.BUTTON_REGULAR}
-          color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
+            type={textTypes.BUTTON_REGULAR}
+            color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
           >
-          Sabor da Água: {item.saborDagua}
+            Sabor da Água: {item.saborDagua}
           </Text>
-        
-      {item.profundidadePoco &&(   
+
+          {item.profundidadePoco!>0 &&(  
           <Text
           type={textTypes.BUTTON_REGULAR}
           color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}
           >
           Profundidade do Proço: {item.profundidadePoco}
-          </Text>)} 
+          </Text>
+          )}
+
+     
       {mostrarModalDelete && (
                   
                   <DeleteConfirmation
@@ -109,7 +114,8 @@ const RenderItemAgua = ({ item }: { item: AguaType }) => {
                      onDeleteSuccess={() => {
                      setMostrarModalDelete(false);}}
                   />
-                  )}  
+    )}  
+    
       </View>
     </TouchableOpacity>
   );

@@ -2,7 +2,6 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { Escolaridade } from "../../../enums/Escolaridade";
 import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
 import { Molestias } from "../../../enums/molestias.enum";
 import { Perfil } from "../../../enums/Perfil";
@@ -10,15 +9,12 @@ import { Sexo } from "../../../enums/Sexo";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import Text from "../../../shared/components/text/Text";
+import { theme } from "../../../shared/themes/theme";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { MoradorType } from "../../../shared/types/MoradorType";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
-import { theme } from "../../../shared/themes/theme";
-import Text from "../../../shared/components/text/Text";
-
-
-
 
 
 export interface NovoMoradorParams {
@@ -50,7 +46,7 @@ export const NovoMorador = ()=>{
             disabled
           } = useNovoMorador(benfeitoria, morador);
 
-          
+     
   useEffect(() => {
         const consolidaDados = estuda === 'SIM' 
           ? (ondeEstuda ? [`onde estuda: ${ondeEstuda}`] : [])  
@@ -67,7 +63,7 @@ export const NovoMorador = ()=>{
   
     handleArrayFieldChange('trabalho', consolidaDados);
   
-   }, [trabalha, ondeEstuda]);
+   }, [trabalha, ondeTrabalha]);
 
 
   useEffect(()=>{
@@ -84,7 +80,16 @@ export const NovoMorador = ()=>{
   const perfilOptions =  Object.values(Perfil);
   const sexoOptions =  Object.values(Sexo);
   const estadoCivilOptions =  Object.values(EstadoCivil);
-  const escolaridadeOptions =  Object.values(Escolaridade);
+  const escolaridadeOptions =  Object.values([
+    "Analfabeto",
+    "Fundamental completo",
+    "Fundamental incompleto",
+    "Ensino médio completo",
+    "Ensino médio incompleto",
+    "Ensino superior completo",
+    "Ensino superior incompleto",
+    "Pós-graduação"
+  ]);
   const molestiasOptions =  Object.values(Molestias);
     
     const handleEnviar = async () => {
@@ -125,7 +130,7 @@ export const NovoMorador = ()=>{
 
 
     return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
         <MoradorDetailContainer>
           
       

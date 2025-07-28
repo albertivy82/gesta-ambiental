@@ -39,8 +39,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const netInfoState = await NetInfo.fetch();
-        if (!netInfoState.isConnected && !(await testConnection())) {
+       
+        if (!!(await testConnection())) {
           setDisable(true);
         } else {
           setDisable(false);
@@ -87,7 +87,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
             borderRadius: 10, 
             alignItems: 'center'
           }}>
-            <Text type={textTypes.PARAGRAPH_LIGHT}>Deseja realmente editar este item?</Text>
+            <Text type={textTypes.PARAGRAPH_LIGHT} color="#e42929">Deseja realmente editar este item?</Text>
             
             {loading ? (
               <ActivityIndicator size="large" color="#ff4500" />

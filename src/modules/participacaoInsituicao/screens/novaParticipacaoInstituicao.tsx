@@ -18,7 +18,7 @@ export interface NovaParticipacaoInstituicaoParams {
 }
 
 export const detalharParticipacaoInstituicao = (navigate: NavigationProp<ParamListBase>['navigate'], morador: MoradorType)=>{
-    navigate('ParticipacaoInstituicaoLista', {morador})
+    navigate('ParticipacaoInstituicao', {morador})
 }
 
 export const NovaParticipacaoInstituicao = ()=>{
@@ -34,7 +34,7 @@ export const NovaParticipacaoInstituicao = ()=>{
             disabled
           } = useNovaParticipacaoInstituicao(morador, participacaoInstituicao);
 
-
+console.log(morador, participacaoInstituicao)
 
   
     const handleEnviar = async () => {
@@ -59,10 +59,10 @@ export const NovaParticipacaoInstituicao = ()=>{
    
 
     return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
         <ParticipacaoInstituicaoDetailContainer>
 
-                  <RenderPicker
+            <RenderPicker
                label="Qual instituição?"
                selectedValue={novaParticipacaoInstituicao.instituicao}
                onValueChange={(value) => handleEnumChange('instituicao', value)}
@@ -70,8 +70,8 @@ export const NovaParticipacaoInstituicao = ()=>{
             />
 
           <Input 
-              value={novaParticipacaoInstituicao.tipoDeRgistro} 
-              onChange={(event)=> handleOnChangeInput(event, 'tipoDeRgistro')}
+              value={novaParticipacaoInstituicao.tipoDeRegistro} 
+              onChange={(event)=> handleOnChangeInput(event, 'tipoDeRegistro')}
               placeholder="..."
               margin="15px 10px 30px 5px"
               title="Qual tipo de registro é feito nesta intituição?"

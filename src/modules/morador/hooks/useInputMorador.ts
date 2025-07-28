@@ -15,7 +15,7 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   perfil: null,
   dataNascimento: 0,
   sexo: null,
-  escolaridade: null,
+  escolaridade: '',
   estadoCivil: null,
   ondeEstuda: '',
   trabalho: null,
@@ -39,7 +39,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
       novoMorador.perfil !== '' &&
       novoMorador.sexo !== '' &&
       novoMorador.estadoCivil !== null &&
-      novoMorador.escolaridade !== null &&
+      novoMorador.escolaridade !== '' &&
       novoMorador.trabalho != null &&
       novoMorador.religiao !== '' &&
       novoMorador.doencas !== ''
@@ -107,16 +107,17 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
          
         }else{
             novoMorador.benfeitoria = {id:benfeitoria.id};
-            const netInfoState = await NetInfo.fetch();
+           
             const isConnected = await testConnection();
           
-                  if(netInfoState.isConnected && isConnected){
+                  if(isConnected){
                     
                     try{
-                      
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador) as MoradorType;
-                          
+                         
+                      const response = await connectionAPIPost('http://177.74.56.24/morador', novoMorador) as MoradorType;
+                      console.log("vamos verificar !", response, response.id);
                       if (response && response.id) {
+                        console.log("vamos verificar !", response, response.id);
                             return fetchMoradorAPI(response.id);
                       }
   
@@ -141,15 +142,17 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
       ...novoMorador,
       benfeitoria: { id: typeof morador!.benfeitoria === 'number' ? morador!.benfeitoria : morador!.benfeitoria.id }
     };
-    const netInfoState = await NetInfo.fetch();
+   
     const isConnected = await testConnection();
     
-     if(netInfoState.isConnected && isConnected){
+     if(isConnected){
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
-                    if (response && response.id) {
+              const response = await connectionAPIPut(`http://177.74.56.24/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
+            
+              if (response && response.id) {
+                     
                       return fetchMoradorAPI(response.id);
                     }else{
                       const local = await salvarMorador(buildMoradorAtualizada());
@@ -184,7 +187,8 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
    const fetchMoradorAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<MoradorType>(`http://192.168.100.28:8080/morador/${id}`);
+              const response = await connectionAPIGet<MoradorType>(`http://177.74.56.24/morador/${id}`);
+              console.log("vamos verificar", response);
               if (response) {
                 const moradorData = {
                     ...response,

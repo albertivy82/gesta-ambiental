@@ -8,6 +8,7 @@ import { MoradorType } from "../../../shared/types/MoradorType";
 import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instituicaoConhecidaService";
 
 export const convertToMoradorInput = (morador: any): MoradorInput => {
+  console.log(morador.benfeitoria);
   return {
     
     perfil: morador.perfil,
@@ -31,19 +32,20 @@ export const useMoradores = (benfeitoriaId: number) => {
   const sincronizeMoradoresQueue = async () => {
     if (benfeitoriaId > 0) {
       const queue = getMoradoresDessincronizados(benfeitoriaId);
-
+      console.log("1", queue)
       if (queue.length > 0) {
         for (const morador of queue) {
           const novoMoradorInput = convertToMoradorInput(morador);
-          const netInfoState = await NetInfo.fetch();
-
-          if (netInfoState.isConnected) {
+         
+       
             const isConnected = await testConnection();
             if (isConnected) {
               try {
-                const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMoradorInput);
+                console.log("2", novoMoradorInput)
+                const response = await connectionAPIPost('http://177.74.56.24/morador', novoMoradorInput);
+                console.log("3", response)
                 const moradorAPI = response as MoradorType;
-
+                console.log("4", moradorAPI)
                 if (moradorAPI.id) {
                   setIdMoradorFromApiOnInstituicao(moradorAPI.id, novoMoradorInput.idLocal!)
                   apagarMoradorQueue(morador.idLocal!);
@@ -52,7 +54,7 @@ export const useMoradores = (benfeitoriaId: number) => {
                 //console.error('Erro na sincronização de morador:', error);
               }
             }
-          }
+          
         }
       }
     }
@@ -68,7 +70,7 @@ export const useMoradores = (benfeitoriaId: number) => {
   const fetchMoradoresAPI = async () => {
     try {
       const response = await connectionAPIGet<MoradorType[]>(
-        `http://192.168.100.28:8080/morador/benfeitoria-morador/${benfeitoriaId}`
+        `http://177.74.56.24/morador/benfeitoria-morador/${benfeitoriaId}`
       );
 
       const apiData = response.map((item) => ({

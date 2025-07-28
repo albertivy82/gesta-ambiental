@@ -1,12 +1,8 @@
-// ParticipacaoInstituicao.ts
-
-import { Instituicao } from "../../enums/Instituicao.enum";
-
 
 export interface ParticipacaoInstituicaoType {
     id: number;
     instituicao: string;
-    tipoDeRgistro: string;
+    tipoDeRegistro: string;
     Registro: string;
     morador: {
         id: number;

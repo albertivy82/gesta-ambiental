@@ -51,17 +51,9 @@ const EntrevistadoDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, EntrevistadoParam>>>();
   const {imovelPresente} = useImovel(params.entrevistado.id);
 
-
+    console.log(imovelPresente);
  
-   // Alerta caso não haja imóveis
-   useEffect(() => {
-    if (!imovelPresente) {
-      Alert.alert(
-        "O entrevistado não possui imóveis cadastrados.",
-        "Siga até o final da página para inserir dados do imóvel"
-      );
-    }
-  }, [imovelPresente]);
+      
 
   useFocusEffect(
       useCallback(() => {

@@ -13,7 +13,7 @@ import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesTy
 export const DEFAULT_RENDA_OUTRAS_FONTES_INPUT: RendaOutrasFontesInput = {
 fonte: null,
 beneficiarios: 0,
-rendaMesTotal: 0, 
+rendaMesTotal: '', 
 benfeitoria: {
     id: 0,
   },
@@ -29,7 +29,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
     if (
       novaRendaOutrasFontes.fonte !== null &&
       novaRendaOutrasFontes.beneficiarios ==0 &&
-      novaRendaOutrasFontes.rendaMesTotal ==0 
+      novaRendaOutrasFontes.rendaMesTotal =='' 
 
     ) {
       setDisabled(false);
@@ -77,14 +77,14 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
   
         }else{
             novaRendaOutrasFontes.benfeitoria = {id:benfeitoria.id};
-            const netInfoState = await NetInfo.fetch();
+           
             const isConnected = await testConnection();
           
-                  if(netInfoState.isConnected && isConnected){
+                  if(isConnected){
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
+                      const response = await connectionAPIPost('http://177.74.56.24/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
                           
                       if (response && response.id) {
                             return fetchRendaOutrasFontesAPI(response.id);
@@ -111,14 +111,14 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
       ...novaRendaOutrasFontes,
       benfeitoria: { id: typeof rendaOutrasFontes!.benfeitoria === 'number' ? rendaOutrasFontes!.benfeitoria : rendaOutrasFontes!.benfeitoria.id }
     };
-    const netInfoState = await NetInfo.fetch();
+   
     const isConnected = await testConnection();
     
-     if(netInfoState.isConnected && isConnected){
+     if(isConnected){
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
+              const response = await connectionAPIPut(`http://177.74.56.24/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
                     if (response && response.id) {
                       return fetchRendaOutrasFontesAPI(response.id);
                     }else{
@@ -154,7 +154,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
    const fetchRendaOutrasFontesAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://192.168.100.28:8080/outras-fontes-de-renda/${id}`);
+              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://177.74.56.24/outras-fontes-de-renda/${id}`);
               if (response) {
                 const rendaOutrasFontesData = {
                     ...response,
@@ -184,17 +184,15 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
         event: NativeSyntheticEvent<TextInputChangeEventData>
       ) => {
         let value = event.nativeEvent.text;
-      
-        // Remove qualquer caractere não numérico
+  
+        // Remove tudo que não for número
         value = value.replace(/\D/g, '');
       
-        // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
-        const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
-      
-        // Atualiza o estado com o valor formatado como número
+        // Formata como string com 2 casas decimais
+        const formattedValue = (parseInt(value || '0', 10) / 100).toFixed(2);
         setNovaRendaOutrasFontes((current) => ({
           ...current,
-          rendaMesTotal: parseFloat(formattedValue), // Salva como número para enviar à API
+          rendaMesTotal:formattedValue, // Salva como número para enviar à API
         }));
       };
 

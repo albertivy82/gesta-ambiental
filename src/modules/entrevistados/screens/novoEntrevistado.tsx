@@ -5,22 +5,19 @@ import { ActivityIndicator } from "react-native-paper";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
 import { AtendimentoSaude } from "../../../enums/AtendimentoSaude.enum";
 import { Compras } from "../../../enums/Compras.enum";
-import { Escolaridade } from "../../../enums/Escolaridade";
 import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
 import { ServicoPublicos } from "../../../enums/ServicoPublicos";
 import { Sexo } from "../../../enums/Sexo";
 import { SimNao } from "../../../enums/simNao.enum";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
-import DateSelector from "../../../shared/components/input/DateSelector";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import Text from "../../../shared/components/text/Text";
+import { theme } from "../../../shared/themes/theme";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import Text from "../../../shared/components/text/Text";
-import { formatarData, formatDateForApi } from "../../../shared/functions/data";
-import { theme } from "../../../shared/themes/theme";
 
 
 export interface NovoEntrevistadoParams {
@@ -122,7 +119,16 @@ export const NovoEntrevistado = ()=>{
     'Acima de 30 anos']);
     
     const saudeOptions = Object.values(AtendimentoSaude);
-    const sexoEscolaridade = Object.values(Escolaridade);
+    const sexoEscolaridade = Object.values([
+      "Analfabeto",
+      "Fundamental completo",
+      "Fundamental incompleto",
+      "Ensino médio completo",
+      "Ensino médio incompleto",
+      "Ensino superior completo",
+      "Ensino superior incompleto",
+      "Pós-graduação"
+    ]);
     const simNaoOptions = Object.values(SimNao);
     const estadoCivilOptions = Object.values(EstadoCivil);
     const simNaoTalvezOptions = Object.values(SimNaoTalvez);

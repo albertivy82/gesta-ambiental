@@ -15,6 +15,7 @@ import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva
 
 
 export const convertToAtividadeProdutivaInput = (atividade: any) => {
+  console.log(atividade.benfeitoria.id)
   return {
     atividade: atividade.atividade,
     pessoasEnvolvidas: atividade.pessoasEnvolvidas,
@@ -35,14 +36,14 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
       if (fila.length > 0) {
         for (const atividade of fila) {
           const novaAtividadeInput = convertToAtividadeProdutivaInput(atividade);
-          const netInfoState = await NetInfo.fetch();
+         
 
-          if (netInfoState.isConnected) {
+         
             const isConnected = await testConnection();
             if (isConnected) {
               try {
                 const response = await connectionAPIPost(
-                  "http://192.168.100.28:8080/atividade-produtiva",novaAtividadeInput);
+                  "http://177.74.56.24/atividade-produtiva",novaAtividadeInput);
                    const atividadeAPI = response as AtividadeProdutivaType;
 
                 if (atividadeAPI.id) {
@@ -52,7 +53,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
                 //console.error("Erro na sincronização da atividade produtiva:", error);
               }
             }
-          }
+          
         }
       }
     }
@@ -68,7 +69,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
   const fetchAtividadesAPI = async () => {
     try {
       const response = await connectionAPIGet<AtividadeProdutivaType[]>(
-        `http://192.168.100.28:8080/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
+        `http://177.74.56.24/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
       );
 
       const data = response.map((atividade) => ({

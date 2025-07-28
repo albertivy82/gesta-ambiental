@@ -86,13 +86,17 @@ export const salvarAtividade= (atividade:AtividadeProdutivaType): Promise<Ativid
 
                 // Atualiza somente se sincronizado ou se não existir ainda
                 if (atividade.sincronizado && atividadeExistente && atividade.idLocal === '') {
+               
                     atividadeSalvo = realmInstance.create("AtividadeProdutiva", atividadePadrao, true);
+                    console.log(atividadeSalvo)
                 } else {
                     atividadeSalvo = realmInstance.create("AtividadeProdutiva", atividadePadrao, true);
+                    console.log(atividadeSalvo)
                 }
             });
     if (atividadeSalvo) {
         const cleanAtividade = JSON.parse(JSON.stringify(atividadeSalvo))
+       
         resolve(cleanAtividade as AtividadeProdutivaType);
     } else {
     throw new Error("Erro ao recuperar a atividade salvo.");

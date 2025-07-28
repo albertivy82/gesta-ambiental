@@ -75,13 +75,12 @@ export const useEntrevistados = (localidadeId: number) =>{
         
             const novoEntrevistadoIput = convertToEntrevistadoInput(entrevistado);
             
-            const netInfoState = await NetInfo.fetch();
-            if (netInfoState.isConnected) {
+                    
                 const isConnected = await testConnection();
                 if (isConnected) {
                     try {
                      
-                        const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoIput);
+                        const response = await connectionAPIPost('http://177.74.56.24/entrevistado', novoEntrevistadoIput);
                         const EntrevistadoAPI = response as EntrevistadoType;
                        
                         if (EntrevistadoAPI.id) {
@@ -92,20 +91,20 @@ export const useEntrevistados = (localidadeId: number) =>{
                         console.error('Erro na sincronização do imóvel:', error);
                     }
                 }
-            }
+          
         }
     }
 };
 
 const fetchEntrevistadosFromAPI = async () => {
    
-    const netInfoState = await NetInfo.fetch();
-    if (netInfoState.isConnected ) {
-        const isConnected = await testConnection();
-        if (isConnected) {
-            console.log("here")
+   
+     const isConnected = await testConnection();
+     
+     if (isConnected) {
+           
       try {
-          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`);
+          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://177.74.56.24/entrevistado/localidade-entrevistado/${localidadeId}`);
            
           const entrevistadoData: EntrevistadoType[] = entrevistadoAPI.map(entrevistado => ({
                          ...entrevistado,
@@ -126,7 +125,7 @@ const fetchEntrevistadosFromAPI = async () => {
       } catch (error) {
         console.log("CONTAGEM DE ENTREVISTADOS-ERRO!!!:", error);
       }
-    }}
+    }
       
     };
 

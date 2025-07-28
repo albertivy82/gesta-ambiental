@@ -4,7 +4,7 @@ export const CreditoSchema = {
     properties: {
         id: 'int',
         nome: 'string',
-        valor: 'double', 
+        valor: 'string', 
         benfeitoria: 'int?',
         sincronizado: 'bool',
         idLocal: 'string?',

@@ -9,21 +9,26 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
 import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
+import Text from "../../../shared/components/text/Text";
 
-export interface idParam {
+export interface NovoCreditoParams {
   benfeitoria: BenfeitoriaType;
+  renda?: RendaOutrasFontesType;
 }
 
-export const detalharRenda = (navigate: NavigationProp<ParamListBase>['navigate'], renda: RendaOutrasFontesType)=>{
-  navigate('RendaDetails', {renda})
-}
+export const detalharRenda = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('RendaOutrasFontesLista', { benfeitoria });
+};
+
 
 export const NovaRendaOutrasFontes = () => {
-  const { params } = useRoute<RouteProp<Record<string, idParam>>>();
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
+  const benfeitoria = params.benfeitoria ?? params.renda?.benfeitoria;
+  const renda = params.renda;
+  const [loading, setLoading] = useState(false); 
   const [fonteRenda, setFonteRenda] = useState<string>('');     
   const [outraFonte, SetOutraFonte] = useState<string>('');
-  const [loading, setLoading] = useState(false);
   const {  
     novaRendaOutrasFontes,
     enviarRegistro,
@@ -31,7 +36,7 @@ export const NovaRendaOutrasFontes = () => {
     handleNumberChange,
     handleOnChangeRendimentoMensal,
     disabled
-  } = useNovaRendaOutrasFontes(params.benfeitoria);
+  } = useNovaRendaOutrasFontes(benfeitoria, renda);
   
   const fontesOptions = Object.values(FontesRenda);
   
@@ -50,7 +55,7 @@ export const NovaRendaOutrasFontes = () => {
     try {
       const rendaSalva = await enviarRegistro(); 
       if (rendaSalva) {
-        detalharRenda(navigation.navigate, rendaSalva);
+        detalharRenda(navigation.navigate, benfeitoria);
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();
@@ -63,11 +68,20 @@ export const NovaRendaOutrasFontes = () => {
     }
   };
 
+  
+                  
+   const val1 = renda?.fonte? renda.fonte: '';
+   const val2 = renda?.beneficiarios? renda.beneficiarios  : '';
+   const val3 = renda?.rendaMesTotal? renda.rendaMesTotal : '';
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <RendaOutrasFontesDetailContainer>
         
-       
+      {val1 && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                   Informação cadastrada anteriormente:  {val1}
+                </Text>
+        )}
       <RenderPicker
        label="Selecione uma fonte de renda"
        selectedValue={fonteRenda}
@@ -91,6 +105,11 @@ export const NovaRendaOutrasFontes = () => {
                 </View>
        )}
 
+        {val2 && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                   Informação cadastrada anteriormente: {val2}
+                </Text>
+        )}
        
        <Input
               value={novaRendaOutrasFontes.beneficiarios?.toString() || ''}
@@ -101,9 +120,15 @@ export const NovaRendaOutrasFontes = () => {
               title="Quantos beneficiários dessa fonte?"
        />
 
+
+        {val3 && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                   Informação cadastrada anteriormente: {val3}
+                </Text>
+        )}
              
       <Input
-              value={novaRendaOutrasFontes.rendaMesTotal?.toFixed(2) || ''}
+              value={novaRendaOutrasFontes.rendaMesTotal || ''}
               onChange={handleOnChangeRendimentoMensal}
               keyboardType='numeric'
               placeholder="R$"

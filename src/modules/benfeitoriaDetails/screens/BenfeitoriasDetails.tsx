@@ -136,7 +136,7 @@ const BenfeitoriaDetails = () => {
                     style={{ marginLeft: 10 }}
                   >
                     {moradores.length > 0
-                      ? `Moradores cadastrados: ${moradores.length}`
+                      ? `Listagem de cadastrados`
                       : 'Moradores'}
                   </Text>
                 </View>
@@ -157,7 +157,7 @@ const BenfeitoriaDetails = () => {
                   style={{ marginLeft: 10 }}
                 >
                   {aguas.length > 0
-                    ? `Fontes de água registradas: ${aguas.length}`
+                    ? `Dados Registradas`
                     : 'Água'}
                 </Text>
               </View>
@@ -178,7 +178,7 @@ const BenfeitoriaDetails = () => {
                   style={{ marginLeft: 10 }}
                 >
                   {atividades.length > 0
-                    ? `Atividades Produtivas registradas: ${atividades.length}`
+                    ? `Listagem de  Atividades Produtivas`
                     : 'Atividades Produtivas'}
                 </Text>
               </View>
@@ -199,7 +199,7 @@ const BenfeitoriaDetails = () => {
               style={{ marginLeft: 10 }}
             >
               {creditos.length > 0
-                ? `Créditos: ${creditos.length}`
+                ? `Listagem de Créditos`
                 : 'Crédito'}
             </Text>
           </View>
@@ -220,7 +220,7 @@ const BenfeitoriaDetails = () => {
                 style={{ marginLeft: 10 }}
               >
                 {rendasOF.length > 0
-                  ? `Outras rendas informadas: ${rendasOF.length}`
+                  ? `Listagem de Outras Rendas`
                   : 'Outras Fontes de Renda'}
               </Text>
             </View>
@@ -241,7 +241,7 @@ const BenfeitoriaDetails = () => {
                   style={{ marginLeft: 10 }}
                 >
                   {servicos.length > 0
-                    ? `Serviços de comunicação registrados: ${servicos.length}`
+                    ? `Listagem de Serviços de Comunicação`
                     : 'Serviços de Comunicação disponíveis'}
                 </Text>
               </View>

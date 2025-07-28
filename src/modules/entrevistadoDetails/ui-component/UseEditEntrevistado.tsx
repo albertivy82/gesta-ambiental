@@ -20,7 +20,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disable, setDisable] = useState<boolean>(false);
-
+  console.log("por que o didabela não altera?", disable)
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
@@ -38,21 +38,17 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const netInfoState = await NetInfo.fetch();
-        if (!netInfoState.isConnected && !(await testConnection())) {
-          setDisable(true);
-        } else {
-          setDisable(false);
-        }
+        const online = await testConnection();
+        setDisable(!online); // Se está online, disable = false
       } catch (error) {
         console.error('Erro ao verificar conexão:', error);
-        setDisable(true);
+        setDisable(true); // Em caso de erro, desabilita por segurança
       }
     };
-
+  
     checkConnection();
   }, []);
-
+  
     
    
   

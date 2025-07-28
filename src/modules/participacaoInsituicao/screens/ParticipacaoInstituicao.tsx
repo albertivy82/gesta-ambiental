@@ -10,27 +10,28 @@ import { ParticipacaoInstituicaoDetailContainer } from '../styles/ParticipacaoIn
 import RenderItemParticipacaoInstituicao from '../ui-components/listaParticipacaoInstituicao';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { getParticipacoesIntitucionais } from '../../../realm/services/ParticipacaoInstituicaoService';
+import { MoradorType } from '../../../shared/types/MoradorType';
 
 
 export interface ParticipacaoInstituicaoParam {
-  entrevistado: EntrevistadoType;
+  morador: MoradorType;
 }
 
-export const novaParticipacaoInstituicao = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType) => {
-  navigate('NovaParticipacaoInstituicao', { entrevistado });
+export const novaParticipacaoInstituicao = (navigate: NavigationProp<ParamListBase>['navigate'], morador:  MoradorType) => {
+  navigate('NovaParticipacaoInstituicao', { morador });
 }
 
 const ParticipacaoInstituicao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ParticipacaoInstituicaoParam>, 'ParticipacaoInstituicaoLista'>>();
-  const { entrevistado } = route.params;
+  const { morador } = route.params;
   const flatListRef = useRef<FlatList>(null);
   const [participacoes, setParticipacoes] = useState<ParticipacaoInstituicaoType[]>();
 
   const fetchParticipacoes = async () => {
-    if (!entrevistado.id) return;
+    if (!morador) return;
   
-    const novas = getParticipacoesIntitucionais(entrevistado.id);
+    const novas = getParticipacoesIntitucionais(morador.id);
   
     const novasNaoDuplicadas = novas.filter(nova =>
       !participacoes?.some(v =>
@@ -57,7 +58,7 @@ const ParticipacaoInstituicao = () => {
   };
 
   const handleNovaParticipacaoInstituicao = () => {
-    novaParticipacaoInstituicao(navigation.navigate, entrevistado);
+    novaParticipacaoInstituicao(navigation.navigate, morador);
   };
 
   return (

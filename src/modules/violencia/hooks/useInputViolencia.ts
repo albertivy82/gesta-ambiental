@@ -74,12 +74,12 @@ export const useNovaViolencia = (benfeitoriaId: number, idBenfeitoriaLocal : str
       console.log("Violência case: benfeitoria offline");
     } else {
       novaViolencia.benfeitoria = { id: benfeitoriaId };
-      const netInfoState = await NetInfo.fetch();
+     
       const isConnected = await testConnection();
   
-      if (netInfoState.isConnected && isConnected) {
+      if (isConnected) {
         try {
-          await connectionAPIPost('http://192.168.100.28:8080/violencia', novaViolencia);
+          await connectionAPIPost('http://177.74.56.24/violencia', novaViolencia);
         } catch (error) {
           const violenciaDataQueue = objetoFila();
           salvarViolenciaQueue(violenciaDataQueue);

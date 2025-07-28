@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import Input from "../../../shared/components/input/input";
@@ -7,6 +7,7 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovoCredito } from "../hooks/useInputCredito";
 import { CreditoDetailContainer } from "../styles/credito.style";
 import { CreditoType } from "../../../shared/types/CreditoType";
+import Text from "../../../shared/components/text/Text";
 
 
 export interface NovoCreditoParams {
@@ -17,6 +18,8 @@ export interface NovoCreditoParams {
 export const detalharCredito = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
   navigate('CreditoLista', { benfeitoria });
 };
+
+
 
 export const NovoCredito = () => {
  const navigation = useNavigation<NavigationProp<ParamListBase>>();
@@ -30,7 +33,7 @@ export const NovoCredito = () => {
     handleOnChangeInput,
     enviarRegistro,
     disabled
-  } = useNovoCredito(params.benfeitoria);
+  } = useNovoCredito(params.benfeitoria, credito );
 
  
 
@@ -54,7 +57,12 @@ export const NovoCredito = () => {
            }
          };
 
-  //const valorSalvo = credito?. credito.faturamentoAtividadeMesTotal.toFixed(2) : '';
+      useEffect(() => {
+        if (!credito) return;
+         handleOnChangeInput(credito.nome, 'nome');
+      }, [credito]);
+                      
+    const valorSalvo = credito?.valor? credito.valor  : '';
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
@@ -62,14 +70,18 @@ export const NovoCredito = () => {
         
         <Input 
           value={novoCredito.nome} 
-          onChange={(event) => handleOnChangeInput(event, 'tipoCredito')}
+          onChange={(event) => handleOnChangeInput(event, 'nome')}
           placeholder="..."
           margin="15px 10px 30px 5px"
           title="Informe qual é a linha crédito acessada pelos moradores da casa:"
         />
-        
+        {valorSalvo && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação cadastrada anteriormente: R$ {valorSalvo}
+                </Text>
+        )}
          <Input
-              value={novoCredito.valor?.toFixed(2) || ''}
+              value={novoCredito.valor || ''}
               onChange={handleOnChangeRendimentoMensal}
               keyboardType='numeric'
               placeholder="R$"

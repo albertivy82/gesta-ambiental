@@ -104,7 +104,7 @@ export const salvarBenfeitoriaQueue = (benfeitoria:BenfeitoriaInput): Promise<Be
                     let benfeitoriaSalva;
                     
                         realmInstance.write(() => {
-                        console.log('ERRO QUEUE');
+                        
                         const benfeitoriaPadrao = {
                             ...benfeitoria,
                             id: Id(), 
@@ -154,7 +154,7 @@ export const getAllBenfeitorias=()=>{
 
 export const getBenfeitoriaDessincronizadas = (idImovelApi: number): BenfeitoriaType[] => {
    
-    console.log("benfeitpria. ponto de sisncronização 3", idImovelApi)
+    
     const query = `imovel == "${idImovelApi}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const imoveisQueue = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query);
 
@@ -163,7 +163,7 @@ export const getBenfeitoriaDessincronizadas = (idImovelApi: number): Benfeitoria
         ...benfeitoria
     }));
 
-    console.log("getBenfeitoriaDessincronizadas", cleanedQueue)
+    
     return cleanedQueue;
 };
 

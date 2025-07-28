@@ -66,14 +66,14 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
   const enviaEscolaNova = async () =>{
 
     novaEscola.localidade = {id:localidadeId};
-            const netInfoState = await NetInfo.fetch();
+           
             const isConnected = await testConnection();
           
-                  if(netInfoState.isConnected && isConnected){
+                  if(isConnected){
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscola) as EscolaType;
+                      const response = await connectionAPIPost('http://177.74.56.24/escola', novaEscola) as EscolaType;
                           
                       if (response && response.id) {
                             return fetchEscolaAPI(response.id);
@@ -97,14 +97,14 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
       ...novaEscola,
       localidade: { id: typeof escola!.localidade === 'number' ? escola!.localidade : escola!.localidade.id }
     };
-    const netInfoState = await NetInfo.fetch();
+   
     const isConnected = await testConnection();
     
-     if(netInfoState.isConnected && isConnected){
+     if(isConnected){
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
+              const response = await connectionAPIPut(`http://177.74.56.24/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
               if (response && response.id) {
                 return fetchEscolaAPI(response.id);
               }
@@ -149,7 +149,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
    const fetchEscolaAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<EscolaType>(`http://192.168.100.28:8080/escola/${id}`);
+              const response = await connectionAPIGet<EscolaType>(`http://177.74.56.24/escola/${id}`);
               if (response) {
                 const escolaData = {
                     ...response,

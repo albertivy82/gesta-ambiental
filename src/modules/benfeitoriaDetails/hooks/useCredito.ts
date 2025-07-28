@@ -12,6 +12,7 @@ import { CreditoType } from "../../../shared/types/CreditoType";
 import { CreditoInput } from "../../../shared/types/CreditoInput";
 
 export const convertToCreditoInput = (credito: any): CreditoInput => {
+  console.log(credito.benfeitoria.id);
   return {
     nome: credito.nome,
     valor: credito.valor,
@@ -29,10 +30,10 @@ export const useCreditos = (benfeitoriaId: number) => {
       const queue = getCreditosDessincronizados(benfeitoriaId);
       for (const credito of queue) {
         const creditoInput = convertToCreditoInput(credito);
-        const netInfo = await NetInfo.fetch();
-        if (netInfo.isConnected && (await testConnection())) {
+        const isConnected = await testConnection();
+                    if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://192.168.100.28:8080/credito', creditoInput);
+            const response = await connectionAPIPost('http://177.74.56.24/credito', creditoInput);
             const creditoAPI = response as CreditoType;
             if (creditoAPI.id) apagarCreditoQueue(credito.idLocal!);
           } catch (error) {
@@ -52,7 +53,7 @@ export const useCreditos = (benfeitoriaId: number) => {
 
   const fetchCreditoAPI = async () => {
     try {
-      const response = await connectionAPIGet<CreditoType[]>(`http://192.168.100.28:8080/credito/benfeitoria-credito/${benfeitoriaId}`);
+      const response = await connectionAPIGet<CreditoType[]>(`http://177.74.56.24/credito/benfeitoria-credito/${benfeitoriaId}`);
       const dados = response.map(item => ({
         ...item,
         sincronizado: true,

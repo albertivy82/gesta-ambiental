@@ -38,8 +38,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ benfeitoria, destin
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const netInfoState = await NetInfo.fetch();
-        if (!netInfoState.isConnected && !(await testConnection())) {
+       
+        if (!!(await testConnection())) {
           setDisable(true);
         } else {
           setDisable(false);
@@ -59,7 +59,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ benfeitoria, destin
 
   return (
     <>
-     <TouchableOpacity onPress={() => setModalVisible(true)} disabled={disable}>
+     <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
           <Icon size={40} name='pencil2' color={disable ? '#aaa' : "#ff4500"} />
           <Text 

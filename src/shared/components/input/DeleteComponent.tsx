@@ -81,11 +81,11 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
         navigation.goBack();
   
       } else {
-        const netInfoState = await NetInfo.fetch();
+       
         const isConnected = await testConnection();
   
-        if (netInfoState.isConnected && isConnected) {
-          await connectionAPIDelete(`http://192.168.100.28:8080/${deleteEndpoint}/${id}`);
+        if (isConnected) {
+          await connectionAPIDelete(`http://177.74.56.24/${deleteEndpoint}/${id}`);
   
           switch (deleteEndpoint) {
             case "imovel":

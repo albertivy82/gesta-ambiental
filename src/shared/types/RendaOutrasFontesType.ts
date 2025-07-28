@@ -5,7 +5,7 @@ export interface RendaOutrasFontesType {
     id: number;
     fonte: FontesRenda|null|'';
     beneficiarios: number;
-    rendaMesTotal: number; 
+    rendaMesTotal: string; 
     benfeitoria: {
         id: number;
     };

@@ -106,14 +106,14 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
     } else {
         novoImovel.entrevistado = { id: entrevistado.id };
         console.log( novoImovel.entrevistado)
-        const netInfoState = await NetInfo.fetch();
+       
         const isConnected = await testConnection();
         
-            if (netInfoState.isConnected && isConnected) {
+            if (isConnected) {
                 try {
                   
                    console.log( novoImovel)
-                  const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel) as imovelBody;
+                  const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovel) as imovelBody;
                   if (response && response.id) {
                     return fetchImovelAPI(response.id);
                    }      
@@ -134,14 +134,15 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
       ...novoImovel,
       entrevistado: { id: typeof imovel!.entrevistado === 'number' ? imovel!.entrevistado : imovel!.entrevistado.id }
     };
-    const netInfoState = await NetInfo.fetch();
+   
     const isConnected = await testConnection();
     
-     if(netInfoState.isConnected && isConnected){
+     if(isConnected){
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
+              const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
+              
               if (response && response.id) {
                   return fetchImovelAPI(response.id);
               }else{
@@ -149,7 +150,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                   return local;
               }
             } catch (error) {
-              const local = await await salvarImovel(buildImovelAtualizada());
+              const local = await salvarImovel(buildImovelAtualizada());
               Alert.alert("Erro ao enviar edição", "Tente novamente online.");
               return local;
             }
@@ -176,7 +177,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
    const fetchImovelAPI = async(id:number) =>{
       
               try{
-                  const response = await connectionAPIGet<imovelBody>(`http://192.168.100.28:8080/imovel/${id}`);
+                  const response = await connectionAPIGet<imovelBody>(`http://177.74.56.24/imovel/${id}`);
                   if (response) {
                     const imovelData = {
                         ...response,

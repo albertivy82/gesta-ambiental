@@ -65,12 +65,12 @@ export const useNovaInstituicaoConhecida = (benfeitoriaId: number, idBenfeitoria
       console.log("Instituição Conhecida case: benfeitoria offline");
     } else {
       novaInstituicao.benfeitoria = { id: benfeitoriaId };
-      const netInfoState = await NetInfo.fetch();
+     
       const isConnected = await testConnection();
   
-      if (netInfoState.isConnected && isConnected) {
+      if (isConnected) {
         try {
-          await connectionAPIPost('http://192.168.100.28:8080/instituicao-conhecida', novaInstituicao);
+          await connectionAPIPost('http://177.74.56.24/instituicao-conhecida', novaInstituicao);
         } catch (error) {
           const instituicaoConhecidaDataQueue = objetoFila();
           salvarInstituicaoConhecidaQueue(instituicaoConhecidaDataQueue);

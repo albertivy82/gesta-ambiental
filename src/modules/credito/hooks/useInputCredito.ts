@@ -11,7 +11,7 @@ import { CreditoType } from "../../../shared/types/CreditoType";
 
 export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   nome: '',
-  valor: 0,
+  valor: '',
   benfeitoria: {
     id: 0,
   },
@@ -25,7 +25,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
     console.log(novoCredito);
     if (
       novoCredito.nome !== null &&
-      novoCredito.valor == 0
+      novoCredito.valor == ''
     ) {
       setDisabled(false);
     }
@@ -72,14 +72,14 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
   
         }else{
             novoCredito.benfeitoria = {id:benfeitoria.id};
-            const netInfoState = await NetInfo.fetch();
+           
             const isConnected = await testConnection();
           
-                  if(netInfoState.isConnected && isConnected){
+                  if(isConnected){
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/credito', novoCredito) as CreditoType;
+                      const response = await connectionAPIPost('http://177.74.56.24/credito', novoCredito) as CreditoType;
                           
                       if (response && response.id) {
                             return fetchCreditoAPI(response.id);
@@ -106,14 +106,14 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
       ...novoCredito,
       benfeitoria: { id: typeof credito!.benfeitoria === 'number' ? credito!.benfeitoria : credito!.benfeitoria.id }
     };
-    const netInfoState = await NetInfo.fetch();
+   
     const isConnected = await testConnection();
     
-     if(netInfoState.isConnected && isConnected){
+     if(isConnected){
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/credito/benfeitoria-credito/${credito!.id}`, creditoCorrigida) as CreditoType;
+              const response = await connectionAPIPut(`http://177.74.56.24/credito/benfeitoria-credito/${credito!.id}`, creditoCorrigida) as CreditoType;
                     if (response && response.id) {
                       return fetchCreditoAPI(response.id);
                     }else{
@@ -149,7 +149,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
    const fetchCreditoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<CreditoType>(`http://192.168.100.28:8080/credito/${id}`);
+              const response = await connectionAPIGet<CreditoType>(`http://177.74.56.24/credito/${id}`);
               if (response) {
                 const creditoData = {
                     ...response,
@@ -181,7 +181,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
           // Atualiza o estado com o valor formatado como número
           setNovoCredito((current) => ({
             ...current,
-            valor: parseFloat(formattedValue), // Salva como número para enviar à API
+            valor:formattedValue, // Salva como número para enviar à API
           }));
   };
 

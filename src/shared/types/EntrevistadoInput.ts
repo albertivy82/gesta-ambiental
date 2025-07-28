@@ -1,4 +1,3 @@
-import { Escolaridade } from "../../enums/Escolaridade";
 import { EstadoCivil } from "../../enums/EstadoCivil.enum";
 import { Sexo } from "../../enums/Sexo";
 import { SimNao } from "../../enums/simNao.enum";
@@ -11,7 +10,7 @@ export interface EntrevistadoInput {
     nascimentoData: number;
     sexo: Sexo | "" | null;
     apelido: string;
-    escolaridade: Escolaridade | "" | null;
+    escolaridade: string;
     estadoCivil: EstadoCivil | "" | null;
     religiao: string;
     morador: SimNao | "" | null;

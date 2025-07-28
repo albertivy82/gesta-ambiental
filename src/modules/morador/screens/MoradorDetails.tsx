@@ -16,9 +16,9 @@ import EditConfirmation from '../ui-components/UseEditMorador';
 export const handleNavigation = <T,>(
   navigate: NavigationProp<ParamListBase>['navigate'], 
   route: string, 
-  data: T | T[]
+  morador: MoradorType
 ) => {
-  navigate(route, { data });
+  navigate(route, { morador });
 };
 
 export const handleNewEntry = (
@@ -38,22 +38,21 @@ export interface MoradorParam {
 const MoradorDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, MoradorParam>>>();
-  console.log("***************", params);
-  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(params.morador.id);
+  const morador = params.morador;
+  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id);
   
 
-  const handleDecision = (
-        data: any[] | undefined,
-        detailRoute: string,
-        newRoute: string
-      ) => {
-        if (data && data.length > 0) {
-          handleNavigation(navigation.navigate, detailRoute, data);
-        } else {
-          handleNewEntry(navigation.navigate, newRoute, params.morador);
-        }
-  };
-  
+ const handleDecision = <T,>(
+      data: T | T[],
+      detailRoute: string,
+      newRoute: string
+    ) => {
+      if (Array.isArray(data) ? data.length > 0 : !!data) {
+        handleNavigation(navigation.navigate, detailRoute, morador);
+      } else {
+         handleNewEntry(navigation.navigate, newRoute, morador);
+      }
+    };
    
   return (
     
@@ -106,7 +105,7 @@ const MoradorDetails = () => {
                  
                  </View>
                        
-                <TouchableOpacity onPress={() => handleDecision(participacaoInsituicaoes, "ParticipacaoInstituicaoLista", "NovaPariticapaInstituicao")}>
+                <TouchableOpacity onPress={() => handleDecision(participacaoInsituicaoes, "ParticipacaoInstituicao", "NovaParticipacaoInstituicao")}>
                       <View style={{
                         alignItems: 'stretch',
                         flexDirection: 'row',

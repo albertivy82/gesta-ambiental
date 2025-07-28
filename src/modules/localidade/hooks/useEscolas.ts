@@ -30,12 +30,12 @@ export const useEscolas= (localidadeId:number)=>{
             for (const escola of escolasQueue) {
                 const novaEscolaIput = convertToEscolaInput(escola);
                 //console.log(novaEscolaIput);
-                const netInfoState = await NetInfo.fetch();
-                if (netInfoState.isConnected) {
+               
+               
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscolaIput);
+                            const response = await connectionAPIPost('http://177.74.56.24/escola', novaEscolaIput);
                             const escolaAPI = response as EscolaType;
                            
                             if (escolaAPI.id) {
@@ -45,7 +45,7 @@ export const useEscolas= (localidadeId:number)=>{
                             console.error('Erro na sincronização do imóvel:', error);
                         }
                     }
-                }
+                
             }
         }
     };
@@ -61,13 +61,11 @@ export const useEscolas= (localidadeId:number)=>{
 
    const fetchEscolasromAPI = async () => {
 
-        const netInfoState = await NetInfo.fetch();
-        if (netInfoState.isConnected) {
-            const isConnected = await testConnection();
-            if (isConnected) {
+       const isConnected = await testConnection();
+        if (isConnected) {
           try {
-              const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://192.168.100.28:8080/escola/localidade-escola/${localidadeId}`);
-              
+              const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://177.74.56.24/escola/localidade-escola/${localidadeId}`);
+              console.log(escolasAPI)
               const EscData: EscolaType[] = escolasAPI.map(escola => ({
                 ...escola,
                 localidade: { id: escola.localidade.id }, // ajusta a estrutura
@@ -87,7 +85,7 @@ export const useEscolas= (localidadeId:number)=>{
           } catch (error) {
             console.log("CONTAGEM DE ESCOLAS-ERRO!!!:", error);
           }
-        }}
+        }
           
         };
 
