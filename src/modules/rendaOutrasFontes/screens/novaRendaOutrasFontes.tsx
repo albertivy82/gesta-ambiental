@@ -128,7 +128,7 @@ export const NovaRendaOutrasFontes = () => {
         )}
              
       <Input
-              value={novaRendaOutrasFontes.rendaMesTotal || ''}
+              value={novaRendaOutrasFontes.rendaMesTotal.toFixed(2)}
               onChange={handleOnChangeRendimentoMensal}
               keyboardType='numeric'
               placeholder="R$"

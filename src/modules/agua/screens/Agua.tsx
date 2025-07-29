@@ -17,8 +17,8 @@ export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;
 }
 
-export const novaAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovaAgua', { benfeitoriaId });
+export const novaAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('NovaAgua', { benfeitoria });
 }
 
 const Aguas = () => {
@@ -33,6 +33,7 @@ const Aguas = () => {
   useEffect(()=>{
         setIsLoading(true);
           if(benfeitoria){
+            console.log("1111", benfeitoria.id)
              const benfeitoriaRealm = getAguas(benfeitoria.id);
              setAguas(benfeitoriaRealm);
              console.log(benfeitoria.id, benfeitoriaRealm)
@@ -52,7 +53,8 @@ const Aguas = () => {
   };
 
   const handleNovaAgua = () => {
-    novaAgua(navigation.navigate, benfeitoria.id);
+    console.log(benfeitoria.id)
+    novaAgua(navigation.navigate, benfeitoria);
   };
 
   return (

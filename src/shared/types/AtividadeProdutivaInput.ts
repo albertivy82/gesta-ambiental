@@ -3,7 +3,7 @@ export interface AtividadeProdutivaInput {
     
     atividade: string;
     pessoasEnvolvidas: number;
-    faturamentoAtividadeMesTotal: string;
+    faturamentoAtividadeMesTotal: number;
     benfeitoria?: {
         id: number;
     };

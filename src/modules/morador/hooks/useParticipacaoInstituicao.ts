@@ -10,10 +10,10 @@ export const convertToParticipacaoInstituicaoInput = (ParticipacaoInstituicao: a
   return {
     
     instituicao: ParticipacaoInstituicao.instituicao,
-    tipoDeRgistro: ParticipacaoInstituicao.dataNascimento,
-    Registro: ParticipacaoInstituicao.sexo,
+    tipoDeRegistro: ParticipacaoInstituicao.tipoDeRegistro,
+    registro: ParticipacaoInstituicao.Registro,
     morador: {
-      id: ParticipacaoInstituicao.participacaoInsituicao,
+      id: ParticipacaoInstituicao.morador,
     },
   };
 };

@@ -5,7 +5,7 @@ export const RendaOutrasFontesSchema = {
         id: 'int',
         fonte: 'string', 
         beneficiarios: 'int',
-        rendaMesTotal: 'string', 
+        rendaMesTotal: 'double', 
         benfeitoria: 'int?',
         sincronizado: 'bool',
         idLocal: 'string?',

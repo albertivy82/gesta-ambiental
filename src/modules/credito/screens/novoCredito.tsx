@@ -81,7 +81,7 @@ export const NovoCredito = () => {
                 </Text>
         )}
          <Input
-              value={novoCredito.valor || ''}
+              value={novoCredito.valor.toFixed(2)}
               onChange={handleOnChangeRendimentoMensal}
               keyboardType='numeric'
               placeholder="R$"

@@ -13,7 +13,7 @@ import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesTy
 export const DEFAULT_RENDA_OUTRAS_FONTES_INPUT: RendaOutrasFontesInput = {
 fonte: null,
 beneficiarios: 0,
-rendaMesTotal: '', 
+rendaMesTotal: 0, 
 benfeitoria: {
     id: 0,
   },
@@ -29,7 +29,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
     if (
       novaRendaOutrasFontes.fonte !== null &&
       novaRendaOutrasFontes.beneficiarios ==0 &&
-      novaRendaOutrasFontes.rendaMesTotal =='' 
+      novaRendaOutrasFontes.rendaMesTotal >=0 
 
     ) {
       setDisabled(false);
@@ -192,7 +192,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
         const formattedValue = (parseInt(value || '0', 10) / 100).toFixed(2);
         setNovaRendaOutrasFontes((current) => ({
           ...current,
-          rendaMesTotal:formattedValue, // Salva como número para enviar à API
+          rendaMesTotal:parseFloat(formattedValue), // Salva como número para enviar à API
         }));
       };
 

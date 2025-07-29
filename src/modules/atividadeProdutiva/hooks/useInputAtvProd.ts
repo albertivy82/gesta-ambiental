@@ -12,7 +12,7 @@ import { salvarAtividade, salvarAtividadeQueue } from "../../../realm/services/a
 export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   atividade: '',
   pessoasEnvolvidas: 0,
-  faturamentoAtividadeMesTotal: '',
+  faturamentoAtividadeMesTotal: 0,
   benfeitoria: {
     id: 0,
   },
@@ -28,7 +28,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
       novaAtividade.atividade !=='' &&
       novaAtividade.pessoasEnvolvidas > 0 &&
        novaAtividade.pessoasEnvolvidas < 20 &&
-      novaAtividade.faturamentoAtividadeMesTotal !==''
+      novaAtividade.faturamentoAtividadeMesTotal <= 0
     ) {
       setDisabled(false);
     }
@@ -208,7 +208,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
   
     setNovaAtvProd((current) => ({
       ...current,
-      faturamentoAtividadeMesTotal: formattedValue, // Mantém como string
+      faturamentoAtividadeMesTotal: parseFloat(formattedValue), // Mantém como string
     }));
   };
   

@@ -1,7 +1,7 @@
 ﻿export interface CreditoType {
     id: number;
     nome: string;
-    valor: string; 
+    valor: number; 
     benfeitoria: {
         id: number;
     };

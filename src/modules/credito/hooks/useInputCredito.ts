@@ -11,7 +11,7 @@ import { CreditoType } from "../../../shared/types/CreditoType";
 
 export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   nome: '',
-  valor: '',
+  valor: 0,
   benfeitoria: {
     id: 0,
   },
@@ -25,7 +25,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
     console.log(novoCredito);
     if (
       novoCredito.nome !== null &&
-      novoCredito.valor == ''
+      novoCredito.valor <= 0
     ) {
       setDisabled(false);
     }
@@ -181,7 +181,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
           // Atualiza o estado com o valor formatado como número
           setNovoCredito((current) => ({
             ...current,
-            valor:formattedValue, // Salva como número para enviar à API
+            valor:parseFloat(formattedValue), // Salva como número para enviar à API
           }));
   };
 

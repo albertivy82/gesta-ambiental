@@ -99,7 +99,7 @@ const atividadeOptions =  Object.values(
                 </Text>
               )}
               <Input
-                value={novaAtividade.faturamentoAtividadeMesTotal || ''}
+                value={novaAtividade.faturamentoAtividadeMesTotal.toFixed(2)}
                 onChange={handleOnChangeRendimentoMensal}
                 keyboardType="numeric"
                 placeholder="R$"

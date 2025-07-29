@@ -140,6 +140,21 @@ export const getBenfeitorias = (imovel:number): BenfeitoriaType[]=>{
     return cleanBenfeitoria as BenfeitoriaType[];
 };
 
+export const getBenfeitoria = (id: number): BenfeitoriaType | undefined => {
+    const query = `id == ${id}`;
+    
+    const benfeitoria = realmInstance
+      .objects<BenfeitoriaType>('Benfeitoria')
+      .filtered(query)[0]; // pega só o primeiro
+  
+    if (!benfeitoria) return undefined;
+  
+    const cleanBenfeitoria = JSON.parse(JSON.stringify(benfeitoria));
+  
+    return cleanBenfeitoria as BenfeitoriaType;
+  };
+  
+
 
 export const getAllBenfeitorias=()=>{
 

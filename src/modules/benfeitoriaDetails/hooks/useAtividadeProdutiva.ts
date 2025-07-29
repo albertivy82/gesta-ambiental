@@ -21,7 +21,7 @@ export const convertToAtividadeProdutivaInput = (atividade: any) => {
     pessoasEnvolvidas: atividade.pessoasEnvolvidas,
     faturamentoAtividadeMesTotal: atividade.faturamentoAtividadeMesTotal,
     benfeitoria: {
-      id: atividade.benfeitoria.id,
+      id: atividade.benfeitoria,
     },
   };
 };
@@ -74,19 +74,23 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
 
       const data = response.map((atividade) => ({
         ...atividade,
+        faturamentoAtividadeMesTotal:
+        atividade.faturamentoAtividadeMesTotal != null
+          ? String(atividade.faturamentoAtividadeMesTotal)
+          : "0.00", // ou '' se quiser forçar campo vazio
         sincronizado: true,
         idLocal: "",
         idFather: "",
       }));
 
       if (data.length > 0) {
-        await salvarAtividadesProdutivas(data);
+         await salvarAtividadesProdutivas(data);
         setAtividades((prev) => [...prev, ...data]);
       } else {
         throw new Error("Dados de atividade produtiva inválidos");
       }
     } catch (error) {
-     // console.error("Erro ao recuperar atividades produtivas da API:", error);
+     console.log("Erro ao recuperar atividades produtivas da API:", error);
     }
   };
 

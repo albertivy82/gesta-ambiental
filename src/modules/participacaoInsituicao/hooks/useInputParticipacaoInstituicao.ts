@@ -11,7 +11,7 @@ import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoI
 export const DEFAULT_VEGETACAO_INPUT: ParticipacaoInstituicaoInput = {
   instituicao: '',
   tipoDeRegistro: '',
-  Registro: '',
+  registro: '',
   morador: {
     id: 0,
   },
@@ -20,12 +20,13 @@ export const DEFAULT_VEGETACAO_INPUT: ParticipacaoInstituicaoInput = {
 export const useNovaParticipacaoInstituicao = (morador:MoradorType, participacaoInstituicao?: ParticipacaoInstituicaoType) => {
   const [novaParticipacaoInstituicao, setNovaParticipacaoInstituicao] = useState<ParticipacaoInstituicaoInput>(DEFAULT_VEGETACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
-  console.log('useNovaParticipacaoInstituicao', morador)
+  
   useEffect(() => {
+    console.log(novaParticipacaoInstituicao)
     if (
       novaParticipacaoInstituicao.instituicao !== '' &&
       novaParticipacaoInstituicao.tipoDeRegistro !== '' &&
-      novaParticipacaoInstituicao.Registro !== ''
+      novaParticipacaoInstituicao.registro !== ''
     ) {
       setDisabled(false);
   }
@@ -80,17 +81,19 @@ const objetoFila = () => {
                     if(isConnected){
                       
                       try{
-                         
+                        console.log("********", novaParticipacaoInstituicao)
                         const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
-                            
+                        console.log(response)
                         if (response && response.id) {
                               return fetchParticipacaoInstituicaoAPI(response.id);
                         }
     
                       } catch (error) {
+                          console.log(error)
                           const participacaoInstituicaoDataQueue = objetoFila();
                           const participacaoInstituicaoQueue = await salvarParticipacaoInstituicaoQueue(participacaoInstituicaoDataQueue);
                           return participacaoInstituicaoQueue;
+                          
                          
                       }
                     }else{
@@ -114,7 +117,7 @@ const objetoFila = () => {
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 
-                const response = await connectionAPIPut(`http://177.74.56.24/participacaoInstituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
+                const response = await connectionAPIPut(`http://177.74.56.24/participacao-instituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
                     if (response && response.id) {
                     return fetchParticipacaoInstituicaoAPI(response.id);
                     }else{
@@ -151,7 +154,7 @@ const objetoFila = () => {
      const fetchParticipacaoInstituicaoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`http://177.74.56.24/participacaoInstituicao/${id}`);
+                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`http://177.74.56.24/participacao-instituicao/${id}`);
                 if (response) {
                   const participacaoInstituicaoData = {
                       ...response,

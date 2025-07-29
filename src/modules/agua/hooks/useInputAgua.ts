@@ -63,6 +63,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
 
   const enviarRegistro = async () => {
     if (agua) {
+      console.log("1111", agua)
       return await enviaAguaEdicao();
     } else {
       return await enviaAguaNova();
@@ -116,14 +117,17 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
       ...novaAgua,
       benfeitoria: { id: typeof agua!.benfeitoria === 'number' ? agua!.benfeitoria : agua!.benfeitoria.id }
     };
-   
+    console.log("222", agua)
     const isConnected = await testConnection();
     
      if(isConnected){
+      console.log("3333",aguaCorrigida)
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
               const response = await connectionAPIPut(`http://177.74.56.24/agua/${agua!.id}`, aguaCorrigida) as AguaType;
+
+              console.log("4444",response)
                     if (response && response.id) {
                       return fetchAguaAPI(response.id);
                     }else{
@@ -132,7 +136,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                                         }
            } catch (error) {
               const local = await salvarAgua(buildAguaAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              console.log("Erro ao enviar edição", "Tente novamente online.");
               return local;
           }
           
@@ -161,6 +165,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
   
           try{
               const response = await connectionAPIGet<AguaType>(`http://177.74.56.24/agua/${id}`);
+              console.log("55555", response)
               if (response) {
                 const aguaData = {
                     ...response,
@@ -168,12 +173,14 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                     idLocal: '',
                     idFather: '',
                 };
+
+                console.log("55555", aguaData)
                    return await salvarAgua(aguaData);
               }else{
                       throw new Error('Dados de agua Inválidos'); 
                   }
           } catch (error) {
-                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                  console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
           }
     };
   

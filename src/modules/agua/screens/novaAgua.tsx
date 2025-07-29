@@ -13,6 +13,7 @@ import CheckboxSelector from "../../../shared/components/input/checkBox";
 import { AguaType } from "../../../shared/types/AguaType";
 import { theme } from "../../../shared/themes/theme";
 import Text from "../../../shared/components/text/Text";
+import { getBenfeitoria, getBenfeitorias } from "../../../realm/services/benfeitoriaService";
 
 
 export interface NovaAguaParams {
@@ -21,6 +22,7 @@ export interface NovaAguaParams {
 }
 
 export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  console.log("10", benfeitoria)
   navigate('AguaLista', { benfeitoria });
 };
 
@@ -43,7 +45,7 @@ export const NovaAgua = () => {
     handleOnChangeProfundidade,
     disabled
   } = useNovaAgua(benfeitoria, agua);
-
+console.log("?", benfeitoria)
   const abastecimentoOptions = Object.values([
     'ABASTECIMENTO PUBLICO', 'POÇO AMAZONAS',
     'POÇO ARTESIANO',
@@ -78,9 +80,17 @@ export const NovaAgua = () => {
   const handleEnviar = async () => {
     setLoading(true);
     try {
+     
       const aguaSalva = await enviarRegistro();
+     
       if (aguaSalva) {
-        detalharAgua(navigation.navigate, benfeitoria);
+        if(typeof benfeitoria === 'number'){
+          const benfeitoriaBanco = getBenfeitoria(benfeitoria)
+           detalharAgua(navigation.navigate, benfeitoriaBanco!);
+        }else{
+          detalharAgua(navigation.navigate, benfeitoria);
+        }
+           
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

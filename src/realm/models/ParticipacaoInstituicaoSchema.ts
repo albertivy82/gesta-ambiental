@@ -5,7 +5,7 @@ export const ParticipacaoInstituicaoSchema = {
         id: 'int',
         instituicao: 'string', 
         tipoDeRegistro: 'string',
-        Registro: 'string',
+        registro: 'string',
         morador: 'int', 
         sincronizado: 'bool',
         idLocal: 'string?',

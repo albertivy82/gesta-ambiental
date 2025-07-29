@@ -78,8 +78,8 @@ console.log(morador, participacaoInstituicao)
            />
 
           <Input 
-              value={novaParticipacaoInstituicao.Registro} 
-              onChange={(event)=> handleOnChangeInput(event, 'Registro')}
+              value={novaParticipacaoInstituicao.registro} 
+              onChange={(event)=> handleOnChangeInput(event, 'registro')}
               placeholder="..."
               margin="15px 10px 30px 5px"
               title="Informe o número de registro"

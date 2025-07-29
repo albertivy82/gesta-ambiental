@@ -3,7 +3,7 @@ export interface AtividadeProdutivaType {
     id: number;
     atividade: string;
     pessoasEnvolvidas: number;
-    faturamentoAtividadeMesTotal: string;
+    faturamentoAtividadeMesTotal: number;
     benfeitoria: {
         id: number;
     };

@@ -5,7 +5,7 @@ export const AtividadeProdutivaSchema = {
         id: 'int',
         atividade: 'string', 
         pessoasEnvolvidas: 'int',
-        faturamentoAtividadeMesTotal: 'string',
+        faturamentoAtividadeMesTotal: 'double',
         benfeitoria: 'int?',
         sincronizado: 'bool',
         idLocal: 'string?',

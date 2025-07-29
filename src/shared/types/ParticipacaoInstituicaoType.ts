@@ -3,7 +3,7 @@ export interface ParticipacaoInstituicaoType {
     id: number;
     instituicao: string;
     tipoDeRegistro: string;
-    Registro: string;
+    registro: string;
     morador: {
         id: number;
     }

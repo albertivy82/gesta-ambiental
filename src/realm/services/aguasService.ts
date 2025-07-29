@@ -91,12 +91,14 @@ export const salvarAgua= (agua:AguaType): Promise<AguaType> => {
                     aguaSalvo = realmInstance.create("Agua", aguaPadrao, true);
                 }
             });
-    if (aguaSalvo) {
-        const cleanAgua = JSON.parse(JSON.stringify(aguaSalvo))
-        resolve(cleanAgua as AguaType);
-    } else {
-    throw new Error("Erro ao recuperar a agua salvo.");
-    }
+            
+            if (aguaSalvo) {
+                    const cleanAgua = JSON.parse(JSON.stringify(aguaSalvo))
+                    console.log("77777", cleanAgua)
+                    resolve(cleanAgua as AguaType);
+                } else {
+                throw new Error("Erro ao recuperar a agua salvo.");
+                }
            
         } catch (error) {
             reject(error);
@@ -105,6 +107,7 @@ export const salvarAgua= (agua:AguaType): Promise<AguaType> => {
 };
 
 export const getAguas = (benfeitoriaId: number): AguaType[] => {
+  console.log("15", benfeitoriaId)
   const query = `benfeitoria == ${benfeitoriaId}`;
   const aguas = realmInstance.objects<AguaType>('Agua').filtered(query).slice();
   return JSON.parse(JSON.stringify(aguas)) as AguaType[];

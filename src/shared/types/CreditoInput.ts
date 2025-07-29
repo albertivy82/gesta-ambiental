@@ -1,7 +1,7 @@
 ﻿export interface CreditoInput {
     
     nome: string;
-    valor: string; 
+    valor: number; 
     benfeitoria?: {
         id: number;
     };

@@ -15,8 +15,8 @@ export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;
 }
 
-export const novoServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovoServicoComunicacao', { benfeitoriaId });
+export const novoServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('NovoServicoComunicacao', { benfeitoria});
 }
 
 const ServicosComunicacao = () => {
@@ -50,7 +50,7 @@ const ServicosComunicacao = () => {
   };
 
   const handleNovoServicoComunicacao = () => {
-    novoServicoComunicacao(navigation.navigate, benfeitoria.id);
+    novoServicoComunicacao(navigation.navigate, benfeitoria);
   };
 
   return (

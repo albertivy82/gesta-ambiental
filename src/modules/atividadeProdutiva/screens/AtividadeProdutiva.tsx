@@ -15,8 +15,8 @@ export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;
 }
 
-export const novaAtividade = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoriaId: number) => {
-  navigate('NovaAtividade', { benfeitoriaId });
+export const novaAtividade = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('NovaAtividade', { benfeitoria });
 }
 
 const Atividades = () => {
@@ -50,7 +50,7 @@ const handleRefresh = () => {
  
 
   const handleNovaAtividade = () => {
-    novaAtividade(navigation.navigate, benfeitoria.id);
+    novaAtividade(navigation.navigate, benfeitoria);
   };
 
   return (
