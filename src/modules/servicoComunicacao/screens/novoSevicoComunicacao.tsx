@@ -22,7 +22,7 @@ export const detalharServicoComunicacao = (navigate: NavigationProp<ParamListBas
 export const NovoServicoComunicacao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const { params } = useRoute<RouteProp<Record<string, NovoServicoParams>, string>>();
-    const benfeitoria = params.benfeitoria ?? params.servicosComunicacao?.benfeitoria;
+    const benfeitoria = params.benfeitoria;
     const servicosComunicacao = params.servicosComunicacao;
     const [loading, setLoading] = useState(false); 
   const [serviCom, setServCom] = useState<string>('');     

@@ -6,6 +6,7 @@ import { theme } from "../../../shared/themes/theme";
 import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
 import { useState } from "react";
 import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
+import { getMorador } from "../../../realm/services/moradorService";
 
 
 
@@ -13,9 +14,13 @@ const RenderItemParticipacaoInstituicao = ({ item }: { item: ParticipacaoInstitu
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
  
- 
+   const id = typeof item.morador === 'number'
+   ? item.morador
+   : Number(item.morador);
+   
+   const morador = getMorador(id)
   
-    const handleAcaoParticipacaoInstituicao = (vegetacao: ParticipacaoInstituicaoType) => {
+    const handleAcaoParticipacaoInstituicao = (participacaoInstituicao: ParticipacaoInstituicaoType) => {
      
       Alert.alert(
         'Ação sobre a Instituição vinculada',
@@ -24,7 +29,7 @@ const RenderItemParticipacaoInstituicao = ({ item }: { item: ParticipacaoInstitu
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovaParticipacaoInstituicao', { vegetacao }); // reuso da tela para edição
+              navigation.navigate('NovaParticipacaoInstituicao', { participacaoInstituicao, morador }); // reuso da tela para edição
             },
           },
           {
@@ -51,7 +56,7 @@ const RenderItemParticipacaoInstituicao = ({ item }: { item: ParticipacaoInstitu
         </Text>
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Instituição: {item.instituicao}</Text>
         <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Tipo de registro: {item.tipoDeRegistro}</Text>
-        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Número de registro: {item.Registro}</Text>
+        <Text type={textTypes.BUTTON_REGULAR} color={item.sincronizado ? "#000000" : theme.colors.redTheme.red}>Número de registro: {item.registro}</Text>
        
         {mostrarModalDelete && (
                   

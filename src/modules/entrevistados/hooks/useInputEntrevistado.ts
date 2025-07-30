@@ -63,12 +63,18 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
           novoEntrevistado.nome !== '' && 
           novoEntrevistado.naturalidade !== '' && 
           novoEntrevistado.nascimentoData >= 18 &&
+          novoEntrevistado.nascimentoData < 120 &&
           novoEntrevistado.sexo !== null &&
           novoEntrevistado.apelido !== '' && 
           novoEntrevistado.escolaridade !== '' &&
           novoEntrevistado.estadoCivil !== null &&
           novoEntrevistado.religiao !== '' &&
           novoEntrevistado.morador !== null &&
+          novoEntrevistado.dataChegada !== '' &&
+          novoEntrevistado.sofreuAssaltos > -1 &&
+          novoEntrevistado.sofreuAssaltos < 200 &&
+          novoEntrevistado.presenciouAssalto > -1 &&
+          novoEntrevistado.presenciouAssalto < 200 &&
           novoEntrevistado.dataChegada !== '' &&
           novoEntrevistado.pretendeMudar !== null &&
           novoEntrevistado.relacaoAreaImovel !== '' &&
@@ -92,6 +98,8 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
       ) {
         
           setDisabled(false);
+      }else{
+        setDisabled(true);
       }
       
   }, [novoEntrevistado]);

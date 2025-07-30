@@ -140,7 +140,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
      if(isConnected){
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
             try{
-              
+              console.log("está ok",imovelCorrigido)
               const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
               
               if (response && response.id) {

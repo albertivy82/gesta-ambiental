@@ -6,11 +6,18 @@ import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { AguaType } from "../../../shared/types/AguaType";
+import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
 
 
 const RenderItemAgua = ({ item }: { item: AguaType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
+
+  const id = typeof item.benfeitoria === 'number'
+  ? item.benfeitoria
+  : Number(item.benfeitoria);
+  
+  const benfeitoria = getBenfeitoria(id)
   
   
       const handleAcaoAgua = (agua: AguaType) => {
@@ -22,7 +29,7 @@ const RenderItemAgua = ({ item }: { item: AguaType }) => {
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovaAgua', { agua }); // reuso da tela para edição
+              navigation.navigate('NovaAgua', { agua, benfeitoria }); // reuso da tela para edição
             },
           },
           {

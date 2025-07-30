@@ -29,7 +29,7 @@ export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate']
 export const NovaAgua = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, NovaAguaParams>, string>>();
-  const benfeitoria = params.benfeitoria ?? params.agua?.benfeitoria;
+  const benfeitoria = params.benfeitoria;
   const agua = params.agua;
   const [loading, setLoading] = useState(false);
   const [fornecimentoAgua, setFornecimentoAgua] = useState<string>('');     
@@ -84,13 +84,7 @@ console.log("?", benfeitoria)
       const aguaSalva = await enviarRegistro();
      
       if (aguaSalva) {
-        if(typeof benfeitoria === 'number'){
-          const benfeitoriaBanco = getBenfeitoria(benfeitoria)
-           detalharAgua(navigation.navigate, benfeitoriaBanco!);
-        }else{
-          detalharAgua(navigation.navigate, benfeitoria);
-        }
-           
+            detalharAgua(navigation.navigate, benfeitoria);
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

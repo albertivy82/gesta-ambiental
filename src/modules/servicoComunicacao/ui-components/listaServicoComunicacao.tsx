@@ -6,13 +6,19 @@ import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
+import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
 
 
 const RenderItemServicoComunicacao = ({ item }: { item: ServicosComunicacaoType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
   
-  
+  const id = typeof item.benfeitoria === 'number'
+      ? item.benfeitoria
+      : Number(item.benfeitoria);
+      
+      const benfeitoria = getBenfeitoria(id)
+
       const handleAcaoServicosComunicacao = (servicosComunicacao: ServicosComunicacaoType) => {
      
       Alert.alert(
@@ -22,7 +28,7 @@ const RenderItemServicoComunicacao = ({ item }: { item: ServicosComunicacaoType 
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovoServicoComunicacao', { servicosComunicacao }); // reuso da tela para edição
+              navigation.navigate('NovoServicoComunicacao', { servicosComunicacao, benfeitoria }); // reuso da tela para edição
             },
           },
           {

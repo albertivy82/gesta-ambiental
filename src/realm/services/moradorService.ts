@@ -110,6 +110,20 @@ export const getMoradores = (benfeitoriaId: number): MoradorType[] => {
     return JSON.parse(JSON.stringify(moradores)) as MoradorType[];
 };
 
+export const getMorador = (id: number): MoradorType | undefined => {
+    const query = `id == ${id}`;
+    
+    const morador = realmInstance
+      .objects<MoradorType>('Morador')
+      .filtered(query)[0]; // pega só o primeiro
+  
+    if (!morador) return undefined;
+  
+    const cleanMorador = JSON.parse(JSON.stringify(morador));
+  
+    return cleanMorador as MoradorType;
+  };
+
 export const getMoradoresDessincronizados = (benfeitoriaId: number): MoradorType[] => {
     console.log("...ou seria o probelma aqui?")
     const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;

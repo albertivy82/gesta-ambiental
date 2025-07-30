@@ -23,7 +23,7 @@ export const detalharAtividadeProdutiva = (navigate: NavigationProp<ParamListBas
 export const NovaAtividade = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, NovaAtividadeParams>, string>>();
-  const benfeitoria = params.benfeitoria ?? params.atividadeProdutiva?.benfeitoria;
+  const benfeitoria = params.benfeitoria;
   const atividadeProdutiva = params.atividadeProdutiva;
   const [loading, setLoading] = useState(false); 
   const { novaAtividade,

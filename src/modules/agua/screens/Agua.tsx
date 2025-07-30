@@ -116,7 +116,7 @@ const Aguas = () => {
         data={aguas}
         extraData={aguas}
         renderItem={({ item }) => <RenderItemAgua item={item} />}
-        keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ?        item.idLocal : 'Sem Id'}
+        keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ?  item.idLocal : 'Sem Id'}
       />
 
      

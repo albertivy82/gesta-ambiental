@@ -278,6 +278,7 @@ export const NovoEntrevistado = ()=>{
            <Input 
               value={novoEntrevistado.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
+              maxLength={255}
               placeholder="Nome do entrevistado"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
@@ -288,6 +289,7 @@ export const NovoEntrevistado = ()=>{
            <Input 
               value={novoEntrevistado.naturalidade} 
               onChange={(event)=> handleOnChangeInput(event, 'naturalidade')}
+              maxLength={100}
               placeholder="naturalidade"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
@@ -324,6 +326,7 @@ export const NovoEntrevistado = ()=>{
            <Input 
               value={novoEntrevistado.apelido} 
               onChange={(event)=> handleOnChangeInput(event, 'apelido')}
+              maxLength={100}
               placeholder="como é mais conhecido na região"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
@@ -390,6 +393,7 @@ export const NovoEntrevistado = ()=>{
               <Input 
               value={novoEntrevistado.relacaoAreaImovel} 
               onChange={(event)=> handleOnChangeInput(event, 'relacaoAreaImovel')}
+              maxLength={255}
               placeholder="Relação do entrevistado com a área do imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
@@ -401,6 +405,7 @@ export const NovoEntrevistado = ()=>{
             <Input 
                   value={novoEntrevistado.relacaoVizinhos} 
                   onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
+                  maxLength={255}
                   placeholder="Relação do entrevistado com a vizinhança"
                   placeholderTextColor={theme.colors.grayTheme.gray80}
                   margin="15px 10px 30px 5px"
@@ -456,7 +461,7 @@ export const NovoEntrevistado = ()=>{
                 onSave={(selectedValues) => {
                     setLocalCompras(selectedValues);
                     if (!selectedValues.includes('OUTRA_LOCALIDADE')) {
-                        setOutrasInformadas('');
+                      SetOutrosLocais('');
                     }
                 }}
             />
@@ -526,6 +531,7 @@ export const NovoEntrevistado = ()=>{
                 <View style={{ marginTop: 10 }}>
                     <Input
                         value={outrosLServicosPublicos}
+                        maxLength={100}
                         onChangeText={SetOutrosServicosPublicos}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
@@ -562,6 +568,7 @@ export const NovoEntrevistado = ()=>{
               <Input
                 value={novoEntrevistado.problemasDeViolenciaLocal}
                 onChange={(event) => handleOnChangeInput(event, 'problemasDeViolenciaLocal')}
+                maxLength={255}
                 placeholder="Separe por vírgulas se houver mais de um relato"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
@@ -591,6 +598,7 @@ export const NovoEntrevistado = ()=>{
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={quaisConhece}
+                        maxLength={100}
                         onChangeText={SetQuaisConhece}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
@@ -603,6 +611,7 @@ export const NovoEntrevistado = ()=>{
               <Input 
                 value={novoEntrevistado.importanciaDeProtegerAmbiente} 
                 onChange={(event) => handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
+                maxLength={255}
                 placeholder="..."
                 margin="15px 10px 30px 5px"
                 title="Para você, qual a importância de proteger o meio ambiente?"
@@ -613,6 +622,7 @@ export const NovoEntrevistado = ()=>{
               <Input 
                 value={novoEntrevistado.importanciaDeProtegerFauna} 
                 onChange={(event) => handleOnChangeInput(event, 'importanciaDeProtegerFauna')}
+                maxLength={255}
                 placeholder="..."
                 margin="15px 10px 30px 5px"
                 title="Qual a importância de proteger a fauna?"
@@ -623,6 +633,7 @@ export const NovoEntrevistado = ()=>{
               <Input 
                 value={novoEntrevistado.qualEspacoPrecisaSerPreservado} 
                 onChange={(event) => handleOnChangeInput(event, 'qualEspacoPrecisaSerPreservado')}
+                maxLength={255}
                 placeholder="..."
                 margin="15px 10px 30px 5px"
                 title="Há algum espaço na sua localidade que você acredite que precisa ser protegido?"
@@ -632,6 +643,7 @@ export const NovoEntrevistado = ()=>{
 
               <Input 
                 value={novoEntrevistado.problemasRelacionadosAoAmbiente} 
+                maxLength={255}
                 onChange={(event) => handleOnChangeInput(event, 'problemasRelacionadosAoAmbiente')}
                 placeholder="..."
                 margin="15px 10px 30px 5px"
@@ -685,6 +697,7 @@ export const NovoEntrevistado = ()=>{
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={sobreUso}
+                        maxLength={250}
                         onChangeText={SetSobreUso}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
@@ -697,6 +710,7 @@ export const NovoEntrevistado = ()=>{
           <Input 
             value={novoEntrevistado.propostaMelhorarArea} 
             onChange={(event) => handleOnChangeInput(event, 'propostaMelhorarArea')}
+            maxLength={255}
             placeholder=" "
             margin="15px 10px 30px 5px"
             title="Qual sua sugestão de melhorias para a área?"
@@ -707,6 +721,7 @@ export const NovoEntrevistado = ()=>{
           <Input 
             value={novoEntrevistado.indicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'indicadoConsultaPublica')}
+            maxLength={150}
             placeholder=" "
             margin="15px 10px 30px 5px"
             title="Indicação de um nome para Participar da Consulta Pública"
@@ -717,6 +732,7 @@ export const NovoEntrevistado = ()=>{
           <Input 
             value={novoEntrevistado.contatoIndicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'contatoIndicadoConsultaPublica')}
+            maxLength={50}
             placeholder=" "
             margin="15px 10px 30px 5px"
             title="Informe um contato do indicado"

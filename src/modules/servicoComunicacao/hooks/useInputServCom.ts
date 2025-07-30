@@ -124,7 +124,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://177.74.56.24/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${servicoComunicacao!.id}`, servicoComunicacaoCorrigida) as ServicosComunicacaoType;
+              const response = await connectionAPIPut(`http://177.74.56.24/servico-de-comunicacao/${servicoComunicacao!.id}`, servicoComunicacaoCorrigida) as ServicosComunicacaoType;
                     if (response && response.id) {
                       return fetchServicoComunicacaoAPI(response.id);
                     }else{

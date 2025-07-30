@@ -23,7 +23,7 @@ export const detalharParticipacaoInstituicao = (navigate: NavigationProp<ParamLi
 
 export const NovaParticipacaoInstituicao = ()=>{
    const { params } = useRoute<RouteProp<Record<string, NovaParticipacaoInstituicaoParams>, string>>();
-   const morador = params.morador ?? params.participacaoInstituicao?.morador;
+   const morador = params.morador;
    const participacaoInstituicao = params.participacaoInstituicao;
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const [loading, setLoading] = useState(false); 

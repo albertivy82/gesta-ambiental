@@ -6,13 +6,19 @@ import { theme } from "../../../shared/themes/theme";
 import { RendaOutrasFontesType } from "../../../shared/types/rendaOutrasFontesType";
 import { useState } from "react";
 import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
+import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
 
 
 const RenderItemRendaOutrasFontes = ({ item }: { item: RendaOutrasFontesType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
   
-  
+  const id = typeof item.benfeitoria === 'number'
+      ? item.benfeitoria
+      : Number(item.benfeitoria);
+      
+      const benfeitoria = getBenfeitoria(id)
+
       const handleAcaoAgua = (renda: RendaOutrasFontesType) => {
      
       Alert.alert(
@@ -22,7 +28,7 @@ const RenderItemRendaOutrasFontes = ({ item }: { item: RendaOutrasFontesType }) 
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovaRendaOutrasFontes', { renda }); // reuso da tela para edição
+              navigation.navigate('NovaRendaOutrasFontes', { renda, benfeitoria }); // reuso da tela para edição
             },
           },
           {

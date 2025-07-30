@@ -29,7 +29,8 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
       novoPosto.nome !== "" &&
       novoPosto.ambulatorial !== null &&
       novoPosto.urgenciaEmergencia !== null &&
-      novoPosto.medicosPorTurno > 0;
+      novoPosto.medicosPorTurno < 101 &&
+      novoPosto.medicosPorTurno > 0
 
     setDisabled(!camposPreenchidos);
   }, [novoPosto]);

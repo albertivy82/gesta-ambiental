@@ -6,10 +6,18 @@ import { theme } from "../../../shared/themes/theme";
 import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
 import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
 import { useState } from "react";
+import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
 
 const RenderItemAtividade = ({ item }: { item: AtividadeProdutivaType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
+
+  const id = typeof item.benfeitoria === 'number'
+    ? item.benfeitoria
+    : Number(item.benfeitoria);
+    
+    const benfeitoria = getBenfeitoria(id)
+    
   
   
       const handleAcaoAtividadeProdutiva = (atividadeProdutiva: AtividadeProdutivaType) => {
@@ -21,7 +29,7 @@ const RenderItemAtividade = ({ item }: { item: AtividadeProdutivaType }) => {
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovaAtividade', { atividadeProdutiva }); // reuso da tela para edição
+              navigation.navigate('NovaAtividade', { atividadeProdutiva, benfeitoria }); // reuso da tela para edição
             },
           },
           {

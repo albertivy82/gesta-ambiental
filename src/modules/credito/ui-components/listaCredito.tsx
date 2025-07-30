@@ -6,11 +6,17 @@ import { theme } from "../../../shared/themes/theme";
 import { CreditoType } from "../../../shared/types/CreditoType";
 import { useState } from "react";
 import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
+import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
 
 const RenderItemCredito = ({ item }: { item: CreditoType }) => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [mostrarModalDelete, setMostrarModalDelete] = useState(false);
   
+  const id = typeof item.benfeitoria === 'number'
+      ? item.benfeitoria
+      : Number(item.benfeitoria);
+      
+      const benfeitoria = getBenfeitoria(id)
   
       const handleAcaoCredito = (credito: CreditoType) => {
      
@@ -21,7 +27,7 @@ const RenderItemCredito = ({ item }: { item: CreditoType }) => {
           {
             text: 'Editar',
             onPress: () => {
-              navigation.navigate('NovoCredito', { credito }); // reuso da tela para edição
+              navigation.navigate('NovoCredito', { credito, benfeitoria }); // reuso da tela para edição
             },
           },
           {

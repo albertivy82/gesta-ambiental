@@ -113,7 +113,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://177.74.56.24/credito/benfeitoria-credito/${credito!.id}`, creditoCorrigida) as CreditoType;
+              const response = await connectionAPIPut(`http://177.74.56.24/credito/${credito!.id}`, creditoCorrigida) as CreditoType;
                     if (response && response.id) {
                       return fetchCreditoAPI(response.id);
                     }else{

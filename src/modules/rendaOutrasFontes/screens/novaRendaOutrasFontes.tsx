@@ -24,7 +24,7 @@ export const detalharRenda = (navigate: NavigationProp<ParamListBase>['navigate'
 export const NovaRendaOutrasFontes = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
-  const benfeitoria = params.benfeitoria ?? params.renda?.benfeitoria;
+  const benfeitoria = params.benfeitoria;
   const renda = params.renda;
   const [loading, setLoading] = useState(false); 
   const [fonteRenda, setFonteRenda] = useState<string>('');     

@@ -9,7 +9,7 @@ export const AguaSchema = {
         corDagua: 'string',
         cheiroDagua: 'string',
         saborDagua: 'string',
-        profundidadePoco: 'int?',
+        profundidadePoco: 'float?',
         benfeitoria: 'int?',
         sincronizado: 'bool',
         idLocal: 'string?',

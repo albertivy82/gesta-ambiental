@@ -64,7 +64,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ benfeitoria, destin
           <Icon size={40} name='pencil2' color={disable ? '#aaa' : "#ff4500"} />
           <Text 
             type={textTypes.PARAGRAPH_LIGHT} 
-            color={disable ? "#070707" : "#ff4500"} 
+            color={disable ? "#f0efef" : "#ff4500"} 
             style={{ alignItems: 'baseline' }}
           >
             Editar Item

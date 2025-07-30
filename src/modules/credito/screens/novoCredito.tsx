@@ -24,7 +24,7 @@ export const detalharCredito = (navigate: NavigationProp<ParamListBase>['navigat
 export const NovoCredito = () => {
  const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
-   const benfeitoria = params.benfeitoria ?? params.credito?.benfeitoria;
+   const benfeitoria = params.benfeitoria;
    const credito = params.credito;
    const [loading, setLoading] = useState(false); 
    const {  

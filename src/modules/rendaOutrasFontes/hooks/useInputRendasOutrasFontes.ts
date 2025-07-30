@@ -118,7 +118,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://177.74.56.24/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
+              const response = await connectionAPIPut(`http://177.74.56.24/outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
                     if (response && response.id) {
                       return fetchRendaOutrasFontesAPI(response.id);
                     }else{

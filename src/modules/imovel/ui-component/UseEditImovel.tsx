@@ -60,7 +60,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ imovel, destino, on
 
   return (
     <>
-     <TouchableOpacity onPress={() => setModalVisible(true)} disabled={disable}>
+     <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
           <Icon size={40} name='pencil2' color={disable ? '#aaa' : "#ff4500"} />
           <Text 
