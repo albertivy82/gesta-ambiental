@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getMoradores } from '../../../realm/services/moradorService';
@@ -29,23 +29,34 @@ const Morador = () => {
     const flatListRef = useRef<FlatList>(null);
   const [moradors, setMorador] = useState<MoradorType[]>([]);
  
-  useEffect(()=>{
+  const isFocused = useIsFocused();
+
+  const carregarMoradores = () => {
+    if (benfeitoria) {
       setIsLoading(true);
-        if(benfeitoria){
-           const benfeitoriaRealm = getMoradores(benfeitoria.id);
-            setMorador(benfeitoriaRealm);
-         }
-         setIsLoading(false);
-     }, [benfeitoria])
+      const benfeitoriaRealm = getMoradores(benfeitoria.id);
+      setMorador(benfeitoriaRealm);
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    if (isFocused) {
+      carregarMoradores();
+    }
+  }, [isFocused]);
+  
+  const handleRefresh = () => {
+    carregarMoradores();
+    handleScrollToEnd();
+  };
   
   // Rola até o final da lista
 const handleScrollToEnd = () => {
   flatListRef.current?.scrollToEnd({ animated: true });
 };  
 
-const handleRefresh = () => {
-   handleScrollToEnd();
-};
+
 
   const handleNovoMorador = () => {
     console.log(benfeitoria)

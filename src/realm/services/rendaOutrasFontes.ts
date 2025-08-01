@@ -111,7 +111,7 @@ export const getRendaOutrasFontes = (benfeitoriaId: number): RendaOutrasFontesTy
 };
 
 export const getRendaOutrasFontesDessincronizadas = (benfeitoriaId: number): RendaOutrasFontesType[] => {
-    const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+    const query = `benfeitoria == ${benfeitoriaId} AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const rendaQueue = realmInstance.objects<RendaOutrasFontesType>('RendaOutrasFontes').filtered(query).slice();
     return JSON.parse(JSON.stringify(rendaQueue)) as RendaOutrasFontesType[];
 };

@@ -75,12 +75,12 @@ export const useEntrevistados = (localidadeId: number) =>{
         
             const novoEntrevistadoIput = convertToEntrevistadoInput(entrevistado);
             
-                    
+            console.log("entrevistado para envio", novoEntrevistadoIput)
                 const isConnected = await testConnection();
                 if (isConnected) {
                     try {
-                     
-                        const response = await connectionAPIPost('http://177.74.56.24/entrevistado', novoEntrevistadoIput);
+                     console.log()
+                        const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoIput);
                         const EntrevistadoAPI = response as EntrevistadoType;
                        
                         if (EntrevistadoAPI.id) {
@@ -88,7 +88,7 @@ export const useEntrevistados = (localidadeId: number) =>{
                             apagarEntrevistadoQueue(entrevistado.idLocal!);
                         }
                     } catch (error) {
-                        console.error('Erro na sincronização do imóvel:', error);
+                        console.error('Erro na sincronização do entrevistado:', error);
                     }
                 }
           
@@ -104,7 +104,7 @@ const fetchEntrevistadosFromAPI = async () => {
      if (isConnected) {
            
       try {
-          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://177.74.56.24/entrevistado/localidade-entrevistado/${localidadeId}`);
+          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`);
            
           const entrevistadoData: EntrevistadoType[] = entrevistadoAPI.map(entrevistado => ({
                          ...entrevistado,

@@ -1,5 +1,6 @@
 // Molestias.ts
 export enum Molestias {
+    DESCONHECE = "DESCONHECE",
     MALARIA = "MALÁRIA",
     LEISHMANIOSE = "LEISHMANIOSE",
     HEPATITE = "HEPATITE",

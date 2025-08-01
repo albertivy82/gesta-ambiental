@@ -36,14 +36,12 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
       if (fila.length > 0) {
         for (const atividade of fila) {
           const novaAtividadeInput = convertToAtividadeProdutivaInput(atividade);
-         
-
-         
-            const isConnected = await testConnection();
+         console.log("atividade produtiva", novaAtividadeInput)
+           const isConnected = await testConnection();
             if (isConnected) {
               try {
                 const response = await connectionAPIPost(
-                  "http://177.74.56.24/atividade-produtiva",novaAtividadeInput);
+                  "http://192.168.100.28:8080/atividade-produtiva",novaAtividadeInput);
                    const atividadeAPI = response as AtividadeProdutivaType;
 
                 if (atividadeAPI.id) {
@@ -69,15 +67,15 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
   const fetchAtividadesAPI = async () => {
     try {
       const response = await connectionAPIGet<AtividadeProdutivaType[]>(
-        `http://177.74.56.24/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
+        `http://192.168.100.28:8080/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
       );
 
       const data = response.map((atividade) => ({
         ...atividade,
         faturamentoAtividadeMesTotal:
-        atividade.faturamentoAtividadeMesTotal != null
-          ? String(atividade.faturamentoAtividadeMesTotal)
-          : "0.00", // ou '' se quiser forçar campo vazio
+          atividade.faturamentoAtividadeMesTotal != null
+            ? parseFloat(Number(atividade.faturamentoAtividadeMesTotal).toFixed(2))
+            : 0.0,
         sincronizado: true,
         idLocal: "",
         idFather: "",
@@ -85,7 +83,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
 
       if (data.length > 0) {
          await salvarAtividadesProdutivas(data);
-        setAtividades((prev) => [...prev, ...data]);
+          setAtividades((prev) => [...prev, ...data]);
       } else {
         throw new Error("Dados de atividade produtiva inválidos");
       }

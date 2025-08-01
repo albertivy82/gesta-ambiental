@@ -48,6 +48,7 @@ export const NovoServicoComunicacao = () => {
  const operadoraOptions = Object.values([
   "Oi",
   "Vivo",
+  "Tim",
   "Claro",
   "Não declarado",
   "Outro"
@@ -100,17 +101,18 @@ export const NovoServicoComunicacao = () => {
        label="Selecione o tipo de serviço de comunicação informado"
        selectedValue={serviCom}
        onValueChange={(value) => {
-       setServCom(value ?? 'OUTROS'); 
+       setServCom(value ?? 'Outros'); 
           if (value !== '') {
            SetOutroServCom('');
            }
         }}
         options={servicosOptions}
               />
-               {serviCom.includes('OUTROS') && (
+               {serviCom.includes('Outros') && (
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={outroServCom}
+                        maxLength={100}
                         onChangeText={SetOutroServCom}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"

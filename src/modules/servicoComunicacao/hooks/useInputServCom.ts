@@ -30,6 +30,8 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
       novoServicoComunicacao.operadoraServicoComunicacao !== null
     ) {
       setDisabled(false);
+    }else{
+      setDisabled(true);
     }
   }, [novoServicoComunicacao]);
 
@@ -90,7 +92,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://177.74.56.24/servico-de-comunicacao', novoServicoComunicacao) as ServicosComunicacaoType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/servico-de-comunicacao', novoServicoComunicacao) as ServicosComunicacaoType;
                           
                       if (response && response.id) {
                             return fetchServicoComunicacaoAPI(response.id);
@@ -124,7 +126,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://177.74.56.24/servico-de-comunicacao/${servicoComunicacao!.id}`, servicoComunicacaoCorrigida) as ServicosComunicacaoType;
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/servico-de-comunicacao/${servicoComunicacao!.id}`, servicoComunicacaoCorrigida) as ServicosComunicacaoType;
                     if (response && response.id) {
                       return fetchServicoComunicacaoAPI(response.id);
                     }else{
@@ -160,7 +162,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
    const fetchServicoComunicacaoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<ServicosComunicacaoType>(`http://177.74.56.24/servico-de-comunicacao/${id}`);
+              const response = await connectionAPIGet<ServicosComunicacaoType>(`http://192.168.100.28:8080/servico-de-comunicacao/${id}`);
               if (response) {
                 const servComData = {
                     ...response,

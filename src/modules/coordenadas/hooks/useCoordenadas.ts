@@ -41,14 +41,14 @@ export const useCoordenadas = () =>{
 
             console.log(coordenadaNova)
            
-            const resultBack = await connectionAPIPost(`http://177.74.56.24/coordenada`, coordenadaNova);
+            const resultBack = await connectionAPIPost(`http://192.168.100.28:8080/coordenada`, coordenadaNova);
             
         };
 
 
         const atualizarCoordenada = async (coordenadaId: number) => {
 
-           const resultBack = await connectionAPIPut(`http://177.74.56.24/coordenada/${coordenadaId}`, coordenadaNova);
+           const resultBack = await connectionAPIPut(`http://192.168.100.28:8080/coordenada/${coordenadaId}`, coordenadaNova);
             
         };
     

@@ -79,7 +79,7 @@ export const useNovaViolencia = (benfeitoriaId: number, idBenfeitoriaLocal : str
   
       if (isConnected) {
         try {
-          await connectionAPIPost('http://177.74.56.24/violencia', novaViolencia);
+          await connectionAPIPost('http://192.168.100.28:8080/violencia', novaViolencia);
         } catch (error) {
           const violenciaDataQueue = objetoFila();
           salvarViolenciaQueue(violenciaDataQueue);

@@ -134,7 +134,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const isConnected = await testConnection();
       if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://177.74.56.24/entrevistado', novoEntrevistado) as EntrevistadoType;
+            const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado) as EntrevistadoType;
             if (response && response.id) {
               return fetchEntrevistadoAPI(response.id);
              }
@@ -162,7 +162,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 console.log("enviando para edição", entrevistadoCorrigido)
-                const response = await connectionAPIPut(`http://177.74.56.24/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
+                const response = await connectionAPIPut(`http://192.168.100.28:8080/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
                 console.log("recebendo edição", response)
                 if (response && response.id) {
                      return fetchEntrevistadoAPI(response.id);
@@ -196,7 +196,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const fetchEntrevistadoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<EntrevistadoType>(`http://177.74.56.24/entrevistado/${id}`);
+                const response = await connectionAPIGet<EntrevistadoType>(`http://192.168.100.28:8080/entrevistado/${id}`);
                 if (response) {
                   const bftData = {
                       ...response,

@@ -115,7 +115,7 @@ export const getAguas = (benfeitoriaId: number): AguaType[] => {
 
 export const getAguaDessincronizadas = (benfeitoriaId: number): AguaType[] => {
   console.log("seria o probelma aqui?")
-  const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+  const query = `benfeitoria == ${benfeitoriaId} AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const aguasQueue = realmInstance.objects<AguaType>('Agua').filtered(query).slice();
   return JSON.parse(JSON.stringify(aguasQueue)) as AguaType[];
 };

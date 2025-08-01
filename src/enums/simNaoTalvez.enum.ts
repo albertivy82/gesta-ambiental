@@ -1,5 +1,5 @@
 export enum SimNaoTalvez {
-    SIM = 'SIM',
-    NAO = 'NÃO',  
-    TALVEZ = 'TALVEZ'
+    Sim = 'Sim',
+    Nao = 'Não',  
+    Talvez = 'Talvez'
 }

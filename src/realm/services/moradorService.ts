@@ -40,24 +40,23 @@ export const salvarMoradorQueue = (morador:MoradorInput): Promise<MoradorType>=>
             return - Math.floor(Math.random() * (max - min + 1)) + min; 
         };
         
-        
-                try{
+               try{
                     let moradorSalvo;
                     
                         realmInstance.write(() => {
-                        console.log('ERRO QUEUE');
-                        const moradorPadrao = {
+                       const moradorPadrao = {
                             ...morador,
                             id: Id(), 
                            benfeitoria: morador.benfeitoria!.id,
                         };
             
                         moradorSalvo = realmInstance.create('Morador', moradorPadrao, true);
-                        //console.log("salvarBenfeitoriaQueue", benfeitoriaPadrao)
+                        console.log("salvarBenfeitoriaQueue", moradorPadrao, moradorSalvo)
                     });
 
                     if (moradorSalvo) {
                         const cleanMorador = JSON.parse(JSON.stringify(moradorSalvo))
+                        console.log("salvarBenfeitoriaQueue cleaned", cleanMorador)
                         resolve(cleanMorador as MoradorType);
                     } else {
                     throw new Error("Erro ao recuperar a benfeitoria salva.");

@@ -2,20 +2,12 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { Vizinhos } from "../../../enums/Vizinhos";
-import { documentacao } from "../../../enums/documentacao.enum";
-import { esporteLazerEnum } from "../../../enums/esporteLazer.enum";
-import { limitesTerrenoEnum } from "../../../enums/limitesTerreno.enum";
-import { pavimentacao } from "../../../enums/pavimentacao.enum";
 import { SimNao } from "../../../enums/simNao.enum";
-import { situacaoFundiaria } from "../../../enums/situacaoFundiaria.enum";
-import { tipoSoloEnum } from "../../../enums/tipoSolo.enum";
 import LocationInput from "../../../shared/components/input/LocationInput";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
-import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
@@ -50,9 +42,10 @@ export const NovoImovel = () => {
   const [pavimentacaoInformada, setPavimentacaoInformada] = useState<string[]>([]);  
   const [outrasInformadas, SetOutrasInformadas] = useState<string>('');
   const [vizinhosConfinantesInformados, setVizinhosConfinantesInformados] = useState<string[]>([]);
-  const [outrasVizinhosConfinantes, setOutrasVizinhosConfinantes] = useState<string>('');
   const [equipamentosUrbanosInformados, setEquipamentosUrbanosInformados] = useState<string[]>([]);
   const [outrosEquipamentosUrbanos, setOutrosEquipamentosUrbanos] = useState<string>('');
+  const [espacosLazer, setEspacosLazer]  = useState<string[]>([]);
+  const [outrosEspacosLazer, setOutrosEspacosLazer] = useState<string>('');
   
       
       
@@ -66,15 +59,7 @@ export const NovoImovel = () => {
       
   },[pavimentacaoInformada, outrasInformadas ])
 
-  
-  useEffect(() => {
-    const consolidaVizinhosConfinantes = [
-        ...vizinhosConfinantesInformados.filter((item) => item !== 'Outras'),
-        ...(outrasVizinhosConfinantes ? [`Outras: ${outrasVizinhosConfinantes}`] : []),
-    ];
 
-    handleArrayFieldChange('vizinhosConfinantes', consolidaVizinhosConfinantes);
-  }, [vizinhosConfinantesInformados, outrasVizinhosConfinantes]);
 
 
   useEffect(() => {
@@ -86,23 +71,76 @@ export const NovoImovel = () => {
     handleArrayFieldChange('equipamentosUrbanos', consolidaEquipamentosUrbanos);
   }, [equipamentosUrbanosInformados, outrosEquipamentosUrbanos]);
 
+  useEffect(() => {
+    const consolidaEspacosLaze = [
+        ...espacosLazer.filter((item) => item !== 'Outros'),
+        ...(outrosEspacosLazer ? [outrosEspacosLazer] : []),
+    ];
+
+    handleArrayFieldChange('espacosEsporteLazer', consolidaEspacosLaze);
+  }, [espacosLazer, outrosEspacosLazer]);
 
      
-    const fundiarioOptions = Object.values(situacaoFundiaria);
-    const documentacaoOptions = Object.values(documentacao);
-    const limitesOptions = Object.values(limitesTerrenoEnum);
-    const soloOptions = Object.values(tipoSoloEnum);
-    const lazerOptions = Object.values(esporteLazerEnum);
+    const fundiarioOptions = Object.values([
+      'Proprietário',
+      'Ocupação com benfeitoria',
+      'Aluguel',
+      'Posse',
+      'Outros'
+    ]);
+    const documentacaoOptions = Object.values([
+      'Recibo de compra e venda',      
+      'Escritura pública',             
+      'Escritura',                     
+      'Certidão',                     
+      'Título de posse',              
+      'Não possui'                    
+    ]);
+    const limitesOptions = Object.values([
+      'Muro de alvenaria',       
+      'Cerca de madeira',        
+      'Cerca de arame',         
+      'Cerca viva',               
+      'Sem cerca'                 
+    ]);
+    const soloOptions = Object.values([
+      'Várzea',
+      'Terra firme',
+      'Igapó'
+    ]);
+    const lazerOptions = Object.values([
+      'Campo de futebol',       
+      'Quadra poliesportiva',    
+      'Sede esportiva',          
+      'Balneários',              
+      'Parques',                
+      'Outros'                   
+    ]);
     const equipamentosUrbanosOptions = Object.values(SimNao);
     const simNaoOptions =  Object.values(SimNao);
-    const vizinhoOptions =  Object.values(Vizinhos);
+    const vizinhoOptions =  Object.values([
+      'Lado esquerdo',
+      'Lado direito',
+      'Atrás',
+      'Em frente',
+      'Não declarado',
+      'Não possui'
+    ]);
+    const pavimentacaoOptions = Object.values([
+      'Asfalto',
+      'Bloket',
+      'Picarra',
+      'Nenhum',
+      'Outro'
+    ]
+    );
     const ruaInput = useRef<TextInput>(null);
     const numeroInput = useRef<TextInput>(null);
     const bairroInput = useRef<TextInput>(null);
     const referencialInput = useRef<TextInput>(null);
     const areaImovelInput = useRef<TextInput>(null);
     const linhaBarcoInput = useRef<TextInput>(null);
-    const pavimentacaoOptions = Object.values(pavimentacao);
+    
     
     useEffect(() => {
       if (!imovel) return;
@@ -162,6 +200,7 @@ export const NovoImovel = () => {
         <ImovelDetailContainer>
            <Input 
               value={novoImovel.rua} 
+              maxLength={255}
               onChange={(event)=> handleOnChangeInput(event, 'rua')}
               placeholder="Informe a rua do imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -172,6 +211,7 @@ export const NovoImovel = () => {
 
            <Input 
               value={novoImovel.numero} 
+              maxLength={45}
               onChange={(event)=> handleOnChangeInput(event, 'numero')}
               placeholder="Imforme o número do Imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -182,6 +222,7 @@ export const NovoImovel = () => {
 
            <Input 
               value={novoImovel.bairro} 
+              maxLength={255}
               onChange={(event)=> handleOnChangeInput(event, 'bairro')}
               placeholder="Informe o bairro imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -194,6 +235,7 @@ export const NovoImovel = () => {
 
             <Input 
               value={novoImovel.referencial} 
+              maxLength={255}
               onChange={(event)=> handleOnChangeInput(event, 'referencial')}
               placeholder="Informe uma referência para o imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -222,6 +264,7 @@ export const NovoImovel = () => {
               )}
             <Input
               value={novoImovel.areaImovel?.toFixed(2) || ''}
+              maxLength={20}
               onChange={handleOnChangeAreaImovel}
               keyboardType='numeric'
               placeholder="Área em m²"
@@ -245,36 +288,15 @@ export const NovoImovel = () => {
                  )}
 
                 <CheckboxSelector
-                    options={vizinhoOptions}
-                    selectedValues={vizinhosConfinantesInformados}
-                    label="Vizinhos Confinantes:"
-                    onSave={(selectedValues) => {
-                        setVizinhosConfinantesInformados(selectedValues);
-                        if (!selectedValues.includes('Outras')) {
-                            setOutrasVizinhosConfinantes('');
-                        }
+                 options={vizinhoOptions}
+                 selectedValues={vizinhosConfinantesInformados}
+                 label="Vizinhos Confinantes:"
+                 onSave={(selectedValues) => {
+                      setVizinhosConfinantesInformados(selectedValues);
+                      handleArrayFieldChange('vizinhosConfinantes', selectedValues); 
                     }}
-                />
-                {vizinhosConfinantesInformados.includes('Outras') && (
-                    <View style={{ marginTop: 10 }}>
-                        <Text
-                            margin="0px 0px 4px 8px"
-                            color={theme.colors.whiteTheme.white}
-                            type={textTypes.SUB_TITLE_BOLD}
-                        >
-                            Informe quais:
-                        </Text>
-                        <Input
-                            value={outrasVizinhosConfinantes}
-                            onChangeText={setOutrasVizinhosConfinantes}
-                            placeholder="Separe as informações por vírgula"
-                            placeholderTextColor={theme.colors.grayTheme.gray80}
-                            margin="15px 10px 30px 5px"
-                            title="Informe quais:"
-                        />
-                    </View>
-                )}
-           
+                 />
+               
 
              <RenderPicker
               label="Situação Fundiária"
@@ -301,6 +323,7 @@ export const NovoImovel = () => {
 
               <Input 
               value={novoImovel.linhasDeBarco} 
+              maxLength={255}
               onChange={(event)=> handleOnChangeInput(event, 'linhasDeBarco')}
               placeholder="Se houver, informe as linhas de barco do local"
               placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -321,22 +344,16 @@ export const NovoImovel = () => {
                 label="Pavimentação das vias?:"
                 onSave={(selectedValues) => {
                     setPavimentacaoInformada(selectedValues);
-                    if (!selectedValues.includes('Outras')) {
+                    if (!selectedValues.includes('Outro')) {
                         SetOutrasInformadas('');
                     }
                 }}
             />
-            {pavimentacaoInformada.includes('Outras') && (
+            {pavimentacaoInformada.includes('Outro') && (
                 <View style={{ marginTop: 10 }}>
-                    <Text
-                        margin="0px 0px 4px 8px"
-                        color={theme.colors.whiteTheme.white}
-                        type={textTypes.SUB_TITLE_BOLD}
-                    >
-                        Informe quais:
-                    </Text>
-                    <Input
+                   <Input
                         value={outrasInformadas}
+                        maxLength={200}
                         onChangeText={SetOutrasInformadas}
                         placeholder="Separe as informações por vírgula"
                         placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -366,22 +383,16 @@ export const NovoImovel = () => {
                     label="Equipamentos Urbanos Disponíveis:"
                     onSave={(selectedValues) => {
                         setEquipamentosUrbanosInformados(selectedValues);
-                        if (!selectedValues.includes('Outras')) {
+                        if (!selectedValues.includes('Sim')) {
                             setOutrosEquipamentosUrbanos('');
                         }
                     }}
                 />
-                {equipamentosUrbanosInformados.includes('SIM') && (
+                {equipamentosUrbanosInformados.includes('Sim') && (
                     <View style={{ marginTop: 10 }}>
-                        <Text
-                            margin="0px 0px 4px 8px"
-                            color={theme.colors.whiteTheme.white}
-                            type={textTypes.SUB_TITLE_BOLD}
-                        >
-                            Informe quais:
-                        </Text>
                         <Input
                             value={outrosEquipamentosUrbanos}
+                            maxLength={200}
                             onChangeText={setOutrosEquipamentosUrbanos}
                             placeholder="Se não souber, infomar 'não sabe'"
                             placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -392,17 +403,35 @@ export const NovoImovel = () => {
                 )}
 
                 
-              
-             <RenderPicker
-             label="Espaços de Lazer?"
-             selectedValue={novoImovel.espacosEsporteLazer}
-             onValueChange={(value) => handleEnumChange('espacosEsporteLazer', value)}
-             options={lazerOptions}
-             />
+             <CheckboxSelector
+                options={lazerOptions}
+                selectedValues={espacosLazer}
+               label="Espaços de Lazer?"
+                onSave={(selectedValues) => {
+                    setEspacosLazer(selectedValues);
+                    if (!selectedValues.includes('Outros')) {
+                        setOutrosEspacosLazer('');
+                    }
+                }}
+            />
+            {espacosLazer.includes('Outros') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={outrosEspacosLazer}
+                        maxLength={300}
+                        onChangeText={setOutrosEspacosLazer}
+                        placeholder="Separe as informações por vírgula"
+                        placeholderTextColor={theme.colors.grayTheme.gray80}
+                        margin="15px 10px 30px 5px"
+                        title="Informe quais:"
+                    />
+                </View>
+            )}
 
               
              <Input 
               value={novoImovel.programaInfraSaneamento} 
+              maxLength={450}
               onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
               placeholder="Conhece algum destinado para a área?"
               placeholderTextColor={theme.colors.grayTheme.gray80}

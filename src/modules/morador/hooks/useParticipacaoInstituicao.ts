@@ -11,7 +11,7 @@ export const convertToParticipacaoInstituicaoInput = (ParticipacaoInstituicao: a
     
     instituicao: ParticipacaoInstituicao.instituicao,
     tipoDeRegistro: ParticipacaoInstituicao.tipoDeRegistro,
-    registro: ParticipacaoInstituicao.Registro,
+    registro: ParticipacaoInstituicao.registro,
     morador: {
       id: ParticipacaoInstituicao.morador,
     },
@@ -28,13 +28,11 @@ export const useParticipacaoInstituicoes = (moradorId: number) => {
       if (queue.length > 0) {
         for (const participacaoInsituicao of queue) {
           const novoParticipacaoInstituicaoInput = convertToParticipacaoInstituicaoInput(participacaoInsituicao);
-         
-
-         
-            const isConnected = await testConnection();
+         console.log("participação enviada", novoParticipacaoInstituicaoInput)
+           const isConnected = await testConnection();
             if (isConnected) {
               try {
-                const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novoParticipacaoInstituicaoInput);
+                const response = await connectionAPIPost('http://192.168.100.28:8080/participacao-instituicao', novoParticipacaoInstituicaoInput);
                 const participacaoInsituicaoAPI = response as ParticipacaoInstituicaoType;
 
                 if (participacaoInsituicaoAPI.id) {
@@ -52,6 +50,7 @@ export const useParticipacaoInstituicoes = (moradorId: number) => {
 
   const fetchParticipacaoInstituicoesRealm = () => {
     const realmData = getParticipacoesIntitucionais(moradorId);
+    console.log("aaaa", realmData)
     if (realmData.length > 0) {
       setParticipacaoInstituicoes((prev) => [...prev, ...realmData]);
     }
@@ -59,7 +58,7 @@ export const useParticipacaoInstituicoes = (moradorId: number) => {
 
           const fetchParticipacaoInstituicoesAPI = async () => {
             try {
-              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://177.74.56.24/participacao-instituicao/${moradorId}`);
+              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://192.168.100.28:8080/participacao-instituicao/${moradorId}`);
 
              const participacaoData: ParticipacaoInstituicaoType[] = response.map(partcipacao => ({
                                        ...partcipacao,

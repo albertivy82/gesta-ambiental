@@ -80,7 +80,7 @@ export const useInputUsers = ()=>{
         const formattedUser = formatUserData(novoUsuario);
 
         try{
-            const response: Response = await connectionAPIPost('http://177.74.56.24/usuario', formattedUser);
+            const response: Response = await connectionAPIPost('http://192.168.100.28:8080/usuario', formattedUser);
             navigation.navigate('Users');
         } catch (error) {
              console.error(error);
@@ -91,7 +91,7 @@ export const useInputUsers = ()=>{
         
         const formattedUser = formatUserData(novoUsuario);
         try{
-            const response: Response = await connectionAPIPut(`http://177.74.56.24/usuario/${id}`, formattedUser);
+            const response: Response = await connectionAPIPut(`http://192.168.100.28:8080/usuario/${id}`, formattedUser);
             navigation.navigate('Users');
          } catch (error) {
             console.error(error);

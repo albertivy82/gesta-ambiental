@@ -97,6 +97,7 @@ export const NovaRendaOutrasFontes = () => {
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={outraFonte}
+                        maxLength={150}
                         onChangeText={SetOutraFonte}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
@@ -114,6 +115,7 @@ export const NovaRendaOutrasFontes = () => {
        <Input
               value={novaRendaOutrasFontes.beneficiarios?.toString() || ''}
               onChange={(event)=> handleNumberChange(event, 'beneficiarios')}
+              maxLength={3}
               keyboardType='numeric'
               placeholder="..."
               margin="15px 10px 30px 5px"
@@ -130,6 +132,7 @@ export const NovaRendaOutrasFontes = () => {
       <Input
               value={novaRendaOutrasFontes.rendaMesTotal.toFixed(2)}
               onChange={handleOnChangeRendimentoMensal}
+              maxLength={10}
               keyboardType='numeric'
               placeholder="R$"
               margin="15px 10px 30px 5px"

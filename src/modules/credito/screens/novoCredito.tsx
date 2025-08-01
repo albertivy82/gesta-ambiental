@@ -70,6 +70,7 @@ export const NovoCredito = () => {
         
         <Input 
           value={novoCredito.nome} 
+          maxLength={250}
           onChange={(event) => handleOnChangeInput(event, 'nome')}
           placeholder="..."
           margin="15px 10px 30px 5px"
@@ -82,6 +83,7 @@ export const NovoCredito = () => {
         )}
          <Input
               value={novoCredito.valor.toFixed(2)}
+              maxLength={10}
               onChange={handleOnChangeRendimentoMensal}
               keyboardType='numeric'
               placeholder="R$"

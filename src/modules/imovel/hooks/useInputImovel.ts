@@ -19,16 +19,16 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     latitude: '',
     longitude: '',
     areaImovel: 0,
-    tipoSolo: null,
+    tipoSolo: '',
     vizinhosConfinantes: '',
-    situacaoFundiaria: null,
-    documentacaoImovel: null,
-    limites: null,
+    situacaoFundiaria: '',
+    documentacaoImovel: '',
+    limites: '',
     linhasDeBarco: '',
     pavimentacao: '',
     iluminacaoPublica: null,
     equipamentosUrbanos: '',
-    espacosEsporteLazer: null,
+    espacosEsporteLazer: '',
     programaInfraSaneamento: '',
     entrevistado: {
         id: 0,
@@ -43,30 +43,36 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
     const [novoImovel, setNovoImovel] = useState<imovelInput>(DEFAUL_IMOVEL_INPUT);
     const [disabled, setDisabled] = useState<boolean>(true);
    
-    useEffect(() => {
-      
-      if (
-          novoImovel.rua !== '' && 
-          novoImovel.numero !== '' && 
-          novoImovel.bairro !== '' && 
-          novoImovel.referencial !== '' && 
-          novoImovel.latitude !== '' && 
-          novoImovel.longitude !== '' && 
-          novoImovel.areaImovel > 1 &&
-          novoImovel.vizinhosConfinantes !== '' &&
-          novoImovel.situacaoFundiaria !== null &&
-          novoImovel.documentacaoImovel !== null &&
-          novoImovel.limites !== null &&
-          novoImovel.linhasDeBarco !== '' &&
-          novoImovel.pavimentacao !== '' &&
-          novoImovel.iluminacaoPublica !== null &&
-          novoImovel.equipamentosUrbanos !== '' &&
-          novoImovel.espacosEsporteLazer !== null &&
-          novoImovel.programaInfraSaneamento !== ''
-      ) {
-          setDisabled(false);
-      }
-  }, [novoImovel]);
+    
+  useEffect(() => {
+    const areaValida = novoImovel.areaImovel >= 10 && novoImovel.areaImovel <= 1000000;
+    
+    console.log(novoImovel)
+    if (
+        novoImovel.rua !== '' &&
+        novoImovel.numero !== '' &&
+        novoImovel.bairro !== '' &&
+        novoImovel.referencial !== '' &&
+         areaValida &&
+        novoImovel.tipoSolo !== '' &&
+        novoImovel.vizinhosConfinantes !== '' &&
+        novoImovel.situacaoFundiaria !== null &&
+        novoImovel.documentacaoImovel !== null &&
+        novoImovel.limites !== null &&
+        novoImovel.linhasDeBarco !== '' &&
+        novoImovel.pavimentacao !== '' &&
+        novoImovel.iluminacaoPublica !== null &&
+        novoImovel.equipamentosUrbanos !== '' &&
+        novoImovel.espacosEsporteLazer !== null &&
+        novoImovel.programaInfraSaneamento !== ''
+        
+    ) {
+        setDisabled(false);
+    } else {
+        setDisabled(true);
+    }
+}, [novoImovel]);
+
   
 
   const objetoFila = () => {
@@ -102,7 +108,8 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
     
     if (!entrevistado.sincronizado && entrevistado.id <= 0) {
         const imovelDataQueue = objetoFila();
-        salvarImovelQueue(imovelDataQueue);
+        const imovelQueue = await salvarImovelQueue(imovelDataQueue);
+        return imovelQueue;
     } else {
         novoImovel.entrevistado = { id: entrevistado.id };
         console.log( novoImovel.entrevistado)
@@ -112,19 +119,21 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
             if (isConnected) {
                 try {
                   
-                   console.log( novoImovel)
-                  const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovel) as imovelBody;
+                   console.log("novo", novoImovel)
+                  const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel) as imovelBody;
                   if (response && response.id) {
                     return fetchImovelAPI(response.id);
                    }      
                 } catch (error) {
                   const imovelDataQueue = objetoFila();
-                  salvarImovelQueue(imovelDataQueue);
+                  const imovelQueue = await salvarImovelQueue(imovelDataQueue);
+                  return imovelQueue;
+                   
                 }
             } else {
                 const imovelDataQueue = objetoFila();
-                salvarImovelQueue(imovelDataQueue);
-                console.log("useInputImovel_f", novoImovel)
+                const imovelQueue = await salvarImovelQueue(imovelDataQueue);
+                return imovelQueue;
             }
     }
   };
@@ -141,7 +150,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
             try{
               console.log("está ok",imovelCorrigido)
-              const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
               
               if (response && response.id) {
                   return fetchImovelAPI(response.id);
@@ -177,7 +186,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
    const fetchImovelAPI = async(id:number) =>{
       
               try{
-                  const response = await connectionAPIGet<imovelBody>(`http://177.74.56.24/imovel/${id}`);
+                  const response = await connectionAPIGet<imovelBody>(`http://192.168.100.28:8080/imovel/${id}`);
                   if (response) {
                     const imovelData = {
                         ...response,

@@ -118,7 +118,8 @@ export const getParticipacoesIntitucionais = (moradorId: number): ParticipacaoIn
 };
 
 export const getParticipacoesIntitucionaisDessincronizadas = (moradorId: number): ParticipacaoInstituicaoType[] => {
-  const query = `morador == "${moradorId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+   const query = `morador == ${moradorId} AND sincronizado == false AND (idFather == null OR idFather == "")`;
+
   const participacoesIntitucionaisQueue = realmInstance
     .objects<ParticipacaoInstituicaoType>('ParticipacaoInstituicao')
     .filtered(query)

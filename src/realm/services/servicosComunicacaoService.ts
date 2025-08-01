@@ -114,7 +114,7 @@ export const getServicosComunicacao = (benfeitoriaId: number): ServicosComunicac
 };
 
 export const getServicosComunicacaoDessincronizados = (benfeitoriaId: number): ServicosComunicacaoType[] => {
-  const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+  const query = `benfeitoria == ${benfeitoriaId} AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const servicosQueue = realmInstance
     .objects<ServicosComunicacaoType>('ServicosComunicacao')
     .filtered(query)

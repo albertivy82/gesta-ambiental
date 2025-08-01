@@ -42,12 +42,12 @@ export const useMoradores = (benfeitoriaId: number) => {
             if (isConnected) {
               try {
                 console.log("2", novoMoradorInput)
-                const response = await connectionAPIPost('http://177.74.56.24/morador', novoMoradorInput);
+                const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMoradorInput);
                 console.log("3", response)
                 const moradorAPI = response as MoradorType;
                 console.log("4", moradorAPI)
                 if (moradorAPI.id) {
-                  setIdMoradorFromApiOnInstituicao(moradorAPI.id, novoMoradorInput.idLocal!)
+                  setIdMoradorFromApiOnInstituicao(moradorAPI.id, morador.idLocal!)
                   apagarMoradorQueue(morador.idLocal!);
                 }
               } catch (error) {
@@ -70,7 +70,7 @@ export const useMoradores = (benfeitoriaId: number) => {
   const fetchMoradoresAPI = async () => {
     try {
       const response = await connectionAPIGet<MoradorType[]>(
-        `http://177.74.56.24/morador/benfeitoria-morador/${benfeitoriaId}`
+        `http://192.168.100.28:8080/morador/benfeitoria-morador/${benfeitoriaId}`
       );
 
       const apiData = response.map((item) => ({

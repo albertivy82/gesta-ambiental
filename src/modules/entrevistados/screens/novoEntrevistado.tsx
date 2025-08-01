@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
-import { AtendimentoSaude } from "../../../enums/AtendimentoSaude.enum";
 import { Compras } from "../../../enums/Compras.enum";
 import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
 import { ServicoPublicos } from "../../../enums/ServicoPublicos";
@@ -118,7 +117,19 @@ export const NovoEntrevistado = ()=>{
     'Entre 26 e 30 anos',
     'Acima de 30 anos']);
     
-    const saudeOptions = Object.values(AtendimentoSaude);
+    const saudeOptions = Object.values([
+      'Consulta com técnico no posto de saúde da comunidade',
+      'Consulta com o enfermeiro no posto de saúde',
+      'Atendimento no Programa Saúde da Família',
+      'Atendimento por agentes comunitários de saúde',
+      'Trata com curandeiro',
+      'Participa das campanhas de vacinação',
+      'Atendimento por parteiras',
+      'Atendimento em outra localidade',
+      'Não declarado',
+      'Outros'
+    ]
+    );
     const sexoEscolaridade = Object.values([
       "Analfabeto",
       "Fundamental completo",
@@ -212,9 +223,9 @@ export const NovoEntrevistado = ()=>{
 
 
     useEffect(() => {
-      const consolidaDados = usoArea === 'SIM' 
+      const consolidaDados = usoArea === 'Sim' 
         ? (sobreUso ? [`COMO: ${sobreUso}`] : [])  // Se for "SIM", adiciona sobreUso se houver
-        : ['NÃO']; // Se não for "SIM", mantém apenas "NÃO"
+        : ['Não']; // Se não for "SIM", mantém apenas "Não"
     
       handleArrayFieldChange('utilizaAreaUc', consolidaDados);
     
@@ -236,9 +247,9 @@ export const NovoEntrevistado = ()=>{
     },[idade])
 
     useEffect(() => {
-      const consolidaDados = conheceInstituicao === 'SIM' 
+      const consolidaDados = conheceInstituicao === 'Sim' 
         ? (quaisConhece ? [`Instituições Conhecidas: ${quaisConhece}`] : [])  // Se for "SIM", adiciona sobreUso se houver
-        : ['NÃO']; // Se não for "SIM", mantém apenas "NÃO"
+        : ['Não']; // Se não for "SIM", mantém apenas "Não"
     
       handleArrayFieldChange('instituicaoConhecida', consolidaDados);
     
@@ -377,10 +388,11 @@ export const NovoEntrevistado = ()=>{
                 />
 
                 {/* Exibe o campo de texto apenas se a resposta for 'Sim' */}
-                {novoEntrevistado.pretendeMudar === SimNaoTalvez.SIM && ( 
+                {novoEntrevistado.pretendeMudar === SimNaoTalvez.Sim&& ( 
                   <View style={{ marginTop: 10 }}>
                     <Input 
                       value={novoEntrevistado.motivoVontadeMudanca} 
+                      maxLength={255}
                       onChange={(event) => handleOnChangeInput(event, 'motivoVontadeMudanca')}
                       placeholder="Por qual motivo?"
                       margin="15px 10px 30px 5px"
@@ -437,6 +449,7 @@ export const NovoEntrevistado = ()=>{
             {alimentacoInformada.includes('OUTRAS') && (
                 <View style={{ marginTop: 10 }}>
                     <Input
+                        maxLength={255}
                         value={outrasInformadas}
                         onChangeText={setOutrasInformadas}
                         placeholder="Separe as informações por vírgula"
@@ -468,6 +481,7 @@ export const NovoEntrevistado = ()=>{
             {localCompras.includes('OUTRA_LOCALIDADE') && (
                 <View style={{ marginTop: 10 }}>
                     <Input
+                        maxLength={200}
                         value={outrosLocais}
                         onChangeText={SetOutrosLocais}
                         placeholder="Separe as informações por vírgula"
@@ -491,15 +505,16 @@ export const NovoEntrevistado = ()=>{
                 label="Como é feito o atendimento de saúde a sua família?"
                 onSave={(selectedValues) => {
                     setCuidadoMedico(selectedValues);
-                    if (!selectedValues.includes('OUTROS')) {
+                    if (!selectedValues.includes('Outros')) {
                         SetOutrosCuidados('');
                     }
                 }}
             />
-            {cuidadoMedico.includes('OUTROS') && (
+            {cuidadoMedico.includes('Outros') && (
                 <View style={{ marginTop: 10 }}>
                     <Input
                         value={outrosCuidados}
+                        maxLength={100}
                         onChangeText={SetOutrosCuidados}
                         placeholder="Separe as informações por vírgula"
                         margin="15px 10px 30px 5px"
@@ -522,12 +537,12 @@ export const NovoEntrevistado = ()=>{
                 label="Serviços Públicos: quais os maiores problemas enfrentados?"
                 onSave={(selectedValues) => {
                   setServicosPublicos(selectedValues);
-                  if (!selectedValues.includes('OUTRA_LOCALIDADE')) {
+                  if (!selectedValues.includes('Outros')) {
                       SetOutrosServicosPublicos('');
                   }
               }}
             />
-            {servicosPublicos.includes('OUTROS') && (
+            {servicosPublicos.includes('Outros') && (
                 <View style={{ marginTop: 10 }}>
                     <Input
                         value={outrosLServicosPublicos}
@@ -592,9 +607,9 @@ export const NovoEntrevistado = ()=>{
                       SetQuaisConhece('');
                     }
                   }}
-                  options={['SIM', 'NÃO']}
+                  options={['Sim', 'Não']}
               />
-               {conheceInstituicao.includes('SIM') && (
+               {conheceInstituicao.includes('Sim') && (
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={quaisConhece}
@@ -687,17 +702,17 @@ export const NovoEntrevistado = ()=>{
                   selectedValue={usoArea}
                   onValueChange={(value) => {
                     setUsoArea(value ?? ''); 
-                    if (value !== 'SIM') {
+                    if (value !== 'Sim') {
                       SetSobreUso('');
                     }
                   }}
-                  options={['SIM', 'NÃO']}
+                  options={['Sim', 'Não']}
                 />
-            {usoArea.includes('SIM') && (
+            {usoArea.includes('Sim') && (
                 <View style={{ marginTop: 10 }}>
                    <Input
                         value={sobreUso}
-                        maxLength={250}
+                        maxLength={240}
                         onChangeText={SetSobreUso}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"

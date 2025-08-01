@@ -64,11 +64,11 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                 const isConnected = await testConnection();
               
                     if (isConnected) {
-                        console.log("useBenfeitorias/isConnected", isConnected)
+                       // console.log("useBenfeitorias/isConnected", isConnected)
                         try {
-                            console.log("benfeitoria enviada",novaBenfeitoriaInput)
-                            const response = await connectionAPIPost('http://177.74.56.24/benfeitoria', novaBenfeitoriaInput);
-                            console.log("benfeitpria. ponto de sisncronização 5")
+                           // console.log("benfeitoria enviada",novaBenfeitoriaInput)
+                            const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoriaInput);
+                           // console.log("benfeitpria. ponto de sisncronização 5")
                             const benfeitoriaAPI = response as BenfeitoriaType;
                            
                                 if(benfeitoriaAPI.id){
@@ -79,7 +79,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                                     setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     apagarBenfeitiaQueue(benfeitoria.idLocal!)
-                                    console.log("benfeitpria. ponto de sisncronização 6", )
+                                    //console.log("benfeitpria. ponto de sisncronização 6", )
                                 }
                                 
                         } catch (error) {
@@ -105,7 +105,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
     const fetchBefeitoriasAPI = async() =>{
 
         try{
-            const response = await connectionAPIGet<BenfeitoriaType[]>(`http://177.74.56.24/benfeitoria/imovel-benfeitoria/${imovelId}`);
+            const response = await connectionAPIGet<BenfeitoriaType[]>(`http://192.168.100.28:8080/benfeitoria/imovel-benfeitoria/${imovelId}`);
                 const bftData = response.map(bft=>({
                     ...bft,
                     sincronizado:true,
@@ -113,7 +113,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                     idFather:'',
 
                 }))
-                console.log("benfeitpria. circuito da API")    
+              //  console.log("benfeitpria. circuito da API")    
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
                       await salvarBenfeitorias(bftData);
                        setBenfeitoria((prevBenf) => [...prevBenf, ...bftData]);

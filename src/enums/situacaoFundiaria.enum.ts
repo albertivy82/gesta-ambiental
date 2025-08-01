@@ -1,8 +1,0 @@
-export enum situacaoFundiaria {
-    PROPRIETARIO = 'PROPRIETARIO',
-    OCUPACAO_COM_BENFEITORIA = 'OCUPACAO_COM_BENFEITORIA',
-    ALUGUEL = 'ALUGUEL',
-    POSSE = 'POSSE',
-    OUTROS = 'OUTROS'
-    
-}

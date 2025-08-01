@@ -115,7 +115,7 @@ export const getAtividadesProdutivas = (benfeitoriaId: number): AtividadeProduti
 };
 
 export const getAtividadesProdutivasDessincronizadas = (benfeitoriaId: number): AtividadeProdutivaType[] => {
-  const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+  const query = `benfeitoria == ${benfeitoriaId} AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const atividadesQueue = realmInstance.objects<AtividadeProdutivaType>('AtividadeProdutiva').filtered(query).slice();
   return JSON.parse(JSON.stringify(atividadesQueue)) as AtividadeProdutivaType[];
 };

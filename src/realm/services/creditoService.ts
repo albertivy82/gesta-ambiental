@@ -113,7 +113,7 @@ export const getCreditos = (benfeitoriaId: number): CreditoType[] => {
 };
 
 export const getCreditosDessincronizados = (benfeitoriaId: number): CreditoType[] => {
-  const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+  const query = `benfeitoria == ${benfeitoriaId} AND sincronizado == false AND (idFather == null OR idFather == "")`;
   const creditosQueue = realmInstance
     .objects<CreditoType>('Credito')
     .filtered(query)

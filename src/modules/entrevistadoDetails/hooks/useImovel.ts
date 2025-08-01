@@ -1,7 +1,7 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { setIdImovelFromApiOnBenfeitoria } from "../../../realm/services/benfeitoriaService";
-import { apagarImovelQueue, getImoveisDessincronizados, getImovel, salvarImoveis } from "../../../realm/services/imovelService";
+import { apagarImovelQueue, getImoveisDessincronizados, getImovel, getTodosImoveis, salvarImoveis } from "../../../realm/services/imovelService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";
@@ -25,7 +25,7 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
       linhasDeBarco: imovel.linhasDeBarco,
       pavimentacao: imovel.pavimentacao,
       iluminacaoPublica: imovel.iluminacaoPublica,
-      equipamentosUrbanos: imovel.equipamntosUrbanos,
+      equipamentosUrbanos: imovel.equipamentosUrbanos, // corrigido aqui
       espacosEsporteLazer: imovel.espacosEsporteLazer,
       programaInfraSaneamento: imovel.programaInfraSaneamento,
       entrevistado: {
@@ -38,36 +38,56 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
 
 
 
+
 export const useImovel = (idEntrevistado: number) => {
    const [imovelPresente, setImovelPresente] = useState<imovelBody>();
    
-  const sinconizeImovelQueue = async () => {
+ const sinconizeImovelQueue = async () => {
+ console.log(getTodosImoveis()) ;
       const imovelQueue = getImoveisDessincronizados(idEntrevistado);
-  
+     
       if (imovelQueue) {
         const novoImovelInput = convertToImovelInput(imovelQueue);
-       
-       
+             
           const isConnected = await testConnection();
           if (isConnected) {
             try {
-              const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovelInput);
+             
+              const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovelInput) as imovelBody;
+             
               const imovelAPI = response as imovelBody;
-  
+              
               if (imovelAPI.id) {
                 setIdImovelFromApiOnBenfeitoria(imovelAPI.id, imovelQueue.idLocal!);
                 apagarImovelQueue(imovelAPI.idLocal!);
-                fetchImovelRealm();
+                
               }
-            } catch (error) {
-              console.log('Há imóveis com problemas de sincronização com a API: '+ error);
+            } catch (error: any) {
+              if (error.response) {
+                // Erro HTTP com resposta do servidor
+                console.error("❌ Erro da API (HTTP 400 ou 500):");
+                console.error("Status:", error.response.status);
+                console.error("Headers:", error.response.headers);
+                console.error("Body:", JSON.stringify(error.response.data, null, 2));
+              } else if (error.request) {
+                // Requisição enviada, mas sem resposta
+                console.error("⚠️ Requisição enviada, mas sem resposta da API:");
+                console.error(error.request);
+              } else {
+                // Erro de configuração, timeout, etc.
+                console.error("❌ Erro inesperado no cliente:");
+                console.error("Mensagem:", error.message);
+                console.error("Erro completo:", error);
+              }
             }
+            
           }
         
       }
     };
   
     const fetchImovelRealm = () => {
+      
       const imovelRealm = getImovel(idEntrevistado);
       if(imovelRealm){
         setImovelPresente(imovelRealm);
@@ -77,10 +97,13 @@ export const useImovel = (idEntrevistado: number) => {
     };
   
     const fetchImovelAPI = async () => {
+      console.log('O QUE VEIO???');
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `http://177.74.56.24/imovel/imovel-entrevistado/${idEntrevistado}`
+          `http://192.168.100.28:8080/imovel/imovel-entrevistado/${idEntrevistado}`
         );
+
+       
   
         if (response as imovelBody && response.id) {
           const imovelData: imovelBody = {
@@ -91,7 +114,7 @@ export const useImovel = (idEntrevistado: number) => {
           };
   
           await salvarImoveis(imovelData);
-          fetchImovelRealm();
+          setImovelPresente(imovelData); 
         } else {
           throw new Error('Dados de imóvel inválidos');
         }
@@ -100,11 +123,16 @@ export const useImovel = (idEntrevistado: number) => {
       }
     };
   
-    useEffect(()=>{
-      sinconizeImovelQueue();
-      fetchImovelRealm();
-      fetchImovelAPI();
-  }, []);
+    useEffect(() => {
+      const syncAndFetch = async () => {
+        await sinconizeImovelQueue(); // espera a sincronização terminar
+        fetchImovelRealm();           // agora busca o dado atualizado do Realm
+        await fetchImovelAPI();       // por fim, busca da API se necessário
+      };
+    
+      syncAndFetch();
+    }, []);
+    
 
   return {imovelPresente};
 };

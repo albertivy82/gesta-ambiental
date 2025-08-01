@@ -86,6 +86,7 @@ const atividadeOptions =  Object.values(
 
             <Input
               value={novaAtividade.pessoasEnvolvidas?.toString() || ''}
+              maxLength={3}
               onChange={(event)=> handleNumberChange(event, 'pessoasEnvolvidas')}
               keyboardType='numeric'
               placeholder="..."
@@ -100,6 +101,7 @@ const atividadeOptions =  Object.values(
               )}
               <Input
                 value={novaAtividade.faturamentoAtividadeMesTotal.toFixed(2)}
+                maxLength={9}
                 onChange={handleOnChangeRendimentoMensal}
                 keyboardType="numeric"
                 placeholder="R$"

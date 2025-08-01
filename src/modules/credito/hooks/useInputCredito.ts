@@ -28,6 +28,8 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
       novoCredito.valor <= 0
     ) {
       setDisabled(false);
+    }else{
+      setDisabled(true);
     }
   }, [novoCredito]);
 
@@ -79,7 +81,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://177.74.56.24/credito', novoCredito) as CreditoType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/credito', novoCredito) as CreditoType;
                           
                       if (response && response.id) {
                             return fetchCreditoAPI(response.id);
@@ -113,7 +115,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://177.74.56.24/credito/${credito!.id}`, creditoCorrigida) as CreditoType;
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/credito/${credito!.id}`, creditoCorrigida) as CreditoType;
                     if (response && response.id) {
                       return fetchCreditoAPI(response.id);
                     }else{
@@ -149,7 +151,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
    const fetchCreditoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<CreditoType>(`http://177.74.56.24/credito/${id}`);
+              const response = await connectionAPIGet<CreditoType>(`http://192.168.100.28:8080/credito/${id}`);
               if (response) {
                 const creditoData = {
                     ...response,

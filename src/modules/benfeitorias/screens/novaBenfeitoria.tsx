@@ -2,30 +2,32 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { Efluentes } from "../../../enums/Efluentes.enum";
-import { EnergiaAlimentos } from "../../../enums/EnergiaAlimentos.enum";
-import { FonteEnergia } from "../../../enums/FonteEnergia.enum";
-import { Funcao } from "../../../enums/Funcao.enum";
-import { InformativoPredominante } from "../../../enums/InformativoPredominante.enum";
-import { origemMaterialConstrucao } from "../../../enums/OrigemMaterialConstrucao.enum";
-import { Residuos } from "../../../enums/Residuos.enum";
-import { TipoBenfeitoria } from "../../../enums/TipoBenfeitoria.enum";
-import { TipoCobertura } from "../../../enums/TipoCobertura.enum";
-import { TipoConstrucao } from "../../../enums/TipoConstrucao.enum";
-import { TipoEsquadrias } from "../../../enums/TipoEsquadrias.enum";
-import { Vizinhos } from "../../../enums/Vizinhos";
-import { limitesTerrenoEnum } from "../../../enums/limitesTerreno.enum";
-import { tipoSoloBenfeitoriaEnum } from "../../../enums/tipoSoloBenfeitoria.enum copy";
-import { transporteEnum } from "../../../enums/transporte.enum";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
-import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
-import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
-import { imovelBody } from "../../../shared/types/imovelType";
 import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
+import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { imovelBody } from "../../../shared/types/imovelType";
+import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
+import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
+import {
+  limitesOptions,
+  optionsEfluentes,
+  optionsEnergiaAlimentos,
+  optionsFonteEnergia,
+  optionsFuncao,
+  optionsInformativoPredominante,
+  optionsLocomocao,
+  optionsOrigemMaterial,
+  optionsResiduos,
+  optionsTipoBenfeitoria,
+  optionsTipoCobertura,
+  optionsTipoConstrucao,
+  optionsTipoEsquadrias,
+  optionsTipoSolo,
+  vizinhoOptions
+} from "../ui-components/opcoesBenfeitoria";
 
 export interface imovelParam {
 imovel: imovelBody, 
@@ -51,7 +53,7 @@ export const NovaBenfeitoria=()=>{
            disabled,
            } = UseNovaBenfeitoria(imovel, benfeitoria);
 
-    const [referencaiDaPrincipal, setReferencaiDaPrincipal] = useState<string[]>([]);
+    const [referenciaDaPrincipal, setReferenciaDaPrincipal] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);    
     const [alagamento, setAlagamento] = useState<string>('');     
     const [ocorrencia, SetOcorrencia] = useState<string>('');
@@ -69,9 +71,9 @@ export const NovaBenfeitoria=()=>{
     const [outrosMeioInformativos, SetOutrosMeioInformativos] = useState<string>('');
 
     useEffect(() => {
-      const consolidaDados = alagamento === 'SIM' 
+      const consolidaDados = alagamento === 'Sim' 
         ? (ocorrencia ? [`ocorrencia: ${ocorrencia}`] : [])  
-        : ['NÃO']; 
+        : ['Não']; 
     
       handleArrayFieldChange('alagamentos', consolidaDados);
     
@@ -122,9 +124,9 @@ export const NovaBenfeitoria=()=>{
     
 
     useEffect(() => {
-      const consolidaDados = linhaOnibus === 'SIM' 
+      const consolidaDados = linhaOnibus === 'Sim' 
         ? (qual ? [`ocorrencia: ${qual}`] : [])  
-        : ['NÃO']; 
+        : ['Não']; 
     
       handleArrayFieldChange('linhasOnibus', consolidaDados);
     
@@ -140,21 +142,7 @@ export const NovaBenfeitoria=()=>{
     
     },[meioInofrmativo, outrosMeioInformativos])
      
-    const optionsTipoBenfeitoria = Object.values(TipoBenfeitoria)
-    const vizinhoOptions =  Object.values(Vizinhos);
-    const optionsFuncao = Object.values(Funcao)
-    const optionsTipoSolo = Object.values(tipoSoloBenfeitoriaEnum)
-    const limitesOptions = Object.values(limitesTerrenoEnum);
-    const optionsTipoConstrucao = Object.values(TipoConstrucao)
-    const optionsTipoCobertura = Object.values(TipoCobertura)
-    const optionsTipoEsquadrias = Object.values(TipoEsquadrias)
-    const optionsOrigemMaterial = Object.values(origemMaterialConstrucao)
-    const optionsEfluentes = Object.values(Efluentes)
-    const optionsLocomocao = Object.values(transporteEnum)
-    const optionsResiduos = Object.values(Residuos)
-    const optionsFonteEnergia = Object.values(FonteEnergia)
-    const optionsEnergiaAlimentos = Object.values(EnergiaAlimentos)
-    const optionsInformativoPredominante = Object.values(InformativoPredominante)
+
       
     const handleEnviar = async () => {
       setLoading(true);
@@ -193,7 +181,7 @@ export const NovaBenfeitoria=()=>{
     }, [benfeitoria]);
     
        
-    const afastamentoDaPrincipalvelha = benfeitoria?.meiosLocomocao ?? '';
+    const afastamentoDaPrincipalvelha = benfeitoria?.afastamentoDaPrincipal ?? '';
     const areaBenfeitoriaVelha = benfeitoria?.areaBenfeitoria ?? '';
     const pavimentosVelha = benfeitoria?.pavimentos ?? '';
     const alagamentosVelha = benfeitoria?.alagamentos ?? '';
@@ -233,10 +221,10 @@ export const NovaBenfeitoria=()=>{
 
             <CheckboxSelector
               options={vizinhoOptions}
-              selectedValues={referencaiDaPrincipal}
+              selectedValues={referenciaDaPrincipal}
               label="Localização em relação à edificação principal:"
               onSave={(selectedValues) => {
-                setReferencaiDaPrincipal(selectedValues);
+                setReferenciaDaPrincipal(selectedValues);
                 handleArrayFieldChange('afastamentoDaPrincipal', selectedValues); 
               }}
             />
@@ -347,13 +335,13 @@ export const NovaBenfeitoria=()=>{
                   selectedValue={alagamento}
                   onValueChange={(value) => {
                     setAlagamento(value ?? ''); 
-                    if (value !== 'SIM') {
+                    if (value !== 'Sim') {
                       SetOcorrencia('');
                     }
                   }}
-                  options={['SIM', 'NÃO']}
+                  options={['Sim', 'Não']}
               />
-                    {alagamento === 'SIM' && (
+                    {alagamento === 'Sim' && (
                       <View style={{ marginTop: 10 }}>
                             <RenderPicker
                             label="Qual é a ocorrência"
@@ -364,7 +352,7 @@ export const NovaBenfeitoria=()=>{
                       </View>
                       )}
                
-                    {alagamento.includes('SIM') && (
+                    {alagamento.includes('Sim') && (
                     <View style={{ marginTop: 10 }}>
                           <Input 
                           value={novaBenfeitoria.epocaOcorrencia} 
@@ -511,13 +499,13 @@ export const NovaBenfeitoria=()=>{
                   selectedValue={linhaOnibus}
                   onValueChange={(value) => {
                     setLinhaOnibus(value ?? ''); 
-                    if (value !== 'SIM') {
+                    if (value !== 'Sim') {
                       SetQual('');
                     }
                   }}
-                  options={['SIM', 'NÃO']}
+                  options={['Sim', 'Não']}
                  />
-                    {linhaOnibus.includes('SIM') && (
+                    {linhaOnibus.includes('Sim') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
                       value={qual}

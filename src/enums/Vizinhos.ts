@@ -1,8 +1,0 @@
-export enum Vizinhos {
-    LADO_ESQUERDO = 'LADO_ESQUERDO',
-    LADO_DIREITO = 'LADO_DIREITO',
-    ATRAS = 'ATRAS',
-    EM_FRENTE = 'EM_FRENTE',
-    NAO_DECLARADO = 'NAO_DECLARADO',
-    NAO_POSSUI = 'NAO_POSSUI'
-}

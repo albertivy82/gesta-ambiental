@@ -18,7 +18,7 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   escolaridade: '',
   estadoCivil: null,
   ondeEstuda: '',
-  trabalho: null,
+  trabalho: '',
   religiao: '',
   doencas: '',
   benfeitoria: {
@@ -36,6 +36,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
     console.log(novoMorador);
     if (
       novoMorador.dataNascimento <0 &&
+      novoMorador.dataNascimento >120 &&
       novoMorador.perfil !== '' &&
       novoMorador.sexo !== '' &&
       novoMorador.estadoCivil !== null &&
@@ -45,24 +46,11 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
       novoMorador.doencas !== ''
     ) {
       setDisabled(false);
+    }else{
+      setDisabled(true);
     }
   }, [novoMorador]);
 
-  useEffect(() => {
-    if (dataNascimento) {
-      const hoje = new Date();
-      let anos = hoje.getFullYear() - dataNascimento.getFullYear();
-      const m = hoje.getMonth() - dataNascimento.getMonth();
-      if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
-        anos--;
-      }
-  
-      setNovaMorador((current) => ({
-        ...current,
-        idade: anos,
-      }));
-    }
-  }, [dataNascimento]); // Agora o efeito escuta a data correta
   
 
   const objetoFila = () => {
@@ -114,7 +102,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
                     
                     try{
                          
-                      const response = await connectionAPIPost('http://177.74.56.24/morador', novoMorador) as MoradorType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMorador) as MoradorType;
                       console.log("vamos verificar !", response, response.id);
                       if (response && response.id) {
                         console.log("vamos verificar !", response, response.id);
@@ -149,7 +137,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://177.74.56.24/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
+              const response = await connectionAPIPut(`http://192.168.100.28:8080/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
             
               if (response && response.id) {
                      
@@ -187,7 +175,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
    const fetchMoradorAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<MoradorType>(`http://177.74.56.24/morador/${id}`);
+              const response = await connectionAPIGet<MoradorType>(`http://192.168.100.28:8080/morador/${id}`);
               console.log("vamos verificar", response);
               if (response) {
                 const moradorData = {

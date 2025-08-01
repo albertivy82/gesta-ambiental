@@ -48,18 +48,18 @@ export const NovoMorador = ()=>{
 
      
   useEffect(() => {
-        const consolidaDados = estuda === 'SIM' 
+        const consolidaDados = estuda === 'Sim' 
           ? (ondeEstuda ? [`onde estuda: ${ondeEstuda}`] : [])  
-          : ['NÃO']; 
+          : ['Não']; 
       
         handleArrayFieldChange('ondeEstuda', consolidaDados);
       
   }, [estuda, ondeEstuda]);
 
   useEffect(() => {
-    const consolidaDados = trabalha === 'SIM' 
+    const consolidaDados = trabalha === 'Sim' 
       ? (ondeTrabalha ? [`onde trabalha: ${ondeTrabalha}`] : [])  
-      : ['NÃO']; 
+      : ['Não']; 
   
     handleArrayFieldChange('trabalho', consolidaDados);
   
@@ -136,6 +136,7 @@ export const NovoMorador = ()=>{
       
                <Input
                 value={idade?.toString() || ''}
+                maxLength={3}
                 onChangeText={(text) => {
                   const num = parseInt(text.replace(/\D/g, ''), 10);
                   setIdade(isNaN(num) ? undefined : num);
@@ -143,7 +144,7 @@ export const NovoMorador = ()=>{
                 keyboardType="numeric"
                 placeholder="Digite a idade do morador"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
-                title="Qual sua idade?"
+                title="Idade do morador"
               />
 
 
@@ -187,15 +188,16 @@ export const NovoMorador = ()=>{
                   selectedValue={estuda}
                   onValueChange={(value) => {
                     setEstuda(value ?? ''); 
-                    if (value !== 'SIM') {
+                    if (value !== 'Sim') {
                       SetOndeEstuda('');
                     }
                   }}
-                  options={['SIM', 'NÃO']}
+                  options={['Sim', 'Não']}
                  />
-                    {estuda.includes('SIM') && (
+                    {estuda.includes('Sim') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
+                       maxLength={255}
                       value={ondeEstuda}
                       onChangeText={SetOndeEstuda}
                       placeholder="..."
@@ -216,15 +218,16 @@ export const NovoMorador = ()=>{
                   selectedValue={trabalha}
                   onValueChange={(value) => {
                     setTrabalha(value ?? ''); 
-                    if (value !== 'SIM') {
+                    if (value !== 'Sim') {
                       SetOndeTrabalha('');
                     }
                   }}
-                  options={['SIM', 'NÃO']}
+                  options={['Sim', 'Não']}
                  />
-                    {trabalha.includes('SIM') && (
+                    {trabalha.includes('Sim') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
+                       maxLength={255}
                       value={ondeTrabalha}
                       onChangeText={SetOndeTrabalha}
                       placeholder="..."

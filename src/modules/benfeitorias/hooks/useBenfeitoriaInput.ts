@@ -10,26 +10,26 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { imovelBody } from "../../../shared/types/imovelType";
 
 export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput = {
-  tipoBenfeitoria: null,
-  funcao: null,
+  tipoBenfeitoria: '',
+  funcao: '',
   afastamentoDaPrincipal: '',
-  impermeabilizacaoSolo: null,
+  impermeabilizacaoSolo: '',
   limites: '',
   areaBenfeitoria: 0,
   pavimentos: 0,
-  paredes: null,
-  tipoCobertura: null,
-  tipoEsquadrias: null,
-  origemMadeiraDaConstrucao: null,
-  origemPedraDaConstrucao: null,
-  origemAreiaDaConstrucao: null,
+  paredes: '',
+  tipoCobertura: '',
+  tipoEsquadrias: '',
+  origemMadeiraDaConstrucao: '',
+  origemPedraDaConstrucao: '',
+  origemAreiaDaConstrucao: '',
   alagamentos: '',
   epocaOcorrencia: '',
   efluentes: '',
   residuos: '',
   fonteEnergia: '',
   energiaAlimentos: '',
-  meiosLocomocao: null,
+  meiosLocomocao: '',
   linhasOnibus: '',
   informativoPredominante: '',
   imovel: {
@@ -70,7 +70,9 @@ const [disabled, setdisable] = useState<boolean>(true);
             novaBenfeitoria.informativoPredominante !== ''
           ) {
             setdisable(false);
-        }
+          }else{
+            setdisable(true);
+          }
     }, [novaBenfeitoria]);
 
 
@@ -139,7 +141,7 @@ const enviaBenfeitoriaNova = async () =>{
                   
                   try{
                      
-                    const response = await connectionAPIPost('http://177.74.56.24/benfeitoria', novaBenfeitoria) as BenfeitoriaType;
+                    const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoria) as BenfeitoriaType;
                      
                     if (response && response.id) {
                           return fetchBefeitoriaAPI(response.id);
@@ -175,7 +177,7 @@ const enviaBenfeitoriaEdicao= async () =>{
           //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
           try{
             
-            const response = await connectionAPIPut(`http://177.74.56.24/benfeitoria/${benfeitoria!.id}`, benfeitoriaCorrigida) as BenfeitoriaType;
+            const response = await connectionAPIPut(`http://192.168.100.28:8080/benfeitoria/${benfeitoria!.id}`, benfeitoriaCorrigida) as BenfeitoriaType;
                 if (response && response.id) {
                 return fetchBefeitoriaAPI(response.id);
                 }else{
@@ -212,7 +214,7 @@ const buildBenfeitoriaAtualizada = (): BenfeitoriaType => ({
  const fetchBefeitoriaAPI = async(id:number) =>{
 
         try{
-            const response = await connectionAPIGet<BenfeitoriaType>(`http://177.74.56.24/benfeitoria/${id}`);
+            const response = await connectionAPIGet<BenfeitoriaType>(`http://192.168.100.28:8080/benfeitoria/${id}`);
             if (response) {
               const bftData = {
                   ...response,

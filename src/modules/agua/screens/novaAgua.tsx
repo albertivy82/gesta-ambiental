@@ -52,9 +52,9 @@ console.log("?", benfeitoria)
     'OUTRO'
   ]);
 
-  const corOptions = Object.values(['INCOLOR (CRISTALINA)', 'COR']);
-  const cheiroOptions = Object.values(['NÃO POSSUI CHEIRO', 'CHEIRO']);
-  const saborOptions = Object.values(['NÃO POSSUI SABOR', 'SABOR']);
+  const corOptions = Object.values(['INCOLOR (CRISTALINA)', ' APRESENTA COR']);
+  const cheiroOptions = Object.values(['NÃO POSSUI CHEIRO', 'APRESENTA CHEIRO']);
+  const saborOptions = Object.values(['NÃO POSSUI SABOR', 'APRESENTA SABOR']);
   const qualidadeOptions = Object.values(QualidadeAguaEnum);
   const tratamentoOptions = Object.values(MetodoTratamentoAgua);
 
@@ -130,6 +130,7 @@ console.log("?", benfeitoria)
                {fornecimentoAgua.includes('OUTRO') && (
                 <View style={{ marginTop: 10 }}>
                    <Input
+                        maxLength={75}
                         value={outroFornecimento}
                         onChangeText={SetOutroFornecimento}
                         placeholder="Separe por vírgulas"
@@ -161,6 +162,7 @@ console.log("?", benfeitoria)
             {tratamentoAgua.includes('OUTROS') && (
                 <View style={{ marginTop: 10 }}>
                     <Input
+                        maxLength={95}
                         value={outrosTratamentos}
                         onChangeText={setOutrosTratamentos}
                         placeholder="..."
@@ -201,6 +203,7 @@ console.log("?", benfeitoria)
             <View style={{ marginTop: 10 }}>
               <Input
                 value={novaAgua.profundidadePoco?.toString() || ''}
+                maxLength={5}
                 onChange={handleOnChangeProfundidade}
                 keyboardType='decimal-pad'
                 placeholder="Ex: 10.5"
