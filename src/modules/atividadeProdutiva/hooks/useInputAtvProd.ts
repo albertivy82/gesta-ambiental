@@ -27,7 +27,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
     if (
       novaAtividade.atividade !=='' &&
       novaAtividade.pessoasEnvolvidas > 0 &&
-       novaAtividade.pessoasEnvolvidas < 20 &&
+      novaAtividade.pessoasEnvolvidas < 20 &&
       novaAtividade.faturamentoAtividadeMesTotal <= 0 &&
       novaAtividade.faturamentoAtividadeMesTotal <= 1000000
     ) {
@@ -86,7 +86,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/atividade-produtiva', novaAtividade) as AtividadeProdutivaType;
+                      const response = await connectionAPIPost('http://177.74.56.24/atividade-produtiva', novaAtividade) as AtividadeProdutivaType;
                      
                       if (response && response.id) {
                             return fetchAtividadeAPI(response.id);
@@ -120,7 +120,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/atividade-produtiva/${atividade!.id}`, atividadeCorrigida) as AtividadeProdutivaType;
+              const response = await connectionAPIPut(`http://177.74.56.24/atividade-produtiva/${atividade!.id}`, atividadeCorrigida) as AtividadeProdutivaType;
                     if (response && response.id) {
                       return fetchAtividadeAPI(response.id);
                     }else{
@@ -157,7 +157,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
    const fetchAtividadeAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<AtividadeProdutivaType>(`http://192.168.100.28:8080/atividade-produtiva/${id}`);
+              const response = await connectionAPIGet<AtividadeProdutivaType>(`http://177.74.56.24/atividade-produtiva/${id}`);
               
               if (response) {
                 const atividadeData = {
@@ -203,17 +203,18 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
   ) => {
     let value = event.nativeEvent.text;
   
-    // Remove tudo que não for número
+    // Remove qualquer caractere não numérico
     value = value.replace(/\D/g, '');
   
-    // Formata como string com 2 casas decimais
-    const formattedValue = (parseInt(value || '0', 10) / 100).toFixed(2);
+    // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
+    const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
   
+    // Atualiza o estado com o valor formatado como número
     setNovaAtvProd((current) => ({
       ...current,
-      faturamentoAtividadeMesTotal: parseFloat(formattedValue), // Mantém como string
+      faturamentoAtividadeMesTotal:parseFloat(formattedValue), // Salva como número para enviar à API
     }));
-  };
+};
   
 
 

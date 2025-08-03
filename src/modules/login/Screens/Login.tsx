@@ -34,7 +34,7 @@ const Login = () => {
     code_challenge_method: 'S256',
   });
 
-  const authorizationUrl = `http://192.168.100.28:8080/oauth2/authorize?${config}`;
+  const authorizationUrl = `http://177.74.56.24/oauth2/authorize?${config}`;
 
 
   const extrairCodigoDaURL = (url:string) => {

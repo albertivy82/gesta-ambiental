@@ -90,7 +90,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/agua', novaAgua) as AguaType;
+                      const response = await connectionAPIPost('http://177.74.56.24/agua', novaAgua) as AguaType;
                           
                       if (response && response.id) {
                             return fetchAguaAPI(response.id);
@@ -125,7 +125,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/agua/${agua!.id}`, aguaCorrigida) as AguaType;
+              const response = await connectionAPIPut(`http://177.74.56.24/agua/${agua!.id}`, aguaCorrigida) as AguaType;
 
               console.log("4444",response)
                     if (response && response.id) {
@@ -164,7 +164,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
    const fetchAguaAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<AguaType>(`http://192.168.100.28:8080/agua/${id}`);
+              const response = await connectionAPIGet<AguaType>(`http://177.74.56.24/agua/${id}`);
               console.log("55555", response)
               if (response) {
                 const aguaData = {

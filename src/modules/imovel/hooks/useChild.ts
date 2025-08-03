@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native"
+/*import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native"
 import { imovelBody } from "../../../shared/types/imovelType"
 
 //BLOCO BENFEITORIA
@@ -39,4 +39,4 @@ export const  handleGerenciaFilhas =  (navigate: NavigationProp<ParamListBase>['
     }else{
         console.log("não handle para isso")
     }
-}
+}*/

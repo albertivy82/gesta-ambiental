@@ -421,7 +421,7 @@ export const NovoEntrevistado = ()=>{
                   placeholder="Relação do entrevistado com a vizinhança"
                   placeholderTextColor={theme.colors.grayTheme.gray80}
                   margin="15px 10px 30px 5px"
-                  title="Como você é a sua relação com a vizinhança?"
+                  title="Como é a sua relação com a vizinhança?"
                   ref={relacaoVizinhoInput}
               />
 
@@ -559,6 +559,7 @@ export const NovoEntrevistado = ()=>{
               <Input
                 value={novoEntrevistado.sofreuAssaltos?.toString() || ''}
                 onChange={(event) => handleNumberChange(event, 'sofreuAssaltos')}
+                maxLength={3}
                 keyboardType="numeric"
                 placeholder="Área em m²"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -571,6 +572,7 @@ export const NovoEntrevistado = ()=>{
               <Input
                 value={novoEntrevistado.presenciouAssalto?.toString() || ''}
                 onChange={(event) => handleNumberChange(event, 'presenciouAssalto')}
+                maxLength={3}
                 keyboardType="numeric"
                 placeholder="Quantas vezes?"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
@@ -736,8 +738,9 @@ export const NovoEntrevistado = ()=>{
           <Input 
             value={novoEntrevistado.indicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'indicadoConsultaPublica')}
+            placeholderTextColor={theme.colors.grayTheme.gray80}
             maxLength={150}
-            placeholder=" "
+            placeholder="O próprio entrevistado?"
             margin="15px 10px 30px 5px"
             title="Indicação de um nome para Participar da Consulta Pública"
             ref={indicadoConsultaInput}
@@ -747,8 +750,9 @@ export const NovoEntrevistado = ()=>{
           <Input 
             value={novoEntrevistado.contatoIndicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'contatoIndicadoConsultaPublica')}
+            placeholderTextColor={theme.colors.grayTheme.gray80}
             maxLength={50}
-            placeholder=" "
+            placeholder="Qualquer meio disponível"
             margin="15px 10px 30px 5px"
             title="Informe um contato do indicado"
             ref={contatoConsultaInput}

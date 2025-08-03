@@ -70,7 +70,7 @@ export const useNovaInstituicaoConhecida = (benfeitoriaId: number, idBenfeitoria
   
       if (isConnected) {
         try {
-          await connectionAPIPost('http://192.168.100.28:8080/instituicao-conhecida', novaInstituicao);
+          await connectionAPIPost('http://177.74.56.24/instituicao-conhecida', novaInstituicao);
         } catch (error) {
           const instituicaoConhecidaDataQueue = objetoFila();
           salvarInstituicaoConhecidaQueue(instituicaoConhecidaDataQueue);

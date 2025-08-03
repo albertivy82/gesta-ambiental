@@ -35,7 +35,7 @@ export const useEscolas= (localidadeId:number)=>{
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscolaIput);
+                            const response = await connectionAPIPost('http://177.74.56.24/escola', novaEscolaIput);
                             const escolaAPI = response as EscolaType;
                            
                             if (escolaAPI.id) {
@@ -64,7 +64,7 @@ export const useEscolas= (localidadeId:number)=>{
        const isConnected = await testConnection();
         if (isConnected) {
           try {
-              const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://192.168.100.28:8080/escola/localidade-escola/${localidadeId}`);
+              const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://177.74.56.24/escola/localidade-escola/${localidadeId}`);
               console.log(escolasAPI)
               const EscData: EscolaType[] = escolasAPI.map(escola => ({
                 ...escola,

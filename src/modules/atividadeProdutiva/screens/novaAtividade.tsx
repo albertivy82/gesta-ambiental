@@ -108,7 +108,7 @@ const atividadeOptions =  Object.values(
                 title="Informe o rendimento mensal aproximado da atividade"
               />
 
-                       
+                                  
              <View style={{ marginTop: 40 }}>
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 

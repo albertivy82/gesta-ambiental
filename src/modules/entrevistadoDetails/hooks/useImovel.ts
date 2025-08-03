@@ -43,41 +43,42 @@ export const useImovel = (idEntrevistado: number) => {
    const [imovelPresente, setImovelPresente] = useState<imovelBody>();
    
  const sinconizeImovelQueue = async () => {
- console.log(getTodosImoveis()) ;
+
       const imovelQueue = getImoveisDessincronizados(idEntrevistado);
-     
+    
       if (imovelQueue) {
+        
         const novoImovelInput = convertToImovelInput(imovelQueue);
              
           const isConnected = await testConnection();
           if (isConnected) {
             try {
              
-              const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovelInput) as imovelBody;
+              const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovelInput) as imovelBody;
              
               const imovelAPI = response as imovelBody;
               
               if (imovelAPI.id) {
                 setIdImovelFromApiOnBenfeitoria(imovelAPI.id, imovelQueue.idLocal!);
-                apagarImovelQueue(imovelAPI.idLocal!);
+                apagarImovelQueue(imovelQueue.idLocal!);
                 
               }
             } catch (error: any) {
               if (error.response) {
                 // Erro HTTP com resposta do servidor
-                console.error("❌ Erro da API (HTTP 400 ou 500):");
-                console.error("Status:", error.response.status);
-                console.error("Headers:", error.response.headers);
-                console.error("Body:", JSON.stringify(error.response.data, null, 2));
+                //console.error("❌ Erro da API (HTTP 400 ou 500):");
+                //console.error("Status:", error.response.status);
+                //console.error("Headers:", error.response.headers);
+                //console.error("Body:", JSON.stringify(error.response.data, null, 2));
               } else if (error.request) {
                 // Requisição enviada, mas sem resposta
-                console.error("⚠️ Requisição enviada, mas sem resposta da API:");
-                console.error(error.request);
+                //console.error("⚠️ Requisição enviada, mas sem resposta da API:");
+                //console.error(error.request);
               } else {
                 // Erro de configuração, timeout, etc.
-                console.error("❌ Erro inesperado no cliente:");
-                console.error("Mensagem:", error.message);
-                console.error("Erro completo:", error);
+               // console.error("❌ Erro inesperado no cliente:");
+               // console.error("Mensagem:", error.message);
+               // console.error("Erro completo:", error);
               }
             }
             
@@ -97,10 +98,10 @@ export const useImovel = (idEntrevistado: number) => {
     };
   
     const fetchImovelAPI = async () => {
-      console.log('O QUE VEIO???');
+      
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `http://192.168.100.28:8080/imovel/imovel-entrevistado/${idEntrevistado}`
+          `http://177.74.56.24/imovel/imovel-entrevistado/${idEntrevistado}`
         );
 
        

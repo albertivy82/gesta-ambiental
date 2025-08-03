@@ -10,17 +10,23 @@ import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
+import { getTodosImoveis } from '../../../realm/services/imovelService';
 
 
 export interface entrevistadoParam {
   localidadeId: number;
 }
 
+
+
 const Entrevistados = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, entrevistadoParam>, 'Entrevistado'>>();
   const { localidadeId } = route.params;
   const { contagemEntrevistados } = useEntrevistados(localidadeId);
+
+  
+  
   const flatListRef = useRef<FlatList>(null);
   const [entrevistados, setEntrevistados] = useState<EntrevistadoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);

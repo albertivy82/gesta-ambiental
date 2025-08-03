@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -27,27 +27,35 @@ const Atividades = () => {
    const [isLoading, setIsLoading] = useState(false);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
 
-   useEffect(()=>{
-        setIsLoading(true);
-          if(benfeitoria){
-            const atividadesRealm = getAtividadesProdutivas(benfeitoria.id);
-            setAtividades(atividadesRealm);
-           }
-           setIsLoading(false);
-  }, [benfeitoria])
+  
+ const isFocused = useIsFocused();
 
-
+  const carregarAtividades = () => {
+    if (benfeitoria) {
+      setIsLoading(true);
+      const atividadesRealm = getAtividadesProdutivas(benfeitoria.id);
+      setAtividades(atividadesRealm);
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    if (isFocused) {
+      carregarAtividades();
+    }
+  }, [isFocused]);
+  
+  const handleRefresh = () => {
+    carregarAtividades();
+    handleScrollToEnd();
+  };
 
    // Rola até o final da lista
 const handleScrollToEnd = () => {
   flatListRef.current?.scrollToEnd({ animated: true });
 };  
 
-const handleRefresh = () => {
-   handleScrollToEnd();
-};
 
- 
 
   const handleNovaAtividade = () => {
     novaAtividade(navigation.navigate, benfeitoria);

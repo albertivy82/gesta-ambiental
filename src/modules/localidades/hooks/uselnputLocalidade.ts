@@ -34,7 +34,7 @@ export const useEditUser = () =>{
 
         const editLocalidade = async () => {
            
-            const localidade = await connectionAPIPost('http://192.168.100.28:8080/localidade', novaLocalidade);
+            const localidade = await connectionAPIPost('http://177.74.56.24/localidade', novaLocalidade);
             
         };
     

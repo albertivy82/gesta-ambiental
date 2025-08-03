@@ -23,7 +23,7 @@ const fetchLocalidadeFromDB = () =>{
   const fetchLocalidadeFromAPI = async () => {
       
       try {
-            const response = await connectionAPIGet('http://192.168.100.28:8080/localidade');
+            const response = await connectionAPIGet('http://177.74.56.24/localidade');
                   const data = response as LocalidadeType[];
                         if (data && Array.isArray(data) && data.length > 0) {
                                 await salvarLocalidades(data); 

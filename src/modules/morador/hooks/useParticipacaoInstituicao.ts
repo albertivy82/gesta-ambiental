@@ -32,7 +32,7 @@ export const useParticipacaoInstituicoes = (moradorId: number) => {
            const isConnected = await testConnection();
             if (isConnected) {
               try {
-                const response = await connectionAPIPost('http://192.168.100.28:8080/participacao-instituicao', novoParticipacaoInstituicaoInput);
+                const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novoParticipacaoInstituicaoInput);
                 const participacaoInsituicaoAPI = response as ParticipacaoInstituicaoType;
 
                 if (participacaoInsituicaoAPI.id) {
@@ -58,7 +58,7 @@ export const useParticipacaoInstituicoes = (moradorId: number) => {
 
           const fetchParticipacaoInstituicoesAPI = async () => {
             try {
-              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://192.168.100.28:8080/participacao-instituicao/${moradorId}`);
+              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://177.74.56.24/participacao-instituicao/${moradorId}`);
 
              const participacaoData: ParticipacaoInstituicaoType[] = response.map(partcipacao => ({
                                        ...partcipacao,

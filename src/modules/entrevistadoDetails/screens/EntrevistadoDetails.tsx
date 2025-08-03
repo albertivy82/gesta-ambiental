@@ -13,6 +13,7 @@ import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
 import { getImovel } from '../../../realm/services/imovelService';
+import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 
 
 // Para entidades MULTIPLAS (vegetacao, peixes, etc.)
@@ -50,8 +51,6 @@ const EntrevistadoDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, EntrevistadoParam>>>();
   const {imovelPresente} = useImovel(params.entrevistado.id);
-
-    console.log(imovelPresente);
  
       
 

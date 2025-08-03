@@ -182,7 +182,7 @@ export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBod
     
     const query = `entrevistado == "${idEntrevistadoApi}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const imoveisQueue = realmInstance.objects<imovelBody>('Imovel').filtered(query);
-   
+    console.log("Verificando como está sendo feita esta busca", idEntrevistadoApi,imoveisQueue)
     const cleanedQueue = imoveisQueue.map(imovel => ({ ...imovel }));
     
     const primeiroRegistro = cleanedQueue[0];
@@ -193,15 +193,17 @@ export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBod
 
 
 
-export const apagarImovelQueue = (imovelidLocal: string) => {
+export const apagarImovelQueue = (idLocal: string) => {
+    
     try {
         realmInstance.write(() => {
            
-            const query = `idLocal == "${imovelidLocal}"`;
+            const query = `idLocal == "${idLocal}"`;
             const imovelAExcluir = realmInstance.objects<imovelBody>('Imovel').filtered(query);
-             console.log("Apagando queue", imovelAExcluir);
+            
             if (imovelAExcluir.length > 0) {
                 realmInstance.delete(imovelAExcluir);
+               
             } 
         });
     } catch (error) {
@@ -217,7 +219,7 @@ export const apagarImovelSyncronizado = (imovelId: number) => {
             const imovelAExcluir = realmInstance.objects<imovelBody>('Imovel').filtered(query);
 
             if (imovelAExcluir.length > 0) {
-
+                
              realmInstance.delete(imovelAExcluir);
              
             } 

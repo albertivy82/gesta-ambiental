@@ -182,7 +182,7 @@ export const apagarEntrevistadoQueue = (idLocal: string) => {
                 realmInstance.delete(entrevistadoExcluir);
             }
         });
-        console.log('apagarEntrevistadoQueue');
+       
     } catch (error) {
         console.error('Erro ao excluir entrevistado da fila:', error);
     }

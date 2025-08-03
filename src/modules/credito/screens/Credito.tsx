@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -28,16 +28,27 @@ const Credito = () => {
   const flatListRef = useRef<FlatList>(null);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
 
-  useEffect(()=>{
+    const isFocused = useIsFocused();
+   
+     const carregarCreditos = () => {
+       if (benfeitoria) {
          setIsLoading(true);
-           if(benfeitoria){
-              const creitoRealm = getCreditos(benfeitoria.id);
-              setCreditos(creitoRealm);
-              console.log(benfeitoria.id, creitoRealm)
-            }
-           
-            setIsLoading(false);
-   }, [benfeitoria])
+         const creitoRealm = getCreditos(benfeitoria.id);
+         setCreditos(creitoRealm);
+         setIsLoading(false);
+       }
+     };
+     
+     useEffect(() => {
+       if (isFocused) {
+        carregarCreditos();
+       }
+     }, [isFocused]);
+     
+     const handleRefresh = () => {
+      carregarCreditos();
+       handleScrollToEnd();
+     };
  
 
   // Rola até o final da lista
@@ -45,12 +56,7 @@ const Credito = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de créditos
-  const handleRefresh = () => {
-    handleScrollToEnd();
-  };
-
-  const handleNovoCredito = () => {
+   const handleNovoCredito = () => {
     novoCredito(navigation.navigate, benfeitoria);
   };
 
