@@ -20,7 +20,7 @@ export const convertToPostoInput = (posto: any) => {
     return postoInput;
 };
 
-export const usePostos = (localidadeId: number) => {
+export const usePostos = (localidadeId: number, foccus:boolean) => {
     const [contagemPostos, setContagemPostos] = useState<number>(0);
 
     const sinconizeQueue = async () => {
@@ -91,7 +91,7 @@ export const usePostos = (localidadeId: number) => {
         sinconizeQueue();
         fetchPostosFromAPI();
         fetchPostosFromLocalDb();
-    }, []);
+    }, [foccus]);
   
     return { contagemPostos };
 }

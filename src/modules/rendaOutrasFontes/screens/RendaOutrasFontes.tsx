@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getRendaOutrasFontes } from '../../../realm/services/rendaOutrasFontes';
@@ -25,10 +25,11 @@ const RendaOutrasFontes = () => {
  const navigation = useNavigation<NavigationProp<ParamListBase>>();
  const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
  const { benfeitoria } = route.params;
+ const foccus =useIsFocused();
  const [isLoading, setIsLoading] = useState(false);
  const flatListRef = useRef<FlatList>(null);
  const [rendasF, setRendasF] = useState<RendaOutrasFontesType[]>([]);
- const {} = useRendasOutrasFontes(benfeitoria.id);
+ const {} = useRendasOutrasFontes(benfeitoria.id, foccus);
 
    
  useEffect(()=>{

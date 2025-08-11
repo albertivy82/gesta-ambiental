@@ -115,6 +115,15 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
   }
 
   const enviaServicoComunicacaoEdicao= async () =>{
+     const testConnectionOne = await testConnection();
+                    
+                    if(!servicoComunicacao?.sincronizado && !testConnectionOne){
+                           
+                            Alert.alert("Registro Apenas Local");
+                            const local = await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
+                             return local;
+                    
+                    }else{
     const servicoComunicacaoCorrigida = {
       ...novoServicoComunicacao,
       benfeitoria: { id: typeof servicoComunicacao!.benfeitoria === 'number' ? servicoComunicacao!.benfeitoria : servicoComunicacao!.benfeitoria.id }
@@ -148,12 +157,14 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
             }
             
           }
+        }
           
   }
 
   const buildServicoComunicacaoAtualizada = (): ServicosComunicacaoType => ({
     ...servicoComunicacao!,
     ...novoServicoComunicacao,
+    benfeitoria: { id: typeof servicoComunicacao!.benfeitoria === 'number' ? servicoComunicacao!.benfeitoria : servicoComunicacao!.benfeitoria.id },
     sincronizado: servicoComunicacao?.sincronizado,
     idLocal: servicoComunicacao?.idLocal,
     idFather: servicoComunicacao?.idFather,

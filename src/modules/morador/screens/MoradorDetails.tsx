@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
@@ -39,7 +39,8 @@ const MoradorDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, MoradorParam>>>();
   const morador = params.morador;
-  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id);
+  const foccus =useIsFocused();
+  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id, foccus);
   
 
  const handleDecision = <T,>(

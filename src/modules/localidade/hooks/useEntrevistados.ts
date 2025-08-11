@@ -52,7 +52,7 @@ export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput
 
 
 
-export const useEntrevistados = (localidadeId: number) =>{
+export const useEntrevistados = (localidadeId: number, foccus:boolean) =>{
     
    const [contagemEntrevistados, setContagemEntrevistados] = useState<number>(0);
    
@@ -136,7 +136,7 @@ const fetchEntrevistadosFromAPI = async () => {
         sinconizeQueue();
         fetchEntrevistadosFromAPI();
         fetchEntrevistadosFromLocalDb();
-     }, []);
+     }, [foccus]);
     
       return { contagemEntrevistados};
 

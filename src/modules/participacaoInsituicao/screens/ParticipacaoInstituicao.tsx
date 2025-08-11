@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getParticipacoesIntitucionais } from '../../../realm/services/ParticipacaoInstituicaoService';
@@ -25,9 +25,10 @@ const ParticipacaoInstituicao = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, ParticipacaoInstituicaoParam>, 'ParticipacaoInstituicaoLista'>>();
   const { morador } = route.params;
+  const foccus =useIsFocused();
   const flatListRef = useRef<FlatList>(null);
   const [participacoes, setParticipacoes] = useState<ParticipacaoInstituicaoType[]>();
- const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id);
+ const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id, foccus);
  
   
 

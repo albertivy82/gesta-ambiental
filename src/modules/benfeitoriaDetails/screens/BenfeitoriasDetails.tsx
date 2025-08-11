@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
@@ -43,12 +43,13 @@ const BenfeitoriaDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
   const benfeitoria = params.benfeitoria;
-  const {moradores} = useMoradores(benfeitoria.id);
-  const {aguas} = useAguas(benfeitoria.id);
-  const {atividades} = useAtividadesProdutivas(benfeitoria.id);
-  const {creditos} = useCreditos(benfeitoria.id);
-  const {rendasOF} = useRendasOutrasFontes(benfeitoria.id);
-  const {servicos} = useServicosComunicacao(benfeitoria.id);
+  const foccus =useIsFocused();
+  const {moradores} = useMoradores(benfeitoria.id, foccus);
+  const {aguas} = useAguas(benfeitoria.id, foccus);
+  const {atividades} = useAtividadesProdutivas(benfeitoria.id, foccus);
+  const {creditos} = useCreditos(benfeitoria.id, foccus);
+  const {rendasOF} = useRendasOutrasFontes(benfeitoria.id, foccus);
+  const {servicos} = useServicosComunicacao(benfeitoria.id, foccus);
   
 
    const handleDecision = <T,>(

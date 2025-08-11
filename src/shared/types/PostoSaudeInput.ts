@@ -1,5 +1,4 @@
 import { SimNao } from "../../enums/simNao.enum";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface postoSaudeInput {
   nome: string;
@@ -9,6 +8,6 @@ export interface postoSaudeInput {
   localidade: {
     id: number;
   };
-  sincronizado?: boolean;
-  idLocal?: string;
-}
+ sincronizado?: boolean;
+ idLocal?: string;
+ }

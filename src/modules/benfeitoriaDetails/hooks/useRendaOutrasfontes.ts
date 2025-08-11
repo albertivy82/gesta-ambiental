@@ -17,7 +17,7 @@ export const convertToRendaOFInput = (renda: any): RendaOutrasFontesInput => {
   };
 };
 
-export const useRendasOutrasFontes = (benfeitoriaId: number) => {
+export const useRendasOutrasFontes = (benfeitoriaId: number, foccus: Boolean) => {
   const [rendasOF, setRendasOF] = useState<RendaOutrasFontesType[]>([]);
 
   const sincronizeRendaOFQueue = async () => {
@@ -68,7 +68,7 @@ export const useRendasOutrasFontes = (benfeitoriaId: number) => {
     fetchRendasRealm();
     fetchRendasAPI();
     sincronizeRendaOFQueue();
-  }, []);
+  }, [foccus]);
 
   return { rendasOF };
 };

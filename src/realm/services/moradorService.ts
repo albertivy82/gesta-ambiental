@@ -74,7 +74,7 @@ export const salvarMorador= (morador:MoradorType): Promise<MoradorType> => {
             let moradorSalvo;
             realmInstance.write(() => {
                 const moradorExistente = realmInstance
-                    .objects<MoradorType>("Benfeitoria")
+                    .objects<MoradorType>("Morador")
                     .filtered(`id == ${morador.id}`)[0];
 
                 const moradorPadrao = {

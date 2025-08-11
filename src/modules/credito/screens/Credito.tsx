@@ -25,10 +25,11 @@ const Credito = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
   const { benfeitoria } = route.params;
+  const foccus =useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
-   const {} = useCreditos(benfeitoria.id);
+   const {} = useCreditos(benfeitoria.id, foccus);
 
     const isFocused = useIsFocused();
    

@@ -22,7 +22,7 @@ export const convertToCreditoInput = (credito: any): CreditoInput => {
   };
 };
 
-export const useCreditos = (benfeitoriaId: number) => {
+export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
 
   const sincronizeCreditoQueue = async () => {
@@ -74,7 +74,7 @@ export const useCreditos = (benfeitoriaId: number) => {
     fetchCreditoRealm();
     fetchCreditoAPI();
     sincronizeCreditoQueue();
-  }, []);
+  }, [foccus]);
 
   return { creditos };
 };

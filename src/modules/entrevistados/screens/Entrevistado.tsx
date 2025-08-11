@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
@@ -22,7 +22,8 @@ const Entrevistados = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, entrevistadoParam>, 'Entrevistado'>>();
   const { localidadeId } = route.params;
-  const { contagemEntrevistados } = useEntrevistados(localidadeId);
+  const foccus =useIsFocused();
+  const { contagemEntrevistados } = useEntrevistados(localidadeId, foccus);
 
   
   

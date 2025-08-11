@@ -109,6 +109,18 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
   }
 
   const enviaAtividadeProdutivaEdicao= async () =>{
+
+
+     const testConnectionOne = await testConnection();
+            
+            if(!atividade?.sincronizado && !testConnectionOne){
+                   
+                    Alert.alert("Registro Apenas Local");
+                    const local = await salvarAtividade(buildAtividadeProdutivaAtualizada());
+                     return local;
+            
+            }else{
+
     const atividadeCorrigida = {
       ...novaAtividade,
       benfeitoria: { id: typeof atividade!.benfeitoria === 'number' ? atividade!.benfeitoria : atividade!.benfeitoria.id }
@@ -142,12 +154,14 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
             }
             
           }
+        }
           
   }
 
   const buildAtividadeProdutivaAtualizada = (): AtividadeProdutivaType => ({
     ...atividade!,
     ...novaAtividade,
+    benfeitoria: { id: typeof atividade!.benfeitoria === 'number' ? atividade!.benfeitoria : atividade!.benfeitoria.id },
     sincronizado: atividade?.sincronizado,
     idLocal: atividade?.idLocal,
     idFather: atividade?.idFather,

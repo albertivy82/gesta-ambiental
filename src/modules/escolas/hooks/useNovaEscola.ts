@@ -1,16 +1,13 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from "uuid";
-import { escolaInput } from "../../../shared/types/EscolaInput";
-import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
-import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
-import { salvarEscola, salvarEscolaQueue } from "../../../realm/services/escolaService";
 import { EsferaEnum } from "../../../enums/esfera.enum";
-import { EscolaType } from "../../../shared/types/EscolaType";
-import { LocalidadeType } from "../../../shared/types/LocalidadeType";
 import { SimNao } from "../../../enums/simNao.enum";
+import { salvarEscola, salvarEscolaQueue } from "../../../realm/services/escolaService";
+import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { escolaInput } from "../../../shared/types/EscolaInput";
+import { EscolaType } from "../../../shared/types/EscolaType";
 
 
 export const DEFAULT_ESCOLA_INPUT: escolaInput = {
@@ -93,60 +90,59 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                     return escolaQueue;
                   }
   }
-
+  
   const enviaEscolaEdicao= async () =>{
-    const escolaCorrigida = {
-      ...novaEscola,
-      localidade: { id: typeof escola!.localidade === 'number' ? escola!.localidade : escola!.localidade.id }
-    };
-   
-    const isConnected = await testConnection();
-    
-     if(isConnected){
-            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
-            try{
-              
-              const response = await connectionAPIPut(`http://177.74.56.24/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
-              if (response && response.id) {
-                return fetchEscolaAPI(response.id);
-              }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
-            }
-          
-          } else {
-            if (!escola!.sincronizado && escola!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const escolaAtualizada: EscolaType = {
-                ...escola!,
-                nome: novaEscola.nome,
-                iniciativa: novaEscola.iniciativa,
-                merenda: novaEscola.merenda?? "",
-                transporte: novaEscola.transporte ?? "",
-                educacaoAmbiental: novaEscola.educacaoAmbiental?? "",
+    const testConnectionOne = await testConnection();
+              if(!escola?.sincronizado && !testConnectionOne){
+                         
+                  Alert.alert("Registro Apenas Local");
+                  const local = await salvarEscola(builEscolaAtualizada());
+                  return local;
+              }else{
+                        
+               const escolaCorrigida = {
+                ...novaEscola,
+                localidade: { id: typeof escola!.localidade === 'number' ? escola!.localidade : escola!.localidade.id }
               };
-              
-              
-              const escolaQueue = await salvarEscola(escolaAtualizada);
-              return escolaQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
-          }
+              const isConnected = await testConnection();
+                        
+                         if(isConnected){
+                                //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+                                try{
+                                  console.log("enviando para edição", escolaCorrigida)
+                                  const response = await connectionAPIPut(`http://177.74.56.24/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
+                                  console.log("recebendo edição", response)
+                                  if (response && response.id) {
+                                       return fetchEscolaAPI(response.id);
+                                  }else{
+                                      const local = await salvarEscola(builEscolaAtualizada());
+                                      return local;
+                                  }
+                                } catch (error) {
+                                   const local = await await salvarEscola(builEscolaAtualizada());
+                                   Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                                   return local;
+                                 }
+                        } else {
+                                if (!escola!.sincronizado && escola!.idLocal) {
+                                    return await await salvarEscola(builEscolaAtualizada());
+                                } else {
+                                    Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                                    return null;
+                                 }
+                          }
+                  
+              }
           
   }
+
+   const builEscolaAtualizada = (): EscolaType => ({
+    ...escola!,
+    ...novaEscola,
+    localidade: { id: typeof escola!.localidade === 'number' ? escola!.localidade : escola!.localidade.id },
+    sincronizado: escola?.sincronizado,
+    idLocal: escola?.idLocal,
+    });
   
    const fetchEscolaAPI = async(id:number) =>{
   

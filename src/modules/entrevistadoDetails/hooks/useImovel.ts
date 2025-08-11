@@ -39,7 +39,7 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
 
 
 
-export const useImovel = (idEntrevistado: number) => {
+export const useImovel = (idEntrevistado: number, foccus:boolean) => {
    const [imovelPresente, setImovelPresente] = useState<imovelBody>();
    
  const sinconizeImovelQueue = async () => {
@@ -125,14 +125,12 @@ export const useImovel = (idEntrevistado: number) => {
     };
   
     useEffect(() => {
-      const syncAndFetch = async () => {
-        await sinconizeImovelQueue(); // espera a sincronização terminar
-        fetchImovelRealm();           // agora busca o dado atualizado do Realm
-        await fetchImovelAPI();       // por fim, busca da API se necessário
-      };
-    
-      syncAndFetch();
-    }, []);
+      sinconizeImovelQueue(); 
+      fetchImovelAPI();  
+      fetchImovelRealm();          
+    }, [foccus]);
+
+ 
     
 
   return {imovelPresente};

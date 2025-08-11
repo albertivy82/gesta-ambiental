@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
@@ -22,7 +22,11 @@ const ImovelDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const imovel = params.imovel;
-  const {benfeitoria} = useBenfeitorias(params.imovel.id);
+  const foccus =useIsFocused();
+  const {benfeitoria} = useBenfeitorias(params.imovel.id, foccus);
+
+  
+  
 
   const handleDecision = (benfeitoria: BenfeitoriaType[]) => {
       if (Array.isArray(benfeitoria) ? benfeitoria.length > 0 : !!benfeitoria) {

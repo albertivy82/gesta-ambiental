@@ -146,7 +146,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
     if(!imovel?.sincronizado && !testConnectionOne){
          
             Alert.alert("Registro Apenas Local");
-           const local = await await salvarImovel(buildImovelAtualizada());
+           const local = await salvarImovel(buildImovelAtualizada());
              return local;
     
     }else{
@@ -192,6 +192,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
   const buildImovelAtualizada = (): imovelBody => ({
   ...imovel!,
    ...novoImovel,
+   entrevistado: { id: typeof imovel!.entrevistado === 'number' ? imovel!.entrevistado : imovel!.entrevistado.id },
      sincronizado: imovel?.sincronizado,
      idLocal: imovel?.idLocal,
      idFather: imovel?.idFather,

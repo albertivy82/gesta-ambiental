@@ -24,10 +24,11 @@ const Atividades = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>>>();
   const { benfeitoria } = route.params;
+  const foccus =useIsFocused();
   const flatListRef = useRef<FlatList>(null);
    const [isLoading, setIsLoading] = useState(false);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
-  const {} = useAtividadesProdutivas(benfeitoria.id);
+  const {} = useAtividadesProdutivas(benfeitoria.id, foccus);
 
   
  const isFocused = useIsFocused();

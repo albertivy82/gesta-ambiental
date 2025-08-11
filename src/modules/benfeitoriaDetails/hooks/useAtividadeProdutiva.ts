@@ -26,7 +26,7 @@ export const convertToAtividadeProdutivaInput = (atividade: any) => {
   };
 };
 
-export const useAtividadesProdutivas = (benfeitoriaId: number) => {
+export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) => {
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
 
   const sincronizeAtividadesQueue = async () => {
@@ -92,7 +92,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number) => {
     fetchAtividadesRealm();
     fetchAtividadesAPI();
     sincronizeAtividadesQueue();
-  }, []);
+  }, [foccus]);
 
   return { atividades };
 };

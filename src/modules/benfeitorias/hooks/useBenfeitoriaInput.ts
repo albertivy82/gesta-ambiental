@@ -217,6 +217,7 @@ const enviaBenfeitoriaEdicao= async () =>{
 const buildBenfeitoriaAtualizada = (): BenfeitoriaType => ({
   ...benfeitoria!,
   ...novaBenfeitoria,
+  imovel: { id: typeof benfeitoria!.imovel === 'number' ? benfeitoria!.imovel : benfeitoria!.imovel.id },
   sincronizado: benfeitoria?.sincronizado,
   idLocal: benfeitoria?.idLocal,
   idFather: benfeitoria?.idFather,

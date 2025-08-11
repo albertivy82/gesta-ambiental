@@ -88,57 +88,58 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
   }
 
   const enviaPostoEdicao= async () =>{
-    const postoCorrigido = {
-      ...novoPosto,
-      localidade: { id: typeof posto!.localidade === 'number' ? posto!.localidade : posto!.localidade.id }
-    };
-   
-    const isConnected = await testConnection();
-    
-     if(isConnected){
-            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
-            try{
+    const testConnectionOne = await testConnection();
+          if(!posto?.sincronizado && !testConnectionOne){
+                     
+              Alert.alert("Registro Apenas Local");
+              const local = await salvarPosto(builPostoAtualizada());
+              return local;
+          }else{
+                    
+           const postoCorrigido = {
+            ...novoPosto,
+            localidade: { id: typeof posto!.localidade === 'number' ? posto!.localidade : posto!.localidade.id }
+          };
+          const isConnected = await testConnection();
+                    
+                     if(isConnected){
+                            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+                            try{
+                              console.log("enviando para edição", postoCorrigido)
+                              const response = await connectionAPIPut(`http://177.74.56.24/posto/${posto!.id}`, postoCorrigido) as PostoType;
+                              console.log("recebendo edição", response)
+                              if (response && response.id) {
+                                   return fetchPostoAPI(response.id);
+                              }else{
+                                  const local = await salvarPosto(builPostoAtualizada());
+                                  return local;
+                              }
+                            } catch (error) {
+                               const local = await await salvarPosto(builPostoAtualizada());
+                               Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                               return local;
+                             }
+                    } else {
+                            if (!posto!.sincronizado && posto!.idLocal) {
+                                return await await salvarPosto(builPostoAtualizada());
+                            } else {
+                                Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                                return null;
+                             }
+                      }
               
-              const response = await connectionAPIPut(`http://177.74.56.24/posto-de-saude/${posto!.id}`, postoCorrigido) as PostoType;
-              if (response && response.id) {
-                return fetchPostoAPI(response.id);
-              }
-              } catch (error) {
-                
-                Alert.alert(
-                  "Erro ao editar",
-                  "Não foi possível salvar as alterações. Tente novamente quando estiver online."
-                );
-                return null;
-               
-            }
-          
-          } else {
-            if (!posto!.sincronizado && posto!.idLocal) {
-             
-              //Objeto ainda não sincronizado → atualizar no Realm
-              const postoAtualizado: PostoType = {
-                ...posto!,
-                nome: novoPosto.nome,
-                ambulatorial: novoPosto.ambulatorial ?? "",
-                urgenciaEmergencia: novoPosto.urgenciaEmergencia ?? "",
-                medicosPorTurno: novoPosto.medicosPorTurno,
-              };
-              
-              const postoQueue = await salvarPosto(postoAtualizado);
-              return postoQueue;
-            } else {
-              // Objeto sincronizado → não permitir edição offline
-              Alert.alert(
-                "Sem conexão",
-                "Este registro já foi sincronizado. Para editá-lo, conecte-se à internet."
-              );
-              return null;
-            }
           }
-          
+             
+                                                        
   }
-
+                              
+  const builPostoAtualizada = (): PostoType => ({
+  ...posto!,
+  ...novoPosto,
+  localidade: { id: typeof posto!.localidade === 'number' ? posto!.localidade : posto!.localidade.id },
+  sincronizado: posto?.sincronizado,
+  idLocal: posto?.idLocal,
+  });
   
   
    const fetchPostoAPI = async(id:number) =>{

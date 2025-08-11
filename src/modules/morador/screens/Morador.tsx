@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getMoradores } from '../../../realm/services/moradorService';
@@ -26,10 +26,11 @@ const Morador = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
   const { benfeitoria } = route.params;
-   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [moradors, setMorador] = useState<MoradorType[]>([]);
-  const {moradores} = useMoradores(benfeitoria.id);
+   const foccus =useIsFocused();
+  const {moradores} = useMoradores(benfeitoria.id, foccus );
  
   
   useEffect(()=>{

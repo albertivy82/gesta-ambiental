@@ -21,7 +21,7 @@ export const convertToServicoComunicacaoInput = (item: any) => {
   };
 };
 
-export const useServicosComunicacao = (benfeitoriaId: number) => {
+export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) => {
   const [servicos, setServicos] = useState<ServicosComunicacaoType[]>([]);
 
   const sincronizeQueue = async () => {
@@ -79,7 +79,7 @@ export const useServicosComunicacao = (benfeitoriaId: number) => {
     fetchFromRealm();
     fetchFromAPI();
     sincronizeQueue();
-  }, []);
+  }, [foccus]);
 
   return { servicos };
 };

@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect } from 'react';
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -50,7 +50,8 @@ export interface EntrevistadoParam {
 const EntrevistadoDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, EntrevistadoParam>>>();
-  const {imovelPresente} = useImovel(params.entrevistado.id);
+  const foccus =useIsFocused();
+  const {imovelPresente} = useImovel(params.entrevistado.id, foccus);
  
       
 

@@ -21,7 +21,7 @@ export const convertToAguaInput = (agua: any): AguaInput => {
   };
 };
 
-export const useAguas = (benfeitoriaId: number) => {
+export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
   const [aguas, setAguas] = useState<AguaType[]>([]);
  
   const sincronizeAguaQueue = async () => {
@@ -74,7 +74,7 @@ export const useAguas = (benfeitoriaId: number) => {
     fetchAguaRealm();
     fetchAguaAPI();
     sincronizeAguaQueue();
-  }, []);
+  }, [foccus]);
 
   return { aguas };
   

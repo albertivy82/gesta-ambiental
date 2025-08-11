@@ -105,6 +105,16 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
   }
 
   const enviaCreditoEdicao= async () =>{
+
+    const testConnectionOne = await testConnection();
+        
+        if(!credito?.sincronizado && !testConnectionOne){
+               
+                Alert.alert("Registro Apenas Local");
+                const local = await salvarCredito(buildCreditoAtualizada());
+                 return local;
+        
+        }else{
     const creditoCorrigida = {
       ...novoCredito,
       benfeitoria: { id: typeof credito!.benfeitoria === 'number' ? credito!.benfeitoria : credito!.benfeitoria.id }
@@ -138,12 +148,14 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
             }
             
           }
+        }
           
   }
 
   const buildCreditoAtualizada = (): CreditoType => ({
     ...credito!,
     ...novoCredito,
+    benfeitoria: { id: typeof credito!.benfeitoria === 'number' ? credito!.benfeitoria : credito!.benfeitoria.id },
     sincronizado: credito?.sincronizado,
     idLocal: credito?.idLocal,
     idFather: credito?.idFather,

@@ -60,7 +60,7 @@ export const salvarImovel = (imovel: imovelBody): Promise<imovelBody> =>{
             let imovelSalvo;
             realmInstance.write(()=>{
               
-              const imovelRealm = realmInstance.objects('Entrevistado')
+              const imovelRealm = realmInstance.objects('Imovel')
               .filtered(`id == ${imovel.id}`)[0];
 
                                

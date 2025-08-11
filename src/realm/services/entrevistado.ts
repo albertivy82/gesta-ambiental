@@ -51,13 +51,17 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
   
 export const salvarEntrevistado = (entrevistado: EntrevistadoType): Promise<EntrevistadoType> =>{
 
+    
+
     return new Promise((resolve, reject)=>{
            
         try{
             let entrevistadoSalvo;
             realmInstance.write(()=>{
-              const entrevistadoRealm = realmInstance.objects('Localidade')
+              const entrevistadoRealm = realmInstance.objects('Entrevistado')
               .filtered(`id == ${entrevistado.id}`)[0];
+
+              console.log("################",entrevistado, entrevistadoRealm );
                     
                     if(entrevistado.sincronizado && entrevistadoRealm && entrevistado.idLocal==''){
                      

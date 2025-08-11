@@ -21,7 +21,7 @@ export const convertToEscolaInput = (escola: any) => {
     return escolaInput;
   };
 
-export const useEscolas= (localidadeId:number)=>{
+export const useEscolas= (localidadeId:number, foccus:boolean)=>{
     const [contagemEscolas, setContagemescolas] = useState<number>(0);
 
     const sinconizeQueue = async () => {
@@ -93,7 +93,7 @@ export const useEscolas= (localidadeId:number)=>{
             sinconizeQueue()
             fetchEscolasromAPI();
             fetchEscolasFromLocalDb();
-          }, []);
+          }, [foccus]);
         
           return { contagemEscolas};
 

@@ -46,7 +46,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
   
 
 
- export const useBenfeitorias = (imovelId:number)=>{
+ export const useBenfeitorias = (imovelId:number, foccus:boolean)=>{
 
     const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>([]);
 
@@ -129,7 +129,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
         fetchBenfeitoriasRealm();
         fetchBefeitoriasAPI();
         sinconizeBenfeitoriaQueue();
-    }, []);
+    }, [foccus]);
 
     return {benfeitoria};
 }

@@ -60,7 +60,7 @@ export const salvarBenfeitoria = (benfeitoria: BenfeitoriaType): Promise<Benfeit
             let benfeitoriaSalva;
             realmInstance.write(() => {
                 const benfeitoriaExistente = realmInstance
-                    .objects<BenfeitoriaType>("Imovel")
+                    .objects<BenfeitoriaType>("Benfeitoria")
                     .filtered(`id == ${benfeitoria.id}`)[0];
 
                 const benfeitoriaPadrao = {

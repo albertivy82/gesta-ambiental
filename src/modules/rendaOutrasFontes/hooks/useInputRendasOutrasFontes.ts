@@ -110,6 +110,16 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
   }
 
   const enviaRendaOutrasFontesEdicao= async () =>{
+
+     const testConnectionOne = await testConnection();
+                
+                if(!rendaOutrasFontes?.sincronizado && !testConnectionOne){
+                       
+                        Alert.alert("Registro Apenas Local");
+                        const local = await salvarRenda(buildRendaOutrasFontesAtualizada());
+                         return local;
+                
+                }else{
     const rendaOutrasFontesCorrigida = {
       ...novaRendaOutrasFontes,
       benfeitoria: { id: typeof rendaOutrasFontes!.benfeitoria === 'number' ? rendaOutrasFontes!.benfeitoria : rendaOutrasFontes!.benfeitoria.id }
@@ -143,12 +153,15 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
             }
             
           }
+
+        }
           
   }
 
   const buildRendaOutrasFontesAtualizada = (): RendaOutrasFontesType => ({
     ...rendaOutrasFontes!,
     ...novaRendaOutrasFontes,
+    benfeitoria: { id: typeof rendaOutrasFontes!.benfeitoria === 'number' ? rendaOutrasFontes!.benfeitoria : rendaOutrasFontes!.benfeitoria.id },
     sincronizado: rendaOutrasFontes?.sincronizado,
     idLocal: rendaOutrasFontes?.idLocal,
     idFather: rendaOutrasFontes?.idFather,

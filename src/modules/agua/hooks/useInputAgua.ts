@@ -115,48 +115,62 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
   }
 
   const enviaAguaEdicao= async () =>{
-    const aguaCorrigida = {
-      ...novaAgua,
-      benfeitoria: { id: typeof agua!.benfeitoria === 'number' ? agua!.benfeitoria : agua!.benfeitoria.id }
-    };
-    console.log("222", agua)
-    const isConnected = await testConnection();
-    
-     if(isConnected){
-      console.log("3333",aguaCorrigida)
-            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
-            try{
-              
-              const response = await connectionAPIPut(`http://177.74.56.24/agua/${agua!.id}`, aguaCorrigida) as AguaType;
 
-              console.log("4444",response)
-                    if (response && response.id) {
-                      return fetchAguaAPI(response.id);
-                    }else{
-                      const local = await salvarAgua(buildAguaAtualizada());
-                      return local;
-                                        }
-           } catch (error) {
-              const local = await salvarAgua(buildAguaAtualizada());
-              console.log("Erro ao enviar edição", "Tente novamente online.");
-              return local;
-          }
-          
-          } else {
-            if (!agua!.sincronizado && agua!.idLocal) {
-             return await salvarAgua(buildAguaAtualizada());
-            } else {
-             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
-             return null;
-            }
-            
-          }
+    const testConnectionOne = await testConnection();
+    
+    if(!agua?.sincronizado && !testConnectionOne){
+           
+            Alert.alert("Registro Apenas Local");
+            const local = await salvarAgua(buildAguaAtualizada());
+             return local;
+    
+    }else{
+
+        const aguaCorrigida = {
+          ...novaAgua,
+          benfeitoria: { id: typeof agua!.benfeitoria === 'number' ? agua!.benfeitoria : agua!.benfeitoria.id }
+        };
+      
+        const isConnected = await testConnection();
+        
+        if(isConnected){
+        
+                //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+                try{
+                  
+                  const response = await connectionAPIPut(`http://177.74.56.24/agua/${agua!.id}`, aguaCorrigida) as AguaType;
+
+                
+                        if (response && response.id) {
+                          return fetchAguaAPI(response.id);
+                        }else{
+                          const local = await salvarAgua(buildAguaAtualizada());
+                          return local;
+                                            }
+              } catch (error) {
+                  const local = await salvarAgua(buildAguaAtualizada());
+                  console.log("Erro ao enviar edição", "Tente novamente online.");
+                  return local;
+              }
+              
+              } else {
+                if (!agua!.sincronizado && agua!.idLocal) {
+                return await salvarAgua(buildAguaAtualizada());
+                } else {
+                Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                return null;
+                }
+                
+              }
+
+    }
           
   }
 
   const buildAguaAtualizada = (): AguaType => ({
     ...agua!,
     ...novaAgua,
+    benfeitoria: { id: typeof agua!.benfeitoria === 'number' ? agua!.benfeitoria : agua!.benfeitoria.id },
     sincronizado: agua?.sincronizado,
     idLocal: agua?.idLocal,
     idFather: agua?.idFather,

@@ -19,7 +19,7 @@ export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
   sexo: null,
   apelido: '',
   escolaridade: '',
-  estadoCivil: null,
+  estadoCivil: '',
   religiao: '',
   morador: null,
   dataChegada: '',
@@ -67,7 +67,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
           novoEntrevistado.sexo !== null &&
           novoEntrevistado.apelido !== '' && 
           novoEntrevistado.escolaridade !== '' &&
-          novoEntrevistado.estadoCivil !== null &&
+          novoEntrevistado.estadoCivil !== '' &&
           novoEntrevistado.religiao !== '' &&
           novoEntrevistado.morador !== null &&
           novoEntrevistado.dataChegada !== '' &&
@@ -202,6 +202,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
                   const builEntrevistadoAtualizada = (): EntrevistadoType => ({
                     ...entrevistado!,
                     ...novoEntrevistado,
+                    localidade: { id: typeof entrevistado!.localidade === 'number' ? entrevistado!.localidade : entrevistado!.localidade.id },
                     sincronizado: entrevistado?.sincronizado,
                     idLocal: entrevistado?.idLocal,
                   });

@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, View } from 'react-native';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
@@ -58,9 +58,10 @@ const InfLocalidade = () => {
       const navigation = useNavigation<NavigationProp<ParamListBase>>();
       const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
       const { localidade } = params;
-      const {contagemEscolas} = useEscolas(localidade.id);
-      const {contagemPostos} = usePostos(localidade.id);     
-      const {contagemEntrevistados} = useEntrevistados(localidade.id);
+      const foccus =useIsFocused();
+      const {contagemEscolas} = useEscolas(localidade.id, foccus);
+      const {contagemPostos} = usePostos(localidade.id, foccus);     
+      const {contagemEntrevistados} = useEntrevistados(localidade.id, foccus);
       
            
       

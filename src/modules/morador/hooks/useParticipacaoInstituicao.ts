@@ -18,7 +18,7 @@ export const convertToParticipacaoInstituicaoInput = (ParticipacaoInstituicao: a
   };
 };
 
-export const useParticipacaoInstituicoes = (moradorId: number) => {
+export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) => {
   const [participacaoInsituicaoes, setParticipacaoInstituicoes] = useState<ParticipacaoInstituicaoType[]>([]);
 
   const sincronizeParticipacaoInstituicoesQueue = async () => {
@@ -83,7 +83,7 @@ export const useParticipacaoInstituicoes = (moradorId: number) => {
     fetchParticipacaoInstituicoesRealm();
     fetchParticipacaoInstituicoesAPI();
     sincronizeParticipacaoInstituicoesQueue();
-  }, []);
+  }, [foccus]);
 
   return { participacaoInsituicaoes };
 };

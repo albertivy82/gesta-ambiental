@@ -127,47 +127,59 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
   }
 
   const enviaMoradorEdicao= async () =>{
-    const moradorCorrigida = {
-      ...novoMorador,
-      benfeitoria: { id: typeof morador!.benfeitoria === 'number' ? morador!.benfeitoria : morador!.benfeitoria.id }
-    };
-   
-    const isConnected = await testConnection();
-    
-     if(isConnected){
-            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
-            try{
+     const testConnectionOne = await testConnection();
+        
+        if(!morador?.sincronizado && !testConnectionOne){
+               
+                Alert.alert("Registro Apenas Local");
+                const local = await salvarMorador(buildMoradorAtualizada());
+                 return local;
+        
+        }else{
+
+        const moradorCorrigida = {
+          ...novoMorador,
+          benfeitoria: { id: typeof morador!.benfeitoria === 'number' ? morador!.benfeitoria : morador!.benfeitoria.id }
+        };
+      
+        const isConnected = await testConnection();
+        
+        if(isConnected){
+                //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
+                try{
+                  
+                  const response = await connectionAPIPut(`http://177.74.56.24/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
+                
+                  if (response && response.id) {
+                        
+                          return fetchMoradorAPI(response.id);
+                        }else{
+                          const local = await salvarMorador(buildMoradorAtualizada());
+                          return local;
+                                            }
+              } catch (error) {
+                  const local = await salvarMorador(buildMoradorAtualizada());
+                  Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                  return local;
+              }
               
-              const response = await connectionAPIPut(`http://177.74.56.24/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
-            
-              if (response && response.id) {
-                     
-                      return fetchMoradorAPI(response.id);
-                    }else{
-                      const local = await salvarMorador(buildMoradorAtualizada());
-                      return local;
-                                        }
-           } catch (error) {
-              const local = await salvarMorador(buildMoradorAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
-              return local;
-          }
-          
-          } else {
-            if (!morador!.sincronizado && morador!.idLocal) {
-             return await salvarMorador(buildMoradorAtualizada());
-            } else {
-             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
-             return null;
-            }
-            
-          }
+              } else {
+                if (!morador!.sincronizado && morador!.idLocal) {
+                return await salvarMorador(buildMoradorAtualizada());
+                } else {
+                Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                return null;
+                }
+                
+              }
+         }
           
   }
 
   const buildMoradorAtualizada = (): MoradorType => ({
     ...morador!,
     ...novoMorador,
+    benfeitoria: { id: typeof morador!.benfeitoria === 'number' ? morador!.benfeitoria : morador!.benfeitoria.id },
     sincronizado: morador?.sincronizado,
     idLocal: morador?.idLocal,
     idFather: morador?.idFather,

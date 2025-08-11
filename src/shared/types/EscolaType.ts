@@ -11,6 +11,6 @@ export interface EscolaType {
     localidade: {
         id: number;
     }
-    sincronizado: boolean;
+    sincronizado?: boolean;
     idLocal?: string;
 }

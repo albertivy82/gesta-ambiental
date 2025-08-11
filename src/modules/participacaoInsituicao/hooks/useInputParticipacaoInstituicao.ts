@@ -111,6 +111,15 @@ const objetoFila = () => {
     }
 
     const enviaParticipacaoInstituicaoEdicao= async () =>{
+      const testConnectionOne = await testConnection();
+                          
+                          if(!participacaoInstituicao?.sincronizado && !testConnectionOne){
+                                 
+                                  Alert.alert("Registro Apenas Local");
+                                  const local = await salvarParticipacaoInstituicao(buildParticipacaoInstituicaoAtualizada());
+                                   return local;
+                          
+                          }else{
       const participacaoInstituicaoCorrigida = {
         ...novaParticipacaoInstituicao,
         morador: { id: typeof participacaoInstituicao!.morador === 'number' ? participacaoInstituicao!.morador : participacaoInstituicao!.morador.id }
@@ -144,12 +153,14 @@ const objetoFila = () => {
                 return null;
               }
             }
+          }
             
     }
 
     const buildParticipacaoInstituicaoAtualizada = (): ParticipacaoInstituicaoType => ({
       ...participacaoInstituicao!,
       ...novaParticipacaoInstituicao,
+      morador: { id: typeof participacaoInstituicao!.morador === 'number' ? participacaoInstituicao!.morador : participacaoInstituicao!.morador.id },
       sincronizado: participacaoInstituicao?.sincronizado,
       idLocal: participacaoInstituicao?.idLocal,
       idFather: participacaoInstituicao?.idFather,
