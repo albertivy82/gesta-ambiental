@@ -53,23 +53,27 @@ export const salvarImoveis = (imovel: imovelBody) =>{
 };
 
 export const salvarImovel = (imovel: imovelBody): Promise<imovelBody> =>{
-
+ 
     return new Promise((resolve, reject)=>{
-           
+      
         try{
             let imovelSalvo;
             realmInstance.write(()=>{
-              const imovelRealm = realmInstance.objects('Imovel')
+              
+              const imovelRealm = realmInstance.objects('Entrevistado')
               .filtered(`id == ${imovel.id}`)[0];
-                    
+
+                               
                     if(imovel.sincronizado && imovelRealm && imovel.idLocal==''){
-                     
+                       
                         const imovelPadrao ={
                          ...imovel,
                         entrevistado: imovel.entrevistado.id,
+                       
                         };
                         imovelSalvo =  realmInstance.create('Imovel', imovelPadrao, true);
                     }else{
+                      
                         const imovelPadrao ={
                             ...imovel,
                            entrevistado: imovel.entrevistado.id,
@@ -79,6 +83,7 @@ export const salvarImovel = (imovel: imovelBody): Promise<imovelBody> =>{
             });
             if(imovelSalvo){
                 const cleanImovel = JSON.parse(JSON.stringify(imovelSalvo));
+               // console.log("imovel salvo no realm, aquiperdeu o entrecvitado?",imovelSalvo)
                 resolve(cleanImovel);
             }else{
                 throw new Error("Erro ao recuperar o imovel Salvo.");
@@ -99,21 +104,21 @@ export const setIdEntrevistadoFromApiOnImovel = (idEntrevistadoApi: number, entr
         const query = `idFather == "${entrevistadoIdLocal}" AND (sincronizado == false)`;
         const imovelQueue = realmInstance.objects('Imovel').filtered(query);
 
-        console.log("Conjunto de imovels que precisam receber o ID do pai:", imovelQueue);
+       
 
         if (imovelQueue.length > 0) {
             realmInstance.write(() => {
                 imovelQueue.forEach(imovelOrfan => {
-                   console.log("Atualizando imovel:", imovelOrfan);
+                  
                     // Atualizar o ID do pai (imovel) para o ID vindo da API
                     imovelOrfan.entrevistado = idEntrevistadoApi;
                     // Se quiser manter o idFather para referência futura, pode comentá-la
                     imovelOrfan.idFather = '';  
-                    console.log("Atualizando imovel:", imovelOrfan);
+                    
                 });
             });
 
-           console.log("Benfeitorias atualizadas com o novo ID:", imovelQueue);
+          
         } else {
            console.log("Nenhuma imovel encontrada para o ID local:", entrevistadoIdLocal);
         }
@@ -182,7 +187,7 @@ export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBod
     
     const query = `entrevistado == "${idEntrevistadoApi}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const imoveisQueue = realmInstance.objects<imovelBody>('Imovel').filtered(query);
-    console.log("Verificando como está sendo feita esta busca", idEntrevistadoApi,imoveisQueue)
+  
     const cleanedQueue = imoveisQueue.map(imovel => ({ ...imovel }));
     
     const primeiroRegistro = cleanedQueue[0];
@@ -250,7 +255,7 @@ export const apagarQueueImovel = () => {
             if (imovelExcluir.length > 0) {
                 // Deleta todos os imóveis encontrados
                 realmInstance.delete(imovelExcluir);
-                console.log(`${imovelExcluir.length} imóveis excluídos com sucesso.`);
+               
             } else {
                 console.log('Nenhum imóvel encontrado para exclusão.');
             }

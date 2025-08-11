@@ -19,12 +19,11 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ morador, destino, o
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [disable, setDisable] = useState<boolean>(false);
-console.log("por que o didabela não altera?", disable)
+  
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
-     // console.log("aqui",morador)
+    
       navigation.navigate(destino, {morador});
       setModalVisible(false);
       onEditSuccess();
@@ -35,36 +34,17 @@ console.log("por que o didabela não altera?", disable)
     }
   };
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      try {
-       
-        if (!!(await testConnection())) {
-          setDisable(true);
-        } else {
-          setDisable(false);
-        }
-      } catch (error) {
-        console.error('Erro ao verificar conexão:', error);
-        setDisable(true);
-      }
-    };
-
-    checkConnection();
-  }, []);
-
-    
    
   
 
   return (
     <>
-     <TouchableOpacity onPress={() => setModalVisible(true)} disabled={disable}>
+     <TouchableOpacity onPress={() => setModalVisible(true)} >
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='pencil2' color={disable ? '#aaa' : "#ff4500"} />
+          <Icon size={40} name='pencil2' color={"#ff4500"} />
           <Text 
             type={textTypes.PARAGRAPH_LIGHT} 
-            color={disable ? "#070707" : "#ff4500"} 
+            color={"#ff4500"} 
             style={{ alignItems: 'baseline' }}
           >
             Editar Item

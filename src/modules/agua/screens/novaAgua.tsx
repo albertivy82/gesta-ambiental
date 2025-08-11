@@ -2,18 +2,17 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
+import { QualidadeAguaEnum } from "../../../enums/qualidadeAgua.enum";
+import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import Text from "../../../shared/components/text/Text";
+import { theme } from "../../../shared/themes/theme";
+import { AguaType } from "../../../shared/types/AguaType";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAgua } from "../hooks/useInputAgua";
 import { AguaDetailContainer } from "../styles/agua.style";
-import { QualidadeAguaEnum } from "../../../enums/qualidadeAgua.enum";
-import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
-import CheckboxSelector from "../../../shared/components/input/checkBox";
-import { AguaType } from "../../../shared/types/AguaType";
-import { theme } from "../../../shared/themes/theme";
-import Text from "../../../shared/components/text/Text";
-import { getBenfeitoria, getBenfeitorias } from "../../../realm/services/benfeitoriaService";
 
 
 export interface NovaAguaParams {
@@ -22,7 +21,6 @@ export interface NovaAguaParams {
 }
 
 export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
-  console.log("10", benfeitoria)
   navigate('AguaLista', { benfeitoria });
 };
 
@@ -100,12 +98,13 @@ console.log("?", benfeitoria)
   useEffect(() => {
     if (!agua) return;
     handleEnumChange( 'qualidadeDaAgua', agua.qualidadeDaAgua);
-    handleEnumChange( 'qualidadeDaAgua', agua.corDagua);
-    handleEnumChange( 'qualidadeDaAgua', agua.saborDagua);
-    handleEnumChange( 'qualidadeDaAgua', agua.cheiroDagua);
+    handleEnumChange( 'corDagua', agua.corDagua);
+    handleEnumChange( 'saborDagua', agua.saborDagua);
+    handleEnumChange( 'cheiroDagua', agua.cheiroDagua);
   }, [agua]);
                   
   const tipoFornecimento = agua?.tipoDeFornecimento ? agua.tipoDeFornecimento : '';
+  const metTratamento = agua?.metodoTratamento ? agua.metodoTratamento : '';
   const profundidade = agua?.profundidadePoco ? agua.profundidadePoco.toFixed(2)  : '';
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
@@ -113,7 +112,7 @@ console.log("?", benfeitoria)
 
       {tipoFornecimento && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                  área informada anteriormente: {tipoFornecimento}
+                 Informação dada anteriormente: {tipoFornecimento}
                 </Text>
         )}
       <RenderPicker
@@ -133,9 +132,8 @@ console.log("?", benfeitoria)
                         maxLength={75}
                         value={outroFornecimento}
                         onChangeText={SetOutroFornecimento}
-                        placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
-                        title="Qual(is) a(s) instituição(ões) e que tipo de trabalho desenvolve?"
+                        title="Informe qual"
                     />
                 </View>
        )}
@@ -147,7 +145,11 @@ console.log("?", benfeitoria)
                options={qualidadeOptions}
               />
 
-
+{metTratamento && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente: {metTratamento}
+                </Text>
+        )}
             <CheckboxSelector
                 options={tratamentoOptions}
                 selectedValues={tratamentoAgua}
@@ -219,7 +221,7 @@ console.log("?", benfeitoria)
           {loading ? (
             <ActivityIndicator size="large" color="#ff4500" /> 
           ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
           )}
         </View>
 

@@ -28,8 +28,9 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
     console.log(novaRendaOutrasFontes);
     if (
       novaRendaOutrasFontes.fonte !== null &&
-      novaRendaOutrasFontes.beneficiarios ==0 &&
-      novaRendaOutrasFontes.rendaMesTotal >=0 
+      novaRendaOutrasFontes.beneficiarios > 0 &&
+      novaRendaOutrasFontes.rendaMesTotal >0 &&
+      novaRendaOutrasFontes.rendaMesTotal <=1000000 
 
     ) {
       setDisabled(false);

@@ -27,8 +27,8 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
     if (
       novaAtividade.atividade !=='' &&
       novaAtividade.pessoasEnvolvidas > 0 &&
-      novaAtividade.pessoasEnvolvidas < 20 &&
-      novaAtividade.faturamentoAtividadeMesTotal <= 0 &&
+      novaAtividade.pessoasEnvolvidas < 100 &&
+      novaAtividade.faturamentoAtividadeMesTotal >= 0 &&
       novaAtividade.faturamentoAtividadeMesTotal <= 1000000
     ) {
       setDisabled(false);

@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getRendaOutrasFontes } from '../../../realm/services/rendaOutrasFontes';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -10,6 +10,7 @@ import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { RendaOutrasFontesType } from '../../../shared/types/rendaOutrasFontesType';
 import { RendaOutrasFontesDetailContainer } from '../styles/rendaOutrasFontes.style';
 import RenderItemRendaOutrasFontes from '../ui-components/listaRendasOutrasFontes';
+import { useRendasOutrasFontes } from '../../benfeitoriaDetails/hooks/useRendaOutrasfontes';
 
 
 export interface BenfeitoriaParams {
@@ -26,30 +27,40 @@ const RendaOutrasFontes = () => {
  const { benfeitoria } = route.params;
  const [isLoading, setIsLoading] = useState(false);
  const flatListRef = useRef<FlatList>(null);
- const [creditos, setCreditos] = useState<RendaOutrasFontesType[]>([]);
+ const [rendasF, setRendasF] = useState<RendaOutrasFontesType[]>([]);
+ const {} = useRendasOutrasFontes(benfeitoria.id);
 
-   useEffect(()=>{
-          setIsLoading(true);
-            if(benfeitoria){
-               const rendasRealm = getRendaOutrasFontes(benfeitoria.id);
-               setCreditos(rendasRealm);
-               console.log(benfeitoria.id, rendasRealm)
-             }
-            
-             setIsLoading(false);
-    }, [benfeitoria])
+   
+ useEffect(()=>{
+  if(benfeitoria){
+    const rendasRealm = getRendaOutrasFontes(benfeitoria.id);
+    setRendasF(rendasRealm);
+   
+  }
+  }, [benfeitoria])
   
-
-  // Rola até o final da lista
+  const fetchMorador = useCallback(async () => {
+        setIsLoading(true);
+        if (benfeitoria.id) {
+          const moradoresRealm = getRendaOutrasFontes(benfeitoria.id);
+          setRendasF(moradoresRealm);
+        }
+        setIsLoading(false);
+      }, [benfeitoria]);
+  
+  useEffect(() => {
+    fetchMorador();
+  }, [fetchMorador]);
+  
+     
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
-  };
-
-  // Atualiza a lista de créditos
+  };  
+  
   const handleRefresh = () => {
+    fetchMorador();
     handleScrollToEnd();
-  };
-
+  }
   const handleNovoCredito = () => {
     novoCredito(navigation.navigate, benfeitoria);
   };
@@ -109,8 +120,8 @@ const RendaOutrasFontes = () => {
 
       <FlatList
         ref={flatListRef}
-        data={creditos}
-        extraData={creditos} 
+        data={rendasF}
+        extraData={rendasF} 
         renderItem={({ item }) => <RenderItemRendaOutrasFontes item={item} />}
         keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
       />

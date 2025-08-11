@@ -10,7 +10,6 @@ import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
-import { getTodosImoveis } from '../../../realm/services/imovelService';
 
 
 export interface entrevistadoParam {

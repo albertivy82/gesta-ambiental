@@ -4,7 +4,6 @@ import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
 import { Compras } from "../../../enums/Compras.enum";
-import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
 import { ServicoPublicos } from "../../../enums/ServicoPublicos";
 import { Sexo } from "../../../enums/Sexo";
 import { SimNao } from "../../../enums/simNao.enum";
@@ -17,6 +16,8 @@ import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
+import { estadoCivilOptions } from "../ui-components/opcoesEntrevistado";
+import { getAllEntrevistados } from "../../../realm/services/entrevistado";
 
 
 export interface NovoEntrevistadoParams {
@@ -38,14 +39,13 @@ export const NovoEntrevistado = ()=>{
   const { novoEntrevistado,
           enviarRegistro,
           handleOnChangeInput,
-          handleOnChangeData,
           handleArrayFieldChange,
           handleEnumChange,
           handleNumberChange,
           handleSetNumber,
           disabled} = useNovoEntrevistado(localidadeId!, entrevistado);
          
-    
+          getAllEntrevistados();
           useEffect(() => {
             if (!entrevistado) return;
           
@@ -55,11 +55,8 @@ export const NovoEntrevistado = ()=>{
             handleOnChangeInput(entrevistado.apelido, 'apelido');
             handleOnChangeInput(entrevistado.religiao, 'religiao');
             setIdade(entrevistado.nascimentoData);
-          
-            // Datas
-            handleOnChangeData(new Date(entrevistado.dataChegada), 'dataChegada');
-          
             // Enums
+            handleEnumChange('dataChegada', entrevistado.dataChegada);
             handleEnumChange('sexo', entrevistado.sexo);
             handleEnumChange('escolaridade', entrevistado.escolaridade);
             handleEnumChange('estadoCivil', entrevistado.estadoCivil);
@@ -141,7 +138,6 @@ export const NovoEntrevistado = ()=>{
       "Pós-graduação"
     ]);
     const simNaoOptions = Object.values(SimNao);
-    const estadoCivilOptions = Object.values(EstadoCivil);
     const simNaoTalvezOptions = Object.values(SimNaoTalvez);
     const alimentacaoOptions = Object.values(Alimentacao);
     const comprasOptions = Object.values(Compras);

@@ -24,8 +24,9 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
   useEffect(() => {
     console.log(novoCredito);
     if (
-      novoCredito.nome !== null &&
-      novoCredito.valor <= 0
+      novoCredito.nome !== '' &&
+      novoCredito.valor > 0 &&
+      novoCredito.valor <= 1000000
     ) {
       setDisabled(false);
     }else{

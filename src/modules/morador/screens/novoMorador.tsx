@@ -2,7 +2,6 @@ import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } fro
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
-import { EstadoCivil } from "../../../enums/EstadoCivil.enum";
 import { Molestias } from "../../../enums/molestias.enum";
 import { Perfil } from "../../../enums/Perfil";
 import { Sexo } from "../../../enums/Sexo";
@@ -15,6 +14,7 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { MoradorType } from "../../../shared/types/MoradorType";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
+import { estadoCivilOptions } from "../ui-components/opcoesMorador";
 
 
 export interface NovoMoradorParams {
@@ -79,7 +79,6 @@ export const NovoMorador = ()=>{
   const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
   const perfilOptions =  Object.values(Perfil);
   const sexoOptions =  Object.values(Sexo);
-  const estadoCivilOptions =  Object.values(EstadoCivil);
   const escolaridadeOptions =  Object.values([
     "Analfabeto",
     "Fundamental completo",
@@ -264,7 +263,7 @@ export const NovoMorador = ()=>{
               {loading ? (
                 <ActivityIndicator size="large" color="#ff4500" /> 
               ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
               )}
             </View>
       

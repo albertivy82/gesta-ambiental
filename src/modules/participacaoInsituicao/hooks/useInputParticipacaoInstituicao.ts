@@ -22,14 +22,18 @@ export const useNovaParticipacaoInstituicao = (morador:MoradorType, participacao
   const [disabled, setDisabled] = useState<boolean>(true);
   
   useEffect(() => {
-    console.log(novaParticipacaoInstituicao)
+   
     if (
       novaParticipacaoInstituicao.instituicao !== '' &&
       novaParticipacaoInstituicao.tipoDeRegistro !== '' &&
       novaParticipacaoInstituicao.registro !== ''
     ) {
-      setDisabled(false);
-  }
+      setDisabled(false)
+      }else
+      {
+       setDisabled(true);
+      };
+  
 }, [novaParticipacaoInstituicao]);
 
   

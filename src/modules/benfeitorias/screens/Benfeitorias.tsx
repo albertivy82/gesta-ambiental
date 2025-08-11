@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getBenfeitorias } from '../../../realm/services/benfeitoriaService';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -27,21 +27,33 @@ const Benfeitorias = ()=>{
   
   
   useEffect(()=>{
-    setIsLoading(true);
-      if(imovel){
+    if(imovel){
          const benfeitoriaRealm = getBenfeitorias(imovel.id);
           setBenfeitoria(benfeitoriaRealm);
        }
-       setIsLoading(false);
-   }, [imovel])
+  }, [imovel])
 
-// Rola até o final da lista
+const fetchBenfeitorias = useCallback(async () => {
+      setIsLoading(true);
+      if (imovel.id) {
+        const benfeitoriassRealm = getBenfeitorias(imovel.id);
+        setBenfeitoria(benfeitoriassRealm);
+      }
+      setIsLoading(false);
+    }, [imovel]);
+
+useEffect(() => {
+  fetchBenfeitorias();
+}, [fetchBenfeitorias]);
+
+   
 const handleScrollToEnd = () => {
   flatListRef.current?.scrollToEnd({ animated: true });
 };  
 
 const handleRefresh = () => {
-   handleScrollToEnd();
+  fetchBenfeitorias();
+  handleScrollToEnd();
 };
  
 const handleNovaBenfeitoria = () => {

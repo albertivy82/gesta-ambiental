@@ -140,7 +140,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
             if (response && response.id) {
               return fetchEntrevistadoAPI(response.id);
              }
-        console.log("useInputEntrevistado.ts...enviando api...");
+      
           } catch (error) {
             objetoFila();
           }
@@ -153,11 +153,20 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     };
 
     const enviaEntrevistadoEdicao= async () =>{
-      const entrevistadoCorrigido = {
-        ...novoEntrevistado,
-        localidade: { id: typeof entrevistado!.localidade === 'number' ? entrevistado!.localidade : entrevistado!.localidade.id }
-      };
-     
+      const testConnectionOne = await testConnection();
+
+      if(!entrevistado?.sincronizado && !testConnectionOne){
+       
+        Alert.alert("Registro Apenas Local");
+        const local = await salvarEntrevistado(builEntrevistadoAtualizada());
+         return local;
+
+      }else{
+      
+        const entrevistadoCorrigido = {
+          ...novoEntrevistado,
+          localidade: { id: typeof entrevistado!.localidade === 'number' ? entrevistado!.localidade : entrevistado!.localidade.id }
+        };
       const isConnected = await testConnection();
       
        if(isConnected){
@@ -185,8 +194,10 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
                   return null;
                }
         }
+
+      }
                                           
-}
+      }
                 
                   const builEntrevistadoAtualizada = (): EntrevistadoType => ({
                     ...entrevistado!,

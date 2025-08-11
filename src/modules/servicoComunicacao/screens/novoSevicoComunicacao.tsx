@@ -134,7 +134,7 @@ export const NovoServicoComunicacao = () => {
           {loading ? (
             <ActivityIndicator size="large" color="#ff4500" /> 
           ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
           )}
         </View>
 

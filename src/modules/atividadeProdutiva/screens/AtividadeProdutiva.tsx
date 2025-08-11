@@ -10,6 +10,7 @@ import { AtividadeProdutivaType } from '../../../shared/types/AtividadeProdutiva
 import { AtividadeDetailContainer } from '../styles/ativdade.style';
 import { getAtividadesProdutivas } from '../../../realm/services/atividadeProdutivaService';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { useAtividadesProdutivas } from '../../benfeitoriaDetails/hooks/useAtividadeProdutiva';
 
 export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;
@@ -26,6 +27,7 @@ const Atividades = () => {
   const flatListRef = useRef<FlatList>(null);
    const [isLoading, setIsLoading] = useState(false);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
+  const {} = useAtividadesProdutivas(benfeitoria.id);
 
   
  const isFocused = useIsFocused();

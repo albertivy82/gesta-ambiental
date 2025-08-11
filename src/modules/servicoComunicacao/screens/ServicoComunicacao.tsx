@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
@@ -10,6 +10,7 @@ import { getServicosComunicacao } from '../../../realm/services/servicosComunica
 import { ServicosComunicacaoType } from '../../../shared/types/ComunicacaoType';
 import RenderItemServicoComunicacao from '../ui-components/listaServicoComunicacao';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { useServicosComunicacao } from '../../benfeitoriaDetails/hooks/useSevicoComunicacao';
 
 export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;
@@ -26,29 +27,39 @@ const ServicosComunicacao = () => {
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [servicosComunicacao, setServicosComunicacao] = useState<ServicosComunicacaoType[]>([]);
+  const {} = useServicosComunicacao(benfeitoria.id);
 
-  useEffect(()=>{
-           setIsLoading(true);
-             if(benfeitoria){
-                const creitoRealm = getServicosComunicacao(benfeitoria.id);
-                setServicosComunicacao(creitoRealm);
-                console.log(benfeitoria.id, creitoRealm)
-              }
-             
-              setIsLoading(false);
-     }, [benfeitoria])
    
-
-    // Rola até o final da lista
+ useEffect(()=>{
+  if(benfeitoria){
+    const creitoRealm = getServicosComunicacao(benfeitoria.id);
+    setServicosComunicacao(creitoRealm);
+  }
+  }, [benfeitoria])
+  
+  const fetchMorador = useCallback(async () => {
+        setIsLoading(true);
+        if (benfeitoria.id) {
+          const moradoresRealm = getServicosComunicacao(benfeitoria.id);
+          setServicosComunicacao(moradoresRealm);
+        }
+        setIsLoading(false);
+      }, [benfeitoria]);
+  
+  useEffect(() => {
+    fetchMorador();
+  }, [fetchMorador]);
+  
+     
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
-  };
-
-  // Atualiza a lista de serviços de comunicação
+  };  
+  
   const handleRefresh = () => {
-       handleScrollToEnd();
-  };
-
+    fetchMorador();
+    handleScrollToEnd();
+  }
+  
   const handleNovoServicoComunicacao = () => {
     novoServicoComunicacao(navigation.navigate, benfeitoria);
   };

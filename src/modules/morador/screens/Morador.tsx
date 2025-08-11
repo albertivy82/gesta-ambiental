@@ -1,15 +1,16 @@
-import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getMoradores } from '../../../realm/services/moradorService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { MoradorType } from '../../../shared/types/MoradorType';
 import { MoradorDetailContainer } from '../styles/morador.style';
 import RenderItemMorador from '../ui-components/listaMoradores';
-import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { useMoradores } from '../../benfeitoriaDetails/hooks/useMorador';
 
 
 
@@ -25,36 +26,41 @@ const Morador = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, BenfeitoriaParams>, 'Benfeitoria'>>();
   const { benfeitoria } = route.params;
-  const [isLoading, setIsLoading] = useState(false);
-    const flatListRef = useRef<FlatList>(null);
+   const [isLoading, setIsLoading] = useState(false);
+  const flatListRef = useRef<FlatList>(null);
   const [moradors, setMorador] = useState<MoradorType[]>([]);
+  const {moradores} = useMoradores(benfeitoria.id);
  
-  const isFocused = useIsFocused();
-
-  const carregarMoradores = () => {
+  
+  useEffect(()=>{
     if (benfeitoria) {
-      setIsLoading(true);
-      const benfeitoriaRealm = getMoradores(benfeitoria.id);
-      setMorador(benfeitoriaRealm);
-      setIsLoading(false);
+      const moradoresRealm = getMoradores(benfeitoria.id);
+      setMorador(moradoresRealm);
     }
-  };
+  }, [benfeitoria])
+  
+  const fetchMorador = useCallback(async () => {
+        setIsLoading(true);
+        if (benfeitoria.id) {
+          const moradoresRealm = getMoradores(benfeitoria.id);
+          setMorador(moradoresRealm);
+        }
+        setIsLoading(false);
+      }, [benfeitoria]);
   
   useEffect(() => {
-    if (isFocused) {
-      carregarMoradores();
-    }
-  }, [isFocused]);
+    fetchMorador();
+  }, [fetchMorador]);
+  
+     
+  const handleScrollToEnd = () => {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  };  
   
   const handleRefresh = () => {
-    carregarMoradores();
+    fetchMorador();
     handleScrollToEnd();
   };
-  
-  // Rola até o final da lista
-const handleScrollToEnd = () => {
-  flatListRef.current?.scrollToEnd({ animated: true });
-};  
 
 
 

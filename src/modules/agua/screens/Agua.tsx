@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getAguas } from '../../../realm/services/aguasService';
 import { Icon } from '../../../shared/components/icon/Icon';
@@ -10,6 +10,7 @@ import { AguaType } from '../../../shared/types/AguaType';
 import { AguaDetailContainer } from '../styles/agua.style';
 import RenderItemAgua from '../ui-components/listaAgua';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { useAguas } from '../../benfeitoriaDetails/hooks/useAgua';
 
 
 
@@ -28,31 +29,40 @@ const Aguas = () => {
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [aguas, setAguas] = useState<AguaType[]>([]);
+  const {} = useAguas(benfeitoria.id);
 
  
-  useEffect(()=>{
-        setIsLoading(true);
-          if(benfeitoria){
-            console.log("1111", benfeitoria.id)
-             const benfeitoriaRealm = getAguas(benfeitoria.id);
-             setAguas(benfeitoriaRealm);
-             console.log(benfeitoria.id, benfeitoriaRealm)
-           }
-          
-           setIsLoading(false);
+ useEffect(()=>{
+    if (benfeitoria) {
+      const moradoresRealm = getAguas(benfeitoria.id);
+      setAguas(moradoresRealm);
+    }
   }, [benfeitoria])
-
- 
-
+  
+  const fetchAgua = useCallback(async () => {
+        setIsLoading(true);
+        if (benfeitoria.id) {
+          const moradoresRealm = getAguas(benfeitoria.id);
+          setAguas(moradoresRealm);
+        }
+        setIsLoading(false);
+      }, [benfeitoria]);
+  
+  useEffect(() => {
+    fetchAgua();
+  }, [fetchAgua]);
+  
+     
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
-  };
-
+  };  
+  
   const handleRefresh = () => {
+    fetchAgua();
     handleScrollToEnd();
-  };
-
-  const handleNovaAgua = () => {
+  }
+  
+    const handleNovaAgua = () => {
     console.log(benfeitoria.id)
     novaAgua(navigation.navigate, benfeitoria);
   };

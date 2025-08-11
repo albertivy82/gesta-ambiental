@@ -29,19 +29,20 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
 export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorType)  => {
   const [novoMorador, setNovaMorador] = useState<MoradorInput>(DEFAULT_MORADOR_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
-  const [dataNascimento, setDataNascimento] = useState<Date | null>(null);
+ 
   
 
   useEffect(() => {
-    console.log(novoMorador);
+    console.log(novoMorador)
     if (
-      novoMorador.dataNascimento <0 &&
-      novoMorador.dataNascimento >120 &&
-      novoMorador.perfil !== '' &&
-      novoMorador.sexo !== '' &&
-      novoMorador.estadoCivil !== null &&
+      
+      novoMorador.perfil !== null &&
+      novoMorador.dataNascimento >= 0 &&
+      novoMorador.dataNascimento <120 &&
+      novoMorador.sexo !== null &&
       novoMorador.escolaridade !== '' &&
-      novoMorador.trabalho != null &&
+      novoMorador.estadoCivil !== null &&
+      novoMorador.trabalho != '' &&
       novoMorador.religiao !== '' &&
       novoMorador.doencas !== ''
     ) {
@@ -223,14 +224,6 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
              }));
   };
 
-  const handleOnChangeData = (selectedDate: Date, name: string) => {
-              setDataNascimento(selectedDate);
-              const dataFormatada = formatDateForApi(selectedDate);
-              setNovaMorador((currentUser) => ({
-                  ...currentUser,
-                  [name]: dataFormatada,
-              }));
-  };
 
   const handleNumberChange = (
     event: NativeSyntheticEvent<TextInputChangeEventData>, 
@@ -257,7 +250,6 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
     handleOnChangeInput,
     handleEnumChange,
     handleArrayFieldChange,
-    handleOnChangeData,
     enviarRegistro,
     handleNumberChange,
     handleSetNumber,

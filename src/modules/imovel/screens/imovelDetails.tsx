@@ -1,17 +1,16 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import EditConfirmation from '../ui-component/UseEditImovel';
 import { renderField } from '../ui-component/renderFilds';
-import { useEffect } from 'react';
-import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 
 
 
@@ -24,10 +23,9 @@ const ImovelDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const imovel = params.imovel;
   const {benfeitoria} = useBenfeitorias(params.imovel.id);
- console.log("CONTAGEMMMMMMM",benfeitoria);
+
   const handleDecision = (benfeitoria: BenfeitoriaType[]) => {
       if (Array.isArray(benfeitoria) ? benfeitoria.length > 0 : !!benfeitoria) {
-        console.log(benfeitoria)
         navigation.navigate("Benfeitorias", {imovel});
       } else {
         navigation.navigate("NovaBenfeitoria", {imovel});

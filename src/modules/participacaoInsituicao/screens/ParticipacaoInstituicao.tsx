@@ -1,16 +1,16 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getParticipacoesIntitucionais } from '../../../realm/services/ParticipacaoInstituicaoService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { MoradorType } from '../../../shared/types/MoradorType';
 import { ParticipacaoInstituicaoType } from '../../../shared/types/ParticipacaoInstituicaoType';
+import { useParticipacaoInstituicoes } from '../../morador/hooks/useParticipacaoInstituicao';
 import { ParticipacaoInstituicaoDetailContainer } from '../styles/ParticipacaoInstituicao.style';
 import RenderItemParticipacaoInstituicao from '../ui-components/listaParticipacaoInstituicao';
-import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
-import { getParticipacoesIntitucionais } from '../../../realm/services/ParticipacaoInstituicaoService';
-import { MoradorType } from '../../../shared/types/MoradorType';
 
 
 export interface ParticipacaoInstituicaoParam {
@@ -27,35 +27,40 @@ const ParticipacaoInstituicao = () => {
   const { morador } = route.params;
   const flatListRef = useRef<FlatList>(null);
   const [participacoes, setParticipacoes] = useState<ParticipacaoInstituicaoType[]>();
-
-  const fetchParticipacoes = async () => {
-    if (!morador) return;
-  
-    const novas = getParticipacoesIntitucionais(morador.id);
-  
-    const novasNaoDuplicadas = novas.filter(nova =>
-      !participacoes?.some(v =>
-        (v.id && nova.id && v.id === nova.id) ||
-        (v.idLocal && nova.idLocal && v.idLocal === nova.idLocal)
-      )
-    );
-  
-    setParticipacoes(prev => [...(prev ?? []), ...novasNaoDuplicadas]);
-  };
+ const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id);
+ 
   
 
-  useEffect(() => {
-    fetchParticipacoes();
-  }, []);
-
-  const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
-
-  const handleRefresh = () => {
-    fetchParticipacoes();
-    handleScrollToEnd();
-  };
+  useEffect(()=>{
+      if (morador) {
+        const moradoresRealm = getParticipacoesIntitucionais(morador.id);
+        setParticipacoes(moradoresRealm);
+      }
+    }, [morador])
+    
+    const fetchMorador = useCallback(async () => {
+          
+          if (morador.id) {
+            const piRealm = getParticipacoesIntitucionais(morador.id);
+            setParticipacoes(piRealm);
+          }
+          
+        }, [morador]);
+    
+    useEffect(() => {
+      fetchMorador();
+    }, [fetchMorador]);
+    
+       
+    const handleScrollToEnd = () => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    };  
+    
+    const handleRefresh = () => {
+      fetchMorador();
+      handleScrollToEnd();
+    };
+  
 
   const handleNovaParticipacaoInstituicao = () => {
     novaParticipacaoInstituicao(navigation.navigate, morador);

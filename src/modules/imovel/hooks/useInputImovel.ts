@@ -47,12 +47,14 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
   useEffect(() => {
     const areaValida = novoImovel.areaImovel >= 10 && novoImovel.areaImovel <= 1000000;
     
-    console.log(novoImovel)
+    //console.log(novoImovel)
     if (
         novoImovel.rua !== '' &&
         novoImovel.numero !== '' &&
         novoImovel.bairro !== '' &&
         novoImovel.referencial !== '' &&
+        novoImovel.latitude !== '' &&
+        novoImovel.longitude !== '' &&
          areaValida &&
         novoImovel.tipoSolo !== '' &&
         novoImovel.vizinhosConfinantes !== '' &&
@@ -63,7 +65,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         novoImovel.pavimentacao !== '' &&
         novoImovel.iluminacaoPublica !== null &&
         novoImovel.equipamentosUrbanos !== '' &&
-        novoImovel.espacosEsporteLazer !== null &&
+        novoImovel.espacosEsporteLazer !== '' &&
         novoImovel.programaInfraSaneamento !== ''
         
     ) {
@@ -112,8 +114,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         return imovelQueue;
     } else {
         novoImovel.entrevistado = { id: entrevistado.id };
-        console.log( novoImovel.entrevistado)
-       
+             
         const isConnected = await testConnection();
         
             if (isConnected) {
@@ -139,40 +140,53 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
   };
 
   const enviaImovelEdicao= async () =>{
-    const imovelCorrigido = {
-      ...novoImovel,
-      entrevistado: { id: typeof imovel!.entrevistado === 'number' ? imovel!.entrevistado : imovel!.entrevistado.id }
-    };
+
+      const testConnectionOne = await testConnection();
+     
+    if(!imovel?.sincronizado && !testConnectionOne){
+         
+            Alert.alert("Registro Apenas Local");
+           const local = await await salvarImovel(buildImovelAtualizada());
+             return local;
+    
+    }else{
+   
+      const imovelCorrigido = {
+        ...novoImovel,
+        entrevistado: { id: typeof imovel!.entrevistado === 'number' ? imovel!.entrevistado : imovel!.entrevistado.id }
+      };
+
    
     const isConnected = await testConnection();
     
-     if(isConnected){
-            //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
-            try{
-              console.log("está ok",imovelCorrigido)
-              const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
-              
-              if (response && response.id) {
-                  return fetchImovelAPI(response.id);
-              }else{
-                  const local = await salvarImovel(buildImovelAtualizada());
-                  return local;
-              }
-            } catch (error) {
-              const local = await salvarImovel(buildImovelAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
-              return local;
+            if(isConnected){
+                    //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
+                    try{
+                     
+                      const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
+                      
+                      if (response && response.id) {
+                          return fetchImovelAPI(response.id);
+                      }else{
+                          const local = await salvarImovel(buildImovelAtualizada());
+                          return local;
+                      }
+                    } catch (error) {
+                      const local = await salvarImovel(buildImovelAtualizada());
+                      Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+                      return local;
+                    }
+            } else {
+                if (!imovel!.sincronizado && imovel!.idLocal) {
+                    return await salvarImovel(buildImovelAtualizada());
+                } else {
+                    Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+                    return null;
+                  }
             }
-    } else {
-         if (!imovel!.sincronizado && imovel!.idLocal) {
-             return await salvarImovel(buildImovelAtualizada());
-         } else {
-            Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
-             return null;
-          }
-    }
-                           
- }
+        }
+                                
+      }
                         
                 
   const buildImovelAtualizada = (): imovelBody => ({
@@ -180,7 +194,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
    ...novoImovel,
      sincronizado: imovel?.sincronizado,
      idLocal: imovel?.idLocal,
-      idFather: imovel?.idFather,
+     idFather: imovel?.idFather,
   });
 
    const fetchImovelAPI = async(id:number) =>{

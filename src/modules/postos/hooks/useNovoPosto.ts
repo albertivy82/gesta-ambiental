@@ -21,18 +21,21 @@ export const DEFAULT_POSTO_INPUT: postoSaudeInput = {
 
 export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
   const [novoPosto, setNovoPosto] = useState<postoSaudeInput>(DEFAULT_POSTO_INPUT);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
   
   // Habilitar o botão apenas se todos os campos obrigatórios estiverem preenchidos
   useEffect(() => {
-    const camposPreenchidos =
+      if(
       novoPosto.nome !== "" &&
       novoPosto.ambulatorial !== null &&
       novoPosto.urgenciaEmergencia !== null &&
       novoPosto.medicosPorTurno < 101 &&
       novoPosto.medicosPorTurno > 0
-
-    setDisabled(!camposPreenchidos);
+    )
+    {setDisabled(false)}
+    else
+    {setDisabled(true);
+    };
   }, [novoPosto]);
 
   const objetoFila = () => {

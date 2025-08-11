@@ -71,6 +71,20 @@ export const NovaBenfeitoria=()=>{
     const [outrosMeioInformativos, SetOutrosMeioInformativos] = useState<string>('');
 
     useEffect(() => {
+      
+      if (novaBenfeitoria.funcao === 'Principal') {
+         setReferenciaDaPrincipal([]);
+        handleArrayFieldChange('afastamentoDaPrincipal', []);
+      } else {
+         novaBenfeitoria.afastamentoDaPrincipal='';
+        setReferenciaDaPrincipal([]);
+        handleArrayFieldChange('afastamentoDaPrincipal', []);
+      }
+    }, [novaBenfeitoria.funcao]);
+    
+    
+    
+    useEffect(() => {
       const consolidaDados = alagamento === 'Sim' 
         ? (ocorrencia ? [`ocorrencia: ${ocorrencia}`] : [])  
         : ['Não']; 
@@ -219,15 +233,16 @@ export const NovaBenfeitoria=()=>{
                </Text>
               )}
 
-            <CheckboxSelector
-              options={vizinhoOptions}
-              selectedValues={referenciaDaPrincipal}
-              label="Localização em relação à edificação principal:"
-              onSave={(selectedValues) => {
-                setReferenciaDaPrincipal(selectedValues);
-                handleArrayFieldChange('afastamentoDaPrincipal', selectedValues); 
-              }}
-            />
+              {novaBenfeitoria.funcao !=="Principal" && (
+               <CheckboxSelector
+                options={vizinhoOptions}
+                selectedValues={referenciaDaPrincipal}
+                label="Localização em relação à edificação principal:"
+                onSave={(selectedValues) => {
+                  setReferenciaDaPrincipal(selectedValues);
+                  handleArrayFieldChange('afastamentoDaPrincipal', selectedValues); 
+                }}
+            /> )}
 
 
             <RenderPicker

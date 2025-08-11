@@ -76,6 +76,7 @@ export const salvarEntrevistado = (entrevistado: EntrevistadoType): Promise<Entr
             });
             if(entrevistadoSalvo){
                 const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistadoSalvo));
+                console.log("--->", entrevistadoSalvo);
                 resolve(cleanEntrevistado);
             }else{
                 throw new Error("Erro ao recuperar o entrevistado Salvo.");

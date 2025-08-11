@@ -13,6 +13,7 @@ import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
+import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
 
 
 export interface NovoReptilParams {
@@ -42,11 +43,11 @@ export const NovoImovel = () => {
   const [pavimentacaoInformada, setPavimentacaoInformada] = useState<string[]>([]);  
   const [outrasInformadas, SetOutrasInformadas] = useState<string>('');
   const [vizinhosConfinantesInformados, setVizinhosConfinantesInformados] = useState<string[]>([]);
-  const [equipamentosUrbanosInformados, setEquipamentosUrbanosInformados] = useState<string[]>([]);
+  const [equipamentosUrbanosInformados, setEquipamentosUrbanosInformados] = useState<string>(''); 
   const [outrosEquipamentosUrbanos, setOutrosEquipamentosUrbanos] = useState<string>('');
   const [espacosLazer, setEspacosLazer]  = useState<string[]>([]);
   const [outrosEspacosLazer, setOutrosEspacosLazer] = useState<string>('');
-  
+  const simNaoOptions =  Object.values(SimNao);
       
       
   useEffect(()=>{
@@ -61,14 +62,13 @@ export const NovoImovel = () => {
 
 
 
-
   useEffect(() => {
-    const consolidaEquipamentosUrbanos = [
-        ...equipamentosUrbanosInformados.filter((item) => item !== 'SIM'),
-        ...(outrosEquipamentosUrbanos ? [`Outros: ${outrosEquipamentosUrbanos}`] : []),
-    ];
-
+    const consolidaEquipamentosUrbanos = equipamentosUrbanosInformados === 'Sim' 
+      ? (outrosEquipamentosUrbanos ? [`${outrosEquipamentosUrbanos}`] : [])  
+      : ['Não']; 
+  
     handleArrayFieldChange('equipamentosUrbanos', consolidaEquipamentosUrbanos);
+  
   }, [equipamentosUrbanosInformados, outrosEquipamentosUrbanos]);
 
   useEffect(() => {
@@ -81,59 +81,7 @@ export const NovoImovel = () => {
   }, [espacosLazer, outrosEspacosLazer]);
 
      
-    const fundiarioOptions = Object.values([
-      'Proprietário',
-      'Ocupação com benfeitoria',
-      'Aluguel',
-      'Posse',
-      'Outros'
-    ]);
-    const documentacaoOptions = Object.values([
-      'Recibo de compra e venda',      
-      'Escritura pública',             
-      'Escritura',                     
-      'Certidão',                     
-      'Título de posse',              
-      'Não possui'                    
-    ]);
-    const limitesOptions = Object.values([
-      'Muro de alvenaria',       
-      'Cerca de madeira',        
-      'Cerca de arame',         
-      'Cerca viva',               
-      'Sem cerca'                 
-    ]);
-    const soloOptions = Object.values([
-      'Várzea',
-      'Terra firme',
-      'Igapó'
-    ]);
-    const lazerOptions = Object.values([
-      'Campo de futebol',       
-      'Quadra poliesportiva',    
-      'Sede esportiva',          
-      'Balneários',              
-      'Parques',                
-      'Outros'                   
-    ]);
-    const equipamentosUrbanosOptions = Object.values(SimNao);
-    const simNaoOptions =  Object.values(SimNao);
-    const vizinhoOptions =  Object.values([
-      'Lado esquerdo',
-      'Lado direito',
-      'Atrás',
-      'Em frente',
-      'Não declarado',
-      'Não possui'
-    ]);
-    const pavimentacaoOptions = Object.values([
-      'Asfalto',
-      'Bloket',
-      'Picarra',
-      'Nenhum',
-      'Outro'
-    ]
-    );
+    
     const ruaInput = useRef<TextInput>(null);
     const numeroInput = useRef<TextInput>(null);
     const bairroInput = useRef<TextInput>(null);
@@ -158,7 +106,7 @@ export const NovoImovel = () => {
       handleEnumChange('documentacaoImovel', imovel.documentacaoImovel);
       handleEnumChange('limites', imovel.limites);
       handleEnumChange('iluminacaoPublica', imovel.iluminacaoPublica);
-      handleEnumChange('espacosEsporteLazer', imovel.espacosEsporteLazer);
+      
     
       // Campos de texto
       handleOnChangeInput(imovel.linhasDeBarco ?? '', 'linhasDeBarco');
@@ -172,7 +120,7 @@ export const NovoImovel = () => {
     const valorSalvoAreaImovel = imovel?.areaImovel ? imovel.areaImovel.toFixed(2) : '';
     const valorSalvoLatitude = imovel?.latitude ?? '';
     const valorSalvoLongitude = imovel?.longitude ?? '';
-   
+    const valorSalvoEsporteLazer = imovel?.espacosEsporteLazer ?? '';
     
      const handleEnviar = async () => {
              setLoading(true);
@@ -377,33 +325,40 @@ export const NovoImovel = () => {
                 </Text>
                  )}
 
-                <CheckboxSelector
-                    options={equipamentosUrbanosOptions}
-                    selectedValues={equipamentosUrbanosInformados}
-                    label="Equipamentos Urbanos Disponíveis:"
-                    onSave={(selectedValues) => {
-                        setEquipamentosUrbanosInformados(selectedValues);
-                        if (!selectedValues.includes('Sim')) {
-                            setOutrosEquipamentosUrbanos('');
-                        }
-                    }}
+                <RenderPicker
+                  label="Equipamentos Urbanos Disponíveis:"  
+                  selectedValue={equipamentosUrbanosInformados}
+                  onValueChange={(value) => {
+                      setEquipamentosUrbanosInformados(value ?? ''); 
+                      if (value !== 'Sim') {
+                        setOutrosEquipamentosUrbanos('');
+                      }
+                  }}
+                  options={['Sim', 'Não']}
                 />
-                {equipamentosUrbanosInformados.includes('Sim') && (
-                    <View style={{ marginTop: 10 }}>
-                        <Input
-                            value={outrosEquipamentosUrbanos}
-                            maxLength={200}
-                            onChangeText={setOutrosEquipamentosUrbanos}
-                            placeholder="Se não souber, infomar 'não sabe'"
-                            placeholderTextColor={theme.colors.grayTheme.gray80}
-                            margin="15px 10px 30px 5px"
-                            title="Informe quais:"
-                        />
-                    </View>
-                )}
 
-                
-             <CheckboxSelector
+                 {equipamentosUrbanosInformados.includes('Sim') && (
+                      <View style={{ marginTop: 10 }}>
+                      <Input
+                      value={outrosEquipamentosUrbanos}
+                      maxLength={200}
+                      onChangeText={setOutrosEquipamentosUrbanos}
+                      placeholder="Se não souber, infomar 'não sabe'"
+                      placeholderTextColor={theme.colors.grayTheme.gray80}
+                      margin="15px 10px 30px 5px"
+                      title="Informe quais:"
+                       />
+                      </View>
+                  )}
+
+
+                 
+                 {valorSalvoEsporteLazer    && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informada dada anteriormente: {valorSalvoEsporteLazer   }
+                </Text>
+                 )}
+                <CheckboxSelector
                 options={lazerOptions}
                 selectedValues={espacosLazer}
                label="Espaços de Lazer?"

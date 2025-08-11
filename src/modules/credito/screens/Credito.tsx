@@ -10,6 +10,7 @@ import { CreditoDetailContainer } from '../styles/credito.style';
 import RenderItemCredito from '../ui-components/listaCredito';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { getCreditos } from '../../../realm/services/creditoService';
+import { useCreditos } from '../../benfeitoriaDetails/hooks/useCredito';
 
 
 export interface BenfeitoriaParams {
@@ -27,6 +28,7 @@ const Credito = () => {
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
+   const {} = useCreditos(benfeitoria.id);
 
     const isFocused = useIsFocused();
    

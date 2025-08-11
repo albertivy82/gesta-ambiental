@@ -48,7 +48,6 @@ const [disabled, setdisable] = useState<boolean>(true);
             if (
             novaBenfeitoria.tipoBenfeitoria !== null &&
             novaBenfeitoria.funcao !== null &&
-            novaBenfeitoria.afastamentoDaPrincipal !== '' &&
             novaBenfeitoria.impermeabilizacaoSolo !== null &&
             novaBenfeitoria.limites !== '' &&
             novaBenfeitoria.areaBenfeitoria > 1 &&
@@ -165,6 +164,17 @@ const enviaBenfeitoriaNova = async () =>{
 
 
 const enviaBenfeitoriaEdicao= async () =>{
+ 
+  const testConnectionOne = await testConnection();
+
+    if(!benfeitoria?.sincronizado && !testConnectionOne){
+           
+              Alert.alert("Registro Apenas Local");
+             const local = await salvarBenfeitoria(buildBenfeitoriaAtualizada());
+               return local;
+      
+      }else{
+ 
   const benfeitoriaCorrigida = {
     ...novaBenfeitoria,
     imovel: { id: typeof benfeitoria!.imovel === 'number' ? benfeitoria!.imovel : benfeitoria!.imovel.id }
@@ -200,6 +210,7 @@ const enviaBenfeitoriaEdicao= async () =>{
             return null;
           }
         }
+      }
         
 }
 

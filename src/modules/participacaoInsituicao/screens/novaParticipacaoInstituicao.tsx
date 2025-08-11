@@ -1,5 +1,5 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import Input from "../../../shared/components/input/input";
@@ -34,7 +34,13 @@ export const NovaParticipacaoInstituicao = ()=>{
             disabled
           } = useNovaParticipacaoInstituicao(morador, participacaoInstituicao);
 
-console.log(morador, participacaoInstituicao)
+useEffect(() => {
+      if (!participacaoInstituicao) return;
+
+      handleEnumChange('instituicao', participacaoInstituicao.instituicao);
+      handleOnChangeInput(participacaoInstituicao.tipoDeRegistro ?? '', 'tipoDeRegistro');
+      handleOnChangeInput(participacaoInstituicao.registro ?? '', 'registro');
+    }, [participacaoInstituicao]);
 
   
     const handleEnviar = async () => {

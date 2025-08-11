@@ -38,6 +38,8 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
       
     ) {
       setDisabled(false);
+    }else{
+      setDisabled(true);
     }
   }, [novaAgua]);
 

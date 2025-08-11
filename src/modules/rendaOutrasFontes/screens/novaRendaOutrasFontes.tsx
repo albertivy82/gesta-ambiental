@@ -68,8 +68,7 @@ export const NovaRendaOutrasFontes = () => {
     }
   };
 
-  
-                  
+                
    const val1 = renda?.fonte? renda.fonte: '';
    const val2 = renda?.beneficiarios? renda.beneficiarios  : '';
    const val3 = renda?.rendaMesTotal? renda.rendaMesTotal : '';
@@ -145,7 +144,7 @@ export const NovaRendaOutrasFontes = () => {
           {loading ? (
             <ActivityIndicator size="large" color="#ff4500" /> 
           ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading} />
+            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
           )}
         </View>
 

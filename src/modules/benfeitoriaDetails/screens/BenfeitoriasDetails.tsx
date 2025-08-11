@@ -45,10 +45,10 @@ const BenfeitoriaDetails = () => {
   const benfeitoria = params.benfeitoria;
   const {moradores} = useMoradores(benfeitoria.id);
   const {aguas} = useAguas(benfeitoria.id);
-  const {atividades} = useAtividadesProdutivas(params.benfeitoria.id);
-  const {creditos} = useCreditos(params.benfeitoria.id);
-  const {rendasOF} = useRendasOutrasFontes(params.benfeitoria.id);
-  const {servicos} = useServicosComunicacao(params.benfeitoria.id);
+  const {atividades} = useAtividadesProdutivas(benfeitoria.id);
+  const {creditos} = useCreditos(benfeitoria.id);
+  const {rendasOF} = useRendasOutrasFontes(benfeitoria.id);
+  const {servicos} = useServicosComunicacao(benfeitoria.id);
   
 
    const handleDecision = <T,>(

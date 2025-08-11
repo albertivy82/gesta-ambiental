@@ -39,6 +39,8 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
      
     ) {
       setDisabled(false);
+    }else{
+      setDisabled(true);
     }
   }, [novaEscola]);
 
