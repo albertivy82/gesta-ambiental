@@ -63,7 +63,7 @@ const RenderItemParticipacaoInstituicao = ({ item }: { item: ParticipacaoInstitu
         <DeleteConfirmation
            id={item.id}
            idLocal={item.idLocal}
-           deleteEndpoint="vegetacao"
+           deleteEndpoint="participacao-instituicao"
            onDeleteSuccess={() => {
            setMostrarModalDelete(false);}}
         />

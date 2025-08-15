@@ -131,8 +131,16 @@ export const NovoMorador = ()=>{
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
         <MoradorDetailContainer>
+
+
+             <RenderPicker
+               label="Selecione o perfil do morador"
+               selectedValue={novoMorador.perfil}
+               onValueChange={(value) => handleEnumChange('perfil', value)}
+               options={perfilOptions}
+              />
+
           
-      
                <Input
                 value={idade?.toString() || ''}
                 maxLength={3}
@@ -146,14 +154,7 @@ export const NovoMorador = ()=>{
                 title="Idade do morador"
               />
 
-
-              <RenderPicker
-               label="Selecione o perfil do morador"
-               selectedValue={novoMorador.perfil}
-               onValueChange={(value) => handleEnumChange('perfil', value)}
-               options={perfilOptions}
-              />
-
+            
 
               <RenderPicker
                label="Qual o sexo do morador"

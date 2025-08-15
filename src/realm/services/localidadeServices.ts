@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { LocalidadeType } from '../../shared/types/LocalidadeType';
 import { realmInstance } from './databaseService';
 
@@ -13,11 +12,42 @@ export const salvarLocalidades = (localidades:LocalidadeType[])=>{
             realmInstance.write(()=>{
         
                 localidades.forEach(localidade =>{
-                        realmInstance.create('Localidade', localidade, true);
-                });
+                      const localidadeRealm = realmInstance.objects('Localidade').filtered(`id == ${localidade.id}`)[0];
+                        
+                                if(localidadeRealm){
+                                        realmInstance.create('Localidade', localidade, true);
+                                }else{
+                                    realmInstance.create('Localidade', localidade, true);
+                                }
             });
-        resolve();
-            } catch (error){
+        });
+             resolve();
+        } catch (error){
+            reject(error)
+        }
+    })
+   
+};
+
+
+export const salvarLocalidade = (localidade:LocalidadeType)=>{
+    
+    return new Promise<void>((resolve, reject)=>{
+        try{
+           
+            realmInstance.write(()=>{
+        
+               const localidadeRealm = realmInstance.objects('Localidade').filtered(`id == ${localidade.id}`)[0];
+                        
+                   if(localidadeRealm){
+                        realmInstance.create('Localidade', localidade, true);
+                   }else{
+                        realmInstance.create('Localidade', localidade, true);
+                    }
+           
+          });
+             resolve();
+        } catch (error){
             reject(error)
         }
     })
@@ -49,3 +79,21 @@ export const getLocalidadesPorId = (islocalidade:number): LocalidadeType=>{
    
        return localidadeLimpa as LocalidadeType;
 }
+
+export const apagarLocalidade = (localidadeId: number) => {
+    try {
+        realmInstance.write(() => {
+           
+            const query = `id == "${localidadeId}"`;
+            const localidadeAExcluir = realmInstance.objects<LocalidadeType>('Localidade').filtered(query);
+
+            if (localidadeAExcluir.length > 0) {
+
+             realmInstance.delete(localidadeAExcluir);
+             
+            } 
+        });
+    } catch (error) {
+        console.error('Erro ao excluir localidade da fila:', error);
+    }
+};

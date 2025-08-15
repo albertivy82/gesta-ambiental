@@ -15,7 +15,7 @@ export const salvarEntrevistados = (entrevistados: EntrevistadoType[]) =>{
                     //essa duplicação de código foi feita para controlar atualizações de todas os registros
                     //a primeira condição entram apenas atualizações
                     //no segundo novos registros
-                    const entrevistadoRealm = realmInstance.objects('Localidade').filtered(`id == ${entrevistado.id}`)[0];
+                    const entrevistadoRealm = realmInstance.objects('Entrevistado').filtered(`id == ${entrevistado.id}`)[0];
                     //console.log('Imóvel recuperado do Realm:', entrevistadoRealm);
                     if(entrevistado.sincronizado && entrevistadoRealm && entrevistado.idLocal==''){
                        // console.log('Atualizando imóvel existente:', entrevistado);

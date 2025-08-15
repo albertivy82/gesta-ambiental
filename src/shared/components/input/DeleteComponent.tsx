@@ -19,6 +19,7 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
+import { apagarLocalidade } from "../../../realm/services/localidadeServices";
 
 interface DeleteConfirmationProps {
   id: number;
@@ -90,6 +91,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
           await connectionAPIDelete(`http://177.74.56.24/${deleteEndpoint}/${id}`);
   
           switch (deleteEndpoint) {
+            case "localidade":
+              apagarLocalidade(id);
+              break;
             case "imovel":
               apagarImovelSyncronizado(id);
               break;

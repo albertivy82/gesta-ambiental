@@ -4,7 +4,7 @@ export const estadoCivilOptions = [
     'Solteiro(a)',
     'União estável',
     'Viúvo(a)',
-    'Sepado(a)'
+    'Separado(a)'
   ];
   
  

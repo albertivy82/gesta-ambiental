@@ -28,7 +28,7 @@ const ParticipacaoInstituicao = () => {
   const foccus =useIsFocused();
   const flatListRef = useRef<FlatList>(null);
   const [participacoes, setParticipacoes] = useState<ParticipacaoInstituicaoType[]>();
- const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id, foccus);
+  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id, foccus);
  
   
 

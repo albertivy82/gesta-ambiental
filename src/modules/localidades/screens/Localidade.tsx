@@ -1,20 +1,31 @@
 import { Picker } from "@react-native-picker/picker";
-import { Button, View } from "react-native";
+import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { Alert, Button, View } from "react-native";
 import { EsferaEnum } from "../../../enums/esfera.enum";
 import { municipiosEnum } from "../../../enums/municipios.enum";
 import Input from "../../../shared/components/input/input";
 import Text from "../../../shared/components/text/Text";
+import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { useEditUser } from "../hooks/uselnputLocalidade";
 import { EditUserContainer } from "../styles/Localidade.style";
-import { textTypes } from "../../../shared/components/text/textTypes";
 
 const Localidade = () => {
   const { novaLocalidade, handleOnChangeInput, handleMunicipioChange, editLocalidade, handleEsferaChange, disabled } = useEditUser();
-
+  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  
+  
   const handleEnviar = async () => {
-    await editLocalidade();
+    try {
+      await editLocalidade();          // deve lançar erro se falhar
+      Alert.alert('Sucesso', 'Localidade Salva.');
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível atualizar a localidade.');
+    } finally {
+      navigation.navigate('HOME'); // navega de qualquer jeito
+    }
   };
+  
 
   const municipioOptions = Object.values(municipiosEnum);
   const esferaOptions = Object.values(EsferaEnum);

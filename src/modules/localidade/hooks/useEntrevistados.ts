@@ -56,7 +56,7 @@ export const useEntrevistados = (localidadeId: number, foccus:boolean) =>{
     
    const [contagemEntrevistados, setContagemEntrevistados] = useState<number>(0);
    
-   console.log("contagemEntrevistados", contagemEntrevistados )
+   //console.log("contagemEntrevistados", contagemEntrevistados )
   
    const fetchEntrevistadosFromLocalDb = () => {
     

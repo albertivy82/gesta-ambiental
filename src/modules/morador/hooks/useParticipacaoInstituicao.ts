@@ -28,18 +28,20 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
       if (queue.length > 0) {
         for (const participacaoInsituicao of queue) {
           const novoParticipacaoInstituicaoInput = convertToParticipacaoInstituicaoInput(participacaoInsituicao);
-         console.log("participação enviada", novoParticipacaoInstituicaoInput)
+         console.log("participação enviada1", novoParticipacaoInstituicaoInput)
            const isConnected = await testConnection();
+           console.log("participação enviada2", novoParticipacaoInstituicaoInput)
             if (isConnected) {
+              console.log("participação enviada3", novoParticipacaoInstituicaoInput)
               try {
                 const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novoParticipacaoInstituicaoInput);
                 const participacaoInsituicaoAPI = response as ParticipacaoInstituicaoType;
-
+                console.log("participação enviada4", participacaoInsituicaoAPI)
                 if (participacaoInsituicaoAPI.id) {
                    apagarParticipacaoInstituicaoQueue(participacaoInsituicao.idLocal!);
                 }
               } catch (error) {
-                //console.error('Erro na sincronização de participacaoInsituicao:', error);
+                console.error('Erro na sincronização de participacaoInsituicao:', error);
               }
             }
           
@@ -52,37 +54,39 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
     const realmData = getParticipacoesIntitucionais(moradorId);
     console.log("aaaa", realmData)
     if (realmData.length > 0) {
-      setParticipacaoInstituicoes((prev) => [...prev, ...realmData]);
+      setParticipacaoInstituicoes(realmData);
     }
   };
 
           const fetchParticipacaoInstituicoesAPI = async () => {
             try {
-              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://177.74.56.24/participacao-instituicao/${moradorId}`);
-
-             const participacaoData: ParticipacaoInstituicaoType[] = response.map(partcipacao => ({
-                                       ...partcipacao,
-                                       participacaoInsituicao: { id: partcipacao.morador.id }, // ajusta a estrutura
-                                       sincronizado: true,
-                                       idLocal: '', 
-                                       idFather: '',
-                                     }));
-              if(participacaoData && Array.isArray(participacaoData) && participacaoData.length> 0){
-                             await salvarParticipacoesIntitucionais(participacaoData)
-                             const contagem = participacaoData.length;
-                             setParticipacaoInstituicoes(participacaoData);
-              } else {
-                             throw new Error('Dados de participacaoInsituicaoes inválidos');
-               }
+              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://177.74.56.24/participacao-instituicao/morador-pariticipacao-instituicao/${moradorId}`);
+             console.log("baixando da api", response)
+             const ptcData = response.map(ptcData=>({
+                                 ...ptcData,
+                                 sincronizado:true,
+                                 idLocal:'',
+                                 idFather:'',
+             
+                             }))
+                           //  console.log("benfeitpria. circuito da API")    
+                             if(ptcData && Array.isArray(ptcData) && ptcData.length>0){
+                                   await salvarParticipacoesIntitucionais(ptcData);
+                                    setParticipacaoInstituicoes((prevptcData) => [...prevptcData, ...ptcData]);
+                             }else{
+                                 throw new Error('Dados de benfeitoria Inválidos'); 
+                             }
+             
             } catch (error) {
               //console.error('Erro ao recuperar participacaoInsituicaoes da API:', error);
             }
           };
 
   useEffect(() => {
-    fetchParticipacaoInstituicoesRealm();
-    fetchParticipacaoInstituicoesAPI();
     sincronizeParticipacaoInstituicoesQueue();
+    fetchParticipacaoInstituicoesAPI();
+    fetchParticipacaoInstituicoesRealm();
+    
   }, [foccus]);
 
   return { participacaoInsituicaoes };

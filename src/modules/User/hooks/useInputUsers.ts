@@ -1,11 +1,11 @@
+import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { UserInput } from "../../../shared/types/userInput";
+import { grupoEnum } from "../../../enums/grupo.enum";
+import { removeSpecialCharacters } from "../../../shared/functions/characters";
 import { connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { validateCpf } from "../../../shared/functions/cpf";
-import { removeSpecialCharacters } from "../../../shared/functions/characters";
-import { grupoEnum } from "../../../enums/grupo.enum";
-import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { UserInput } from "../../../shared/types/userInput";
 
 
 export const DEFAULT_CREATE_USER = {
@@ -22,9 +22,7 @@ const formatUserData = (user: UserInput) => {
   
     const grupoIdMapping = {
       'ADMINISTRADOR': 1,
-      'ANALISTA AMBIENTAL': 2,
-      'ANALISTA SOCIAL': 3,
-      'GESTOR AMBIENTAL': 4,
+      'USUARIO': 2,
     };
   
     const grupoId = user.grupo ? grupoIdMapping[user.grupo] : 0;
@@ -83,7 +81,7 @@ export const useInputUsers = ()=>{
             const response: Response = await connectionAPIPost('http://177.74.56.24/usuario', formattedUser);
             navigation.navigate('Users');
         } catch (error) {
-             console.error(error);
+          throw error;
         }
     };
 
@@ -94,7 +92,7 @@ export const useInputUsers = ()=>{
             const response: Response = await connectionAPIPut(`http://177.74.56.24/usuario/${id}`, formattedUser);
             navigation.navigate('Users');
          } catch (error) {
-            console.error(error);
+           throw error;
          }
     }
 

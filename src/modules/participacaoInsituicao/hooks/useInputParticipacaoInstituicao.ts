@@ -85,7 +85,7 @@ const objetoFila = () => {
                     if(isConnected){
                       
                       try{
-                        console.log("********", novaParticipacaoInstituicao)
+                        
                         const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
                         console.log(response)
                         if (response && response.id) {

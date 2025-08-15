@@ -16,7 +16,7 @@ import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
-import { estadoCivilOptions } from "../ui-components/opcoesEntrevistado";
+import { estadoCivilOptions, saudeOptions, sexoEscolaridade, tempomordiaOptions } from "../ui-components/opcoesEntrevistado";
 import { getAllEntrevistados } from "../../../realm/services/entrevistado";
 
 
@@ -105,46 +105,13 @@ export const NovoEntrevistado = ()=>{
             
    
     const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
-    const tempomordiaOptions = Object.values([
-    'Entre 1 e 5 anos',
-    'Entre 6 e 10 anos',
-    'Entre 11 e 15 anos',
-    'Entre 16 e  20 anos',
-    'Entre 21 e 25 anos',
-    'Entre 26 e 30 anos',
-    'Acima de 30 anos']);
-    
-    const saudeOptions = Object.values([
-      'Consulta com técnico no posto de saúde da comunidade',
-      'Consulta com o enfermeiro no posto de saúde',
-      'Atendimento no Programa Saúde da Família',
-      'Atendimento por agentes comunitários de saúde',
-      'Trata com curandeiro',
-      'Participa das campanhas de vacinação',
-      'Atendimento por parteiras',
-      'Atendimento em outra localidade',
-      'Não declarado',
-      'Outros'
-    ]
-    );
-    const sexoEscolaridade = Object.values([
-      "Analfabeto",
-      "Fundamental completo",
-      "Fundamental incompleto",
-      "Ensino médio completo",
-      "Ensino médio incompleto",
-      "Ensino superior completo",
-      "Ensino superior incompleto",
-      "Pós-graduação"
-    ]);
     const simNaoOptions = Object.values(SimNao);
     const simNaoTalvezOptions = Object.values(SimNaoTalvez);
     const alimentacaoOptions = Object.values(Alimentacao);
     const comprasOptions = Object.values(Compras);
     const servicosOptions = Object.values(ServicoPublicos);
     const sexoOptions = Object.values(Sexo);
-    
-    
+      
     const nomeInput = useRef<TextInput>(null);
     const naturalidadeInput = useRef<TextInput>(null);
     const apelidoInput = useRef<TextInput>(null);
@@ -182,8 +149,30 @@ export const NovoEntrevistado = ()=>{
 
     const [conheceInstituicao, setConheceInstituicao] = useState<string>('');     
     const [quaisConhece, SetQuaisConhece] = useState<string>('');
-    
+
     const [idade, setIdade] = useState<number>();
+
+   // estado do picker (se ainda não tiver)
+    const [indicacaoTipo, setIndicacaoTipo] = useState<string>('');
+
+      // reage à mudança do picker e aplica as regras
+      useEffect(() => {
+        if (indicacaoTipo === 'Ninguém') {
+          handleOnChangeInput('Ninguém', 'indicadoConsultaPublica');
+          handleOnChangeInput('Não se aplica', 'contatoIndicadoConsultaPublica');
+        } else if (indicacaoTipo === 'O próprio entrevistado') {
+          handleOnChangeInput('O próprio entrevistado', 'indicadoConsultaPublica');
+          handleOnChangeInput('', 'contatoIndicadoConsultaPublica'); // usuário digita
+        } else if (indicacaoTipo === 'Outra pessoa') {
+          handleOnChangeInput('', 'indicadoConsultaPublica');        // usuário digita
+          handleOnChangeInput('', 'contatoIndicadoConsultaPublica'); // usuário digita
+        } else {
+          // estado inicial (opcional)
+          handleOnChangeInput('', 'indicadoConsultaPublica');
+          handleOnChangeInput('', 'contatoIndicadoConsultaPublica');
+        }
+      }, [indicacaoTipo]);
+
 
     useEffect(()=>{
       const consolidaDados = [
@@ -731,18 +720,29 @@ export const NovoEntrevistado = ()=>{
             onSubmitEditing={() => indicadoConsultaInput.current?.focus()}
           />
 
+
+            <RenderPicker
+              label="Quem indicará para participar da Consulta Pública?"
+              selectedValue={indicacaoTipo}
+              onValueChange={(value) => setIndicacaoTipo(value ?? '')}
+              options={['Ninguém', 'O próprio entrevistado', 'Outra pessoa']}
+            />
+
+       {indicacaoTipo === 'Outra pessoa' && (
           <Input 
             value={novoEntrevistado.indicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'indicadoConsultaPublica')}
             placeholderTextColor={theme.colors.grayTheme.gray80}
             maxLength={150}
-            placeholder="O próprio entrevistado?"
+            placeholder="Nome"
             margin="15px 10px 30px 5px"
             title="Indicação de um nome para Participar da Consulta Pública"
             ref={indicadoConsultaInput}
             onSubmitEditing={() => contatoConsultaInput.current?.focus()}
           />
+        )}
          
+         {(indicacaoTipo === 'Outra pessoa' || indicacaoTipo === 'O próprio entrevistado') && (
           <Input 
             value={novoEntrevistado.contatoIndicadoConsultaPublica} 
             onChange={(event) => handleOnChangeInput(event, 'contatoIndicadoConsultaPublica')}
@@ -753,8 +753,7 @@ export const NovoEntrevistado = ()=>{
             title="Informe um contato do indicado"
             ref={contatoConsultaInput}
           />
-
-
+        )}
        
          
     <View style={{ marginTop: 40 }}>

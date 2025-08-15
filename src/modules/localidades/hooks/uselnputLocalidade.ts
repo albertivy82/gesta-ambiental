@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react"
 import { senhasType } from "../../../shared/types/senhasType";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { connectionAPIPost} from "../../../shared/functions/connection/connectionAPI";
+import { connectionAPIGet, connectionAPIPost} from "../../../shared/functions/connection/connectionAPI";
 import { getToken } from "../../../context/tokenStore";
 import { localidadeInputType } from "../../../shared/types/localidadeInputType ";
 import { municipiosEnum } from "../../../enums/municipios.enum";
 import { EsferaEnum } from "../../../enums/esfera.enum";
+import { LocalidadeType } from "../../../shared/types/LocalidadeType";
+import { salvarLocalidade } from "../../../realm/services/localidadeServices";
 
 
 export const DEFAUL_LOCALIDADE_INPUT = {
@@ -34,8 +36,23 @@ export const useEditUser = () =>{
 
         const editLocalidade = async () => {
            
-            const localidade = await connectionAPIPost('http://177.74.56.24/localidade', novaLocalidade);
+            const localidade = await connectionAPIPost('http://177.74.56.24/localidade', novaLocalidade) as LocalidadeType;
+                if (localidade && localidade.id) {
+                   fetchLocalidadeAPI(localidade.id);
+                }
             
+        };
+
+
+        const fetchLocalidadeAPI = async(id:number) =>{
+            
+          try{
+            const response = await connectionAPIGet<LocalidadeType>(`http://177.74.56.24/localidade/${id}`);
+              await salvarLocalidade(response);
+          } catch (error) {
+              //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+              throw error;
+          }
         };
     
     

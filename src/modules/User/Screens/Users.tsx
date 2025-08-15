@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, TextInput, View } from "react-native";
+import { Alert, Button, TextInput, View } from "react-native";
 import { GetaUserContainer } from "../styles/Users.style";
 import { useInputUsers } from "../hooks/useInputUsers";
 import Input from "../../../shared/components/input/input";
 import { UserBody } from '../../../shared/types/userBody';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { theme } from '../../../shared/themes/theme';
 import { grupoEnum } from '../../../enums/grupo.enum';
 import { Picker } from '@react-native-picker/picker';
@@ -20,6 +20,7 @@ export interface userParam{
 
 
 const User= () =>{
+const navigation = useNavigation<NavigationProp<ParamListBase>>();
 const {params} = useRoute<RouteProp<Record<string, userParam>>>();
 const user = params?.user;
 const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<UserBody>();
@@ -58,10 +59,16 @@ const {sendUser,
       
        
       const enviar = async ()=>{
-            if(user){
+            try {
+               if(user){
                   await UpdateUser(user.id);
-            }else{ 
+               }else{ 
                   await sendUser();
+               }
+            } catch (e) {
+                Alert.alert('Erro', 'Não foi possível realizar a operação.');
+            } finally {
+                navigation.navigate('Users'); // navega de qualquer jeito
             }
            
       }

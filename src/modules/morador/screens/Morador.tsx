@@ -29,7 +29,7 @@ const Morador = () => {
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
   const [moradors, setMorador] = useState<MoradorType[]>([]);
-   const foccus =useIsFocused();
+  const foccus =useIsFocused();
   const {moradores} = useMoradores(benfeitoria.id, foccus );
  
   

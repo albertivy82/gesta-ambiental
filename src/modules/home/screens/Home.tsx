@@ -1,6 +1,6 @@
 import { Button, FlatList, TouchableOpacity, View } from 'react-native';
 import { removeAuthData} from '../../../context/authStore';
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, useIsFocused, useNavigation } from '@react-navigation/native';
 import { HomeContainer } from '../styles/Home.style';
 import { removeToken } from '../../../context/tokenStore';
 import Text from '../../../shared/components/text/Text';
@@ -34,14 +34,16 @@ export const detalhaLocalidade = (navigate: NavigationProp<ParamListBase>['navig
 const Home = () =>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const {localidade, setLocalidade} = useLocalidadeRducer();
-  const { isPresent, fetchLocalidadeFromAPI, fetchLocalidadeFromDB} = useLocalidades();
+  const foccus =useIsFocused();
+  const {isPresent} = useLocalidades(foccus);
+ 
  
   useEffect(() => {
     if (isPresent) {
       const localidadesFromDB = getLocalidades(); 
       setLocalidade(localidadesFromDB);
     }
-  }, [isPresent]);
+  }, [foccus]);
   
   const renderItem = ({ item }: { item: LocalidadeType }) => {
     return (

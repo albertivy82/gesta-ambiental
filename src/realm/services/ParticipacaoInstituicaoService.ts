@@ -95,6 +95,7 @@ export const salvarParticipacaoInstituicao= (participacaoInstituicao:Participaca
                 }
             });
     if (participacaoInstituicaoSalvo) {
+      console.log(participacaoInstituicaoSalvo)
         const cleanParticipacaoInstituicao = JSON.parse(JSON.stringify(participacaoInstituicaoSalvo))
         resolve(cleanParticipacaoInstituicao as ParticipacaoInstituicaoType);
     } else {
