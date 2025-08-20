@@ -23,6 +23,7 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
       documentacaoImovel: imovel.documentacaoImovel,
       limites: imovel.limites,
       linhasDeBarco: imovel.linhasDeBarco,
+      linhasOnibus: imovel.linhasOnibus,
       pavimentacao: imovel.pavimentacao,
       iluminacaoPublica: imovel.iluminacaoPublica,
       equipamentosUrbanos: imovel.equipamentosUrbanos, // corrigido aqui
@@ -54,7 +55,7 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
           if (isConnected) {
             try {
              
-              const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovelInput) as imovelBody;
+              const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovelInput) as imovelBody;
              
               const imovelAPI = response as imovelBody;
               
@@ -101,7 +102,7 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
       
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `http://177.74.56.24/imovel/imovel-entrevistado/${idEntrevistado}`
+          `http://192.168.100.28:8080/imovel/imovel-entrevistado/${idEntrevistado}`
         );
 
        

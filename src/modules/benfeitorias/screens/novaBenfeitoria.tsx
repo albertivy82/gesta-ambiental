@@ -65,8 +65,6 @@ export const NovaBenfeitoria=()=>{
     const [outrasFontes, SetOutrasFontes] = useState<string>('');
     const [energiAlimento, setEnergiAlimento] = useState<string[]>([]);     
     const [outrasEnergias, SetOutrasEnergias] = useState<string>('');
-    const [linhaOnibus, setLinhaOnibus] = useState<string>('');     
-    const [qual, SetQual] = useState<string>('');
     const [meioInofrmativo, setMeioInformativo] = useState<string[]>([]);     
     const [outrosMeioInformativos, SetOutrosMeioInformativos] = useState<string>('');
 
@@ -137,16 +135,7 @@ export const NovaBenfeitoria=()=>{
     }, [energiAlimento, outrasEnergias]); // <- corrigido
     
 
-    useEffect(() => {
-      const consolidaDados = linhaOnibus === 'Sim' 
-        ? (qual ? [`ocorrencia: ${qual}`] : [])  
-        : ['Não']; 
-    
-      handleArrayFieldChange('linhasOnibus', consolidaDados);
-    
-    }, [linhaOnibus, qual]);
-
-    useEffect(()=>{
+     useEffect(()=>{
       const consolidaDados = [
         ...meioInofrmativo.filter((item) => item !== 'Outros'),
         ...(outrosMeioInformativos ? [`Outros: ${outrosMeioInformativos}`] : []),
@@ -204,7 +193,6 @@ export const NovaBenfeitoria=()=>{
     const residuosVelha = benfeitoria?.residuos ?? '';
     const fonteEnergiaVelha = benfeitoria?.fonteEnergia ?? '';
     const energiaAlimentosVelha = benfeitoria?.energiaAlimentos ?? '';
-    const linhasOnibusVelha = benfeitoria?.linhasOnibus ?? '';
     const informativoPredominanteVelha = benfeitoria?.informativoPredominante ?? '';
     
     
@@ -503,36 +491,7 @@ export const NovaBenfeitoria=()=>{
               options={optionsLocomocao}
              />
 
-              {linhasOnibusVelha && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                  Informação dada anteriormente:  {linhasOnibusVelha}
-                </Text>
-              )}
-             
-             <RenderPicker
-                  label="Existem linhas de ônibus que atendem o local?"
-                  selectedValue={linhaOnibus}
-                  onValueChange={(value) => {
-                    setLinhaOnibus(value ?? ''); 
-                    if (value !== 'Sim') {
-                      SetQual('');
-                    }
-                  }}
-                  options={['Sim', 'Não']}
-                 />
-                    {linhaOnibus.includes('Sim') && (
-                      <View style={{ marginTop: 10 }}>
-                      <Input
-                      value={qual}
-                      onChangeText={SetQual}
-                      placeholder="Separe as informações por vírgula"
-                      margin="15px 10px 30px 5px"
-                      title="Quais linhas?"
-                       />
-                      </View>
-                      )}
-
-
+                         
              {informativoPredominanteVelha && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
                   Informação dada anteriormente:  {informativoPredominanteVelha}

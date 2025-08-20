@@ -23,7 +23,6 @@ export const BenfeitoriaSchema = {
       fonteEnergia: 'string',
       energiaAlimentos: 'string',
       meiosLocomocao: 'string',
-      linhasOnibus: 'string',
       informativoPredominante: 'string',
       imovel: 'int?',
       sincronizado: 'bool?',

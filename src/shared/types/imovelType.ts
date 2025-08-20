@@ -17,6 +17,7 @@ export interface imovelBody {
     documentacaoImovel: string;
     limites: string;
     linhasDeBarco: string;
+    linhasOnibus: string;
     pavimentacao: string;
     iluminacaoPublica: SimNao | "" | null;
     equipamentosUrbanos: string;

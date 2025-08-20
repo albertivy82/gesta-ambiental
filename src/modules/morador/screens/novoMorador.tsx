@@ -15,6 +15,7 @@ import { MoradorType } from "../../../shared/types/MoradorType";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
 import { estadoCivilOptions } from "../ui-components/opcoesMorador";
+import { useBuscaEntrevistado } from "../hooks/useBuscaEntrevistado";
 
 
 export interface NovoMoradorParams {
@@ -32,6 +33,7 @@ export const NovoMorador = ()=>{
    const benfeitoria = params.benfeitoria ?? params.morador?.benfeitoria;
    const morador = params.morador;
    const [loading, setLoading] = useState(false); 
+   const [validator, setValidator] = useState(false); 
    const [estuda, setEstuda] = useState<string>('');     
    const [ondeEstuda, SetOndeEstuda] = useState<string>('');
    const [trabalha, setTrabalha] = useState<string>('');     
@@ -45,6 +47,7 @@ export const NovoMorador = ()=>{
             handleSetNumber,
             disabled
           } = useNovoMorador(benfeitoria, morador);
+ const {entrevistado} = useBuscaEntrevistado(benfeitoria, morador);
 
      
   useEffect(() => {
@@ -113,7 +116,7 @@ export const NovoMorador = ()=>{
 
        useEffect(() => {
         if (!morador) return;
-      
+        handleSetNumber(morador.dataNascimento ?? 0, 'dataNascimento');
         handleEnumChange('perfil', morador.perfil);
         handleEnumChange('sexo', morador.sexo);
         handleEnumChange('estadoCivil', morador.estadoCivil);
@@ -128,11 +131,46 @@ export const NovoMorador = ()=>{
       const doencasVelhas = morador?.doencas ?? '';
 
 
+      useEffect(() => {
+           
+         if (novoMorador.perfil==='ENTREVISTADO'){
+        
+          if(entrevistado){
+           
+                handleSetNumber(entrevistado.nascimentoData ?? 0, 'dataNascimento');
+                handleEnumChange('sexo', entrevistado.sexo ?? null);
+                handleEnumChange('estadoCivil', entrevistado.estadoCivil ?? null);
+                handleEnumChange('escolaridade', entrevistado.escolaridade ?? '');
+                handleEnumChange('religiao', entrevistado.religiao ?? '');
+                  setValidator(true);
+           }else{
+                 setValidator(false);
+            Alert.alert("Não foi possíel encontrar entrevistado!")
+           }
+          
+        } else if(novoMorador.perfil==='COABITANTE'){
+                  
+              handleSetNumber( 0, 'dataNascimento');
+              handleEnumChange('sexo', null);
+              handleEnumChange('estadoCivil', null);
+              handleEnumChange('escolaridade', '');
+              handleEnumChange('religiao', '');
+              setValidator(false);
+
+        }else{
+          setValidator(false);
+          return;
+        }
+        
+      }, [novoMorador.perfil]);
+      
+
+
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
         <MoradorDetailContainer>
 
-
+        
              <RenderPicker
                label="Selecione o perfil do morador"
                selectedValue={novoMorador.perfil}
@@ -140,7 +178,7 @@ export const NovoMorador = ()=>{
                options={perfilOptions}
               />
 
-          
+              {!validator &&(  
                <Input
                 value={idade?.toString() || ''}
                 maxLength={3}
@@ -152,30 +190,29 @@ export const NovoMorador = ()=>{
                 placeholder="Digite a idade do morador"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 title="Idade do morador"
-              />
+              />)}  
 
-            
-
+             {!validator &&(  
               <RenderPicker
                label="Qual o sexo do morador"
                selectedValue={novoMorador.sexo}
                onValueChange={(value) => handleEnumChange('sexo', value)}
                options={sexoOptions}
-              />
-
+              />)}
+           {!validator &&(  
               <RenderPicker
                label="Informe o estado civil do morador?"
                selectedValue={novoMorador.estadoCivil}
                onValueChange={(value) => handleEnumChange('estadoCivil', value)}
                options={estadoCivilOptions}
-            />
-
+            />)}
+           {!validator &&(  
               <RenderPicker
                label="Qual o nível de escolaridade do morador?"
                selectedValue={novoMorador.escolaridade}
                onValueChange={(value) => handleEnumChange('escolaridade', value)}
                options={escolaridadeOptions}
-              />
+              />)}
 
                {estudaVelho && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
@@ -236,13 +273,13 @@ export const NovoMorador = ()=>{
                        />
                       </View>
                  )}
-               
+               {!validator &&(               
                <RenderPicker
                   label="Qual a religião do morador?"
                   selectedValue={novoMorador.religiao}
                   onValueChange={(value) => handleEnumChange('religiao', value)}
                   options={religiaoOptions}
-                 />
+                 />)}
                   
                 {doencasVelhas && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>

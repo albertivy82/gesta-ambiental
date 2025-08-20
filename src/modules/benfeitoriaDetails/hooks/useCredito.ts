@@ -34,7 +34,7 @@ export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
         const isConnected = await testConnection();
          if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://177.74.56.24/credito', creditoInput);
+            const response = await connectionAPIPost('http://192.168.100.28:8080/credito', creditoInput);
             const creditoAPI = response as CreditoType;
             if (creditoAPI.id) apagarCreditoQueue(credito.idLocal!);
           } catch (error) {
@@ -54,7 +54,7 @@ export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
 
   const fetchCreditoAPI = async () => {
     try {
-      const response = await connectionAPIGet<CreditoType[]>(`http://177.74.56.24/credito/benfeitoria-credito/${benfeitoriaId}`);
+      const response = await connectionAPIGet<CreditoType[]>(`http://192.168.100.28:8080/credito/benfeitoria-credito/${benfeitoriaId}`);
       const dados = response.map(item => ({
         ...item,
         sincronizado: true,

@@ -43,6 +43,8 @@ export const NovoImovel = () => {
   const [pavimentacaoInformada, setPavimentacaoInformada] = useState<string[]>([]);  
   const [outrasInformadas, SetOutrasInformadas] = useState<string>('');
   const [vizinhosConfinantesInformados, setVizinhosConfinantesInformados] = useState<string[]>([]);
+  const [linhaOnibus, setLinhaOnibus] = useState<string>('');     
+  const [qual, SetQual] = useState<string>('');
   const [equipamentosUrbanosInformados, setEquipamentosUrbanosInformados] = useState<string>(''); 
   const [outrosEquipamentosUrbanos, setOutrosEquipamentosUrbanos] = useState<string>('');
   const [espacosLazer, setEspacosLazer]  = useState<string[]>([]);
@@ -58,7 +60,17 @@ export const NovoImovel = () => {
   
         handleArrayFieldChange('pavimentacao', consolidaDados);
       
-  },[pavimentacaoInformada, outrasInformadas ])
+  },[pavimentacaoInformada, outrasInformadas ]);
+
+
+  useEffect(() => {
+    const consolidaDados = linhaOnibus === 'Sim' 
+      ? (qual ? [`ocorrencia: ${qual}`] : [])  
+      : ['Não']; 
+  
+    handleArrayFieldChange('linhasOnibus', consolidaDados);
+  
+  }, [linhaOnibus, qual]);
 
 
 
@@ -71,6 +83,7 @@ export const NovoImovel = () => {
   
   }, [equipamentosUrbanosInformados, outrosEquipamentosUrbanos]);
 
+ 
   useEffect(() => {
     const consolidaEspacosLaze = [
         ...espacosLazer.filter((item) => item !== 'Outros'),
@@ -120,6 +133,7 @@ export const NovoImovel = () => {
     const valorSalvoAreaImovel = imovel?.areaImovel ? imovel.areaImovel.toFixed(2) : '';
     const valorSalvoLatitude = imovel?.latitude ?? '';
     const valorSalvoLongitude = imovel?.longitude ?? '';
+    const linhasOnibusVelha = imovel?.linhasOnibus ?? '';
     const valorSalvoEsporteLazer = imovel?.espacosEsporteLazer ?? '';
     
      const handleEnviar = async () => {
@@ -279,6 +293,38 @@ export const NovoImovel = () => {
               title="Há linhas de barco no local?"
               ref={linhaBarcoInput}
               />
+ 
+ 
+              {linhasOnibusVelha && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informação dada anteriormente:  {linhasOnibusVelha}
+                </Text>
+              )}
+             
+              <RenderPicker
+                  label="Existem linhas de ônibus que atendem o local?"
+                  selectedValue={linhaOnibus}
+                  onValueChange={(value) => {
+                    setLinhaOnibus(value ?? ''); 
+                    if (value !== 'Sim') {
+                      SetQual('');
+                    }
+                  }}
+                  options={['Sim', 'Não']}
+                 />
+                    {linhaOnibus.includes('Sim') && (
+                      <View style={{ marginTop: 10 }}>
+                      <Input
+                      value={qual}
+                      onChangeText={SetQual}
+                      placeholder="Separe as informações por vírgula"
+                      margin="15px 10px 30px 5px"
+                      title="Quais linhas?"
+                       />
+                      </View>
+                      )}
+
+
 
                 {valorSalvoPavimentacao   && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>

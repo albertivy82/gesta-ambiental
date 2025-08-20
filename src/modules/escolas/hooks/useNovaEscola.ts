@@ -72,7 +72,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://177.74.56.24/escola', novaEscola) as EscolaType;
+                      const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscola) as EscolaType;
                           
                       if (response && response.id) {
                             return fetchEscolaAPI(response.id);
@@ -110,7 +110,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                                 //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                                 try{
                                   console.log("enviando para edição", escolaCorrigida)
-                                  const response = await connectionAPIPut(`http://177.74.56.24/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
+                                  const response = await connectionAPIPut(`http://192.168.100.28:8080/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
                                   console.log("recebendo edição", response)
                                   if (response && response.id) {
                                        return fetchEscolaAPI(response.id);
@@ -147,7 +147,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
    const fetchEscolaAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<EscolaType>(`http://177.74.56.24/escola/${id}`);
+              const response = await connectionAPIGet<EscolaType>(`http://192.168.100.28:8080/escola/${id}`);
               if (response) {
                 const escolaData = {
                     ...response,

@@ -1,6 +1,11 @@
-import { realmInstance } from './databaseService';
+import { BenfeitoriaType } from '../../shared/types/BenfeitoriaType';
+import { EntrevistadorType } from '../../shared/types/EntrevistadorType';
+import { EntrevistadoType } from '../../shared/types/EntrevistadoType';
 import { MoradorInput } from '../../shared/types/MoradorInput';
 import { MoradorType } from '../../shared/types/MoradorType';
+import { realmInstance } from './databaseService';
+import { getEntrevistadoDessincronizadoPorId, getEntrevistadoPorId } from './entrevistado';
+import { getImovelDessincronizadoPorId, getImovelPorId } from './imovelService';
 
 export const salvarMoradores = (moradores: MoradorType[]) => {
     return new Promise<void>((resolve, reject) => {
@@ -123,9 +128,9 @@ export const getMorador = (id: number): MoradorType | undefined => {
     return cleanMorador as MoradorType;
   };
 
-export const getMoradoresDessincronizados = (benfeitoriaId: number): MoradorType[] => {
-    console.log("...ou seria o probelma aqui?")
-    const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
+ 
+  export const getMoradoresDessincronizados = (benfeitoriaId: number): MoradorType[] => {
+     const query = `benfeitoria == "${benfeitoriaId}" AND sincronizado == false AND (idFather == null OR idFather == "")`;
     const moradorQueue = realmInstance.objects<MoradorType>('Morador').filtered(query).slice();
     return JSON.parse(JSON.stringify(moradorQueue)) as MoradorType[];
 };

@@ -56,6 +56,7 @@ const ImovelDetails = () => {
               {renderField('Documentação do Imóvel', params.imovel.documentacaoImovel)}
               {renderField('Material utilizado no entorno do imóvel (Limites)', params.imovel.limites)}
               {renderField('Linhas de Barco Disponíveis', params.imovel.linhasDeBarco)}
+              {renderField('Linhas de ônibus Disponíveis', params.imovel.linhasOnibus)}
               {renderField('Pavimentação', params.imovel.pavimentacao)}
               {renderField('Iluminação Pública', params.imovel.iluminacaoPublica)}
               {renderField('Equipamentos Urbanos Presentes', params.imovel.equipamentosUrbanos)}

@@ -41,7 +41,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) 
             if (isConnected) {
               try {
                 const response = await connectionAPIPost(
-                  "http://177.74.56.24/atividade-produtiva",novaAtividadeInput);
+                  "http://192.168.100.28:8080/atividade-produtiva",novaAtividadeInput);
                    const atividadeAPI = response as AtividadeProdutivaType;
 
                 if (atividadeAPI.id) {
@@ -67,7 +67,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) 
   const fetchAtividadesAPI = async () => {
     try {
       const response = await connectionAPIGet<AtividadeProdutivaType[]>(
-        `http://177.74.56.24/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
+        `http://192.168.100.28:8080/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
       );
 
       const data = response.map((atividade) => ({

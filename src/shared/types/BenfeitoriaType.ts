@@ -22,7 +22,6 @@ export interface BenfeitoriaType {
     fonteEnergia: string;
     energiaAlimentos: string;
     meiosLocomocao: string;
-    linhasOnibus: string;
     informativoPredominante: string;
     imovel: {
         id: number;

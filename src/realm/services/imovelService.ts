@@ -182,6 +182,19 @@ export const getImovel = (entrevistadoId: number): imovelBody | null => {
 };
 
 
+export const getImovelPorId = (imovelId: number): imovelBody | null => {
+    const query = `id == ${imovelId}`; // Se "entrevistado" for um objeto com "id"
+    
+    const imoveisRealm = realmInstance.objects<imovelBody>('Imovel').filtered(query);
+    
+    if (imoveisRealm.length === 0) {
+        return null; // Retorna null se não encontrar um imóvel
+    }
+  
+    return JSON.parse(JSON.stringify(imoveisRealm[0])) as imovelBody;
+};
+
+
 
 export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBody | undefined => {
     
@@ -192,6 +205,19 @@ export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBod
     
     const primeiroRegistro = cleanedQueue[0];
     console.log("sincronização de imopvrecuparado do realm", primeiroRegistro)
+    return primeiroRegistro;
+};
+
+
+export const getImovelDessincronizadoPorId = (idLocal: String|undefined): imovelBody | undefined => {
+    
+    const query = `idLocal ==${idLocal}`;
+    const imoveisQueue = realmInstance.objects<imovelBody>('Imovel').filtered(query);
+  
+    const cleanedQueue = imoveisQueue.map(imovel => ({ ...imovel }));
+    
+    const primeiroRegistro = cleanedQueue[0];
+   
     return primeiroRegistro;
 };
 

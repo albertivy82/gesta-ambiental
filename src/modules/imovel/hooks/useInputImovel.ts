@@ -25,6 +25,7 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     documentacaoImovel: '',
     limites: '',
     linhasDeBarco: '',
+    linhasOnibus: '',
     pavimentacao: '',
     iluminacaoPublica: null,
     equipamentosUrbanos: '',
@@ -62,6 +63,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         novoImovel.documentacaoImovel !== null &&
         novoImovel.limites !== null &&
         novoImovel.linhasDeBarco !== '' &&
+        novoImovel.linhasOnibus !== '' &&
         novoImovel.pavimentacao !== '' &&
         novoImovel.iluminacaoPublica !== null &&
         novoImovel.equipamentosUrbanos !== '' &&
@@ -121,7 +123,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                 try {
                   
                    console.log("novo", novoImovel)
-                  const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovel) as imovelBody;
+                  const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel) as imovelBody;
                   if (response && response.id) {
                     return fetchImovelAPI(response.id);
                    }      
@@ -163,7 +165,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                     //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
                     try{
                      
-                      const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
+                      const response = await connectionAPIPut(`http://192.168.100.28:8080/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
                       
                       if (response && response.id) {
                           return fetchImovelAPI(response.id);
@@ -201,7 +203,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
    const fetchImovelAPI = async(id:number) =>{
       
               try{
-                  const response = await connectionAPIGet<imovelBody>(`http://177.74.56.24/imovel/${id}`);
+                  const response = await connectionAPIGet<imovelBody>(`http://192.168.100.28:8080/imovel/${id}`);
                   if (response) {
                     const imovelData = {
                         ...response,

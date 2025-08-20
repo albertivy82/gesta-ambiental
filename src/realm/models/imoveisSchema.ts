@@ -16,6 +16,7 @@ export const ImovelSchema = {
         documentacaoImovel: 'string?', 
         limites: 'string?',
         linhasDeBarco: 'string?',
+        linhasOnibus: 'string',
         pavimentacao: 'string?',
         iluminacaoPublica: 'string?',
         equipamentosUrbanos: 'string?',

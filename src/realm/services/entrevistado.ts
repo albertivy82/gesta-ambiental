@@ -115,9 +115,9 @@ export const salvarEntrevistadoQueue = (entrevistado: EntrevistadoInput): Promis
                         id: Id(), 
                         localidade: entrevistado.localidade.id,
                     };
-                    console.log('salvarImovelqueue', entrevistadoPadrao)
+                    
                     entrevistadoSalvo = realmInstance.create('Entrevistado', entrevistadoPadrao, true);
-                    console.log('salvarImovelQueue - Ok!')
+                   
                 });
                 if(entrevistadoSalvo){
                     const cleanEntrevistado = JSON.parse(JSON.stringify(entrevistadoSalvo));
@@ -150,6 +150,22 @@ export const getEntrevistados = (localidade:number): EntrevistadoType[]=>{
 }
 
 
+export const getEntrevistadoPorId = (entrevistadoId:number): EntrevistadoType | null=>{
+
+  
+    const query = `id == ${entrevistadoId}`;
+    const entrevistadosRealm = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query).slice();
+    
+        if (entrevistadosRealm.length === 0) {
+            return null;
+           
+        }
+      
+        return JSON.parse(JSON.stringify(entrevistadosRealm[0])) as EntrevistadoType;
+
+}
+
+
 export const getEntrevistadosDessincronizados = (localidade:number): EntrevistadoType[]=>{
 
    
@@ -161,13 +177,25 @@ export const getEntrevistadosDessincronizados = (localidade:number): Entrevistad
 
     return cleanedQueue as EntrevistadoType[];
 };
+
+export const getEntrevistadoDessincronizadoPorId = (idLocal:string|undefined): EntrevistadoType|null=>{
+
+   
+    const query = `idLocal == ${idLocal}`;
+
+    const entrevistadoQueue = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query).slice();
+
+    const cleanedQueue = JSON.parse(JSON.stringify(entrevistadoQueue[0]));
+
+    return cleanedQueue as EntrevistadoType;
+};
   
 
 
 export const getAllEntrevistados = (): EntrevistadoType[] => {
     const entrevistados = realmInstance.objects<EntrevistadoType>('Entrevistado');
     const cleanEntrevistados = JSON.parse(JSON.stringify(entrevistados));
-    console.log('getAllEntrevistados', cleanEntrevistados);
+   
     return cleanEntrevistados as EntrevistadoType[];
 };
 
