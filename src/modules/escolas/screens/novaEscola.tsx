@@ -1,15 +1,15 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Alert, Button, ScrollView } from "react-native";
 import { EsferaEnum } from "../../../enums/esfera.enum";
 import { SimNao } from "../../../enums/simNao.enum";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { theme } from "../../../shared/themes/theme";
 import { EscolaType } from "../../../shared/types/EscolaType";
 import { useNovaEscola } from "../hooks/useNovaEscola";
 import { EscolaContainer } from "../styles/Escolas.style";
-import { theme } from "../../../shared/themes/theme";
 
 
 
@@ -31,6 +31,7 @@ export const NovaEscola = ()=>{
  const escola = params.escola;
  const navigation = useNavigation();
  const [loading, setLoading] = useState(false); 
+ const [showErrors, setShowErrors] = useState(false);
   
   const { novaEscola,
           handleOnChangeInput,
@@ -39,6 +40,7 @@ export const NovaEscola = ()=>{
           handleMerenda,
           handleEducAmbiental,
           handleTransporte,
+          validateEscola,
           disabled,} = useNovaEscola(params.localidadeId!, escola);
     
           useEffect(() => {
@@ -55,11 +57,27 @@ export const NovaEscola = ()=>{
     const simNaoOptions =  Object.values(SimNao);
     const Iniciativa =  Object.values(EsferaEnum);
       
-  console.log(escola?.localidade.id, localidadeId)
+  
 
     const handleEnviar = async () => {
-             setLoading(true);
+      if (loading) return;
+          
+        const result = validateEscola(novaEscola);
+        if (!result.isValid) {
+          setShowErrors(true);
+      
+          Alert.alert(
+            'Campos Obrigatórios',
+            [
+              'Por favor, corrija os campos abaixo:',
+              '',
+              ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+            ].join('\n')
+          );
+          return;
+        }
             try {
+              setLoading(true);
                const vegetacaoSalva = await enviarRegistro(); 
                    if (vegetacaoSalva){
                      detalharEscola(navigation.navigate, params.localidadeId! );
@@ -67,12 +85,11 @@ export const NovaEscola = ()=>{
                      Alert.alert("Erro", "Não foi possível salvar a escola. Tente novamente.");
                      navigation.goBack();
                    }
-             } catch (error) {
-               console.error("Erro no envio:", error);
-               Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-             } finally {
-               setLoading(false);
-             }
+                  } catch (e) {
+                    Alert.alert('Erro', 'Não foi possível realizar a operação.');
+                  } finally {
+                    setLoading(false); // 👈 desliga
+                  }
     };
       
   
@@ -121,13 +138,17 @@ export const NovaEscola = ()=>{
 
      
 
-      <View style={{ marginTop: 40 }}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#ff4500" /> // Exibe o spinner enquanto está carregando
-      ) : (
-        <Button title="Enviar" onPress={handleEnviar} color='#ff4500' disabled={disabled || loading} />
-      )}
-      </View>
+           <FormErrors
+              visible={showErrors && disabled}
+              errors={validateEscola(novaEscola).errors}
+            />
+                             
+            <Button
+            title={loading ? "Enviando..." : "Enviar"}
+            onPress={handleEnviar}
+            color={"#ff4500"}
+            disabled={loading}   // 👈 trava só enquanto envia
+            />
  
         </EscolaContainer>
         </ScrollView>

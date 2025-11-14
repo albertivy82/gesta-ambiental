@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getPostos } from '../../../realm/services/postoService';
@@ -7,10 +7,9 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { PostoType } from '../../../shared/types/postoTypes';
+import { usePostos } from '../../localidade/hooks/usePostos';
 import { PostoContainer } from '../styles/Postos.style';
 import RenderItemImovel from '../ui-components/listaPostos';
-import { LocalidadeType } from '../../../shared/types/LocalidadeType';
-import { usePostos } from '../../localidade/hooks/usePostos';
 
 export interface EscolaParam {
   localidadeId: number;
@@ -24,9 +23,9 @@ const Postos = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, EscolaParam>, 'Posto'>>();
   const { localidadeId } = route.params;
-   const {contagemPostos} = usePostos(localidadeId);
+  const foccus=useIsFocused();
+  const {contagemPostos} = usePostos(localidadeId, foccus);
   const flatListRef = useRef<FlatList>(null);
-
   const [posto, setPosto] = useState<PostoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,6 +58,7 @@ const Postos = () => {
      novoPosto(navigation.navigate, localidadeId);
   };
 
+  
   return (
     <PostoContainer>
       <View style={{  

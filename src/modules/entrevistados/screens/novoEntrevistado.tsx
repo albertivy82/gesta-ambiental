@@ -1,13 +1,14 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
 import { Compras } from "../../../enums/Compras.enum";
 import { ServicoPublicos } from "../../../enums/ServicoPublicos";
 import { Sexo } from "../../../enums/Sexo";
 import { SimNao } from "../../../enums/simNao.enum";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
+import { getAllEntrevistados } from "../../../realm/services/entrevistado";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
@@ -16,8 +17,7 @@ import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
-import { estadoCivilOptions, saudeOptions, sexoEscolaridade, tempomordiaOptions } from "../ui-components/opcoesEntrevistado";
-import { getAllEntrevistados } from "../../../realm/services/entrevistado";
+import { estadoCivilOptions, saudeOptions, sexoEscolaridade, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
 
 
 export interface NovoEntrevistadoParams {
@@ -35,6 +35,7 @@ export const NovoEntrevistado = ()=>{
   const localidadeId = params.localidadeId ?? params.entrevistado?.localidade.id;
   const entrevistado = params.entrevistado;
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const { novoEntrevistado,
           enviarRegistro,
@@ -43,9 +44,10 @@ export const NovoEntrevistado = ()=>{
           handleEnumChange,
           handleNumberChange,
           handleSetNumber,
+          validateEntrevistado,
           disabled} = useNovoEntrevistado(localidadeId!, entrevistado);
          
-          getAllEntrevistados();
+          //getAllEntrevistados();
           useEffect(() => {
             if (!entrevistado) return;
           
@@ -105,6 +107,7 @@ export const NovoEntrevistado = ()=>{
             
    
     const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
+    const relacaoVizinhosOptions = ['Boa','Muito boa','Indiferente','Conflituosa','Não se relaciona', 'Outros',];
     const simNaoOptions = Object.values(SimNao);
     const simNaoTalvezOptions = Object.values(SimNaoTalvez);
     const alimentacaoOptions = Object.values(Alimentacao);
@@ -244,22 +247,38 @@ export const NovoEntrevistado = ()=>{
        
     
     const handleEnviar = async () => {
-         setLoading(true);
+            
+        if (loading) return;
+            
+        const result = validateEntrevistado(novoEntrevistado);
+        if (!result.isValid) {
+          setShowErrors(true);
+      
+          Alert.alert(
+            'Campos Obrigatórios',
+            [
+              'Por favor, corrija os campos abaixo:',
+              '',
+              ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+            ].join('\n')
+          );
+          return;
+        }
        
          try {
+          setLoading(true);
            const entrevistadoSalvo = await enviarRegistro(); 
                if (entrevistadoSalvo){
                  detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
                } else {
-                 Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+                 Alert.alert("Erro", "Não foi possível salvar o entrevistado. Tente novamente.");
                  navigation.goBack();
                }
-         } catch (error) {
-           console.error("Erro no envio:", error);
-           Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-         } finally {
-           setLoading(false);
-         }
+              } catch (e) {
+                Alert.alert('Erro', 'Não foi possível realizar a operação.');
+              } finally {
+                setLoading(false); // 👈 desliga
+              }
     };
     
     
@@ -293,17 +312,17 @@ export const NovoEntrevistado = ()=>{
               ref={naturalidadeInput}
               />
 
-              <Input
-                value={idade?.toString() || ''}
-                onChangeText={(text) => {
+           <Input
+              value={idade?.toString() || ''}
+              onChangeText={(text) => {
                   const num = parseInt(text.replace(/\D/g, ''), 10);
                   setIdade(isNaN(num) ? undefined : num);
-                }}
-                keyboardType="numeric"
-                placeholder="Idade do entrevistado"
-                placeholderTextColor={theme.colors.grayTheme.gray80}
-                title="Qual sua idade?"
-              />
+                 }}
+              keyboardType="numeric"
+              placeholder="Idade do entrevistado"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
+              title="Qual sua idade?"
+            />
 
              {Number(novoEntrevistado.nascimentoData) < 18 && (
                 <Text style={{ fontStyle: 'italic', color: 'grey', marginTop: 8 }}>
@@ -317,41 +336,41 @@ export const NovoEntrevistado = ()=>{
               selectedValue={novoEntrevistado.sexo}
                onValueChange={(value) => handleEnumChange('sexo', value)}
                options={sexoOptions}
-              />
+            />
 
-           <Input 
+            <Input 
               value={novoEntrevistado.apelido} 
               onChange={(event)=> handleOnChangeInput(event, 'apelido')}
               maxLength={100}
-              placeholder="como é mais conhecido na região"
+              placeholder="como você é mais conhecido na região"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Apelido:"
               ref={apelidoInput}
             />
              
-          <RenderPicker
+            <RenderPicker
               label="Escolaridade"
               selectedValue={novoEntrevistado.escolaridade}
                onValueChange={(value) => handleEnumChange('escolaridade', value)}
                options={sexoEscolaridade}
-              />
+            />
                    
-           <RenderPicker
+            <RenderPicker
                 label="Estado Civil"
                 selectedValue={novoEntrevistado.estadoCivil}
                 onValueChange={(value) => handleEnumChange('estadoCivil', value)}
                 options={estadoCivilOptions}
-              />
-
-              <RenderPicker
-              label="Qual a sua religião"
-              selectedValue={novoEntrevistado.religiao}
-               onValueChange={(value) => handleEnumChange('religiao', value)}
-               options={religiaoOptions}
-              />
+             />
 
             <RenderPicker
+                label="Qual a sua religião"
+                selectedValue={novoEntrevistado.religiao}
+                onValueChange={(value) => handleEnumChange('religiao', value)}
+                options={religiaoOptions}
+             />
+
+             <RenderPicker
                 label="É morador do imóvel?"
                 selectedValue={novoEntrevistado.morador}
                 onValueChange={(value) => handleEnumChange('morador', value)}
@@ -359,24 +378,32 @@ export const NovoEntrevistado = ()=>{
               />
            
              <RenderPicker
-                label="Há quanto tempo você reside neste local?"
+                label={
+                  novoEntrevistado.morador === 'Sim'
+                    ? 'Há quanto tempo você reside neste local?'
+                    : 'Há quanto tempo você está presente neste local?'
+                }
                 selectedValue={novoEntrevistado.dataChegada}
                 onValueChange={(value) => handleEnumChange('dataChegada', value)}
-                options={tempomordiaOptions}
+                options={tempomoradiaOptions}
               />
 
                 <RenderPicker
-                  label="Pretende Mudar"
-                  selectedValue={novoEntrevistado.pretendeMudar}
-                  onValueChange={(value) => handleEnumChange('pretendeMudar', value)} // Atualiza o estado
-                  options={simNaoTalvezOptions}
+                    label={
+                    novoEntrevistado.morador === 'Sim'
+                    ? 'Pretende Mudar?'
+                    : 'Pretende deixar o local?'
+                    }
+                    selectedValue={novoEntrevistado.pretendeMudar}
+                    onValueChange={(value) => handleEnumChange('pretendeMudar', value)}
+                    options={simNaoTalvezOptions}
                 />
+                
 
-                {/* Exibe o campo de texto apenas se a resposta for 'Sim' */}
-                {novoEntrevistado.pretendeMudar === SimNaoTalvez.Sim&& ( 
+                {novoEntrevistado.pretendeMudar === SimNaoTalvez.Sim && (
                   <View style={{ marginTop: 10 }}>
-                    <Input 
-                      value={novoEntrevistado.motivoVontadeMudanca} 
+                    <Input
+                      value={novoEntrevistado.motivoVontadeMudanca}
                       maxLength={255}
                       onChange={(event) => handleOnChangeInput(event, 'motivoVontadeMudanca')}
                       placeholder="Por qual motivo?"
@@ -388,35 +415,32 @@ export const NovoEntrevistado = ()=>{
 
 
               <Input 
-              value={novoEntrevistado.relacaoAreaImovel} 
-              onChange={(event)=> handleOnChangeInput(event, 'relacaoAreaImovel')}
-              maxLength={255}
-              placeholder="Relação do entrevistado com a área do imóvel"
-              placeholderTextColor={theme.colors.grayTheme.gray80}
-              margin="15px 10px 30px 5px"
-              title="Como você define a sua relação com o local onde você mora?"
-              ref={relacaoAreaInput}
-              onSubmitEditing={() => relacaoVizinhoInput.current?.focus()}
-              />
-
-            <Input 
-                  value={novoEntrevistado.relacaoVizinhos} 
-                  onChange={(event)=> handleOnChangeInput(event, 'relacaoVizinhos')}
+                  value={novoEntrevistado.relacaoAreaImovel} 
+                  onChange={(event)=> handleOnChangeInput(event, 'relacaoAreaImovel')}
                   maxLength={255}
-                  placeholder="Relação do entrevistado com a vizinhança"
+                  placeholder="Relação do entrevistado com a área do imóvel"
                   placeholderTextColor={theme.colors.grayTheme.gray80}
                   margin="15px 10px 30px 5px"
-                  title="Como é a sua relação com a vizinhança?"
-                  ref={relacaoVizinhoInput}
+                  title="Como você define a sua relação com o local onde você mora?"
+                  ref={relacaoAreaInput}
+                  onSubmitEditing={() => relacaoVizinhoInput.current?.focus()}
               />
 
-                {valorSalvoTipoAlimentacao && (
+              
+              <RenderPicker
+                label="Como é a sua relação com a vizinhança?"
+                selectedValue={novoEntrevistado.relacaoVizinhos}
+                onValueChange={(value) => handleEnumChange('relacaoVizinhos', value)}
+                options={relacaoVizinhosOptions}
+              />
+
+              {valorSalvoTipoAlimentacao && (
                   <View style={{ marginBottom: 5 }}>
                     <Text style={{ fontStyle: 'italic', color: 'gray' }}>
                       Valor salvo sobre a alimentação: {valorSalvoTipoAlimentacao}
                     </Text>
                   </View>
-                )}
+              )}
             
             <CheckboxSelector
                 options={alimentacaoOptions}
@@ -442,7 +466,7 @@ export const NovoEntrevistado = ()=>{
                         title="Informe quais:"
                     />
                 </View>
-            )}
+             )}
 
             {valorSalvoLocalCompras && (
                         <View style={{ marginBottom: 5 }}>
@@ -549,7 +573,7 @@ export const NovoEntrevistado = ()=>{
                 placeholder="Área em m²"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
-                title="Já sofreu Assaltos nesse local"
+                title="Já sofreu Assaltos nesse local? Quantas vezes?"
                 ref={sofreuAssaltosInput}
                 onSubmitEditing={() => presenciouAssaltosInput.current?.focus()}
               />
@@ -562,7 +586,7 @@ export const NovoEntrevistado = ()=>{
                 placeholder="Quantas vezes?"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
-                title="Já presenciou Assaltos nesse local"
+                title="Já presenciou Assaltos nesse local? Quantas vezes?"
                 ref={presenciouAssaltosInput}
                 onSubmitEditing={() => violenciaLocalInput.current?.focus()}
               />
@@ -756,14 +780,17 @@ export const NovoEntrevistado = ()=>{
         )}
        
          
-    <View style={{ marginTop: 40 }}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#ff4500" /> 
-      ) : (
-        <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled || loading} />
-      )}
-    </View>
- 
+          <FormErrors
+            visible={showErrors && disabled}
+            errors={validateEntrevistado(novoEntrevistado).errors}
+          />
+                           
+          <Button
+          title={loading ? "Enviando..." : "Enviar"}
+          onPress={handleEnviar}
+          color={"#ff4500"}
+          disabled={loading}   // 👈 trava só enquanto envia
+          />
     
       
 

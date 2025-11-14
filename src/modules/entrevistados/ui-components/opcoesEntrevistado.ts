@@ -7,7 +7,7 @@ export const estadoCivilOptions = [
     'Separado(a)'
   ];
 
-export const tempomordiaOptions = [
+export const tempomoradiaOptions = [
       'Entre 1 e 5 anos',
       'Entre 6 e 10 anos',
       'Entre 11 e 15 anos',

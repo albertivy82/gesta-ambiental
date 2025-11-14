@@ -16,6 +16,7 @@ import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
 import { estadoCivilOptions } from "../ui-components/opcoesMorador";
 import { useBuscaEntrevistado } from "../hooks/useBuscaEntrevistado";
+import { useBuscaMorador } from "../hooks/useBuscaMorador";
 
 
 export interface NovoMoradorParams {
@@ -48,6 +49,7 @@ export const NovoMorador = ()=>{
             disabled
           } = useNovoMorador(benfeitoria, morador);
  const {entrevistado} = useBuscaEntrevistado(benfeitoria, morador);
+ //const {temEntrevistado} = useBuscaMorador(benfeitoria, morador);
 
      
   useEffect(() => {
@@ -130,6 +132,8 @@ export const NovoMorador = ()=>{
       const trabalhoVelho = morador?.trabalho ?? '';
       const doencasVelhas = morador?.doencas ?? '';
 
+
+      
 
       useEffect(() => {
            

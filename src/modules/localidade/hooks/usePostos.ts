@@ -22,6 +22,7 @@ export const convertToPostoInput = (posto: any) => {
 
 export const usePostos = (localidadeId: number, foccus:boolean) => {
     const [contagemPostos, setContagemPostos] = useState<number>(0);
+    const [loadingEscolas, setLoadingEscolas] = useState<boolean>(true);
 
     const sinconizeQueue = async () => {
         const postosQueue = getPostosDessincronizados(localidadeId);
@@ -32,7 +33,7 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
                const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://192.168.100.28:8080/posto', novoPostoInput);
+                            const response = await connectionAPIPost('http://177.74.56.24/posto', novoPostoInput);
                             const postoAPI = response as PostoType;
                            
                             if (postoAPI.id) {
@@ -62,7 +63,7 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
             const isConnected = await testConnection();
             if (isConnected) {
           try {
-              const postosAPI = await connectionAPIGet<PostoType[]>(`http://192.168.100.28:8080/posto-de-saude/localidade-posto/${localidadeId}`);
+              const postosAPI = await connectionAPIGet<PostoType[]>(`http://177.74.56.24/posto-de-saude/localidade-posto/${localidadeId}`);
               
               const postoData: PostoType[] = postosAPI.map(posto => ({
                 ...posto,
@@ -87,11 +88,18 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
           
     };
 
+    
+
     useEffect(() => {
-        sinconizeQueue();
-        fetchPostosFromAPI();
+      const sincronizarTudo = async () => {
+        setLoadingEscolas(true);
+        await sinconizeQueue();
+        await fetchPostosFromAPI();
         fetchPostosFromLocalDb();
+        setLoadingEscolas(false);
+      };
+      sincronizarTudo();
     }, [foccus]);
   
-    return { contagemPostos };
+    return { contagemPostos, loadingEscolas};
 }

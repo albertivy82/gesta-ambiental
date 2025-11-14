@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarAgua, salvarAguaQueue } from "../../../realm/services/aguasService";
@@ -22,25 +21,86 @@ export const DEFAULT_AGUA_INPUT: AguaInput = {
   },
 };
 
+export const FIELD_LABEL: Partial<Record<keyof AguaInput, string>> = {
+
+  tipoDeFornecimento: 'Tipo de fornecimento',
+  qualidadeDaAgua: 'Qualidade da água',
+  metodoTratamento: 'Método de tratamento',
+  corDagua: 'Cor da água',
+  cheiroDagua: 'Cheiro da água',
+  saborDagua: 'Sabor da água',
+  profundidadePoco: 'Profundidade do poço'
+}
+
+
+export const validateAgua = (data: AguaInput) => {
+  const errors: { field: keyof AguaInput; message: string }[] = [];
+
+  const fornec = (data.tipoDeFornecimento || '').toUpperCase();
+  const isPoco = fornec.includes('POÇO') || fornec.includes('POCO');
+
+  // obrigatórios simples
+  ([
+    'tipoDeFornecimento',
+    'qualidadeDaAgua',
+    'corDagua',
+    'cheiroDagua',
+    'saborDagua',
+  ] as (keyof AguaInput)[]).forEach((f) => {
+    const v = data[f] as any;
+    if (v === '' || v === undefined || v === null) {
+      errors.push({ field: f, message: `Preencha ${FIELD_LABEL[f]}.` });
+    }
+  });
+
+  // regra especial para método
+  if ((data.metodoTratamento || '').trim().length === 0) {
+    errors.push({
+      field: 'metodoTratamento',
+      message: `Selecione ao menos um ${FIELD_LABEL['metodoTratamento']}.`,
+    });
+  }
+
+  // regra condicional
+  if (isPoco) {
+    if (
+      data.profundidadePoco === undefined ||
+      data.profundidadePoco === null ||
+      Number.isNaN(data.profundidadePoco) ||
+      data.profundidadePoco <= 0
+    ) {
+      errors.push({
+        field: 'profundidadePoco',
+        message: `Informe ${FIELD_LABEL['profundidadePoco']} (maior que 0).`,
+      });
+    }
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL[e.field])
+        .filter(Boolean) // remove undefined
+    )
+  );
+  
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
 export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
   const [novaAgua, setNovaAgua] = useState<AguaInput>(DEFAULT_AGUA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
+ 
 
   useEffect(() => {
-    console.log(novaAgua);
-    if (
-      novaAgua.tipoDeFornecimento !== '' &&
-      novaAgua.qualidadeDaAgua !== '' &&
-      novaAgua.metodoTratamento !== '' &&
-      novaAgua.corDagua !== '' &&
-      novaAgua.cheiroDagua !== ''&&
-      novaAgua.saborDagua !== ''
-      
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
+    const {isValid} = validateAgua(novaAgua);
+    setDisabled(!isValid)
   }, [novaAgua]);
 
   const objetoFila = () => {
@@ -65,7 +125,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
 
   const enviarRegistro = async () => {
     if (agua) {
-      console.log("1111", agua)
+      
       return await enviaAguaEdicao();
     } else {
       return await enviaAguaNova();
@@ -84,7 +144,10 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
          
   
         }else{
-            novaAgua.benfeitoria = {id:benfeitoria.id};
+           const payload: AguaInput = {
+            ...novaAgua,
+            benfeitoria: { id: benfeitoria.id },
+          };
            
             const isConnected = await testConnection();
           
@@ -92,7 +155,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/agua', novaAgua) as AguaType;
+                      const response = await connectionAPIPost('http://177.74.56.24/agua', payload) as AguaType;
                           
                       if (response && response.id) {
                             return fetchAguaAPI(response.id);
@@ -138,7 +201,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                 //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                 try{
                   
-                  const response = await connectionAPIPut(`http://192.168.100.28:8080/agua/${agua!.id}`, aguaCorrigida) as AguaType;
+                  const response = await connectionAPIPut(`http://177.74.56.24/agua/${agua!.id}`, aguaCorrigida) as AguaType;
 
                 
                         if (response && response.id) {
@@ -180,8 +243,8 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
    const fetchAguaAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<AguaType>(`http://192.168.100.28:8080/agua/${id}`);
-              console.log("55555", response)
+              const response = await connectionAPIGet<AguaType>(`http://177.74.56.24/agua/${id}`);
+              
               if (response) {
                 const aguaData = {
                     ...response,
@@ -190,7 +253,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                     idFather: '',
                 };
 
-                console.log("55555", aguaData)
+              
                    return await salvarAgua(aguaData);
               }else{
                       throw new Error('Dados de agua Inválidos'); 
@@ -216,21 +279,16 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
           }));
   };
 
-   const handleOnChangeProfundidade = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
-      let value = event.nativeEvent.text;
-    
-      // Remove qualquer caractere não numérico
-      value = value.replace(/\D/g, '');
-    
-      // Converte para um número decimal com duas casas, adicionando 0s à esquerda se necessário
-      const formattedValue = (parseInt(value, 10) / 100).toFixed(2);
-    
-      // Atualiza o estado com o valor formatado como número
-      setNovaAgua((currentImovel) => ({
-        ...currentImovel,
-        profundidadePoco: parseFloat(formattedValue), // Salva como número para enviar à API
-      }));
-    };
+  const handleOnChangeProfundidade = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    let value = (event.nativeEvent.text || '').replace(',', '.'); // vírgula → ponto
+    value = value.replace(/[^0-9.]/g, ''); // remove não numéricos
+    const num = parseFloat(value);
+    setNovaAgua((curr) => ({
+      ...curr,
+      profundidadePoco: Number.isFinite(num) ? Number(num.toFixed(2)) : 0,
+    }));
+  };
+  
 
   return {
     novaAgua,
@@ -239,5 +297,6 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
     handleEnumChange,
     handleOnChangeProfundidade,
     disabled,
+    validateAgua
   };
 };

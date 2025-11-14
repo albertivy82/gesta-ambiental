@@ -1,11 +1,6 @@
-import { BenfeitoriaType } from '../../shared/types/BenfeitoriaType';
-import { EntrevistadorType } from '../../shared/types/EntrevistadorType';
-import { EntrevistadoType } from '../../shared/types/EntrevistadoType';
 import { MoradorInput } from '../../shared/types/MoradorInput';
 import { MoradorType } from '../../shared/types/MoradorType';
 import { realmInstance } from './databaseService';
-import { getEntrevistadoDessincronizadoPorId, getEntrevistadoPorId } from './entrevistado';
-import { getImovelDessincronizadoPorId, getImovelPorId } from './imovelService';
 
 export const salvarMoradores = (moradores: MoradorType[]) => {
     return new Promise<void>((resolve, reject) => {
@@ -150,6 +145,18 @@ export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfe
         }
     } catch (error) {
         console.error('Erro ao atualizar registros de moradores:', error);
+    }
+};
+
+
+export const getMoradorComPaiOffLine = (benfeitoriaIdLocal: string):MoradorType[]|undefined  => {
+    try {
+        const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
+        const moradorQueue = realmInstance.objects<MoradorType>('Morador').filtered(query).slice();
+        return JSON.parse(JSON.stringify(moradorQueue)) as MoradorType[];
+        
+    } catch (error) {
+        //console.error('Erro ao atualizar registros de moradores:', error);
     }
 };
 

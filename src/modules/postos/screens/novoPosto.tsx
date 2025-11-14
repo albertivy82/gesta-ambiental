@@ -11,6 +11,7 @@ import { LocalidadeType } from "../../../shared/types/LocalidadeType";
 import { SimNao } from "../../../enums/simNao.enum";
 import { PostoType } from "../../../shared/types/postoTypes";
 import { theme } from "../../../shared/themes/theme";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoPostoParams {
@@ -30,6 +31,7 @@ export const NovoPosto = ()=>{
   const posto = params.posto;
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false); 
+  const [showErrors, setShowErrors] = useState(false);
   
   const {  novoPosto,
            enviarRegistro,
@@ -37,6 +39,7 @@ export const NovoPosto = ()=>{
            handleAmbulatorialChange,
            handleUrgenciaEmergenciaChange,
            handleMedicosPorTurnoChange,
+           validatePosto,
           disabled,} = useNovoPosto(localidadeId!, posto);
     
           useEffect(() => {
@@ -44,9 +47,12 @@ export const NovoPosto = ()=>{
               handleOnChangeInput(posto.nome, 'nome');
               handleAmbulatorialChange(posto.ambulatorial as SimNao);
               handleUrgenciaEmergenciaChange(posto.urgenciaEmergencia as SimNao);
-              setTimeout(() => {
-                handleMedicosPorTurnoChange({ nativeEvent: { text: String(posto.medicosPorTurno ?? '') } } as any);
-              }, 0);
+              if (posto.medicosPorTurno != null) {
+                handleMedicosPorTurnoChange({
+                  nativeEvent: { text: String(posto.medicosPorTurno) },
+                } as any);
+              }
+              
             }
           }, [posto]);
           
@@ -58,8 +64,26 @@ export const NovoPosto = ()=>{
   
 
     const handleEnviar = async () => {
-                 setLoading(true);
+      
+      if (loading) return;
+          
+      const result = validatePosto(novoPosto);
+      if (!result.isValid) {
+        setShowErrors(true);
+    
+        Alert.alert(
+          'Campos Obrigatórios',
+          [
+            'Por favor, corrija os campos abaixo:',
+            '',
+            ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+          ].join('\n')
+        );
+        return;
+      }
+                 
                 try {
+                  setLoading(true);
                    const postoSalvo = await enviarRegistro(); 
                        if (postoSalvo){
                          detalharPosto(navigation.navigate, localidadeId!);
@@ -67,12 +91,11 @@ export const NovoPosto = ()=>{
                          Alert.alert("Erro", "Não foi possível salvar a posto de saúde. Tente novamente.");
                          navigation.goBack();
                        }
-                 } catch (error) {
-                   console.error("Erro no envio:", error);
-                   Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-                 } finally {
-                   setLoading(false);
-                 }
+                  } catch (e) {
+                    Alert.alert('Erro', 'Não foi possível realizar a operação.');
+                  } finally {
+                    setLoading(false); // 👈 desliga
+                  }
     };
 
 
@@ -112,14 +135,18 @@ export const NovoPosto = ()=>{
               title="Médicos por turno"
        />
 
-      <View style={{ marginTop: 40 }}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#ff4500" /> // Exibe o spinner enquanto está carregando
-      ) : (
-        <Button title="Enviar" onPress={handleEnviar} color='#ff4500' disabled={disabled || loading} />
-      )}
-      </View>
- 
+     <FormErrors
+        visible={showErrors && disabled}
+        errors={validatePosto(novoPosto).errors}
+      />
+                       
+      <Button
+      title={loading ? "Enviando..." : "Enviar"}
+      onPress={handleEnviar}
+      color={"#ff4500"}
+      disabled={loading}   // 👈 trava só enquanto envia
+      />
+     
         </PostoContainer>
         </ScrollView>
     )

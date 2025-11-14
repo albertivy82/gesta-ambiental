@@ -5,8 +5,8 @@ import qs from 'qs';
 import { storeAuthData } from './authStore';
 
 const authServer = axios.create({
-  //baseURL: 'http://177.74.56.24'
-  baseURL: 'http://192.168.100.28:8080'
+   baseURL: 'http://177.74.56.24'
+   //baseURL: 'http://192.168.100.28:8080'
 });
 
 export interface OAuthAuthorizationTokenResponse {

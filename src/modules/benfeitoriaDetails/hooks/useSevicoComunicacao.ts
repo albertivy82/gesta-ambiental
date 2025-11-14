@@ -36,7 +36,7 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
           if (isConnected) {
             try {
               
-              const response = await connectionAPIPost('http://192.168.100.28:8080/servico-de-comunicacao', input);
+              const response = await connectionAPIPost('http://177.74.56.24/servico-de-comunicacao', input);
               
                const servComAPI = response as ServicosComunicacaoType;
               
@@ -59,7 +59,7 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
 
   const fetchFromAPI = async () => {
     try {
-      const response = await connectionAPIGet<ServicosComunicacaoType[]>(`http://192.168.100.28:8080/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`);
+      const response = await connectionAPIGet<ServicosComunicacaoType[]>(`http://177.74.56.24/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`);
       const data = response.map((item) => ({
         ...item,
         sincronizado: true,

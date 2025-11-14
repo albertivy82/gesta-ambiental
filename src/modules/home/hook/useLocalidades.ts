@@ -8,9 +8,9 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 
 export const useLocalidades = (foccus:boolean) =>{
 
-
   const [error, setError] = useState<Error | null>(null);
   const [isPresent, setIsPresent] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
     
 const fetchLocalidadeFromDB = () =>{
   const teste = getLocalidades();
@@ -26,7 +26,7 @@ const fetchLocalidadeFromAPI = async () => {
          if (isConnected) {
       
                 try {
-                  const response = await connectionAPIGet<LocalidadeType[]>('http://192.168.100.28:8080/localidade');
+                  const response = await connectionAPIGet<LocalidadeType[]>('http://177.74.56.24/localidade');
 
                                   const data = response as LocalidadeType[];
                                   if (data && Array.isArray(data) && data.length > 0) {
@@ -48,11 +48,17 @@ const fetchLocalidadeFromAPI = async () => {
             }
     };
 
-  useEffect(() => {
-    fetchLocalidadeFromAPI();
-    fetchLocalidadeFromDB();
-  }, [foccus]);
-
-  return { error, isPresent };
+    useEffect(() => {
+      const loadData = async () => {
+        setLoading(true);
+        fetchLocalidadeFromDB(); // mostra algo rápido caso já tenha cache
+        await fetchLocalidadeFromAPI();
+        setLoading(false);
+      };
+  
+      loadData();
+    }, [foccus]);
+  
+    return { error, isPresent, loading };
 
 }

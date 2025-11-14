@@ -1,17 +1,18 @@
-import { Button, FlatList, TouchableOpacity, View } from 'react-native';
-import { removeAuthData} from '../../../context/authStore';
 import { NavigationProp, ParamListBase, useIsFocused, useNavigation } from '@react-navigation/native';
-import { HomeContainer } from '../styles/Home.style';
-import { removeToken } from '../../../context/tokenStore';
-import Text from '../../../shared/components/text/Text';
-import { LocalidadeType } from '../../../shared/types/LocalidadeType';
-import { textTypes } from '../../../shared/components/text/textTypes';
-import { theme } from '../../../shared/themes/theme';
-import { useLocalidades } from '../hook/useLocalidades';
 import { useEffect } from 'react';
-import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
+import { FlatList, TouchableOpacity, View } from 'react-native';
+import { removeAuthData } from '../../../context/authStore';
+import { removeToken } from '../../../context/tokenStore';
 import { getLocalidades } from '../../../realm/services/localidadeServices';
 import { Icon } from '../../../shared/components/icon/Icon';
+import Text from '../../../shared/components/text/Text';
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { theme } from '../../../shared/themes/theme';
+import { LocalidadeType } from '../../../shared/types/LocalidadeType';
+import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
+import { useLocalidades } from '../hook/useLocalidades';
+import { HomeContainer } from '../styles/Home.style';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 
@@ -34,8 +35,8 @@ export const detalhaLocalidade = (navigate: NavigationProp<ParamListBase>['navig
 const Home = () =>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const {localidade, setLocalidade} = useLocalidadeRducer();
-  const foccus =useIsFocused();
-  const {isPresent} = useLocalidades(foccus);
+  const foccus=useIsFocused();
+  const {isPresent, loading} = useLocalidades(foccus);
  
  
   useEffect(() => {
@@ -43,7 +44,21 @@ const Home = () =>{
       const localidadesFromDB = getLocalidades(); 
       setLocalidade(localidadesFromDB);
     }
-  }, [foccus]);
+  }, [foccus, isPresent]);
+
+
+  if (loading) {
+    return (
+      <HomeContainer
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      >
+        <ActivityIndicator animating={true} size={80} color="#ff4500" style={{ marginTop: 20 }}/>
+        <Text type={textTypes.BUTTON_REGULAR} color={"#000"}>
+          Carregando localidades...
+        </Text>
+      </HomeContainer>
+    );
+  }
   
   const renderItem = ({ item }: { item: LocalidadeType }) => {
     return (

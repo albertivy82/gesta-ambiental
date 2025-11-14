@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getEscolas } from '../../../realm/services/escolaService';
@@ -23,7 +23,8 @@ const Escolas = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const route = useRoute<RouteProp<Record<string, EscolasParam>, 'Localidade'>>();
    const { localidadeId } = route.params;
-  const {contagemEscolas} = useEscolas(localidadeId);
+   const foccus=useIsFocused();
+  const {contagemEscolas} = useEscolas(localidadeId, foccus);
   const flatListRef = useRef<FlatList>(null);
 
   const [escola, setEscola] = useState<EscolaType[]>([]);

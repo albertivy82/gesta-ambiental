@@ -157,9 +157,12 @@ export const getBenfeitoria = (id: number): BenfeitoriaType | undefined => {
   export const getBenfeitoriaDessincronizadaPorId = (idLocal:string|undefined): BenfeitoriaType|null=>{
   
      
-      const query = `idLocal == ${idLocal}`;
-  
-      const benfeitoriaQueue = realmInstance.objects<BenfeitoriaType>('Benfeitoria').filtered(query).slice();
+    const query = `idLocal == "${idLocal}"`;
+
+    const benfeitoriaQueue = realmInstance
+      .objects<BenfeitoriaType>("Benfeitoria")
+      .filtered(query)
+      .slice();
   
       const cleanedQueue = JSON.parse(JSON.stringify(benfeitoriaQueue[0]));
   

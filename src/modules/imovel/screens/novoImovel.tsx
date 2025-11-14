@@ -14,6 +14,7 @@ import { imovelBody } from "../../../shared/types/imovelType";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
 import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoReptilParams {
@@ -30,6 +31,7 @@ export const NovoImovel = () => {
   const entrevistado = params.entrevistado ?? params.imovel?.entrevistado;
   const imovel = params.imovel;
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const { novoImovel,
     handleOnChangeInput,
@@ -37,6 +39,7 @@ export const NovoImovel = () => {
     handleEnumChange,
     enviarRegistro,
     handleOnChangeAreaImovel,
+    validateImovel,
     disabled} = useNovoImovel(entrevistado, imovel);
     
 
@@ -137,9 +140,25 @@ export const NovoImovel = () => {
     const valorSalvoEsporteLazer = imovel?.espacosEsporteLazer ?? '';
     
      const handleEnviar = async () => {
-             setLoading(true);
+          if (loading) return;
+                
+          const result = validateImovel(novoImovel);
+          if (!result.isValid) {
+            setShowErrors(true);
+        
+            Alert.alert(
+              'Campos Obrigatórios',
+              [
+                'Por favor, corrija os campos abaixo:',
+                '',
+                ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+              ].join('\n')
+            );
+            return;
+          }
            
              try {
+              setLoading(true);
                const imovelSalvo = await enviarRegistro(); 
                    if (imovelSalvo){
                      detalharImovel(navigation.navigate, imovelSalvo);
@@ -147,12 +166,11 @@ export const NovoImovel = () => {
                      Alert.alert("Erro", "Não foi possível salvar a imovel. Tente novamente.");
                      navigation.goBack();
                    }
-             } catch (error) {
-               console.error("Erro no envio:", error);
-               Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-             } finally {
-               setLoading(false);
-             }
+                  } catch (e) {
+                    Alert.alert('Erro', 'Não foi possível realizar a operação.');
+                  } finally {
+                    setLoading(false); // 👈 desliga
+                  }
         };
 
     
@@ -442,14 +460,17 @@ export const NovoImovel = () => {
 
 
           
-     <View style={{ marginTop: 40 }}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#ff4500" /> // Exibe o spinner enquanto está carregando
-      ) : (
-        <Button title="Enviar" onPress={handleEnviar} color='#ff4500' disabled={disabled || loading} />
-      )}
-    </View>
- 
+              <FormErrors
+                visible={showErrors && disabled}
+                errors={validateImovel(novoImovel).errors}
+              />
+                               
+              <Button
+              title={loading ? "Enviando..." : "Enviar"}
+              onPress={handleEnviar}
+              color={"#ff4500"}
+              disabled={loading}   // 👈 trava só enquanto envia
+              />
     
       
 

@@ -117,7 +117,7 @@ const ParticipacaoInstituicao = () => {
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovaParticipacaoInstituicao}>
           <Icon size={20} name='plus' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>
-            Add Vegetação
+            Add outras
           </Text>
         </TouchableOpacity>
       </View>

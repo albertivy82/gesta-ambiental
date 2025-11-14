@@ -1,20 +1,21 @@
 import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { ScrollView, View } from 'react-native';
+import { useCallback } from 'react';
+import {ScrollView, View } from 'react-native';
+import { getEntrevistados } from '../../../realm/services/entrevistado';
+import { getEscolas } from '../../../realm/services/escolaService';
+import { getPostos } from '../../../realm/services/postoService';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
+import { theme } from '../../../shared/themes/theme';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
-import { useEscolas } from '../hooks/useEscolas';
 import { useEntrevistados } from '../hooks/useEntrevistados';
+import { useEscolas } from '../hooks/useEscolas';
 import { usePostos } from '../hooks/usePostos';
 import { LocalidadeContainer } from '../styles/Localidade.style';
 import EditConfirmation from '../ui-components/UseEditLocalidade';
 import QuadroDeItens from '../ui-components/quadroDeItens';
-import { getEscolas } from '../../../realm/services/escolaService';
-import { getEntrevistados } from '../../../realm/services/entrevistado';
-import { getPostos } from '../../../realm/services/postoService';
-import Localidade from '../../localidades';
-import { useCallback } from 'react';
+import { ActivityIndicator } from 'react-native-paper';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
@@ -59,10 +60,14 @@ const InfLocalidade = () => {
       const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
       const { localidade } = params;
       const foccus =useIsFocused();
-      const {contagemEscolas} = useEscolas(localidade.id, foccus);
-      const {contagemPostos} = usePostos(localidade.id, foccus);     
-      const {contagemEntrevistados} = useEntrevistados(localidade.id, foccus);
+      const {contagemEscolas, loadingPostos} = useEscolas(localidade.id, foccus);
+      const {contagemPostos, loadingEscolas} = usePostos(localidade.id, foccus);     
+      const {contagemEntrevistados, loadingEntrevistado} = useEntrevistados(localidade.id, foccus);
       
+      const loading =
+      loadingEntrevistado ||
+      loadingEscolas ||
+      loadingPostos;
            
       
       //BLOCO IMOVEL
@@ -75,6 +80,7 @@ const InfLocalidade = () => {
         }
       }
 
+     
       useFocusEffect(
             useCallback(() => {
               getEscolas(localidade.id);
@@ -101,7 +107,35 @@ const InfLocalidade = () => {
           }
        }
 
-           
+   
+   
+       if (loading) {
+        return (
+          <LocalidadeContainer
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <ActivityIndicator
+              animating={true}
+              size={80}      
+              color="#ff4500"
+              style={{ marginTop: 20 }}
+            />
+      
+            <Text
+              type={textTypes.BUTTON_REGULAR}
+              color="#000"
+              margin="20px 0 0 0"
+            >
+              Sincronizando dados...
+            </Text>
+          </LocalidadeContainer>
+        );
+      }
+        
       
 
         

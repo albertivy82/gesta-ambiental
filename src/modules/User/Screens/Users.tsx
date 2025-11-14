@@ -10,6 +10,7 @@ import { grupoEnum } from '../../../enums/grupo.enum';
 import { Picker } from '@react-native-picker/picker';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
+import { FormErrors } from '../../../shared/components/FormErrors';
 
 
 
@@ -23,6 +24,8 @@ const User= () =>{
 const navigation = useNavigation<NavigationProp<ParamListBase>>();
 const {params} = useRoute<RouteProp<Record<string, userParam>>>();
 const user = params?.user;
+const [loading, setLoading] = useState(false);
+const [showErrors, setShowErrors] = useState(false);
 const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<UserBody>();
 const {sendUser, 
       novoUsuario, 
@@ -30,6 +33,7 @@ const {sendUser,
       disabled, 
       UpdateUser, 
       handleGrupoChange,
+      validateUser,
      } = useInputUsers();
 
       const nomeInput = useRef<TextInput>(null);
@@ -58,20 +62,40 @@ const {sendUser,
           }, [dadosUsuarioEditado]);
       
        
-      const enviar = async ()=>{
-            try {
-               if(user){
-                  await UpdateUser(user.id);
-               }else{ 
-                  await sendUser();
-               }
-            } catch (e) {
-                Alert.alert('Erro', 'Não foi possível realizar a operação.');
-            } finally {
-                navigation.navigate('Users'); // navega de qualquer jeito
+          const enviar = async () => {
+            if (loading) return;
+          
+            const result = validateUser(novoUsuario);
+            if (!result.isValid) {
+              setShowErrors(true);
+          
+              Alert.alert(
+                'Campos Obrigatórios',
+                [
+                  'Por favor, corrija os campos abaixo:',
+                  '',
+                  ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+                ].join('\n')
+              );
+              return;
             }
-           
-      }
+          
+            try {
+              setLoading(true); // 👈 agora liga
+          
+              if (user) {
+                await UpdateUser(user.id);
+              } else {
+                await sendUser();
+              }
+              navigation.navigate('Users');
+            } catch (e) {
+              Alert.alert('Erro', 'Não foi possível realizar a operação.');
+            } finally {
+              setLoading(false); // 👈 desliga
+            }
+          };
+          
       
       const grupoOptions = Object.values(grupoEnum);
       return(
@@ -137,9 +161,18 @@ const {sendUser,
                         </Picker>
                 </View>
 
+                 <FormErrors
+                  visible={showErrors && disabled}
+                  errors={validateUser(novoUsuario).errors}
+                  />
                   
-                  
-                  <Button title="enviar" disabled={disabled} onPress={enviar} color={"#ff4500"}/>
+                  <Button
+                  title={loading ? "Enviando..." : "Enviar"}
+                  onPress={enviar}
+                  color={"#ff4500"}
+                  disabled={loading}   // 👈 trava só enquanto envia
+                  />
+
             </GetaUserContainer>
       );
 

@@ -7,10 +7,10 @@ const ImovelService = ()=>{
   export const sendImovelToServer = async (imovelData) => {
     try {
       if (imovelData.id) {
-        const imovel = await connectionAPIPut(`http://192.168.100.28:8080/imovel/${imovelData.id}`, imovelData);
+        const imovel = await connectionAPIPut(`http://177.74.56.24/imovel/${imovelData.id}`, imovelData);
         return imovel;
       } else {
-        const imovel = await connectionAPIPost('http://192.168.100.28:8080/imovel', imovelData);
+        const imovel = await connectionAPIPost('http://177.74.56.24/imovel', imovelData);
         return imovel;
       }
     } catch (error) {

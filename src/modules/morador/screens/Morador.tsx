@@ -28,7 +28,7 @@ const Morador = () => {
   const { benfeitoria } = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const flatListRef = useRef<FlatList>(null);
-  const [moradors, setMorador] = useState<MoradorType[]>([]);
+  const [moradors, setMoradors] = useState<MoradorType[]>([]);
   const foccus =useIsFocused();
   const {moradores} = useMoradores(benfeitoria.id, foccus );
  
@@ -36,7 +36,7 @@ const Morador = () => {
   useEffect(()=>{
     if (benfeitoria) {
       const moradoresRealm = getMoradores(benfeitoria.id);
-      setMorador(moradoresRealm);
+      setMoradors(moradoresRealm);
     }
   }, [benfeitoria])
   
@@ -44,7 +44,7 @@ const Morador = () => {
         setIsLoading(true);
         if (benfeitoria.id) {
           const moradoresRealm = getMoradores(benfeitoria.id);
-          setMorador(moradoresRealm);
+          setMoradors(moradoresRealm);
         }
         setIsLoading(false);
       }, [benfeitoria]);

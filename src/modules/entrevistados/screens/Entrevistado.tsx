@@ -1,6 +1,6 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
@@ -10,6 +10,7 @@ import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 export interface entrevistadoParam {
@@ -119,7 +120,12 @@ const Entrevistados = () => {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
+        <ActivityIndicator
+        animating={true}
+        size={80}      
+        color="#ff4500"
+        style={{ marginTop: 20 }}
+      />
       ) : (
         <FlatList
           ref={flatListRef}

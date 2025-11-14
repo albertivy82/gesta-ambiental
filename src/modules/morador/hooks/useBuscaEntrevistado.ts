@@ -9,16 +9,18 @@ export const useBuscaEntrevistado = (benfeitoria: BenfeitoriaType, morador?:Mora
 
 let entrevistado; 
     if(!morador){
-        entrevistado = getEntrevistadoDoMorador(benfeitoria);
+         entrevistado = getEntrevistadoDoMorador(benfeitoria);
     }else{ 
          let benfeitoriaResgatatda;
         const idFather = morador.idFather ?? "";
         const benfeitoriaId = typeof morador.benfeitoria === "number" 
         ? morador.benfeitoria 
         : (morador.benfeitoria as any)?.id ?? null;
-        if(idFather==='' && benfeitoriaId){
+        console.log('b0000000000000', idFather, benfeitoriaId)
+        if(idFather==='' && benfeitoriaId>0){
             benfeitoriaResgatatda = getBenfeitoria(benfeitoriaId)
         }else{
+           
             benfeitoriaResgatatda = getBenfeitoriaDessincronizadaPorId(idFather);
         }
 
@@ -36,8 +38,9 @@ const getEntrevistadoDoMorador = (benfeitoria: BenfeitoriaType): EntrevistadoTyp
     const imovelId = typeof benfeitoria.imovel === "number" 
         ? benfeitoria.imovel 
         : (benfeitoria.imovel as any)?.id ?? null;
-    if(idFather==='' && imovelId){ 
-            const imovel = getImovelPorId(imovelId); 
+        
+    if(idFather==='' && imovelId>0){ 
+        const imovel = getImovelPorId(imovelId); 
                 const idFatherImovel = imovel?.idFather ?? "";
                 const entrevistadoId = typeof imovel?.entrevistado === "number" ? imovel.entrevistado : (imovel?.entrevistado as any)?.id ?? null;
                 const EntrevistadoIdLocal = imovel?.idLocal ?? ""; 
@@ -46,15 +49,18 @@ const getEntrevistadoDoMorador = (benfeitoria: BenfeitoriaType): EntrevistadoTyp
                 }else{
                   entrevistado = getEntrevistadoDessincronizadoPorId(EntrevistadoIdLocal); 
                 }
-    }else if(idFather!=='' && !imovelId){
+    }else if(idFather!=='' && imovelId<0){
+        
         const imovel = getImovelDessincronizadoPorId(idFather); 
+        
             const idFatherImovel = imovel?.idFather ?? "";
             const entrevistadoId = typeof imovel?.entrevistado === "number" ? imovel.entrevistado : (imovel?.entrevistado as any)?.id ?? null;
             const EntrevistadoIdLocal = imovel?.idLocal ?? ""; 
-                if(idFatherImovel==='' && entrevistadoId ){ 
-                entrevistado = getEntrevistadoPorId(entrevistadoId) 
+                if(idFatherImovel==='' && entrevistadoId>0 ){ 
+                   entrevistado = getEntrevistadoPorId(entrevistadoId) 
                 }else{
-                entrevistado = getEntrevistadoDessincronizadoPorId(EntrevistadoIdLocal); 
+                    console.log('a0000000000000', idFatherImovel, entrevistadoId );
+                   entrevistado = getEntrevistadoDessincronizadoPorId(idFatherImovel); 
                 } 
     } else { return undefined}  
 

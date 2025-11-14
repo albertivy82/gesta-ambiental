@@ -41,16 +41,18 @@ export const NovaAgua = () => {
     handleArrayFieldChange,
     handleEnumChange,
     handleOnChangeProfundidade,
-    disabled
+    disabled,
+    validateAgua
   } = useNovaAgua(benfeitoria, agua);
-console.log("?", benfeitoria)
-  const abastecimentoOptions = Object.values([
-    'ABASTECIMENTO PUBLICO', 'POÇO AMAZONAS',
-    'POÇO ARTESIANO',
-    'OUTRO'
-  ]);
 
-  const corOptions = Object.values(['INCOLOR (CRISTALINA)', ' APRESENTA COR']);
+
+  const abastecimentoOptions = [
+    'ABASTECIMENTO PUBLICO',
+    'POÇO AMAZONAS',
+    'POÇO ARTESIANO',
+    'OUTRO',
+  ];
+  const corOptions = ['INCOLOR (CRISTALINA)', 'APRESENTA COR'];
   const cheiroOptions = Object.values(['NÃO POSSUI CHEIRO', 'APRESENTA CHEIRO']);
   const saborOptions = Object.values(['NÃO POSSUI SABOR', 'APRESENTA SABOR']);
   const qualidadeOptions = Object.values(QualidadeAguaEnum);
@@ -65,35 +67,48 @@ console.log("?", benfeitoria)
     handleArrayFieldChange('tipoDeFornecimento', fornecimentoInformado);
   }, [fornecimentoAgua, outroFornecimento]);
 
-  useEffect(()=>{
-    const consolidaDados = [
-      ...tratamentoAgua.filter((item) => item !== 'OUTROS'),
-      ...(outrosTratamentos ? [`Outros ${outrosTratamentos}`] : []),
-    ];
-
-    handleArrayFieldChange('metodoTratamento', consolidaDados);
+  useEffect(() => {
+    const base = tratamentoAgua
+      .filter((v) => v !== 'OUTROS')
+      .map((v) => v.trim());
   
-  },[tratamentoAgua, outrosTratamentos ])
+    const outros = outrosTratamentos.trim() ? [`OUTROS: ${outrosTratamentos.trim()}`] : [];
+  
+    handleArrayFieldChange('metodoTratamento', [...new Set([...base, ...outros])]);
+  }, [tratamentoAgua, outrosTratamentos]);
+  
 
   const handleEnviar = async () => {
+    if (loading) return;
     setLoading(true);
     try {
-     
+      const result = validateAgua(novaAgua);
+      if (!result.isValid) {
+        const msg = [
+          'Por favor, corrija os itens abaixo:',
+          '',
+          ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+        ].join('\n');
+  
+        Alert.alert('Campos obrigatórios ou inválidos', msg);
+        return; // deixa o finally desligar o loading
+      }
+  
       const aguaSalva = await enviarRegistro();
-     
       if (aguaSalva) {
-            detalharAgua(navigation.navigate, benfeitoria);
+        detalharAgua(navigation.navigate, benfeitoria);
       } else {
-        Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
+        Alert.alert('Erro', 'Não foi possível salvar a benfeitoria. Tente novamente.');
         navigation.goBack();
       }
     } catch (error) {
-      console.error("Erro no envio:", error);
-      Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+      console.error('Erro no envio:', error);
+      Alert.alert('Erro ao enviar', 'Tente novamente mais tarde.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (!agua) return;

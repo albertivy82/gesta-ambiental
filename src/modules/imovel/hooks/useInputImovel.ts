@@ -9,10 +9,11 @@ import { formatDateForApi } from "../../../shared/functions/data";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { validateImovel } from "../components/validateImovel";
 
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
-     rua: '',
+    rua: '',
     numero: '',
     bairro: '',
     referencial: '',
@@ -45,37 +46,11 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
     const [disabled, setDisabled] = useState<boolean>(true);
    
     
-  useEffect(() => {
-    const areaValida = novoImovel.areaImovel >= 10 && novoImovel.areaImovel <= 1000000;
-    
     //console.log(novoImovel)
-    if (
-        novoImovel.rua !== '' &&
-        novoImovel.numero !== '' &&
-        novoImovel.bairro !== '' &&
-        novoImovel.referencial !== '' &&
-        novoImovel.latitude !== '' &&
-        novoImovel.longitude !== '' &&
-         areaValida &&
-        novoImovel.tipoSolo !== '' &&
-        novoImovel.vizinhosConfinantes !== '' &&
-        novoImovel.situacaoFundiaria !== null &&
-        novoImovel.documentacaoImovel !== null &&
-        novoImovel.limites !== null &&
-        novoImovel.linhasDeBarco !== '' &&
-        novoImovel.linhasOnibus !== '' &&
-        novoImovel.pavimentacao !== '' &&
-        novoImovel.iluminacaoPublica !== null &&
-        novoImovel.equipamentosUrbanos !== '' &&
-        novoImovel.espacosEsporteLazer !== '' &&
-        novoImovel.programaInfraSaneamento !== ''
-        
-    ) {
-        setDisabled(false);
-    } else {
-        setDisabled(true);
-    }
-}, [novoImovel]);
+     useEffect(() => {
+        const { isValid } = validateImovel(novoImovel);
+        setDisabled(!isValid);
+      }, [novoImovel]);
 
   
 
@@ -123,7 +98,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                 try {
                   
                    console.log("novo", novoImovel)
-                  const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovel) as imovelBody;
+                  const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovel) as imovelBody;
                   if (response && response.id) {
                     return fetchImovelAPI(response.id);
                    }      
@@ -165,7 +140,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                     //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser editados se forem efetivamente salvos 
                     try{
                      
-                      const response = await connectionAPIPut(`http://192.168.100.28:8080/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
+                      const response = await connectionAPIPut(`http://177.74.56.24/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
                       
                       if (response && response.id) {
                           return fetchImovelAPI(response.id);
@@ -203,7 +178,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
    const fetchImovelAPI = async(id:number) =>{
       
               try{
-                  const response = await connectionAPIGet<imovelBody>(`http://192.168.100.28:8080/imovel/${id}`);
+                  const response = await connectionAPIGet<imovelBody>(`http://177.74.56.24/imovel/${id}`);
                   if (response) {
                     const imovelData = {
                         ...response,
@@ -286,6 +261,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         enviarRegistro,
         handleOnChangeData,
         handleOnChangeAreaImovel,
+        validateImovel,
         disabled,
     };
 };

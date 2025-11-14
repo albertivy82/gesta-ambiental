@@ -34,7 +34,6 @@ import { NovaParticipacaoInstituicao } from "./modules/participacaoInsituicao/sc
 import ParticipacaoInstituicao from "./modules/participacaoInsituicao/screens/ParticipacaoInstituicao";
 import { NovoPosto } from "./modules/postos/screens/novoPosto";
 import Postos from "./modules/postos/screens/Postos";
-import ProfileUser from "./modules/profileUser";
 import { NovaRendaOutrasFontes } from "./modules/rendaOutrasFontes/screens/novaRendaOutrasFontes";
 import RendaOutrasFontes from "./modules/rendaOutrasFontes/screens/RendaOutrasFontes";
 import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoSevicoComunicacao";
@@ -142,7 +141,6 @@ const Navigation =() =>{
           <Stack.Screen name="Localidade" component={Localidade} options={{title: 'Gerenciar Localidades'}} />
           <Stack.Screen name="Localidade_Detalhada" component={InfLocalidade} options={{title: 'Localidade'}} />
           <Stack.Screen name="UserDetail" component={UserDetails} options={{title: 'Usuário'}} />
-          <Stack.Screen name="ProfileUser" component={ProfileUser} options={{title: 'Editar Perfil'}} />
           <Stack.Screen name="Coordenadas" component={Coordenadas} options={{title: 'Coordenadas'}} />
           <Stack.Screen name="Entrevistados" component={Entrevistados} options={{title: 'Entrevistados'}} />
           <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />

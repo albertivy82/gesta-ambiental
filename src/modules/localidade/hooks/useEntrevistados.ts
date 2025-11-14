@@ -1,11 +1,10 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/entrevistado";
 import { setIdEntrevistadoFromApiOnImovel } from "../../../realm/services/imovelService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { apagarEntrevistadoQueue, getEntrevistados, getEntrevistadosDessincronizados, salvarEntrevistados } from "../../../realm/services/entrevistado";
 
 
 export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput => {
@@ -53,9 +52,8 @@ export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput
 
 
 export const useEntrevistados = (localidadeId: number, foccus:boolean) =>{
-    
-   const [contagemEntrevistados, setContagemEntrevistados] = useState<number>(0);
-   
+     const [contagemEntrevistados, setContagemEntrevistados] = useState<number>(0);
+     const [loadingEntrevistado, setLoadingEntrevistado] = useState<boolean>(true);
    //console.log("contagemEntrevistados", contagemEntrevistados )
   
    const fetchEntrevistadosFromLocalDb = () => {
@@ -80,12 +78,13 @@ export const useEntrevistados = (localidadeId: number, foccus:boolean) =>{
                 if (isConnected) {
                     try {
                      console.log()
-                        const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistadoIput);
+                        const response = await connectionAPIPost('http://177.74.56.24/entrevistado', novoEntrevistadoIput);
                         const EntrevistadoAPI = response as EntrevistadoType;
                        
                         if (EntrevistadoAPI.id) {
                             setIdEntrevistadoFromApiOnImovel(EntrevistadoAPI.id, entrevistado.idLocal!);
                             apagarEntrevistadoQueue(entrevistado.idLocal!);
+                            
                         }
                     } catch (error) {
                      //   console.error('Erro na sincronização do entrevistado:', error);
@@ -104,7 +103,7 @@ const fetchEntrevistadosFromAPI = async () => {
      if (isConnected) {
            
       try {
-          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`);
+          const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(`http://177.74.56.24/entrevistado/localidade-entrevistado/${localidadeId}`);
            
           const entrevistadoData: EntrevistadoType[] = entrevistadoAPI.map(entrevistado => ({
                          ...entrevistado,
@@ -132,13 +131,19 @@ const fetchEntrevistadosFromAPI = async () => {
     
     
     
-      useEffect(()=>{
-        sinconizeQueue();
-        fetchEntrevistadosFromAPI();
+    useEffect(() => {
+      const sincronizarTudo = async () => {
+        setLoadingEntrevistado(true);
+        await sinconizeQueue();
+        await fetchEntrevistadosFromAPI();
         fetchEntrevistadosFromLocalDb();
-     }, [foccus]);
+        setLoadingEntrevistado(false);
+      };
+      sincronizarTudo();
+    }, [foccus]);
     
-      return { contagemEntrevistados};
+    
+      return { contagemEntrevistados, loadingEntrevistado};
 
 
 }

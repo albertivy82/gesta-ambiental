@@ -87,7 +87,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
+                      const response = await connectionAPIPost('http://177.74.56.24/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
                           
                       if (response && response.id) {
                             return fetchRendaOutrasFontesAPI(response.id);
@@ -131,7 +131,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`http://192.168.100.28:8080/outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
+              const response = await connectionAPIPut(`http://177.74.56.24/outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
                     if (response && response.id) {
                       return fetchRendaOutrasFontesAPI(response.id);
                     }else{
@@ -170,7 +170,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
    const fetchRendaOutrasFontesAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://192.168.100.28:8080/outras-fontes-de-renda/${id}`);
+              const response = await connectionAPIGet<RendaOutrasFontesType>(`http://177.74.56.24/outras-fontes-de-renda/${id}`);
               if (response) {
                 const rendaOutrasFontesData = {
                     ...response,

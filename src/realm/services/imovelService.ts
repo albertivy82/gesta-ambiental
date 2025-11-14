@@ -211,8 +211,12 @@ export const getImoveisDessincronizados = (idEntrevistadoApi: number): imovelBod
 
 export const getImovelDessincronizadoPorId = (idLocal: String|undefined): imovelBody | undefined => {
     
-    const query = `idLocal ==${idLocal}`;
-    const imoveisQueue = realmInstance.objects<imovelBody>('Imovel').filtered(query);
+    const query = `idLocal == "${idLocal}"`;
+    
+        const imoveisQueue = realmInstance
+          .objects<imovelBody>("Imovel")
+          .filtered(query)
+          .slice();
   
     const cleanedQueue = imoveisQueue.map(imovel => ({ ...imovel }));
     

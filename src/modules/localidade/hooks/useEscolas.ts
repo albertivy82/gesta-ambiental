@@ -23,6 +23,7 @@ export const convertToEscolaInput = (escola: any) => {
 
 export const useEscolas= (localidadeId:number, foccus:boolean)=>{
     const [contagemEscolas, setContagemescolas] = useState<number>(0);
+    const [loadingPostos, setLoadingPostos] = useState<boolean>(true);
 
     const sinconizeQueue = async () => {
         const escolasQueue = getEscolasDessincronizadas(localidadeId);
@@ -35,7 +36,7 @@ export const useEscolas= (localidadeId:number, foccus:boolean)=>{
                     const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscolaIput);
+                            const response = await connectionAPIPost('http://177.74.56.24/escola', novaEscolaIput);
                             const escolaAPI = response as EscolaType;
                            
                             if (escolaAPI.id) {
@@ -64,7 +65,7 @@ export const useEscolas= (localidadeId:number, foccus:boolean)=>{
        const isConnected = await testConnection();
         if (isConnected) {
           try {
-              const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://192.168.100.28:8080/escola/localidade-escola/${localidadeId}`);
+              const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://177.74.56.24/escola/localidade-escola/${localidadeId}`);
               console.log(escolasAPI)
               const EscData: EscolaType[] = escolasAPI.map(escola => ({
                 ...escola,
@@ -89,13 +90,19 @@ export const useEscolas= (localidadeId:number, foccus:boolean)=>{
           
         };
 
-        useEffect(()=>{
-            sinconizeQueue()
-            fetchEscolasromAPI();
-            fetchEscolasFromLocalDb();
+      
+          useEffect(() => {
+            const sincronizarTudo = async () => {
+              setLoadingPostos(true);
+              await sinconizeQueue();
+              await fetchEscolasromAPI();
+              fetchEscolasFromLocalDb();
+              setLoadingPostos(false);
+            };
+            sincronizarTudo();
           }, [foccus]);
         
-          return { contagemEscolas};
+          return { contagemEscolas, loadingPostos};
 
 }   
     

@@ -1,12 +1,13 @@
-import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
-import { useEffect } from 'react';
-import { Button, FlatList, TouchableOpacity, View } from 'react-native';
+import { NavigationProp, ParamListBase, useIsFocused, useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from 'react';
+import { Button, FlatList, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
 import { UserBody } from "../../../shared/types/userBody";
 import { useUserReducer } from "../../../store/reducers/userReducer/useUserReducer";
 import { AdmUsersContainer } from "../styles/AdmUser.style";
+import { theme } from "../../../shared/themes/theme";
 
 
 
@@ -21,6 +22,8 @@ export const GoToUserDetail= (navigate: NavigationProp<ParamListBase>['navigate'
 
 const AdmUsers = ()=>{
     const navigation = useNavigation<NavigationProp<ParamListBase>>();
+    const foccus=useIsFocused();
+    const [loading, setLoading] = useState<boolean>(true);
     const {user, setUser} = useUserReducer();
 
     
@@ -49,19 +52,21 @@ const AdmUsers = ()=>{
       useEffect(() => {
         const fetchUsers = async () => {
           try {
-            const usersData = await connectionAPIGet('http://192.168.100.28:8080/usuario');
+            const usersData = await connectionAPIGet('http://177.74.56.24/usuario');
             if (typeof usersData === 'object' && usersData !== null) {
-              console.log(usersData)
+              //console.log(usersData)
               setUser(usersData as UserBody[]); 
+                if(user){setLoading(false);}
+              
             } else {
-              console.error('Dados de usuários inválidos:', usersData);
+              console.log('Dados de usuários inválidos:', usersData);
             }
           } catch (error) {
-            console.error('Erro ao obter dados de localidade:', error);
+            console.log('Erro ao obter dados de usuários:', error);
           }
         };
         fetchUsers();
-      }, []);
+      }, [foccus]);
 
      
     const handlegestUser =() => {
@@ -72,7 +77,18 @@ const AdmUsers = ()=>{
         GoToUserDetail(navigation.navigate, user);
     };
 
-       
+    if (loading) {
+      return (
+        <AdmUsersContainer
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color={theme.colors.redTheme.red2} />
+          <Text type={textTypes.BUTTON_REGULAR} color={"#000"}>
+            Carregando Lista...
+          </Text>
+        </AdmUsersContainer>
+      );
+    }
     
       return(
 

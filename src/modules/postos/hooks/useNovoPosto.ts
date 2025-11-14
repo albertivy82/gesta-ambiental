@@ -19,24 +19,68 @@ export const DEFAULT_POSTO_INPUT: postoSaudeInput = {
   },
 };
 
+// dentro do hook useNovoPosto.ts
+
+export const FIELD_LABEL_POSTO: Partial<Record<keyof postoSaudeInput, string>> = {
+  nome: 'Nome do posto',
+  ambulatorial: 'Ambulatorial',
+  urgenciaEmergencia: 'Urgência e emergência',
+  medicosPorTurno: 'Médicos por turno',
+};
+
+export const validatePosto = (data: postoSaudeInput) => {
+  const errors: { field: keyof postoSaudeInput; message: string }[] = [];
+
+  ([
+    'nome',
+    'ambulatorial',
+    'urgenciaEmergencia',
+  ] as (keyof postoSaudeInput)[]).forEach((f) => {
+    const v = data[f] as any;
+    if (v === '' || v === undefined || v === null) {
+      errors.push({
+        field: f,
+        message: `Preencha ${FIELD_LABEL_POSTO[f]}.`,
+      });
+    }
+  });
+
+  // médicos por turno: se veio vazio ou <= 0
+  if (
+    data.medicosPorTurno === undefined ||
+    data.medicosPorTurno === null ||
+    Number.isNaN(data.medicosPorTurno) ||
+    data.medicosPorTurno <= 0
+  ) {
+    errors.push({
+      field: 'medicosPorTurno',
+      message: 'Informe a quantidade de médicos por turno (maior que 0).',
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(errors.map((e) => FIELD_LABEL_POSTO[e.field]).filter(Boolean))
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
+
+
 export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
   const [novoPosto, setNovoPosto] = useState<postoSaudeInput>(DEFAULT_POSTO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
   
-  // Habilitar o botão apenas se todos os campos obrigatórios estiverem preenchidos
-  useEffect(() => {
-      if(
-      novoPosto.nome !== "" &&
-      novoPosto.ambulatorial !== null &&
-      novoPosto.urgenciaEmergencia !== null &&
-      novoPosto.medicosPorTurno < 101 &&
-      novoPosto.medicosPorTurno > 0
-    )
-    {setDisabled(false)}
-    else
-    {setDisabled(true);
-    };
-  }, [novoPosto]);
+ // valida sempre que mudar
+   useEffect(() => {
+     const { isValid } = validatePosto(novoPosto);
+     setDisabled(!isValid);
+   }, [novoPosto]);
 
   const objetoFila = () => {
     const postoData: postoSaudeInput = {
@@ -68,7 +112,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                     
             try{
 
-               const response = await connectionAPIPost('http://192.168.100.28:8080/posto-de-saude', novoPosto) as PostoType;
+               const response = await connectionAPIPost('http://177.74.56.24/posto-de-saude', novoPosto) as PostoType;
                     if (response && response.id) {
                         return fetchPostoAPI(response.id);
                       }
@@ -106,7 +150,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                             try{
                               console.log("enviando para edição", postoCorrigido)
-                              const response = await connectionAPIPut(`http://192.168.100.28:8080/posto/${posto!.id}`, postoCorrigido) as PostoType;
+                              const response = await connectionAPIPut(`http://177.74.56.24/posto/${posto!.id}`, postoCorrigido) as PostoType;
                               console.log("recebendo edição", response)
                               if (response && response.id) {
                                    return fetchPostoAPI(response.id);
@@ -145,7 +189,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
    const fetchPostoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<PostoType>(`http://192.168.100.28:8080/posto-de-saude/${id}`);
+              const response = await connectionAPIGet<PostoType>(`http://177.74.56.24/posto-de-saude/${id}`);
               if (response) {
                 const postoData = {
                     ...response,
@@ -212,5 +256,6 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
     handleUrgenciaEmergenciaChange,
     handleMedicosPorTurnoChange,
     disabled,
+    validatePosto,
   };
 };

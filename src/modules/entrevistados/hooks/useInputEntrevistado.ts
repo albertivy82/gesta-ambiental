@@ -1,6 +1,5 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarEntrevistado, salvarEntrevistadoQueue } from "../../../realm/services/entrevistado";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
@@ -8,8 +7,7 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { formatDateForApi } from "../../../shared/functions/data";
 import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { Alert } from "react-native";
-import { parseOnlyNumeric } from "../../../shared/functions/onlyNumeric";
+import { validateEntrevistado } from "../components/validateEntrevistado";
 
 export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
 
@@ -57,56 +55,12 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const [novoEntrevistado, setnovoEntrevistado] = useState<EntrevistadoInput>(DEFAULT_ENTREVISTADO_INPUT);
     const [disabled, setDisabled] = useState<boolean>(true);
 
-    useEffect(() => {
-     
-      if (
-          novoEntrevistado.nome !== '' && 
-          novoEntrevistado.naturalidade !== '' && 
-          novoEntrevistado.nascimentoData >= 18 &&
-          novoEntrevistado.nascimentoData < 120 &&
-          novoEntrevistado.sexo !== null &&
-          novoEntrevistado.apelido !== '' && 
-          novoEntrevistado.escolaridade !== '' &&
-          novoEntrevistado.estadoCivil !== '' &&
-          novoEntrevistado.religiao !== '' &&
-          novoEntrevistado.morador !== null &&
-          novoEntrevistado.dataChegada !== '' &&
-          novoEntrevistado.sofreuAssaltos > -1 &&
-          novoEntrevistado.sofreuAssaltos < 200 &&
-          novoEntrevistado.presenciouAssalto > -1 &&
-          novoEntrevistado.presenciouAssalto < 200 &&
-          novoEntrevistado.dataChegada !== '' &&
-          novoEntrevistado.pretendeMudar !== null &&
-          novoEntrevistado.relacaoAreaImovel !== '' &&
-          novoEntrevistado.relacaoVizinhos !== '' &&
-          novoEntrevistado.tipoAlimentacao !== '' &&
-          novoEntrevistado.localCompras !== '' &&
-          novoEntrevistado.comoCuidaSaudeFamilia!== '' &&
-          novoEntrevistado.servicosDeficitarios !== '' &&
-          novoEntrevistado.problemasDeViolenciaLocal !== '' &&
-          novoEntrevistado.instituicaoConhecida !== '' &&
-          novoEntrevistado.importanciaDeProtegerAmbiente!== '' &&
-          novoEntrevistado.importanciaDeProtegerFauna!== '' &&
-          novoEntrevistado.qualEspacoPrecisaSerPreservado!== '' &&
-          novoEntrevistado.problemasRelacionadosAoAmbiente!== '' &&
-          novoEntrevistado.conheceUcs !== null &&
-          novoEntrevistado.conheceUcProposta !== null &&
-          novoEntrevistado.conheceAreaUc !== null &&
-          novoEntrevistado.utilizaAreaUc !== '' &&
-          novoEntrevistado.propostaMelhorarArea !== '' &&
-          novoEntrevistado.indicadoConsultaPublica !== '' &&
-          novoEntrevistado.contatoIndicadoConsultaPublica !== ""
-             
-      ) {
-        
-          setDisabled(false);
-      }else{
-        setDisabled(true);
-      }
       
-  }, [novoEntrevistado]);
-  
 
+  useEffect(() => {
+    const { isValid } = validateEntrevistado(novoEntrevistado);
+    setDisabled(!isValid);
+  }, [novoEntrevistado]);
     
     const objetoFila = () => {
           
@@ -136,7 +90,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const isConnected = await testConnection();
       if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://192.168.100.28:8080/entrevistado', novoEntrevistado) as EntrevistadoType;
+            const response = await connectionAPIPost('http://177.74.56.24/entrevistado', novoEntrevistado) as EntrevistadoType;
             if (response && response.id) {
               return fetchEntrevistadoAPI(response.id);
              }
@@ -173,7 +127,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 console.log("enviando para edição", entrevistadoCorrigido)
-                const response = await connectionAPIPut(`http://192.168.100.28:8080/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
+                const response = await connectionAPIPut(`http://177.74.56.24/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
                 console.log("recebendo edição", response)
                 if (response && response.id) {
                      return fetchEntrevistadoAPI(response.id);
@@ -210,7 +164,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const fetchEntrevistadoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<EntrevistadoType>(`http://192.168.100.28:8080/entrevistado/${id}`);
+                const response = await connectionAPIGet<EntrevistadoType>(`http://177.74.56.24/entrevistado/${id}`);
                 if (response) {
                   const bftData = {
                       ...response,
@@ -299,6 +253,7 @@ return {
       handleArrayFieldChange,
       handleNumberChange,
       handleSetNumber,
+      validateEntrevistado,
       disabled,
     };
 };

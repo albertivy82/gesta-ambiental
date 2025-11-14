@@ -19,8 +19,8 @@ export const userData = async ()=>{
       
       const matricula = decodedToken["matrícula"];    
        
-      const usuarioAtual = await connectionAPIGet<UserBody>(`http://192.168.100.28:8080/usuario/buscapormatricula/${matricula}`);
-      //const usuarioAtual = await connectionAPIGet<UserBody>(`http://192.168.100.28:8080/usuario/buscapormatricula/${matricula}`);
+      const usuarioAtual = await connectionAPIGet<UserBody>(`http://177.74.56.24/usuario/buscapormatricula/${matricula}`);
+      //const usuarioAtual = await connectionAPIGet<UserBody>(`http://177.74.56.24/usuario/buscapormatricula/${matricula}`);
 
       console.log('consulta', usuarioAtual)
       

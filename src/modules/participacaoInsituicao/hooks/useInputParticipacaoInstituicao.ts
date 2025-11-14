@@ -86,7 +86,7 @@ const objetoFila = () => {
                       
                       try{
                         
-                        const response = await connectionAPIPost('http://192.168.100.28:8080/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
+                        const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
                         console.log(response)
                         if (response && response.id) {
                               return fetchParticipacaoInstituicaoAPI(response.id);
@@ -130,7 +130,7 @@ const objetoFila = () => {
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 
-                const response = await connectionAPIPut(`http://192.168.100.28:8080/participacao-instituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
+                const response = await connectionAPIPut(`http://177.74.56.24/participacao-instituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
                     if (response && response.id) {
                     return fetchParticipacaoInstituicaoAPI(response.id);
                     }else{
@@ -169,7 +169,7 @@ const objetoFila = () => {
      const fetchParticipacaoInstituicaoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`http://192.168.100.28:8080/participacao-instituicao/${id}`);
+                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`http://177.74.56.24/participacao-instituicao/${id}`);
                 if (response) {
                   const participacaoInstituicaoData = {
                       ...response,

@@ -21,24 +21,68 @@ export const DEFAULT_ESCOLA_INPUT: escolaInput = {
   },
 };
 
+
+export const FIELD_LABEL_ESCOLA: Partial<Record<keyof escolaInput, string>> = {
+  nome: 'Nome da escola',
+  iniciativa: 'Iniciativa (municipal/estadual/federal)',
+  merenda: 'Merenda escolar',
+  transporte: 'Transporte escolar',
+  educacaoAmbiental: 'Educação ambiental',
+  // localidade não vou exigir aqui porque vem de cima
+};
+
+
+export const validateEscola = (data: escolaInput) => {
+  const errors: { field: keyof escolaInput; message: string }[] = [];
+
+  // campos obrigatórios diretos
+  ([
+    'nome',
+    'iniciativa',
+    'merenda',
+    'transporte',
+    'educacaoAmbiental',
+  ] as (keyof escolaInput)[]).forEach((f) => {
+    const v = data[f] as any;
+    if (v === '' || v === null || v === undefined) {
+      errors.push({
+        field: f,
+        message: `Preencha ${FIELD_LABEL_ESCOLA[f]}.`,
+      });
+    }
+  });
+
+  // se você quiser garantir que veio uma localidade válida:
+  if (!data.localidade || (!data.localidade.id || data.localidade.id <= 0)) {
+    errors.push({
+      field: 'localidade',
+      message: 'Selecione/Informe a localidade.',
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL_ESCOLA[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
 export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
   const [novaEscola, setNovaEscola] = useState<escolaInput>(DEFAULT_ESCOLA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    
-    if (
-      novaEscola.nome !== '' && 
-      novaEscola.iniciativa != null &&
-      novaEscola.merenda != null &&
-      novaEscola.transporte!= null &&
-      novaEscola.educacaoAmbiental != null
-     
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
+    const { isValid } = validateEscola(novaEscola);
+    setDisabled(!isValid);
   }, [novaEscola]);
 
   const objetoFila = () => {
@@ -72,7 +116,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                     
                     try{
                        
-                      const response = await connectionAPIPost('http://192.168.100.28:8080/escola', novaEscola) as EscolaType;
+                      const response = await connectionAPIPost('http://177.74.56.24/escola', novaEscola) as EscolaType;
                           
                       if (response && response.id) {
                             return fetchEscolaAPI(response.id);
@@ -110,7 +154,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                                 //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                                 try{
                                   console.log("enviando para edição", escolaCorrigida)
-                                  const response = await connectionAPIPut(`http://192.168.100.28:8080/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
+                                  const response = await connectionAPIPut(`http://177.74.56.24/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
                                   console.log("recebendo edição", response)
                                   if (response && response.id) {
                                        return fetchEscolaAPI(response.id);
@@ -147,7 +191,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
    const fetchEscolaAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<EscolaType>(`http://192.168.100.28:8080/escola/${id}`);
+              const response = await connectionAPIGet<EscolaType>(`http://177.74.56.24/escola/${id}`);
               if (response) {
                 const escolaData = {
                     ...response,
@@ -214,6 +258,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
     handleMerenda,
     handleEducAmbiental,
     handleTransporte,
+    validateEscola,
     disabled,
   };
 };

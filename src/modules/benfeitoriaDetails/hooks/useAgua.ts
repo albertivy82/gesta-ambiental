@@ -32,7 +32,7 @@ export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
         const isConnected = await testConnection();
          if (isConnected) {
           try {
-            const response = await connectionAPIPost('http://192.168.100.28:8080/agua', aguaInput);
+            const response = await connectionAPIPost('http://177.74.56.24/agua', aguaInput);
             const aguaAPI = response as AguaType;
             if (aguaAPI.id) apagarAguaQueue(agua.idLocal!);
           } catch (error) {
@@ -52,7 +52,7 @@ export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
 
   const fetchAguaAPI = async () => {
     try {
-      const response = await connectionAPIGet<AguaType[]>(`http://192.168.100.28:8080/agua/benfeitoria-agua/${benfeitoriaId}`);
+      const response = await connectionAPIGet<AguaType[]>(`http://177.74.56.24/agua/benfeitoria-agua/${benfeitoriaId}`);
       
       const aguaData = response.map(agua => ({
                       ...agua,

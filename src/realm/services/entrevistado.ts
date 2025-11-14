@@ -181,13 +181,19 @@ export const getEntrevistadosDessincronizados = (localidade:number): Entrevistad
 export const getEntrevistadoDessincronizadoPorId = (idLocal:string|undefined): EntrevistadoType|null=>{
 
    
-    const query = `idLocal == ${idLocal}`;
+    const query = `idLocal == "${idLocal}"`;
 
-    const entrevistadoQueue = realmInstance.objects<EntrevistadoType>('Entrevistado').filtered(query).slice();
-
-    const cleanedQueue = JSON.parse(JSON.stringify(entrevistadoQueue[0]));
-
-    return cleanedQueue as EntrevistadoType;
+    const entrevistadoQueue = realmInstance
+      .objects<EntrevistadoType>("Entrevistado")
+      .filtered(query)
+      .slice();
+      console.log('b0000000000000', entrevistadoQueue );
+      if (entrevistadoQueue.length === 0) {
+        return null;
+      }
+      
+      const cleanedQueue = JSON.parse(JSON.stringify(entrevistadoQueue[0]));
+      return cleanedQueue as EntrevistadoType;
 };
   
 
