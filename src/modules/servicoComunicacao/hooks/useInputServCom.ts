@@ -92,7 +92,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
            servicoComunicacaoData.idFather = benfeitoria.idLocal;
            servicoComunicacaoData.benfeitoria!.id = benfeitoria.id;
         } else {
-            console.warn("ID local do imóvel não encontrado. Verifique se está sendo passado corretamente.");
+           // console.warn("ID local do imóvel não encontrado. Verifique se está sendo passado corretamente.");
         }
   
       
@@ -158,7 +158,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
                     
                     if(!servicoComunicacao?.sincronizado && !testConnectionOne){
                            
-                            Alert.alert("Registro Apenas Local");
+                            //Alert.alert("Registro Apenas Local");
                             const local = await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
                              return local;
                     
@@ -183,7 +183,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
                                         }
            } catch (error) {
               const local = await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+              //Alert.alert("Erro ao enviar edição", "Tente novamente online.");
               return local;
           }
           
@@ -191,7 +191,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
             if (!servicoComunicacao!.sincronizado && servicoComunicacao!.idLocal) {
              return await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
             } else {
-             Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+             //Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
              return null;
             }
             

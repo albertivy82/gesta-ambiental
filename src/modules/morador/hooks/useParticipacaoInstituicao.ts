@@ -20,6 +20,7 @@ export const convertToParticipacaoInstituicaoInput = (ParticipacaoInstituicao: a
 
 export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) => {
   const [participacaoInsituicaoes, setParticipacaoInstituicoes] = useState<ParticipacaoInstituicaoType[]>([]);
+  const [loadingParticipacoes, setLoadingParticipacoes] = useState<boolean>(true);
 
   const sincronizeParticipacaoInstituicoesQueue = async () => {
     if (moradorId > 0) {
@@ -28,20 +29,20 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
       if (queue.length > 0) {
         for (const participacaoInsituicao of queue) {
           const novoParticipacaoInstituicaoInput = convertToParticipacaoInstituicaoInput(participacaoInsituicao);
-         console.log("participação enviada1", novoParticipacaoInstituicaoInput)
+       //  console.log("participação enviada1", novoParticipacaoInstituicaoInput)
            const isConnected = await testConnection();
-           console.log("participação enviada2", novoParticipacaoInstituicaoInput)
+       //    console.log("participação enviada2", novoParticipacaoInstituicaoInput)
             if (isConnected) {
-              console.log("participação enviada3", novoParticipacaoInstituicaoInput)
+          //    console.log("participação enviada3", novoParticipacaoInstituicaoInput)
               try {
                 const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novoParticipacaoInstituicaoInput);
                 const participacaoInsituicaoAPI = response as ParticipacaoInstituicaoType;
-                console.log("participação enviada4", participacaoInsituicaoAPI)
+               // console.log("participação enviada4", participacaoInsituicaoAPI)
                 if (participacaoInsituicaoAPI.id) {
                    apagarParticipacaoInstituicaoQueue(participacaoInsituicao.idLocal!);
                 }
               } catch (error) {
-                console.error('Erro na sincronização de participacaoInsituicao:', error);
+            //    console.error('Erro na sincronização de participacaoInsituicao:', error);
               }
             }
           
@@ -74,7 +75,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
                                    await salvarParticipacoesIntitucionais(ptcData);
                                     setParticipacaoInstituicoes((prevptcData) => [...prevptcData, ...ptcData]);
                              }else{
-                                 throw new Error('Dados de benfeitoria Inválidos'); 
+                               //  throw new Error('Dados de benfeitoria Inválidos'); 
                              }
              
             } catch (error) {
@@ -89,5 +90,17 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
     
   }, [foccus]);
 
-  return { participacaoInsituicaoes };
+  useEffect(() => {
+    const sincronizarTudo = async () => {
+      setLoadingParticipacoes(true);
+          await sincronizeParticipacaoInstituicoesQueue();
+          await fetchParticipacaoInstituicoesAPI();
+          fetchParticipacaoInstituicoesRealm();
+      setLoadingParticipacoes(false);
+    };
+    sincronizarTudo();
+  }, [foccus]);
+
+
+  return { participacaoInsituicaoes, loadingParticipacoes };
 };

@@ -57,12 +57,12 @@ export const validateAtividadeProdutiva = (data: AtividadeProdutivaInput) => {
     data.faturamentoAtividadeMesTotal === undefined ||
     data.faturamentoAtividadeMesTotal === null ||
     Number.isNaN(data.faturamentoAtividadeMesTotal) ||
-    data.faturamentoAtividadeMesTotal < 0 ||
+    data.faturamentoAtividadeMesTotal <= 0 ||
     data.faturamentoAtividadeMesTotal > 1000000
   ) {
     errors.push({
       field: 'faturamentoAtividadeMesTotal',
-      message: `${FIELD_LABEL_ATV['faturamentoAtividadeMesTotal']} deve estar entre 0 e 1.000.000.`,
+      message: `${FIELD_LABEL_ATV['faturamentoAtividadeMesTotal']} deve ser maior que R$ 0.00 e no máximo R$1.000.000.00`,
     });
   }
 
@@ -87,6 +87,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
+    console.log(novaAtividade)
     const { isValid } = validateAtividadeProdutiva(novaAtividade);
     setDisabled(!isValid);
   }, [novaAtividade]);

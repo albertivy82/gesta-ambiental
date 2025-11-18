@@ -33,11 +33,13 @@ const Entrevistados = () => {
   const [isLoading, setIsLoading] = useState(false);
 
  useEffect(() => {
+   setIsLoading(true);
     if (localidadeId) {
       const entrevistadoRealm = getEntrevistados(localidadeId);
       setEntrevistados(entrevistadoRealm);
     
     }
+    setIsLoading(false);
   }, [localidadeId]);
   
   // Rola até o final da lista

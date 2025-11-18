@@ -10,6 +10,7 @@ import { MoradorType } from '../../../shared/types/MoradorType';
 import { useParticipacaoInstituicoes } from '../hooks/useParticipacaoInstituicao';
 import { MoradorDetailContainer } from '../styles/morador.style';
 import EditConfirmation from '../ui-components/UseEditMorador';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 
@@ -40,7 +41,7 @@ const MoradorDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, MoradorParam>>>();
   const morador = params.morador;
   const foccus =useIsFocused();
-  const {participacaoInsituicaoes} = useParticipacaoInstituicoes(morador.id, foccus);
+  const {participacaoInsituicaoes, loadingParticipacoes} = useParticipacaoInstituicoes(morador.id, foccus);
   
 
  const handleDecision = <T,>(
@@ -54,6 +55,34 @@ const MoradorDetails = () => {
          handleNewEntry(navigation.navigate, newRoute, morador);
       }
     };
+
+
+    if (loadingParticipacoes) {
+      return (
+        <MoradorDetailContainer
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <ActivityIndicator
+            animating={true}
+            size={80}      
+            color="#ff4500"
+            style={{ marginTop: 20 }}
+          />
+    
+          <Text
+            type={textTypes.BUTTON_REGULAR}
+            color="#000"
+            margin="20px 0 0 0"
+          >
+            Sincronizando dados...
+          </Text>
+        </MoradorDetailContainer>
+      );
+    }
    
   return (
     

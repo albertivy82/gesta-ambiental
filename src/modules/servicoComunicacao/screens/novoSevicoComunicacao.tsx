@@ -59,8 +59,8 @@ export const NovoServicoComunicacao = () => {
 
 
  useEffect(() => {
-     const servicoInformado = serviCom === 'OUTROS' 
-     ? (outroServCom ? [`QUAIS: ${serviCom}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+     const servicoInformado = serviCom === 'Outros' 
+     ? (outroServCom ? [`QUAIS: ${outroServCom}`] : [])  // Se for "SIM", adiciona sobreUso se houver
      : [serviCom];
  
      handleArrayFieldChange('tipoServicoComunicacao', servicoInformado);

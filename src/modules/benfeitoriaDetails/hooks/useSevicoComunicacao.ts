@@ -43,7 +43,7 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
               
               if (servComAPI?.id) apagarServicoComunicacaoQueue(item.idLocal!);
             } catch (error) {
-              console.error('Erro na sincronização dos serviços de comunicação:', error);
+             // console.error('Erro na sincronização dos serviços de comunicação:', error);
             }
           }
         }

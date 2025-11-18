@@ -155,7 +155,7 @@ const objetoFila = () => {
                           
                           if(!participacaoInstituicao?.sincronizado && !testConnectionOne){
                                  
-                                  Alert.alert("Registro Apenas Local");
+                                //  Alert.alert("Registro Apenas Local");
                                   const local = await salvarParticipacaoInstituicao(buildParticipacaoInstituicaoAtualizada());
                                    return local;
                           
@@ -180,7 +180,7 @@ const objetoFila = () => {
               } catch (error) {
                 //console.error("Erro ao enviar PUT:", error);
                 const local = await salvarParticipacaoInstituicao(buildParticipacaoInstituicaoAtualizada());
-                Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+             //   Alert.alert("Erro ao enviar edição", "Tente novamente online.");
                 return local;
                  
               }
@@ -189,7 +189,7 @@ const objetoFila = () => {
               if (!participacaoInstituicao!.sincronizado && participacaoInstituicao!.idLocal) {
                return await salvarParticipacaoInstituicao(buildParticipacaoInstituicaoAtualizada());
               } else {
-                Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
+           //     Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
                 return null;
               }
             }
@@ -219,7 +219,7 @@ const objetoFila = () => {
                   };
                      return await salvarParticipacaoInstituicao(participacaoInstituicaoData);
                 }else{
-                        throw new Error('Dados de participacao instituicao Inválidos'); 
+                     //   throw new Error('Dados de participacao instituicao Inválidos'); 
                     }
             } catch (error) {
                     //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);

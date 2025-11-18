@@ -3,7 +3,7 @@ export const MoradorDetailContainer = styled.View`
 
     height: 100%;
     width: 100%;
-    background-color: #E6E8FA;
+    background-color: #f5f5f5;
     justify-content: center;
     justify-items: center;
     padding: 16px;

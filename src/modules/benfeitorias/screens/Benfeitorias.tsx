@@ -1,6 +1,6 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getBenfeitorias } from '../../../realm/services/benfeitoriaService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
@@ -10,6 +10,7 @@ import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { BenfeitoriaContainer } from '../styles/benfeitoria.style';
 import RenderItem from '../ui-components/listaBenfeitorias';
+import { ActivityIndicator } from 'react-native-paper';
 
 export interface benfeitoriasParam {
    imovel: imovelBody; 
@@ -27,10 +28,12 @@ const Benfeitorias = ()=>{
   
   
   useEffect(()=>{
+    setIsLoading(true);
     if(imovel){
          const benfeitoriaRealm = getBenfeitorias(imovel.id);
           setBenfeitoria(benfeitoriaRealm);
        }
+       setIsLoading(false);
   }, [imovel])
 
 const fetchBenfeitorias = useCallback(async () => {
@@ -114,7 +117,11 @@ return(
       </View>
 
       {isLoading ? (
-        <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
+        <ActivityIndicator
+        animating={true}
+        size={40}      
+        color="#ff4500"
+        style={{ marginTop: 5 }} />
       ) : (
         <FlatList
           ref={flatListRef}

@@ -1,11 +1,9 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarMorador, salvarMoradorQueue } from "../../../realm/services/moradorService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { formatDateForApi } from "../../../shared/functions/data";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
 import { MoradorType } from "../../../shared/types/MoradorType";
@@ -16,7 +14,7 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   dataNascimento: 0,
   sexo: null,
   escolaridade: '',
-  estadoCivil: null,
+  estadoCivil: '',
   ondeEstuda: '',
   trabalho: '',
   religiao: '',
@@ -43,13 +41,22 @@ export const FIELD_LABEL: Partial<Record<keyof MoradorInput, string>> = {
 export const validateMorador = (data: MoradorInput) => {
   const errors: { field: keyof MoradorInput; message: string }[] = [];
 
-  // perfil obrigatório
-  if (!data.perfil) {
-    errors.push({
-      field: 'perfil',
-      message: `Selecione ${FIELD_LABEL.perfil}.`,
-    });
-  }
+  ([
+    'perfil',      
+    'sexo',
+    'estadoCivil',
+    'escolaridade',
+    'religiao',
+  ] as (keyof MoradorInput)[]).forEach((f) => {
+    const v = data[f] as any;
+    if (v === null || v === undefined || (typeof v === 'string' && v.trim() === '')) {
+      errors.push({
+        field: f,
+        message: `Preencha ${FIELD_LABEL[f]}.`,
+      });
+    }
+  });
+  
 
   // idade (dataNascimento = idade em anos)
   if (
@@ -65,37 +72,66 @@ export const validateMorador = (data: MoradorInput) => {
     });
   }
 
-  // sexo, estado civil, escolaridade, religião
-  ([
-    'sexo',
-    'estadoCivil',
-    'escolaridade',
-    'religiao',
-  ] as (keyof MoradorInput)[]).forEach((f) => {
-    const v = data[f] as any;
-    if (v === null || v === undefined || (typeof v === 'string' && v.trim() === '')) {
-      errors.push({
-        field: f,
-        message: `Preencha ${FIELD_LABEL[f]}.`,
-      });
-    }
-  });
 
-  // estudo: precisa ter sido respondido (Sim com detalhe ou Não)
-  if (!data.ondeEstuda || data.ondeEstuda.trim().length === 0) {
+// ---- ondeEstuda: Sim/Não + detalhe se Sim ----
+const valorOnde = (data.ondeEstuda || '').trim().toLowerCase();
+
+if (!valorOnde) {
+  // nada salvo: usuário não escolheu Sim/Não
+  errors.push({
+    field: 'ondeEstuda',
+    message: `Informe ${FIELD_LABEL.ondeEstuda} (se estuda ou não).`,
+  });
+} else if (valorOnde === 'não') {
+  // ok, não precisa de detalhe
+} else if (valorOnde === 'sim') {
+  // marcou "Sim" mas não preencheu o "onde"
+  errors.push({
+    field: 'ondeEstuda',
+    message: `Descreva ${FIELD_LABEL.ondeEstuda} (onde estuda).`,
+  });
+} else {
+  // aqui esperamos algo como "onde estuda: Escola X"
+  const partes = data.ondeEstuda.split(':');
+  const detalhe = partes[1]?.trim() ?? '';
+
+  if (!detalhe) {
     errors.push({
       field: 'ondeEstuda',
-      message: `Informe ${FIELD_LABEL.ondeEstuda} (se estuda ou não).`,
+      message: `Descreva ${FIELD_LABEL.ondeEstuda} (onde estuda).`,
     });
   }
+}
 
-  // trabalho: mesma lógica
-  if (!data.trabalho || data.trabalho.trim().length === 0) {
+
+// ---- trabalho: Sim/Não + detalhe se Sim ----
+const valorTrab = (data.trabalho || '').trim().toLowerCase();
+
+if (!valorTrab) {
+  errors.push({
+    field: 'trabalho',
+    message: `Informe ${FIELD_LABEL.trabalho} (se trabalha ou não).`,
+  });
+} else if (valorTrab === 'não') {
+  // ok
+} else if (valorTrab === 'sim') {
+  errors.push({
+    field: 'trabalho',
+    message: `Descreva ${FIELD_LABEL.trabalho} (onde trabalha).`,
+  });
+} else {
+  const partes = data.trabalho.split(':');
+  const detalhe = partes[1]?.trim() ?? '';
+
+  if (!detalhe) {
     errors.push({
       field: 'trabalho',
-      message: `Informe ${FIELD_LABEL.trabalho} (se trabalha ou não).`,
+      message: `Descreva ${FIELD_LABEL.trabalho} (onde trabalha).`,
     });
   }
+}
+
+
 
   // doenças: exige alguma resposta (inclusive se a opção for "Nenhuma")
   if (!data.doencas || data.doencas.trim().length === 0) {

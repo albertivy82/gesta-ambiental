@@ -43,7 +43,7 @@ export const validateCredito = (data: CreditoInput) => {
   ) {
     errors.push({
       field: 'valor',
-      message: `${FIELD_LABEL_CREDITO['valor']} deve ser maior que 0 e no máximo 1.000.000.`,
+      message: `${FIELD_LABEL_CREDITO['valor']} deve ser maior que R$ 0.00 e no máximo R$ 1.000.000.00`,
     });
   }
 
