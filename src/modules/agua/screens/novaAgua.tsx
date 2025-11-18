@@ -13,6 +13,7 @@ import { AguaType } from "../../../shared/types/AguaType";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAgua } from "../hooks/useInputAgua";
 import { AguaDetailContainer } from "../styles/agua.style";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovaAguaParams {
@@ -29,6 +30,7 @@ export const NovaAgua = () => {
   const { params } = useRoute<RouteProp<Record<string, NovaAguaParams>, string>>();
   const benfeitoria = params.benfeitoria;
   const agua = params.agua;
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fornecimentoAgua, setFornecimentoAgua] = useState<string>('');     
   const [outroFornecimento, SetOutroFornecimento] = useState<string>('');
@@ -79,33 +81,36 @@ export const NovaAgua = () => {
   
 
   const handleEnviar = async () => {
+      
     if (loading) return;
-    setLoading(true);
-    try {
-      const result = validateAgua(novaAgua);
-      if (!result.isValid) {
-        const msg = [
-          'Por favor, corrija os itens abaixo:',
+                
+    const result = validateAgua(novaAgua);
+    if (!result.isValid) {
+      setShowErrors(true);
+  
+      Alert.alert(
+        'Campos Obrigatórios',
+        [
+          'Por favor, corrija os campos abaixo:',
           '',
           ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
-        ].join('\n');
-  
-        Alert.alert('Campos obrigatórios ou inválidos', msg);
-        return; // deixa o finally desligar o loading
-      }
-  
+        ].join('\n')
+      );
+      return;
+    }
+    try {
+      setLoading(true);
       const aguaSalva = await enviarRegistro();
       if (aguaSalva) {
         detalharAgua(navigation.navigate, benfeitoria);
       } else {
-        Alert.alert('Erro', 'Não foi possível salvar a benfeitoria. Tente novamente.');
+        Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();
       }
-    } catch (error) {
-      console.error('Erro no envio:', error);
-      Alert.alert('Erro ao enviar', 'Tente novamente mais tarde.');
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível realizar a operação.');
     } finally {
-      setLoading(false);
+      setLoading(false); // 👈 desliga
     }
   };
   
@@ -232,13 +237,17 @@ export const NovaAgua = () => {
           )}
 
 
-        <View style={{ marginTop: 40 }}>
-          {loading ? (
-            <ActivityIndicator size="large" color="#ff4500" /> 
-          ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
-          )}
-        </View>
+         <FormErrors
+            visible={showErrors && disabled}
+            errors={validateAgua(novaAgua).errors}
+          />
+                                      
+         <Button
+           title={loading ? "Enviando..." : "Enviar"}
+           onPress={handleEnviar}
+           color={"#ff4500"}
+           disabled={loading}   // 👈 trava só enquanto envia
+          />
 
       </AguaDetailContainer>
     </ScrollView>

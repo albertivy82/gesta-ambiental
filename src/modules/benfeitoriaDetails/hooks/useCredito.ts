@@ -23,6 +23,7 @@ export const convertToCreditoInput = (credito: any): CreditoInput => {
 };
 
 export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
+  const [loadingCreditos, setLoadingCreditos] = useState<boolean>(true);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
 
   const sincronizeCreditoQueue = async () => {
@@ -70,11 +71,17 @@ export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
     }
   };
 
+  
   useEffect(() => {
-    fetchCreditoRealm();
-    fetchCreditoAPI();
-    sincronizeCreditoQueue();
+    const sincronizarTudo = async () => {
+      setLoadingCreditos(true);
+        await sincronizeCreditoQueue();
+        await fetchCreditoAPI();
+        fetchCreditoRealm();
+      setLoadingCreditos(false);
+  };
+  sincronizarTudo();
   }, [foccus]);
 
-  return { creditos };
+  return { creditos, loadingCreditos };
 };

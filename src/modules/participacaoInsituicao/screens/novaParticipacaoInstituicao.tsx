@@ -8,6 +8,7 @@ import { MoradorType } from "../../../shared/types/MoradorType";
 import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
 import { useNovaParticipacaoInstituicao } from "../hooks/useInputParticipacaoInstituicao";
 import { ParticipacaoInstituicaoDetailContainer } from "../styles/ParticipacaoInstituicao.style";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 
@@ -26,11 +27,13 @@ export const NovaParticipacaoInstituicao = ()=>{
    const morador = params.morador;
    const participacaoInstituicao = params.participacaoInstituicao;
    const navigation = useNavigation<NavigationProp<ParamListBase>>();
+   const [showErrors, setShowErrors] = useState(false);
    const [loading, setLoading] = useState(false); 
    const {  novaParticipacaoInstituicao,
             enviarRegistro,
             handleOnChangeInput,
             handleEnumChange,
+            validateParticipacaoInstituicao, 
             disabled
           } = useNovaParticipacaoInstituicao(morador, participacaoInstituicao);
 
@@ -44,9 +47,25 @@ useEffect(() => {
 
   
     const handleEnviar = async () => {
-         setLoading(true);
+      if (loading) return;
+
+      const result = validateParticipacaoInstituicao(novaParticipacaoInstituicao);
+      if (!result.isValid) {
+        setShowErrors(true);
+  
+        Alert.alert(
+          "Campos obrigatórios",
+          [
+            "Por favor, corrija os campos abaixo:",
+            "",
+            ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+          ].join("\n")
+        );
+        return;
+      }
        
          try {
+          setLoading(true);
            const participacaoInstituicaoSalva = await enviarRegistro(); 
              if (participacaoInstituicaoSalva){
                   detalharParticipacaoInstituicao(navigation.navigate, morador);
@@ -54,12 +73,11 @@ useEffect(() => {
                  Alert.alert("Erro", "Não foi possível salvar a participacaoInstituicao. Tente novamente.");
                  navigation.goBack();
                }
-         } catch (error) {
-           console.error("Erro no envio:", error);
-           Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-         } finally {
-           setLoading(false);
-         }
+              } catch (e) {
+                Alert.alert('Erro', 'Não foi possível realizar a operação.');
+              } finally {
+                setLoading(false); // 👈 desliga
+              }
        };
     
    
@@ -92,13 +110,17 @@ useEffect(() => {
            />
 
 
-           <View style={{ marginTop: 40 }}>
-                         {loading ? (
-                           <ActivityIndicator size="large" color="#ff4500" /> 
-                         ) : (
-                           <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled || loading} />
-                         )}
-            </View>
+       <FormErrors
+          visible={showErrors && disabled}
+          errors={validateParticipacaoInstituicao(novaParticipacaoInstituicao).errors}
+        />
+
+       <Button
+              title={loading ? "Enviando..." : "Enviar"}
+              onPress={handleEnviar}
+              color={"#ff4500"}
+              disabled={loading}   // 👈 trava só enquanto envia
+        />
     
       
 

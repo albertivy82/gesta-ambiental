@@ -27,6 +27,7 @@ export const convertToAtividadeProdutivaInput = (atividade: any) => {
 };
 
 export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) => {
+  const [loadingAtividadesProdutivas, setLoadingAtividadesProdutivas] = useState<boolean>(true);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
 
   const sincronizeAtividadesQueue = async () => {
@@ -88,11 +89,17 @@ export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) 
     }
   };
 
+  
   useEffect(() => {
-    fetchAtividadesRealm();
-    fetchAtividadesAPI();
-    sincronizeAtividadesQueue();
+    const sincronizarTudo = async () => {
+      setLoadingAtividadesProdutivas(true);
+        await sincronizeAtividadesQueue();
+        await fetchAtividadesAPI();
+        fetchAtividadesRealm();
+      setLoadingAtividadesProdutivas(false);
+  };
+  sincronizarTudo();
   }, [foccus]);
 
-  return { atividades };
+  return { atividades, loadingAtividadesProdutivas };
 };

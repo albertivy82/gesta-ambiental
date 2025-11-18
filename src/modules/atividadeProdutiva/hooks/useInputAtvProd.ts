@@ -18,23 +18,77 @@ export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   },
 };
 
+// LABELS para mensagens de erro
+export const FIELD_LABEL_ATV: Partial<Record<keyof AtividadeProdutivaInput, string>> = {
+  atividade: 'Ramo da atividade',
+  pessoasEnvolvidas: 'Quantidade de pessoas envolvidas',
+  faturamentoAtividadeMesTotal: 'Faturamento mensal total da atividade',
+};
+
+
+// Validação centralizada
+export const validateAtividadeProdutiva = (data: AtividadeProdutivaInput) => {
+  const errors: { field: keyof AtividadeProdutivaInput; message: string }[] = [];
+
+  // atividade obrigatória
+  if (!data.atividade || String(data.atividade).trim() === '') {
+    errors.push({
+      field: 'atividade',
+      message: `Selecione ${FIELD_LABEL_ATV['atividade']}.`,
+    });
+  }
+
+  // pessoasEnvolvidas: > 0 e < 100  (mantendo a mesma regra que você já usava)
+  if (
+    data.pessoasEnvolvidas === undefined ||
+    data.pessoasEnvolvidas === null ||
+    Number.isNaN(data.pessoasEnvolvidas) ||
+    data.pessoasEnvolvidas <= 0 ||
+    data.pessoasEnvolvidas >= 100
+  ) {
+    errors.push({
+      field: 'pessoasEnvolvidas',
+      message: `${FIELD_LABEL_ATV['pessoasEnvolvidas']} deve ser maior que 0 e menor que 100.`,
+    });
+  }
+
+  // faturamento: >= 0 e <= 1.000.000 (também mantendo sua regra atual)
+  if (
+    data.faturamentoAtividadeMesTotal === undefined ||
+    data.faturamentoAtividadeMesTotal === null ||
+    Number.isNaN(data.faturamentoAtividadeMesTotal) ||
+    data.faturamentoAtividadeMesTotal < 0 ||
+    data.faturamentoAtividadeMesTotal > 1000000
+  ) {
+    errors.push({
+      field: 'faturamentoAtividadeMesTotal',
+      message: `${FIELD_LABEL_ATV['faturamentoAtividadeMesTotal']} deve estar entre 0 e 1.000.000.`,
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL_ATV[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
 export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: AtividadeProdutivaType)  => {
   const [novaAtividade, setNovaAtvProd] = useState<AtividadeProdutivaInput>(DEFAULT_ATIVIDADE_PRODUTIVA_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    
-    if (
-      novaAtividade.atividade !=='' &&
-      novaAtividade.pessoasEnvolvidas > 0 &&
-      novaAtividade.pessoasEnvolvidas < 100 &&
-      novaAtividade.faturamentoAtividadeMesTotal >= 0 &&
-      novaAtividade.faturamentoAtividadeMesTotal <= 1000000
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
+    const { isValid } = validateAtividadeProdutiva(novaAtividade);
+    setDisabled(!isValid);
   }, [novaAtividade]);
 
   const objetoFila = () => {
@@ -238,6 +292,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
     handleNumberChange,
     enviarRegistro,
     handleOnChangeRendimentoMensal,
+    validateAtividadeProdutiva,
     disabled,
 };
   

@@ -15,6 +15,7 @@ import { useRendasOutrasFontes } from '../hooks/useRendaOutrasfontes';
 import { useServicosComunicacao } from '../hooks/useSevicoComunicacao';
 import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
 import EditConfirmation from '../ui-components/UseEditBenfeitoria';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 export const handleNavigation = <T,>(
@@ -44,13 +45,20 @@ const BenfeitoriaDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, BenfeitoriaParam>>>();
   const benfeitoria = params.benfeitoria;
   const foccus =useIsFocused();
-  const {moradores} = useMoradores(benfeitoria.id, foccus);
-  const {aguas} = useAguas(benfeitoria.id, foccus);
-  const {atividades} = useAtividadesProdutivas(benfeitoria.id, foccus);
-  const {creditos} = useCreditos(benfeitoria.id, foccus);
-  const {rendasOF} = useRendasOutrasFontes(benfeitoria.id, foccus);
-  const {servicos} = useServicosComunicacao(benfeitoria.id, foccus);
+  const {moradores, loadingMoradores} = useMoradores(benfeitoria.id, foccus);
+  const {aguas, loadingAguas} = useAguas(benfeitoria.id, foccus);
+  const {atividades, loadingAtividadesProdutivas} = useAtividadesProdutivas(benfeitoria.id, foccus);
+  const {creditos, loadingCreditos} = useCreditos(benfeitoria.id, foccus);
+  const {rendasOF, loadingOutrasRendas} = useRendasOutrasFontes(benfeitoria.id, foccus);
+  const {servicos, loadingComunicacoes} = useServicosComunicacao(benfeitoria.id, foccus);
   
+  const loading =
+      loadingMoradores ||
+      loadingAguas ||
+      loadingAtividadesProdutivas ||
+      loadingCreditos ||
+      loadingOutrasRendas ||
+      loadingComunicacoes;
 
    const handleDecision = <T,>(
       data: T | T[],
@@ -63,6 +71,35 @@ const BenfeitoriaDetails = () => {
          handleNewEntry(navigation.navigate, newRoute, benfeitoria);
       }
     };
+
+
+
+    if (loading) {
+      return (
+        <BenfeitoriaDetailContainer
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <ActivityIndicator
+            animating={true}
+            size={80}      
+            color="#ff4500"
+            style={{ marginTop: 20 }}
+          />
+    
+          <Text
+            type={textTypes.BUTTON_REGULAR}
+            color="#000"
+            margin="20px 0 0 0"
+          >
+            Sincronizando dados...
+          </Text>
+        </BenfeitoriaDetailContainer>
+      );
+    }
   
   return (
     
@@ -137,7 +174,7 @@ const BenfeitoriaDetails = () => {
                     style={{ marginLeft: 10 }}
                   >
                     {moradores.length > 0
-                      ? `Listagem de cadastrados`
+                      ? `Listagem de Moradores Cadastrados`
                       : 'Moradores'}
                   </Text>
                 </View>
@@ -158,7 +195,7 @@ const BenfeitoriaDetails = () => {
                   style={{ marginLeft: 10 }}
                 >
                   {aguas.length > 0
-                    ? `Dados Registradas`
+                    ? `Dados sobre a Água Registradas`
                     : 'Água'}
                 </Text>
               </View>
@@ -179,7 +216,7 @@ const BenfeitoriaDetails = () => {
                   style={{ marginLeft: 10 }}
                 >
                   {atividades.length > 0
-                    ? `Listagem de  Atividades Produtivas`
+                    ? `Listagem de  Atividades Produtivas Cadastradas`
                     : 'Atividades Produtivas'}
                 </Text>
               </View>
@@ -200,7 +237,7 @@ const BenfeitoriaDetails = () => {
               style={{ marginLeft: 10 }}
             >
               {creditos.length > 0
-                ? `Listagem de Créditos`
+                ? `Listagem de Créditos Cadastrado`
                 : 'Crédito'}
             </Text>
           </View>
@@ -221,7 +258,7 @@ const BenfeitoriaDetails = () => {
                 style={{ marginLeft: 10 }}
               >
                 {rendasOF.length > 0
-                  ? `Listagem de Outras Rendas`
+                  ? `Listagem de Outras Rendas Cadastradas`
                   : 'Outras Fontes de Renda'}
               </Text>
             </View>
@@ -242,7 +279,7 @@ const BenfeitoriaDetails = () => {
                   style={{ marginLeft: 10 }}
                 >
                   {servicos.length > 0
-                    ? `Listagem de Serviços de Comunicação`
+                    ? `Listagem de Serviços de Comunicação Cadastrados`
                     : 'Serviços de Comunicação disponíveis'}
                 </Text>
               </View>

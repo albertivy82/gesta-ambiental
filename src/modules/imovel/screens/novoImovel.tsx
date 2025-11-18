@@ -1,8 +1,8 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { SimNao } from "../../../enums/simNao.enum";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import LocationInput from "../../../shared/components/input/LocationInput";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
@@ -14,7 +14,6 @@ import { imovelBody } from "../../../shared/types/imovelType";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
 import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoReptilParams {
@@ -54,7 +53,7 @@ export const NovoImovel = () => {
   const [outrosEspacosLazer, setOutrosEspacosLazer] = useState<string>('');
   const simNaoOptions =  Object.values(SimNao);
       
-      
+   
   useEffect(()=>{
         const consolidaDados = [
           ...pavimentacaoInformada.filter((item) => item !== 'Outras'),
@@ -271,6 +270,7 @@ export const NovoImovel = () => {
                  options={vizinhoOptions}
                  selectedValues={vizinhosConfinantesInformados}
                  label="Vizinhos Confinantes:"
+                 exclusiveOptions={[ 'Não declarado','Não possui']}
                  onSave={(selectedValues) => {
                       setVizinhosConfinantesInformados(selectedValues);
                       handleArrayFieldChange('vizinhosConfinantes', selectedValues); 
@@ -354,6 +354,7 @@ export const NovoImovel = () => {
                 options={pavimentacaoOptions}
                 selectedValues={pavimentacaoInformada}
                 label="Pavimentação das vias?:"
+                exclusiveOptions={['Nenhum']}
                 onSave={(selectedValues) => {
                     setPavimentacaoInformada(selectedValues);
                     if (!selectedValues.includes('Outro')) {
@@ -425,7 +426,8 @@ export const NovoImovel = () => {
                 <CheckboxSelector
                 options={lazerOptions}
                 selectedValues={espacosLazer}
-               label="Espaços de Lazer?"
+                label="Espaços de Lazer?"
+                exclusiveOptions={['Não tem','Não sabe']}
                 onSave={(selectedValues) => {
                     setEspacosLazer(selectedValues);
                     if (!selectedValues.includes('Outros')) {

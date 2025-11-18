@@ -18,6 +18,7 @@ export const convertToRendaOFInput = (renda: any): RendaOutrasFontesInput => {
 };
 
 export const useRendasOutrasFontes = (benfeitoriaId: number, foccus: Boolean) => {
+  const [loadingOutrasRendas, setLoadingOutrasRendas] = useState<boolean>(true);
   const [rendasOF, setRendasOF] = useState<RendaOutrasFontesType[]>([]);
 
   const sincronizeRendaOFQueue = async () => {
@@ -69,6 +70,16 @@ export const useRendasOutrasFontes = (benfeitoriaId: number, foccus: Boolean) =>
     fetchRendasAPI();
     sincronizeRendaOFQueue();
   }, [foccus]);
-
-  return { rendasOF };
+  
+  useEffect(() => {
+    const sincronizarTudo = async () => {
+      setLoadingOutrasRendas(true);
+        await sincronizeRendaOFQueue();
+        await fetchRendasAPI();
+        fetchRendasRealm();
+        setLoadingOutrasRendas(false);
+  };
+  sincronizarTudo();
+  }, [foccus]);
+  return { rendasOF, loadingOutrasRendas };
 };

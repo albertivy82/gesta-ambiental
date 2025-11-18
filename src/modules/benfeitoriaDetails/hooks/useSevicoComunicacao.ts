@@ -22,6 +22,7 @@ export const convertToServicoComunicacaoInput = (item: any) => {
 };
 
 export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) => {
+  const [loadingComunicacoes, setLoadingComunicacoes] = useState<boolean>(true);
   const [servicos, setServicos] = useState<ServicosComunicacaoType[]>([]);
 
   const sincronizeQueue = async () => {
@@ -75,11 +76,18 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
     }
   };
 
+  
+
   useEffect(() => {
-    fetchFromRealm();
-    fetchFromAPI();
-    sincronizeQueue();
+    const sincronizarTudo = async () => {
+      setLoadingComunicacoes(true);
+        await sincronizeQueue();
+        await fetchFromAPI();
+        fetchFromRealm();
+      setLoadingComunicacoes(false);
+  };
+  sincronizarTudo();
   }, [foccus]);
 
-  return { servicos };
+  return { servicos, loadingComunicacoes };
 };

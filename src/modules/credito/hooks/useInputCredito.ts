@@ -17,22 +17,62 @@ export const DEFAULT_CREDITO_INPUT: CreditoInput = {
   },
 };
 
+export const FIELD_LABEL_CREDITO: Partial<Record<keyof CreditoInput, string>> = {
+  nome: 'Linha de crédito acessada',
+  valor: 'Valor do crédito',
+};
+
+export const validateCredito = (data: CreditoInput) => {
+  const errors: { field: keyof CreditoInput; message: string }[] = [];
+
+  // nome obrigatório
+  if (!data.nome || data.nome.trim().length === 0) {
+    errors.push({
+      field: 'nome',
+      message: `Informe ${FIELD_LABEL_CREDITO['nome']}.`,
+    });
+  }
+
+  // valor > 0 e <= 1.000.000 (mantendo sua regra)
+  if (
+    data.valor === undefined ||
+    data.valor === null ||
+    Number.isNaN(data.valor) ||
+    data.valor <= 0 ||
+    data.valor > 1000000
+  ) {
+    errors.push({
+      field: 'valor',
+      message: `${FIELD_LABEL_CREDITO['valor']} deve ser maior que 0 e no máximo 1.000.000.`,
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL_CREDITO[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
+
 export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoType) => {
   const [novoCredito, setNovoCredito] = useState<CreditoInput>(DEFAULT_CREDITO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novoCredito);
-    if (
-      novoCredito.nome !== '' &&
-      novoCredito.valor > 0 &&
-      novoCredito.valor <= 1000000
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
+    const { isValid } = validateCredito(novoCredito);
+    setDisabled(!isValid);
   }, [novoCredito]);
+  
 
   const objetoFila = () => {
     const creditoData: CreditoInput = {
@@ -220,6 +260,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
     enviarRegistro,
     handleOnChangeRendimentoMensal,
     handleOnChangeInput,
+    validateCredito,
     disabled,
   };
 };

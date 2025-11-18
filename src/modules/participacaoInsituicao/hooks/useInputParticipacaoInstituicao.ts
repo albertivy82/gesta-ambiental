@@ -17,24 +17,64 @@ export const DEFAULT_VEGETACAO_INPUT: ParticipacaoInstituicaoInput = {
   },
 };
 
+export const FIELD_LABEL: Partial<Record<keyof ParticipacaoInstituicaoInput, string>> = {
+  instituicao: 'Instituição',
+  tipoDeRegistro: 'Tipo de registro',
+  registro: 'Número de registro',
+};
+
+export const validateParticipacaoInstituicao = (data: ParticipacaoInstituicaoInput) => {
+  const errors: { field: keyof ParticipacaoInstituicaoInput; message: string }[] = [];
+
+  // instituição obrigatória
+  if (!data.instituicao || data.instituicao.trim().length === 0) {
+    errors.push({
+      field: 'instituicao',
+      message: `Selecione ${FIELD_LABEL.instituicao}.`,
+    });
+  }
+
+  // tipo de registro obrigatório
+  if (!data.tipoDeRegistro || data.tipoDeRegistro.trim().length === 0) {
+    errors.push({
+      field: 'tipoDeRegistro',
+      message: `Informe ${FIELD_LABEL.tipoDeRegistro}.`,
+    });
+  }
+
+  // número de registro obrigatório
+  if (!data.registro || data.registro.trim().length === 0) {
+    errors.push({
+      field: 'registro',
+      message: `Informe ${FIELD_LABEL.registro}.`,
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
 export const useNovaParticipacaoInstituicao = (morador:MoradorType, participacaoInstituicao?: ParticipacaoInstituicaoType) => {
   const [novaParticipacaoInstituicao, setNovaParticipacaoInstituicao] = useState<ParticipacaoInstituicaoInput>(DEFAULT_VEGETACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
   
   useEffect(() => {
-   
-    if (
-      novaParticipacaoInstituicao.instituicao !== '' &&
-      novaParticipacaoInstituicao.tipoDeRegistro !== '' &&
-      novaParticipacaoInstituicao.registro !== ''
-    ) {
-      setDisabled(false)
-      }else
-      {
-       setDisabled(true);
-      };
-  
-}, [novaParticipacaoInstituicao]);
+    const { isValid } = validateParticipacaoInstituicao(novaParticipacaoInstituicao);
+    setDisabled(!isValid);
+  }, [novaParticipacaoInstituicao]);
+
 
   
 const objetoFila = () => {
@@ -221,6 +261,7 @@ const objetoFila = () => {
         handleOnChangeInput,
         handleEnumChange,
         handleArrayFieldChange,
+        validateParticipacaoInstituicao,
         disabled,
     };
     

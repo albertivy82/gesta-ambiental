@@ -19,21 +19,60 @@ export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
   },
 };
 
+export const FIELD_LABEL: Partial<Record<keyof ServicosComunicacaoInput, string>> = {
+  tipoServicoComunicacao: 'Tipo de serviço de comunicação',
+  operadoraServicoComunicacao: 'Operadora do serviço de comunicação',
+};
+
+export const validateServicosComunicacao = (data: ServicosComunicacaoInput) => {
+  const errors: { field: keyof ServicosComunicacaoInput; message: string }[] = [];
+
+  // Tipo de serviço obrigatório
+  if (
+    data.tipoServicoComunicacao === null ||
+    String(data.tipoServicoComunicacao).trim().length === 0
+  ) {
+    errors.push({
+      field: 'tipoServicoComunicacao',
+      message: `Selecione ${FIELD_LABEL.tipoServicoComunicacao}.`,
+    });
+  }
+
+  // Operadora obrigatória
+  if (
+    data.operadoraServicoComunicacao === null ||
+    String(data.operadoraServicoComunicacao).trim().length === 0
+  ) {
+    errors.push({
+      field: 'operadoraServicoComunicacao',
+      message: `Selecione ${FIELD_LABEL.operadoraServicoComunicacao}.`,
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
 export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoComunicacao?: ServicosComunicacaoType) => {
   const [novoServicoComunicacao, setNovoServicoComunicacao] = useState<ServicosComunicacaoInput>(DEFAULT_SERVICOS_COMUNICACAO_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novoServicoComunicacao);
-    if (
-      novoServicoComunicacao.tipoServicoComunicacao !== null &&
-      novoServicoComunicacao.operadoraServicoComunicacao !== null
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
+    const { isValid } = validateServicosComunicacao(novoServicoComunicacao);
+    setDisabled(!isValid);
   }, [novoServicoComunicacao]);
+
 
   const objetoFila = () => {
    
@@ -226,6 +265,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
     handleOnChangeInput,
     handleEnumChange,
     handleArrayFieldChange,
+    validateServicosComunicacao, 
     disabled,
   };
 };

@@ -9,6 +9,7 @@ import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAtvProd } from "../hooks/useInputAtvProd";
 import { AtividadeDetailContainer } from "../styles/ativdade.style";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovaAtividadeParams {
@@ -25,12 +26,14 @@ export const NovaAtividade = () => {
   const { params } = useRoute<RouteProp<Record<string, NovaAtividadeParams>, string>>();
   const benfeitoria = params.benfeitoria;
   const atividadeProdutiva = params.atividadeProdutiva;
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const { novaAtividade,
     enviarRegistro,
           handleEnumChange,
           handleNumberChange,
           handleOnChangeRendimentoMensal,
+          validateAtividadeProdutiva,
           disabled
           } = useNovaAtvProd(benfeitoria, atividadeProdutiva);
 
@@ -40,9 +43,25 @@ const atividadeOptions =  Object.values(
 );
     
     const handleEnviar = async () => {
-         setLoading(true);
+      if (loading) return;
+                
+      const result = validateAtividadeProdutiva(novaAtividade);
+      if (!result.isValid) {
+        setShowErrors(true);
+    
+        Alert.alert(
+          'Campos Obrigatórios',
+          [
+            'Por favor, corrija os campos abaixo:',
+            '',
+            ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+          ].join('\n')
+        );
+        return;
+      }
        
          try {
+          setLoading(true);
            const atividadeSalva = await enviarRegistro(); 
            console.log("ppp", atividadeSalva);
                if (atividadeSalva){
@@ -51,12 +70,11 @@ const atividadeOptions =  Object.values(
                  Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
                  navigation.goBack();
                }
-         } catch (error) {
-           console.error("Erro no envio:", error);
-           Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-         } finally {
-           setLoading(false);
-         }
+              } catch (e) {
+                Alert.alert('Erro', 'Não foi possível realizar a operação.');
+              } finally {
+                setLoading(false); // 👈 desliga
+              }
        };
 
        useEffect(() => {
@@ -109,13 +127,17 @@ const atividadeOptions =  Object.values(
               />
 
                                   
-             <View style={{ marginTop: 40 }}>
-              {loading ? (
-                <ActivityIndicator size="large" color="#ff4500" /> 
-              ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
-              )}
-            </View>
+             <FormErrors
+               visible={showErrors && disabled}
+               errors={validateAtividadeProdutiva(novaAtividade).errors}
+             />
+                                            
+             <Button
+               title={loading ? "Enviando..." : "Enviar"}
+               onPress={handleEnviar}
+               color={"#ff4500"}
+               disabled={loading}   // 👈 trava só enquanto envia
+             />
       
 
         </AtividadeDetailContainer>

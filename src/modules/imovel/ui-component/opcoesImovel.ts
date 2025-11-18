@@ -22,7 +22,7 @@ export   const limitesOptions=[
         'Cerca viva',               
         'Sem cerca'                 
 ];
-export    const soloOptions=[
+export  const soloOptions=[
         'Várzea',
         'Terra firme',
         'Igapó'

@@ -8,6 +8,7 @@ import { testConnection } from "../../../shared/functions/connection/testConnect
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { validateBenfeitoria } from "../components/validateBenfeitria";
 
 export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput = {
   tipoBenfeitoria: '',
@@ -40,37 +41,13 @@ export const DEFAULT_BENFEITORIA_INPUT: BenfeitoriaInput = {
 export const UseNovaBenfeitoria =(imovel: imovelBody, benfeitoria?: BenfeitoriaType)=>{
 
 const [novaBenfeitoria, setNovaBenfeitoria] = useState<BenfeitoriaInput>(DEFAULT_BENFEITORIA_INPUT);
-const [disabled, setdisable] = useState<boolean>(true);
+const [disabled, setDisabled] = useState<boolean>(true);
 
-          useEffect(() => {
-                            console.log(novaBenfeitoria)
-            if (
-            novaBenfeitoria.tipoBenfeitoria !== null &&
-            novaBenfeitoria.funcao !== null &&
-            novaBenfeitoria.impermeabilizacaoSolo !== null &&
-            novaBenfeitoria.limites !== '' &&
-            novaBenfeitoria.areaBenfeitoria > 1 &&
-            novaBenfeitoria.pavimentos > 0 &&
-            novaBenfeitoria.pavimentos < 20 &&
-            novaBenfeitoria.paredes !== null &&
-            novaBenfeitoria.tipoCobertura !== null &&
-            novaBenfeitoria.tipoEsquadrias !== null &&
-            novaBenfeitoria.origemMadeiraDaConstrucao !== null &&
-            novaBenfeitoria.origemPedraDaConstrucao !== null &&
-            novaBenfeitoria.origemAreiaDaConstrucao !== null &&
-            novaBenfeitoria.alagamentos !== '' &&
-            novaBenfeitoria.efluentes !== '' &&
-            novaBenfeitoria.residuos !== '' &&
-            novaBenfeitoria.fonteEnergia !== '' &&
-            novaBenfeitoria.energiaAlimentos !== '' &&
-            novaBenfeitoria.meiosLocomocao !== null &&
-            novaBenfeitoria.informativoPredominante !== ''
-          ) {
-            setdisable(false);
-          }else{
-            setdisable(true);
-          }
-    }, [novaBenfeitoria]);
+ //console.log(novoImovel)
+     useEffect(() => {
+        const { isValid } = validateBenfeitoria(novaBenfeitoria);
+        setDisabled(!isValid);
+      }, [novaBenfeitoria]);
 
 
 
@@ -307,7 +284,8 @@ const buildBenfeitoriaAtualizada = (): BenfeitoriaType => ({
          handleOnChangeAreaBenfeitoria,
          handleNumberChange,
          handleOnChangeInput,
-          disabled,
+         validateBenfeitoria,
+         disabled,
         }
 
 }

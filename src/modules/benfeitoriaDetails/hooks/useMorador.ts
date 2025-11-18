@@ -27,6 +27,7 @@ export const convertToMoradorInput = (morador: any): MoradorInput => {
 };
 
 export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
+  const [loadingMoradores, setLoadingMoradores] = useState<boolean>(true);
   const [moradores, setMoradores] = useState<MoradorType[]>([]);
 
   const sincronizeMoradoresQueue = async () => {
@@ -91,11 +92,17 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
     }
   };
 
+
   useEffect(() => {
-    fetchMoradoresRealm();
-    fetchMoradoresAPI();
-    sincronizeMoradoresQueue();
+    const sincronizarTudo = async () => {
+      setLoadingMoradores(true);
+        await sincronizeMoradoresQueue();
+        await fetchMoradoresAPI();
+        fetchMoradoresRealm();
+      setLoadingMoradores(false);
+  };
+  sincronizarTudo();
   }, [foccus]);
 
-  return { moradores };
+  return { moradores, loadingMoradores };
 };

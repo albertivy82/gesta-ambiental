@@ -26,30 +26,111 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   },
 };
 
+// 🔹 rótulos dos campos
+export const FIELD_LABEL: Partial<Record<keyof MoradorInput, string>> = {
+  perfil: 'Perfil do morador',
+  dataNascimento: 'Idade do morador',
+  sexo: 'Sexo do morador',
+  escolaridade: 'Escolaridade do morador',
+  estadoCivil: 'Estado civil do morador',
+  ondeEstuda: 'Situação de estudo',
+  trabalho: 'Situação de trabalho',
+  religiao: 'Religião do morador',
+  doencas: 'Doenças / condições de saúde',
+};
+
+// 🔹 validador centralizado
+export const validateMorador = (data: MoradorInput) => {
+  const errors: { field: keyof MoradorInput; message: string }[] = [];
+
+  // perfil obrigatório
+  if (!data.perfil) {
+    errors.push({
+      field: 'perfil',
+      message: `Selecione ${FIELD_LABEL.perfil}.`,
+    });
+  }
+
+  // idade (dataNascimento = idade em anos)
+  if (
+    data.dataNascimento === undefined ||
+    data.dataNascimento === null ||
+    Number.isNaN(data.dataNascimento) ||
+    data.dataNascimento <= 0 ||
+    data.dataNascimento > 120
+  ) {
+    errors.push({
+      field: 'dataNascimento',
+      message: `Informe ${FIELD_LABEL.dataNascimento} entre 1 e 120 anos.`,
+    });
+  }
+
+  // sexo, estado civil, escolaridade, religião
+  ([
+    'sexo',
+    'estadoCivil',
+    'escolaridade',
+    'religiao',
+  ] as (keyof MoradorInput)[]).forEach((f) => {
+    const v = data[f] as any;
+    if (v === null || v === undefined || (typeof v === 'string' && v.trim() === '')) {
+      errors.push({
+        field: f,
+        message: `Preencha ${FIELD_LABEL[f]}.`,
+      });
+    }
+  });
+
+  // estudo: precisa ter sido respondido (Sim com detalhe ou Não)
+  if (!data.ondeEstuda || data.ondeEstuda.trim().length === 0) {
+    errors.push({
+      field: 'ondeEstuda',
+      message: `Informe ${FIELD_LABEL.ondeEstuda} (se estuda ou não).`,
+    });
+  }
+
+  // trabalho: mesma lógica
+  if (!data.trabalho || data.trabalho.trim().length === 0) {
+    errors.push({
+      field: 'trabalho',
+      message: `Informe ${FIELD_LABEL.trabalho} (se trabalha ou não).`,
+    });
+  }
+
+  // doenças: exige alguma resposta (inclusive se a opção for "Nenhuma")
+  if (!data.doencas || data.doencas.trim().length === 0) {
+    errors.push({
+      field: 'doencas',
+      message: `Informe ${FIELD_LABEL.doencas} (marque ao menos uma opção).`,
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
 export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorType)  => {
   const [novoMorador, setNovaMorador] = useState<MoradorInput>(DEFAULT_MORADOR_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
  
   
 
+  // 🔹 desabilita/bloqueia botão com base no validador
   useEffect(() => {
-   
-    if (
-      novoMorador.perfil !== null &&
-      novoMorador.dataNascimento >= 0 &&
-      novoMorador.dataNascimento <120 &&
-      novoMorador.sexo !== null &&
-      novoMorador.escolaridade !== '' &&
-      novoMorador.estadoCivil !== null &&
-      novoMorador.trabalho != '' &&
-      novoMorador.religiao !== '' &&
-      novoMorador.doencas !== ''
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
-    console.log(novoMorador)
+    const { isValid } = validateMorador(novoMorador);
+    setDisabled(!isValid);
+    console.log(novoMorador);
   }, [novoMorador]);
 
   
@@ -265,6 +346,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
     enviarRegistro,
     handleNumberChange,
     handleSetNumber,
+    validateMorador,
     disabled,
 };
   

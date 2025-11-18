@@ -1,7 +1,7 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
@@ -50,10 +50,12 @@ export const NovaBenfeitoria=()=>{
            handleOnChangeAreaBenfeitoria,
            handleNumberChange,      
            handleOnChangeInput,     
+           validateBenfeitoria,
            disabled,
            } = UseNovaBenfeitoria(imovel, benfeitoria);
 
     const [referenciaDaPrincipal, setReferenciaDaPrincipal] = useState<string[]>([]);
+    const [showErrors, setShowErrors] = useState(false);
     const [loading, setLoading] = useState(false);    
     const [alagamento, setAlagamento] = useState<string>('');     
     const [ocorrencia, SetOcorrencia] = useState<string>('');
@@ -148,9 +150,26 @@ export const NovaBenfeitoria=()=>{
 
       
     const handleEnviar = async () => {
-      setLoading(true);
+      
+      if (loading) return;
+                
+          const result = validateBenfeitoria(novaBenfeitoria);
+          if (!result.isValid) {
+            setShowErrors(true);
+        
+            Alert.alert(
+              'Campos Obrigatórios',
+              [
+                'Por favor, corrija os campos abaixo:',
+                '',
+                ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+              ].join('\n')
+            );
+            return;
+          }
     
       try {
+        setLoading(true);
         const benfeitoriaSalva = await enviarRegistro(); 
             if (benfeitoriaSalva){
               detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
@@ -158,12 +177,11 @@ export const NovaBenfeitoria=()=>{
               Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
               navigation.goBack();
             }
-      } catch (error) {
-        console.error("Erro no envio:", error);
-        Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-      } finally {
-        setLoading(false);
-      }
+          } catch (e) {
+            Alert.alert('Erro', 'Não foi possível realizar a operação.');
+          } finally {
+            setLoading(false); // 👈 desliga
+          }
     };
 
     useEffect(() => {
@@ -225,6 +243,7 @@ export const NovaBenfeitoria=()=>{
                <CheckboxSelector
                 options={vizinhoOptions}
                 selectedValues={referenciaDaPrincipal}
+                exclusiveOptions={['Não declarado','Não possui']}
                 label="Localização em relação à edificação principal:"
                 onSave={(selectedValues) => {
                   setReferenciaDaPrincipal(selectedValues);
@@ -521,15 +540,17 @@ export const NovaBenfeitoria=()=>{
                   )}
             
            
-
-              
-            <View style={{ marginTop: 40 }}>
-              {loading ? (
-                <ActivityIndicator size="large" color="#ff4500" /> 
-              ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={loading || disabled} />
-              )}
-            </View>
+              <FormErrors
+                visible={showErrors && disabled}
+                errors={validateBenfeitoria(novaBenfeitoria).errors}
+              />
+                               
+              <Button
+              title={loading ? "Enviando..." : "Enviar"}
+              onPress={handleEnviar}
+              color={"#ff4500"}
+              disabled={loading}   // 👈 trava só enquanto envia
+              />
     
         </BenfeitoriaContainer>
     </ScrollView>

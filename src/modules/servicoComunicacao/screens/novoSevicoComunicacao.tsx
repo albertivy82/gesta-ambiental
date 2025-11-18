@@ -9,6 +9,7 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 import { useNovoServicoComunicacao } from "../hooks/useInputServCom";
 import { ServicoComunicacaoDetailContainer } from "../styles/servicoComunicacao.style";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 export interface NovoServicoParams {
   benfeitoria: BenfeitoriaType;
@@ -24,6 +25,7 @@ export const NovoServicoComunicacao = () => {
     const { params } = useRoute<RouteProp<Record<string, NovoServicoParams>, string>>();
     const benfeitoria = params.benfeitoria;
     const servicosComunicacao = params.servicosComunicacao;
+    const [showErrors, setShowErrors] = useState(false);
     const [loading, setLoading] = useState(false); 
   const [serviCom, setServCom] = useState<string>('');     
   const [outroServCom, SetOutroServCom] = useState<string>('');
@@ -33,6 +35,7 @@ export const NovoServicoComunicacao = () => {
     handleEnumChange,
     handleOnChangeInput,
     handleArrayFieldChange,
+    validateServicosComunicacao,
     disabled
   } = useNovoServicoComunicacao(benfeitoria, servicosComunicacao);
  const servicosOptions = Object.values([
@@ -71,8 +74,25 @@ export const NovoServicoComunicacao = () => {
    const val1 = servicosComunicacao?.tipoServicoComunicacao? servicosComunicacao.tipoServicoComunicacao: '';
 
   const handleEnviar = async () => {
-    setLoading(true);
-    try {
+    if (loading) return;
+                
+    const result = validateServicosComunicacao(novoServicoComunicacao);
+    if (!result.isValid) {
+      setShowErrors(true);
+  
+      Alert.alert(
+        'Campos Obrigatórios',
+        [
+          'Por favor, corrija os campos abaixo:',
+          '',
+          ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+        ].join('\n')
+      );
+      return;
+    }
+
+try {
+  setLoading(true);
       const servicoComunicacaoSalvo = await enviarRegistro(); 
       if (servicoComunicacaoSalvo) {
         detalharServicoComunicacao(navigation.navigate, benfeitoria);
@@ -80,11 +100,10 @@ export const NovoServicoComunicacao = () => {
         Alert.alert("Erro", "Não foi possível salvar serviço de comunicação. Tente novamente.");
         navigation.goBack();
       }
-    } catch (error) {
-      console.error("Erro no envio:", error);
-      Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+    } catch (e) {
+      Alert.alert('Erro', 'Não foi possível realizar a operação.');
     } finally {
-      setLoading(false);
+      setLoading(false); // 👈 desliga
     }
   };
 
@@ -130,13 +149,18 @@ export const NovoServicoComunicacao = () => {
 
        
 
-        <View style={{ marginTop: 40 }}>
-          {loading ? (
-            <ActivityIndicator size="large" color="#ff4500" /> 
-          ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
-          )}
-        </View>
+       <FormErrors
+        visible={showErrors && disabled}
+        errors={validateServicosComunicacao(novoServicoComunicacao).errors}
+      />
+
+       <Button
+        title={loading ? "Enviando..." : "Enviar"}
+        onPress={handleEnviar}
+        color={"#ff4500"}
+        disabled={loading}   // 👈 trava só enquanto envia
+        />
+
 
       </ServicoComunicacaoDetailContainer>
     </ScrollView>

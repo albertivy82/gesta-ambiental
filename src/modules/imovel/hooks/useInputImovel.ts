@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
@@ -6,9 +5,9 @@ import { salvarImovel, salvarImovelQueue } from "../../../realm/services/imovelS
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { formatDateForApi } from "../../../shared/functions/data";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { validateImovel } from "../components/validateImovel";
 
 

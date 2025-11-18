@@ -93,9 +93,9 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
     useEffect(() => {
       const sincronizarTudo = async () => {
         setLoadingEscolas(true);
-        await sinconizeQueue();
-        await fetchPostosFromAPI();
-        fetchPostosFromLocalDb();
+            await sinconizeQueue();
+            await fetchPostosFromAPI();
+            fetchPostosFromLocalDb();
         setLoadingEscolas(false);
       };
       sincronizarTudo();

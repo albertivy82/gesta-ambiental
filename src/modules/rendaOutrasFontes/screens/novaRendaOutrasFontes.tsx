@@ -10,6 +10,7 @@ import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesTy
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
 import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
 import Text from "../../../shared/components/text/Text";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 export interface NovoCreditoParams {
   benfeitoria: BenfeitoriaType;
@@ -26,6 +27,7 @@ export const NovaRendaOutrasFontes = () => {
   const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
   const benfeitoria = params.benfeitoria;
   const renda = params.renda;
+  const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const [fonteRenda, setFonteRenda] = useState<string>('');     
   const [outraFonte, SetOutraFonte] = useState<string>('');
@@ -35,6 +37,7 @@ export const NovaRendaOutrasFontes = () => {
     handleArrayFieldChange,
     handleNumberChange,
     handleOnChangeRendimentoMensal,
+    validateRendaOutrasFontes, 
     disabled
   } = useNovaRendaOutrasFontes(benfeitoria, renda);
   
@@ -51,8 +54,26 @@ export const NovaRendaOutrasFontes = () => {
   
     
   const handleEnviar = async () => {
-    setLoading(true);
-    try {
+    if (loading) return;
+                
+    const result = validateRendaOutrasFontes(novaRendaOutrasFontes);
+    if (!result.isValid) {
+      setShowErrors(true);
+  
+      Alert.alert(
+        'Campos Obrigatórios',
+        [
+          'Por favor, corrija os campos abaixo:',
+          '',
+          ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+        ].join('\n')
+      );
+      return;
+    }
+
+  try {
+  setLoading(true);
+   
       const rendaSalva = await enviarRegistro(); 
       if (rendaSalva) {
         detalharRenda(navigation.navigate, benfeitoria);
@@ -140,13 +161,18 @@ export const NovaRendaOutrasFontes = () => {
 
       
 
-        <View style={{ marginTop: 40 }}>
-          {loading ? (
-            <ActivityIndicator size="large" color="#ff4500" /> 
-          ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
-          )}
-        </View>
+     <FormErrors
+        visible={showErrors && disabled}
+        errors={validateRendaOutrasFontes(novaRendaOutrasFontes).errors}
+      />
+
+      <Button
+        title={loading ? "Enviando..." : "Enviar"}
+        onPress={handleEnviar}
+        color={"#ff4500"}
+        disabled={loading}   // 👈 trava só enquanto envia
+       />
+
 
       </RendaOutrasFontesDetailContainer>
     </ScrollView>

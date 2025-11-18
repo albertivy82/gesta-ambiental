@@ -17,6 +17,7 @@ import { MoradorDetailContainer } from "../styles/morador.style";
 import { estadoCivilOptions } from "../ui-components/opcoesMorador";
 import { useBuscaEntrevistado } from "../hooks/useBuscaEntrevistado";
 import { useBuscaMorador } from "../hooks/useBuscaMorador";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoMoradorParams {
@@ -34,6 +35,7 @@ export const NovoMorador = ()=>{
    const benfeitoria = params.benfeitoria ?? params.morador?.benfeitoria;
    const morador = params.morador;
    const [loading, setLoading] = useState(false); 
+   const [showErrors, setShowErrors] = useState(false);
    const [validator, setValidator] = useState(false); 
    const [estuda, setEstuda] = useState<string>('');     
    const [ondeEstuda, SetOndeEstuda] = useState<string>('');
@@ -46,6 +48,7 @@ export const NovoMorador = ()=>{
             handleArrayFieldChange,
             enviarRegistro,
             handleSetNumber,
+            validateMorador,
             disabled
           } = useNovoMorador(benfeitoria, morador);
  const {entrevistado} = useBuscaEntrevistado(benfeitoria, morador);
@@ -97,9 +100,25 @@ export const NovoMorador = ()=>{
   const molestiasOptions =  Object.values(Molestias);
     
     const handleEnviar = async () => {
-         setLoading(true);
-       
-         try {
+      if (loading) return;
+                
+      const result = validateMorador(novoMorador);
+      if (!result.isValid) {
+        setShowErrors(true);
+    
+        Alert.alert(
+          'Campos Obrigatórios',
+          [
+            'Por favor, corrija os campos abaixo:',
+            '',
+            ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+          ].join('\n')
+        );
+        return;
+      }
+
+    try {
+    setLoading(true);
            const moradorSalvo = await enviarRegistro(); 
                if (moradorSalvo){
                  detalharMorador(navigation.navigate, moradorSalvo);
@@ -107,12 +126,11 @@ export const NovoMorador = ()=>{
                  Alert.alert("Erro", "Não foi possível salvar a morador. Tente novomente.");
                  navigation.goBack();
                }
-         } catch (error) {
-           console.error("Erro no envio:", error);
-           Alert.alert("Erro ao enviar", "Tente novomente mais tarde.");
-         } finally {
-           setLoading(false);
-         }
+              } catch (e) {
+                Alert.alert('Erro', 'Não foi possível realizar a operação.');
+              } finally {
+                setLoading(false); // 👈 desliga
+              }
        };
 
 
@@ -300,14 +318,18 @@ export const NovoMorador = ()=>{
                 />
 
              
-          
-             <View style={{ marginTop: 40 }}>
-              {loading ? (
-                <ActivityIndicator size="large" color="#ff4500" /> 
-              ) : (
-                <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
-              )}
-            </View>
+            <FormErrors
+                visible={showErrors && disabled}
+                errors={validateMorador(novoMorador).errors}
+              />
+
+
+           <Button
+              title={loading ? "Enviando..." : "Enviar"}
+              onPress={handleEnviar}
+              color={"#ff4500"}
+              disabled={loading}   // 👈 trava só enquanto envia
+              />
       
 
         </MoradorDetailContainer>

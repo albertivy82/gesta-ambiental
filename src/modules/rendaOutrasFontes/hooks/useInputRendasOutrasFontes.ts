@@ -19,25 +19,78 @@ benfeitoria: {
   },
 };
 
+export const FIELD_LABEL: Partial<Record<keyof RendaOutrasFontesInput, string>> = {
+  fonte: 'Fonte de renda',
+  beneficiarios: 'Quantidade de beneficiários',
+  rendaMesTotal: 'Total mensal dessa renda',
+};
+
+export const validateRendaOutrasFontes = (data: RendaOutrasFontesInput) => {
+  const errors: { field: keyof RendaOutrasFontesInput; message: string }[] = [];
+
+  // fonte obrigatória
+  if (data.fonte === null || String(data.fonte).trim().length === 0) {
+    errors.push({
+      field: 'fonte',
+      message: `Selecione ${FIELD_LABEL.fonte}.`,
+    });
+  }
+
+  // beneficiários > 0
+  if (
+    data.beneficiarios === undefined ||
+    data.beneficiarios === null ||
+    Number.isNaN(data.beneficiarios) ||
+    data.beneficiarios <= 0
+  ) {
+    errors.push({
+      field: 'beneficiarios',
+      message: `Informe ${FIELD_LABEL.beneficiarios} (maior que 0).`,
+    });
+  }
+
+  // rendaMesTotal entre 0 e 1.000.000
+  if (
+    data.rendaMesTotal === undefined ||
+    data.rendaMesTotal === null ||
+    Number.isNaN(data.rendaMesTotal) ||
+    data.rendaMesTotal <= 0 ||
+    data.rendaMesTotal > 1_000_000
+  ) {
+    errors.push({
+      field: 'rendaMesTotal',
+      message: `Informe ${FIELD_LABEL.rendaMesTotal} maior que 0 e até 1.000.000.`,
+    });
+  }
+
+  const missingFieldLabels = Array.from(
+    new Set(
+      errors
+        .map((e) => FIELD_LABEL[e.field])
+        .filter(Boolean)
+    )
+  );
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    missingFieldLabels,
+  };
+};
+
+
+
+
 
 export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutrasFontes?: RendaOutrasFontesType) => {
   const [novaRendaOutrasFontes, setNovaRendaOutrasFontes] = useState<RendaOutrasFontesInput>(DEFAULT_RENDA_OUTRAS_FONTES_INPUT);
   const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log(novaRendaOutrasFontes);
-    if (
-      novaRendaOutrasFontes.fonte !== null &&
-      novaRendaOutrasFontes.beneficiarios > 0 &&
-      novaRendaOutrasFontes.rendaMesTotal >0 &&
-      novaRendaOutrasFontes.rendaMesTotal <=1000000 
-
-    ) {
-      setDisabled(false);
-    }else{
-      setDisabled(true);
-    }
+    const { isValid } = validateRendaOutrasFontes(novaRendaOutrasFontes);
+    setDisabled(!isValid);
   }, [novaRendaOutrasFontes]);
+
 
   const objetoFila = () => {
     const rendaOutrasFontesData: RendaOutrasFontesInput = {
@@ -230,6 +283,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
     handleArrayFieldChange,
     handleOnChangeRendimentoMensal,
     handleNumberChange,
+    validateRendaOutrasFontes, 
     disabled,
   };
 };

@@ -8,6 +8,7 @@ import { useNovoCredito } from "../hooks/useInputCredito";
 import { CreditoDetailContainer } from "../styles/credito.style";
 import { CreditoType } from "../../../shared/types/CreditoType";
 import Text from "../../../shared/components/text/Text";
+import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoCreditoParams {
@@ -25,6 +26,7 @@ export const NovoCredito = () => {
  const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
    const benfeitoria = params.benfeitoria;
+   const [showErrors, setShowErrors] = useState(false);
    const credito = params.credito;
    const [loading, setLoading] = useState(false); 
    const {  
@@ -32,35 +34,51 @@ export const NovoCredito = () => {
     handleOnChangeRendimentoMensal,
     handleOnChangeInput,
     enviarRegistro,
+    validateCredito,
     disabled
   } = useNovoCredito(params.benfeitoria, credito );
 
  
 
   const handleEnviar = async () => {
-           setLoading(true);
-         
-           try {
-             const creditoSalva = await enviarRegistro(); 
-             console.log(creditoSalva);
-                 if (creditoSalva){
-                  detalharCredito(navigation.navigate, benfeitoria);
-                 } else {
-                   Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
-                   navigation.goBack();
-                 }
-           } catch (error) {
-             console.error("Erro no envio:", error);
-             Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
-           } finally {
-             setLoading(false);
-           }
-         };
-
+    if (loading) return;
+  
+    const result = validateCredito(novoCredito);
+    if (!result.isValid) {
+      setShowErrors(true);
+  
+      Alert.alert(
+        'Campos Obrigatórios',
+        [
+          'Por favor, corrija os campos abaixo:',
+          '',
+          ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+        ].join('\n')
+      );
+      return;
+    }
+  
+    setLoading(true);
+    try {
+      const creditoSalva = await enviarRegistro(); 
+      if (creditoSalva){
+        detalharCredito(navigation.navigate, benfeitoria);
+      } else {
+        Alert.alert("Erro", "Não foi possível salvar o crédito. Tente novamente.");
+        navigation.goBack();
+      }
+    } catch (error) {
+      console.error("Erro no envio:", error);
+      Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
       useEffect(() => {
         if (!credito) return;
          handleOnChangeInput(credito.nome, 'nome');
-      }, [credito]);
+      }, [credito]); 
                       
     const valorSalvo = credito?.valor? credito.valor  : '';
 
@@ -91,13 +109,18 @@ export const NovoCredito = () => {
               title="Valor"
             />
 
-        <View style={{ marginTop: 40 }}>
-          {loading ? (
-            <ActivityIndicator size="large" color="#ff4500" /> 
-          ) : (
-            <Button title="Enviar" onPress={handleEnviar} color="#ff4500" disabled={disabled} />
-          )}
-        </View>
+        <FormErrors
+          visible={showErrors && disabled}
+          errors={validateCredito(novoCredito).errors}
+        />
+
+         <Button
+              title={loading ? "Enviando..." : "Enviar"}
+              onPress={handleEnviar}
+              color={"#ff4500"}
+              disabled={loading}   // 👈 trava só enquanto envia
+              />
+
 
       </CreditoDetailContainer>
     </ScrollView>
