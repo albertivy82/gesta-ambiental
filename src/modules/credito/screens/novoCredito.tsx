@@ -92,7 +92,7 @@ export const NovoCredito = () => {
           onChange={(event) => handleOnChangeInput(event, 'nome')}
           placeholder="..."
           margin="15px 10px 30px 5px"
-          title="Informe qual é a linha crédito acessada pelos moradores da casa:"
+          title="Informe qual linha de crédito é acessada pelos moradores da residência:"
         />
         {valorSalvo && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>

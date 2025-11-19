@@ -103,7 +103,7 @@ export const NovaRendaOutrasFontes = () => {
                 </Text>
         )}
       <RenderPicker
-       label="Selecione uma fonte de renda"
+       label="Selecione uma fonte de renda (além da atividade produtiva principal):"
        selectedValue={fonteRenda}
        onValueChange={(value) => {
        setFonteRenda(value ?? 'OUTROS'); 
@@ -121,7 +121,7 @@ export const NovaRendaOutrasFontes = () => {
                         onChangeText={SetOutraFonte}
                         placeholder="Separe por vírgulas"
                         margin="15px 10px 30px 5px"
-                        title="Informe qual ou quais?"
+                        title="Informe qual(is):"
                     />
                 </View>
        )}

@@ -89,7 +89,7 @@ const atividadeOptions =  Object.values(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
         <AtividadeDetailContainer>
             <RenderPicker
-               label="A qual ramo pertence a atividade?"
+               label="A qual ramo pertence a atividade realizada?"
                selectedValue={novaAtividade.atividade}
                onValueChange={(value) => handleEnumChange('atividade', value)}
                options={atividadeOptions}

@@ -70,7 +70,7 @@ useEffect(() => {
              if (participacaoInstituicaoSalva){
                   detalharParticipacaoInstituicao(navigation.navigate, morador);
                 } else {
-                 Alert.alert("Erro", "Não foi possível salvar a participacaoInstituicao. Tente novamente.");
+                  Alert.alert("Erro", "Não foi possível salvar a participacaoInstituicao. Tente novamente.");
                  navigation.goBack();
                }
               } catch (e) {

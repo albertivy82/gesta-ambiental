@@ -88,7 +88,7 @@ export const NovoPosto = ()=>{
                        if (postoSalvo){
                          detalharPosto(navigation.navigate, localidadeId!);
                        } else {
-                         Alert.alert("Erro", "Não foi possível salvar a posto de saúde. Tente novamente.");
+                         Alert.alert("Erro", "Não foi possível salvar o posto de saúde. Tente novamente.");
                          navigation.goBack();
                        }
                   } catch (e) {

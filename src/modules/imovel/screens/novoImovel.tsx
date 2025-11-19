@@ -192,7 +192,7 @@ export const NovoImovel = () => {
               value={novoImovel.numero} 
               maxLength={45}
               onChange={(event)=> handleOnChangeInput(event, 'numero')}
-              placeholder="Imforme o número do Imóvel"
+              placeholder="Informe o número do Imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Número:"
@@ -203,7 +203,7 @@ export const NovoImovel = () => {
               value={novoImovel.bairro} 
               maxLength={255}
               onChange={(event)=> handleOnChangeInput(event, 'bairro')}
-              placeholder="Informe o bairro imóvel"
+              placeholder="Informe o bairro do imóvel"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Bairro:"
@@ -225,7 +225,7 @@ export const NovoImovel = () => {
 
            {valorSalvoLatitude && valorSalvoLongitude && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                 Latitude informada anteiormente:  {valorSalvoLatitude}{"\n"}
+                 Latitude informada anteriormente:  {valorSalvoLatitude}{"\n"}
                  Longitude informada anteriormente:  {valorSalvoLongitude}
                 </Text>
               )}
@@ -262,7 +262,7 @@ export const NovoImovel = () => {
 
                 {valorSalvoVizinhosConfinantes  && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                  Informada dada anteriormente: {valorSalvoVizinhosConfinantes }
+                  Informação dada anteriormente: {valorSalvoVizinhosConfinantes }
                 </Text>
                  )}
 
@@ -378,7 +378,7 @@ export const NovoImovel = () => {
 
                             
               <RenderPicker
-              label="Ilumincao pública?"
+              label="Iluminação pública?"
               selectedValue={novoImovel.iluminacaoPublica}
               onValueChange={(value) => handleEnumChange('iluminacaoPublica', value)}
               options={simNaoOptions}
@@ -454,7 +454,7 @@ export const NovoImovel = () => {
               value={novoImovel.programaInfraSaneamento} 
               maxLength={450}
               onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
-              placeholder="Conhece algum destinado para a área?"
+              placeholder="Conhece algum programa destinado para a área?"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Programas de Infraestrutura e Saneamento:"
