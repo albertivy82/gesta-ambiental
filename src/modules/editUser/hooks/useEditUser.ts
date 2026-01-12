@@ -32,7 +32,7 @@ export const useEditUser = () =>{
     }, [senhaNova]);
     
         const editUser = async () => {
-           
+            console.log("teste");
             const userString = await getUser();
             
             if (userString) {
@@ -40,6 +40,7 @@ export const useEditUser = () =>{
                 const id = user.id;
 
            const resultBack = await connectionAPIPut(`http://177.74.56.24/usuario/alterar-senha/${id}`, senhaNova);
+           console.log(resultBack);
             }
         };
     

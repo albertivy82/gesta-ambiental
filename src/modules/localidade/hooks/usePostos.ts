@@ -16,13 +16,13 @@ export const convertToPostoInput = (posto: any) => {
       },
     };
   
-    console.log('postoInput', postoInput);
+    console.log('postoInput na fila', postoInput);
     return postoInput;
 };
 
 export const usePostos = (localidadeId: number, foccus:boolean) => {
     const [contagemPostos, setContagemPostos] = useState<number>(0);
-    const [loadingEscolas, setLoadingEscolas] = useState<boolean>(true);
+    const [loadingPostos, setLoadingPostos] = useState<boolean>(true);
 
     const sinconizeQueue = async () => {
         const postosQueue = getPostosDessincronizados(localidadeId);
@@ -33,7 +33,7 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
                const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://177.74.56.24/posto', novoPostoInput);
+                            const response = await connectionAPIPost('http://177.74.56.24/posto-de-saude', novoPostoInput);
                             const postoAPI = response as PostoType;
                            
                             if (postoAPI.id) {
@@ -92,14 +92,14 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
 
     useEffect(() => {
       const sincronizarTudo = async () => {
-        setLoadingEscolas(true);
+        setLoadingPostos(true);
             await sinconizeQueue();
             await fetchPostosFromAPI();
             fetchPostosFromLocalDb();
-        setLoadingEscolas(false);
+        setLoadingPostos(false);
       };
       sincronizarTudo();
     }, [foccus]);
   
-    return { contagemPostos, loadingEscolas};
+    return { contagemPostos, loadingPostos};
 }

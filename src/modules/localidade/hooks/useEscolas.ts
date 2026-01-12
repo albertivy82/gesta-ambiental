@@ -23,7 +23,7 @@ export const convertToEscolaInput = (escola: any) => {
 
 export const useEscolas= (localidadeId:number, foccus:boolean)=>{
     const [contagemEscolas, setContagemescolas] = useState<number>(0);
-    const [loadingPostos, setLoadingPostos] = useState<boolean>(true);
+    const [loadingEscolas, setLoadingEscolas] = useState<boolean>(true);
 
     const sinconizeQueue = async () => {
         const escolasQueue = getEscolasDessincronizadas(localidadeId);
@@ -66,7 +66,7 @@ export const useEscolas= (localidadeId:number, foccus:boolean)=>{
         if (isConnected) {
           try {
               const escolasAPI = await connectionAPIGet<EscolaType[]>(`http://177.74.56.24/escola/localidade-escola/${localidadeId}`);
-              console.log(escolasAPI)
+              //console.log(escolasAPI)
               const EscData: EscolaType[] = escolasAPI.map(escola => ({
                 ...escola,
                 localidade: { id: escola.localidade.id }, // ajusta a estrutura
@@ -93,16 +93,16 @@ export const useEscolas= (localidadeId:number, foccus:boolean)=>{
       
           useEffect(() => {
             const sincronizarTudo = async () => {
-              setLoadingPostos(true);
+              setLoadingEscolas(true);
               await sinconizeQueue();
               await fetchEscolasromAPI();
               fetchEscolasFromLocalDb();
-              setLoadingPostos(false);
+              setLoadingEscolas(false);
             };
             sincronizarTudo();
           }, [foccus]);
         
-          return { contagemEscolas, loadingPostos};
+          return { contagemEscolas, loadingEscolas};
 
 }   
     

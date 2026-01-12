@@ -103,9 +103,9 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
   };
   
   const enviaPostNovo = async () =>{
-
+    console.log(localidadeId)
     novoPosto.localidade = {id:localidadeId};
-   
+    console.log( novoPosto.localidade)
     const isConnected = await testConnection();
         
       if(isConnected){

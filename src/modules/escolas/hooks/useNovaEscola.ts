@@ -52,14 +52,7 @@ export const validateEscola = (data: escolaInput) => {
     }
   });
 
-  // se você quiser garantir que veio uma localidade válida:
-  if (!data.localidade || (!data.localidade.id || data.localidade.id <= 0)) {
-    errors.push({
-      field: 'localidade',
-      message: 'Selecione/Informe a localidade.',
-    });
-  }
-
+ 
   const missingFieldLabels = Array.from(
     new Set(
       errors
@@ -107,9 +100,9 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
 
 
   const enviaEscolaNova = async () =>{
-
+    
     novaEscola.localidade = {id:localidadeId};
-           
+    
             const isConnected = await testConnection();
           
                   if(isConnected){

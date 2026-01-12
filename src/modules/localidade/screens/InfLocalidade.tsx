@@ -60,8 +60,8 @@ const InfLocalidade = () => {
       const { params } = useRoute<RouteProp<Record<string, LocalidadeParam>>>();
       const { localidade } = params;
       const foccus =useIsFocused();
-      const {contagemEscolas, loadingPostos} = useEscolas(localidade.id, foccus);
-      const {contagemPostos, loadingEscolas} = usePostos(localidade.id, foccus);     
+      const {contagemEscolas, loadingEscolas} = useEscolas(localidade.id, foccus);
+      const {contagemPostos, loadingPostos} = usePostos(localidade.id, foccus);     
       const {contagemEntrevistados, loadingEntrevistado} = useEntrevistados(localidade.id, foccus);
       
       const loading =
