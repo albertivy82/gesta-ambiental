@@ -39,7 +39,7 @@ export const useEditUser = () =>{
                 const user = JSON.parse(userString);
                 const id = user.id;
 
-           const resultBack = await connectionAPIPut(`http://177.74.56.24/usuario/alterar-senha/${id}`, senhaNova);
+           const resultBack = await connectionAPIPut(`http://192.168.100.28:8080/usuario/alterar-senha/${id}`, senhaNova);
            console.log(resultBack);
             }
         };

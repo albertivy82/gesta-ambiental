@@ -41,22 +41,22 @@ export const convertToImovelInput = (imovel: any): imovelInput => {
 
 
 export const useImovel = (idEntrevistado: number, foccus:boolean) => {
+   const [loadingImovel, setLoadingImovel] = useState<boolean>(true);
    const [imovelPresente, setImovelPresente] = useState<imovelBody>();
    
  const sinconizeImovelQueue = async () => {
 
+    if(idEntrevistado>0){
       const imovelQueue = getImoveisDessincronizados(idEntrevistado);
     
       if (imovelQueue) {
         
         const novoImovelInput = convertToImovelInput(imovelQueue);
-             
           const isConnected = await testConnection();
           if (isConnected) {
             try {
              
-              const response = await connectionAPIPost('http://177.74.56.24/imovel', novoImovelInput) as imovelBody;
-             
+              const response = await connectionAPIPost('http://192.168.100.28:8080/imovel', novoImovelInput) as imovelBody;
               const imovelAPI = response as imovelBody;
               
               if (imovelAPI.id) {
@@ -85,6 +85,7 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
           }
         
       }
+     }
     };
   
     const fetchImovelRealm = () => {
@@ -101,11 +102,9 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
       
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `http://177.74.56.24/imovel/imovel-entrevistado/${idEntrevistado}`
+          `http://192.168.100.28:8080/imovel/imovel-entrevistado/${idEntrevistado}`
         );
 
-       
-  
         if (response as imovelBody && response.id) {
           const imovelData: imovelBody = {
             ...response,
@@ -125,14 +124,19 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
     };
   
     useEffect(() => {
-      sinconizeImovelQueue(); 
-      fetchImovelAPI();  
-      fetchImovelRealm();          
+      const sincronizarTudo = async () => {
+      setLoadingImovel(true);
+      await sinconizeImovelQueue(); 
+      await fetchImovelAPI();  
+      fetchImovelRealm();  
+      setLoadingImovel(false);   
+      }
+      sincronizarTudo();     
     }, [foccus]);
 
  
     
 
-  return {imovelPresente};
+  return {imovelPresente, loadingImovel};
 };
   

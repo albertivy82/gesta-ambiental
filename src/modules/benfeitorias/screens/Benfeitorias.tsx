@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { getBenfeitorias } from '../../../realm/services/benfeitoriaService';
@@ -21,33 +21,28 @@ const Benfeitorias = ()=>{
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const route = useRoute<RouteProp<Record<string, benfeitoriasParam>, 'Imovel'>>();
   const flatListRef = useRef<FlatList>(null);
+   const foccus =useIsFocused();
   const [isLoading, setIsLoading] = useState(false);
   const { imovel } = route.params;
   const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>()
   
   
   
-  useEffect(()=>{
-    setIsLoading(true);
-    if(imovel){
-         const benfeitoriaRealm = getBenfeitorias(imovel.id);
-          setBenfeitoria(benfeitoriaRealm);
-       }
-       setIsLoading(false);
-  }, [imovel])
+useEffect(()=>{
+    fetchBenfeitorias();
+}, [foccus, imovel?.id])
 
-const fetchBenfeitorias = useCallback(async () => {
-      setIsLoading(true);
+const fetchBenfeitorias = () => {
+  setIsLoading(true);
       if (imovel.id) {
         const benfeitoriassRealm = getBenfeitorias(imovel.id);
         setBenfeitoria(benfeitoriassRealm);
       }
-      setIsLoading(false);
-    }, [imovel]);
+  setIsLoading(false);
+   
+  };
 
-useEffect(() => {
-  fetchBenfeitorias();
-}, [fetchBenfeitorias]);
+
 
    
 const handleScrollToEnd = () => {

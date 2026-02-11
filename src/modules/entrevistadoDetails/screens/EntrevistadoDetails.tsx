@@ -14,6 +14,7 @@ import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
 import { getImovel } from '../../../realm/services/imovelService';
 import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 // Para entidades MULTIPLAS (vegetacao, peixes, etc.)
@@ -51,9 +52,9 @@ const EntrevistadoDetails = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, EntrevistadoParam>>>();
   const foccus =useIsFocused();
-  const {imovelPresente} = useImovel(params.entrevistado.id, foccus);
+  const {imovelPresente, loadingImovel} = useImovel(params.entrevistado.id, foccus);
  
-      
+  const loading = loadingImovel;   
 
   useFocusEffect(
       useCallback(() => {
@@ -74,6 +75,32 @@ const EntrevistadoDetails = () => {
     }
   };
   
+  if (loading) {
+    return (
+      <EntrevistadoDetailContainer
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <ActivityIndicator
+          animating={true}
+          size={80}      
+          color="#ff4500"
+          style={{ marginTop: 20 }}
+        />
+  
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color="#000"
+          margin="20px 0 0 0"
+        >
+          Sincronizando dados...
+        </Text>
+      </EntrevistadoDetailContainer>
+    );
+  }
   return (
     
        <ScrollView style={{ flex: 1 }}>

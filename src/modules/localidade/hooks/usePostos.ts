@@ -33,7 +33,7 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
                const isConnected = await testConnection();
                     if (isConnected) {
                         try {
-                            const response = await connectionAPIPost('http://177.74.56.24/posto-de-saude', novoPostoInput);
+                            const response = await connectionAPIPost('http://192.168.100.28:8080/posto-de-saude', novoPostoInput);
                             const postoAPI = response as PostoType;
                            
                             if (postoAPI.id) {
@@ -63,7 +63,7 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
             const isConnected = await testConnection();
             if (isConnected) {
           try {
-              const postosAPI = await connectionAPIGet<PostoType[]>(`http://177.74.56.24/posto-de-saude/localidade-posto/${localidadeId}`);
+              const postosAPI = await connectionAPIGet<PostoType[]>(`http://192.168.100.28:8080/posto-de-saude/localidade-posto/${localidadeId}`);
               
               const postoData: PostoType[] = postosAPI.map(posto => ({
                 ...posto,

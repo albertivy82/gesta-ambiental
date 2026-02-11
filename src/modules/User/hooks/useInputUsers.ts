@@ -135,7 +135,7 @@ export const useInputUsers = () => {
     }
 
     const formattedUser = formatUserData(novoUsuario);
-    await connectionAPIPost("http://177.74.56.24/usuario", formattedUser);
+    await connectionAPIPost("http://192.168.100.28:8080/usuario", formattedUser);
     navigation.navigate("Users");
   };
 
@@ -146,7 +146,7 @@ export const useInputUsers = () => {
     }
 
     const formattedUser = formatUserData(novoUsuario);
-    await connectionAPIPut(`http://177.74.56.24/usuario/${id}`, formattedUser);
+    await connectionAPIPut(`http://192.168.100.28:8080/usuario/${id}`, formattedUser);
     navigation.navigate("Users");
   };
 

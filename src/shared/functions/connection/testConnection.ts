@@ -5,7 +5,7 @@ export const testConnection = async (timeout = 4000): Promise<boolean> => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
   
-      const response = await fetch("http://177.74.56.24/health", {
+      const response = await fetch("http://192.168.100.28:8080/health", {
         method: "GET",
         signal: controller.signal,
       });

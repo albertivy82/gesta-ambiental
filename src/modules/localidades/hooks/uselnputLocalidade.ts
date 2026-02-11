@@ -36,7 +36,7 @@ export const useEditUser = () =>{
 
         const editLocalidade = async () => {
            
-            const localidade = await connectionAPIPost('http://177.74.56.24/localidade', novaLocalidade) as LocalidadeType;
+            const localidade = await connectionAPIPost('http://192.168.100.28:8080/localidade', novaLocalidade) as LocalidadeType;
                 if (localidade && localidade.id) {
                    fetchLocalidadeAPI(localidade.id);
                 }
@@ -47,7 +47,7 @@ export const useEditUser = () =>{
         const fetchLocalidadeAPI = async(id:number) =>{
             
           try{
-            const response = await connectionAPIGet<LocalidadeType>(`http://177.74.56.24/localidade/${id}`);
+            const response = await connectionAPIGet<LocalidadeType>(`http://192.168.100.28:8080/localidade/${id}`);
               await salvarLocalidade(response);
           } catch (error) {
               //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
