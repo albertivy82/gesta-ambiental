@@ -1,6 +1,7 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { getBenfeitorias } from '../../../realm/services/benfeitoriaService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
@@ -10,7 +11,6 @@ import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { imovelBody } from '../../../shared/types/imovelType';
 import { BenfeitoriaContainer } from '../styles/benfeitoria.style';
 import RenderItem from '../ui-components/listaBenfeitorias';
-import { ActivityIndicator } from 'react-native-paper';
 
 export interface benfeitoriasParam {
    imovel: imovelBody; 
@@ -26,33 +26,35 @@ const Benfeitorias = ()=>{
   const { imovel } = route.params;
   const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>()
   
-  
-  
-useEffect(()=>{
-    fetchBenfeitorias();
-}, [foccus, imovel?.id])
+ 
 
-const fetchBenfeitorias = () => {
-  setIsLoading(true);
-      if (imovel.id) {
-        const benfeitoriassRealm = getBenfeitorias(imovel.id);
-        setBenfeitoria(benfeitoriassRealm);
-      }
-  setIsLoading(false);
-   
+useEffect(() => {
+    setIsLoading(true);
+  
+          if (imovel?.id) {
+            const benfeitoriassRealm = getBenfeitorias(imovel.id);
+            setBenfeitoria(benfeitoriassRealm);
+          }
+      setIsLoading(false);
+  }, [imovel?.id, foccus]);
+
+
+  const handleRefresh = () => {
+         setIsLoading(true);
+            if (imovel.id) {
+                const benfeitoriassRealm = getBenfeitorias(imovel.id);
+                  setBenfeitoria(benfeitoriassRealm);
+            }
+        setIsLoading(false);
+        handleScrollToEnd();
+   };
+
+  // Rola até o final da lista
+  const handleScrollToEnd = () => {
+    flatListRef.current?.scrollToEnd({ animated: true });
   };
 
 
-
-   
-const handleScrollToEnd = () => {
-  flatListRef.current?.scrollToEnd({ animated: true });
-};  
-
-const handleRefresh = () => {
-  fetchBenfeitorias();
-  handleScrollToEnd();
-};
  
 const handleNovaBenfeitoria = () => {
   navigation.navigate('NovaBenfeitoria', { imovel});

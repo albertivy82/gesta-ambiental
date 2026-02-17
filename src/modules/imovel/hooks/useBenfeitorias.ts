@@ -1,5 +1,5 @@
 import NetInfo from "@react-native-community/netinfo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setIdBenfeitoriaFromApiOnAguas } from "../../../realm/services/aguasService";
 import { setIdBenfeitoriaFromApiOnAtvProd } from "../../../realm/services/atividadeProdutivaService";
 import { apagarBenfeitiaQueue, getBenfeitoriaDessincronizadas, getBenfeitorias, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
@@ -46,8 +46,9 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
 
 
  export const useBenfeitorias = (imovelId:number, foccus:boolean)=>{
-
-    const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>([]);
+     const [loadingBenfeitoria, setLoadingBenfeitoria] = useState<boolean>(true);
+     const syncingRef = useRef(false);
+     const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>([]);
 
    const sinconizeBenfeitoriaQueue = async () => {
    
@@ -70,15 +71,21 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                            // console.log("benfeitpria. ponto de sisncronização 5")
                             const benfeitoriaAPI = response as BenfeitoriaType;
                            
-                                if(benfeitoriaAPI.id){
-                                    setIdBenfeitoriaFromApiOnMorador(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnCS(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
-                                    apagarBenfeitiaQueue(benfeitoria.idLocal!)
-                                    //console.log("benfeitpria. ponto de sisncronização 6", )
+                                if(benfeitoriaAPI.id && benfeitoria.idLocal){
+                                    const r1 = setIdBenfeitoriaFromApiOnMorador(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    const r2 = setIdBenfeitoriaFromApiOnAtvProd(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    const r3 = setIdBenfeitoriaFromApiOnCS(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    const r4 = setIdBenfeitoriaFromApiOnAguas(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    const r5 = setIdBenfeitoriaFromApiOnRendasOF(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    const r6 = setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
+                                    const results = [r1, r2, r3, r4, r5, r6];
+                                    const ok = !results.includes(false);
+                                    console.log("será que eu coloquei o ide em todas  as filhas de benfeitoris ",ok)
+                                     if(ok){
+                                         apagarBenfeitiaQueue(benfeitoria.idLocal!)
+                                        //console.log("benfeitpria. ponto de sisncronização 6", )  
+                                     }
+                                   
                                 }
                                 
                         } catch (error) {
@@ -102,17 +109,24 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
         };
 
     const fetchBefeitoriasAPI = async() =>{
+        
+
+    const isConnected = await testConnection();
+ 
+    if (isConnected) {
 
         try{
             const response = await connectionAPIGet<BenfeitoriaType[]>(`http://192.168.100.28:8080/benfeitoria/imovel-benfeitoria/${imovelId}`);
-                const bftData = response.map(bft=>({
-                    ...bft,
-                    sincronizado:true,
-                    idLocal:'',
-                    idFather:'',
+                
+            const bftData = (response ?? []).map((bft) => ({
+                ...bft,
+                sincronizado: true,
+                idLocal: "",
+                idFather: "",
+              }));
 
-                }))
-              //  console.log("benfeitpria. circuito da API")    
+              //  console.log("benfeitpria. circuito da API")  
+              //PONTO DE ATENÇÃO. se houver duplicadas o problema será aqui.  
                 if(bftData && Array.isArray(bftData) && bftData.length>0){
                       await salvarBenfeitorias(bftData);
                        setBenfeitoria((prevBenf) => [...prevBenf, ...bftData]);
@@ -122,13 +136,35 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
         } catch (error) {
                 //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
         }
+        } else {
+            console.log(`SYNC|bnfritoris|API_SKIP_OFFLINE imovel=${imovelId}`);
+        }
     };
 
-    useEffect(()=>{
-        fetchBenfeitoriasRealm();
-        fetchBefeitoriasAPI();
-        sinconizeBenfeitoriaQueue();
-    }, [foccus]);
+    
+    
+    useEffect(() => {
+        if (!foccus) return;
+        if (syncingRef.current) return;
+      
+        syncingRef.current = true;
+      
+        const run = async () => {
+          try {
+            setLoadingBenfeitoria(true);
+            await sinconizeBenfeitoriaQueue();
+            await fetchBefeitoriasAPI();
+            fetchBenfeitoriasRealm();
+          } finally {
+            setLoadingBenfeitoria(false);
+            syncingRef.current = false;
+          }
+        };
+      
+        run();
+      }, [foccus, imovelId]);
+      
+    
 
     return {benfeitoria};
 }

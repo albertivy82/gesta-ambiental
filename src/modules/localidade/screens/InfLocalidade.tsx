@@ -1,21 +1,20 @@
 import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback } from 'react';
-import {ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
 import { getEscolas } from '../../../realm/services/escolaService';
 import { getPostos } from '../../../realm/services/postoService';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
-import { theme } from '../../../shared/themes/theme';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
-import { useEntrevistados } from '../hooks/useEntrevistados';
 import { useEscolas } from '../hooks/useEscolas';
 import { usePostos } from '../hooks/usePostos';
 import { LocalidadeContainer } from '../styles/Localidade.style';
 import EditConfirmation from '../ui-components/UseEditLocalidade';
 import QuadroDeItens from '../ui-components/quadroDeItens';
-import { ActivityIndicator } from 'react-native-paper';
+import { useContagemEntrevistados } from '../hooks/useContagemEntrevistados';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
@@ -62,7 +61,7 @@ const InfLocalidade = () => {
       const foccus =useIsFocused();
       const {contagemEscolas, loadingEscolas} = useEscolas(localidade.id, foccus);
       const {contagemPostos, loadingPostos} = usePostos(localidade.id, foccus);     
-      const {contagemEntrevistados, loadingEntrevistado} = useEntrevistados(localidade.id, foccus);
+      const {contagemEntrevistados, loadingEntrevistado} = useContagemEntrevistados(localidade.id, foccus);
       
       const loading =
       loadingEntrevistado ||

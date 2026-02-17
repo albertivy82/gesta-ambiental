@@ -1,11 +1,10 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instituicaoConhecidaService";
 import { apagarMoradorQueue, getMoradores, getMoradoresDessincronizados, salvarMoradores } from "../../../realm/services/moradorService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
 import { MoradorType } from "../../../shared/types/MoradorType";
-import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instituicaoConhecidaService";
 
 export const convertToMoradorInput = (morador: any): MoradorInput => {
   console.log(morador.benfeitoria);
@@ -33,7 +32,6 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
   const sincronizeMoradoresQueue = async () => {
     if (benfeitoriaId > 0) {
       const queue = getMoradoresDessincronizados(benfeitoriaId);
-      console.log("1", queue)
       if (queue.length > 0) {
         for (const morador of queue) {
           const novoMoradorInput = convertToMoradorInput(morador);
@@ -42,14 +40,13 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
             const isConnected = await testConnection();
             if (isConnected) {
               try {
-                console.log("2", novoMoradorInput)
                 const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMoradorInput);
-                console.log("3", response)
+                
                 const moradorAPI = response as MoradorType;
-                console.log("4", moradorAPI)
+              
                 if (moradorAPI.id) {
-                  setIdMoradorFromApiOnInstituicao(moradorAPI.id, morador.idLocal!)
-                  apagarMoradorQueue(morador.idLocal!);
+                  const upadated = setIdMoradorFromApiOnInstituicao(moradorAPI.id, morador.idLocal!)
+                      if (upadated){apagarMoradorQueue(morador.idLocal!)};
                 }
               } catch (error) {
                 //console.error('Erro na sincronização de morador:', error);
@@ -69,27 +66,33 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
   };
 
   const fetchMoradoresAPI = async () => {
-    try {
-      const response = await connectionAPIGet<MoradorType[]>(
-        `http://192.168.100.28:8080/morador/benfeitoria-morador/${benfeitoriaId}`
-      );
 
-      const apiData = response.map((item) => ({
-        ...item,
-        sincronizado: true,
-        idLocal: '',
-        idFather: '',
-      }));
+    const isConnected = await testConnection();
+    
 
-      if (apiData.length > 0) {
-        await salvarMoradores(apiData);
-        setMoradores((prev) => [...prev, ...apiData]);
-      } else {
-        throw new Error('Dados de moradores inválidos');
+    if (isConnected) {
+        try {
+          const response = await connectionAPIGet<MoradorType[]>(
+            `http://192.168.100.28:8080/morador/benfeitoria-morador/${benfeitoriaId}`
+          );
+
+          const apiData = response.map((item) => ({
+            ...item,
+            sincronizado: true,
+            idLocal: '',
+            idFather: '',
+          }));
+
+          if (apiData.length > 0) {
+            await salvarMoradores(apiData);
+            setMoradores((prev) => [...prev, ...apiData]);
+          } else {
+            throw new Error('Dados de moradores inválidos');
+          }
+        } catch (error) {
+          //console.error('Erro ao recuperar moradores da API:', error);
+        }
       }
-    } catch (error) {
-      //console.error('Erro ao recuperar moradores da API:', error);
-    }
   };
 
 

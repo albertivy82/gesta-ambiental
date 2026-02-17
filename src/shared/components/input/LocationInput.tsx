@@ -1,74 +1,81 @@
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { theme } from '../../themes/theme';
 import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
-import Input from './input'; // Importe seu componente Input
-import { ActivityIndicator } from 'react-native-paper';
+import Input from './input';
 
 interface LocationInputProps {
   onLocationChange: (latitude: string, longitude: string) => void;
+  initialLatitude?: string;
+  initialLongitude?: string;
 }
 
-const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
+const INDISPONIVEL = 'Indisponível';
+
+const LocationInput: React.FC<LocationInputProps> = ({
+  onLocationChange,
+  initialLatitude,
+  initialLongitude,
+}) => {
+  const [latitude, setLatitude] = useState(initialLatitude ?? INDISPONIVEL);
+  const [longitude, setLongitude] = useState(initialLongitude ?? INDISPONIVEL);
   const [loading, setLoading] = useState(false);
 
-  // Atualiza os valores nos inputs e no formulário principal
   const updateLocation = (lat: string, lon: string) => {
     setLatitude(lat);
     setLongitude(lon);
     onLocationChange(lat, lon);
   };
 
-  // Obtém a localização atual
   const getLocation = () => {
     setLoading(true);
     Geolocation.getCurrentPosition(
       (position) => {
         setLoading(false);
-        const lat = position.coords.latitude.toString();
-        const lon = position.coords.longitude.toString();
+        const lat = String(position.coords.latitude);
+        const lon = String(position.coords.longitude);
         updateLocation(lat, lon);
       },
       (error) => {
         setLoading(false);
-        Alert.alert('Erro ao obter localização', error.message);
+        // mantém "Indisponível" (não altera nada)
+        Alert.alert('Não foi possível obter a localização', error.message);
       },
       { enableHighAccuracy: true, timeout: 60000, maximumAge: 3600000, distanceFilter: 0 }
     );
   };
 
   useEffect(() => {
-    Geolocation.requestAuthorization();
+    Geolocation.requestAuthorization?.();
+    // opcional: tenta 1 vez automaticamente ao abrir
+    // getLocation();
+    // (se você não quiser tentativa automática, deixe comentado)
   }, []);
 
   return (
     <View style={{ marginBottom: 20 }}>
-      {/* Input para Latitude */}
       <Input
         value={latitude}
-        onChange={(event) => updateLocation(event.nativeEvent.text, longitude)}
         placeholder="Latitude"
         margin="15px 10px 30px 5px"
         title="Latitude"
-        editable={true} // Permitir edição manual
+        editable={false}          // 🔒 travado
+        selectTextOnFocus={false}
       />
-      
-      {/* Input para Longitude */}
+
       <Input
         value={longitude}
-        onChange={(event) => updateLocation(latitude, event.nativeEvent.text)}
         placeholder="Longitude"
         margin="15px 10px 30px 5px"
         title="Longitude"
-        editable={true} // Permitir edição manual
+        editable={false}          // 🔒 travado
+        selectTextOnFocus={false}
       />
 
-      {/* Botão para atualizar localização */}
       <TouchableOpacity
         onPress={getLocation}
         style={{
@@ -77,6 +84,7 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
           borderRadius: 2,
           alignItems: 'center',
         }}
+        disabled={loading}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {loading ? (
@@ -84,6 +92,7 @@ const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
           ) : (
             <Icon size={30} name="location2" color={theme.colors.mainTheme.black} />
           )}
+
           <Text
             margin="0px 0px 0px 0px"
             color={theme.colors.mainTheme.black}

@@ -127,6 +127,11 @@ export const setIdBenfeitoriaFromApiOnCS = (idBenfeitoriaApi: number, benfeitori
     const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
     const servicosQueue = realmInstance.objects('ServicosComunicacao').filtered(query);
 
+    if (servicosQueue.length === 0) {
+      // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+      return false;
+    }
+
     if (servicosQueue.length > 0) {
       realmInstance.write(() => {
         servicosQueue.forEach(servicoOrfan => {
@@ -135,8 +140,10 @@ export const setIdBenfeitoriaFromApiOnCS = (idBenfeitoriaApi: number, benfeitori
         });
       });
     }
+    return true;
   } catch (error) {
     console.error('Erro ao atualizar serviços de comunicação:', error);
+    return false;
   }
 };
 

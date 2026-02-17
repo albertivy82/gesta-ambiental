@@ -124,6 +124,11 @@ export const setIdBenfeitoriaFromApiOnAguas = (idBenfeitoriaApi: number, benfeit
     const query = `idFather == "${benfeitoriaIdLocal}" AND (sincronizado == false and sincronizado == false)`;
     const aguaQueue = realmInstance.objects('Agua').filtered(query);
 
+    if (aguaQueue.length === 0) {
+      // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+      return false;
+    }
+
     if (aguaQueue.length > 0) {
       realmInstance.write(() => {
         aguaQueue.forEach(aguaOrfan => {
@@ -132,8 +137,10 @@ export const setIdBenfeitoriaFromApiOnAguas = (idBenfeitoriaApi: number, benfeit
         });
       });
     }
+    return true;
   } catch (error) {
-    console.error('Erro ao atualizar água:', error);
+   // console.error('Erro ao atualizar água:', error);
+    return false;
   }
 };
 

@@ -135,6 +135,11 @@ export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfe
         const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
         const moradorQueue = realmInstance.objects('Morador').filtered(query);
 
+        if (moradorQueue.length === 0) {
+            // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+            return false;
+        }
+
         if (moradorQueue.length > 0) {
             realmInstance.write(() => {
                 moradorQueue.forEach(moradorOrfan => {
@@ -143,8 +148,10 @@ export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfe
                 });
             });
         }
+        return true;
     } catch (error) {
-        console.error('Erro ao atualizar registros de moradores:', error);
+       // console.error('Erro ao atualizar registros de moradores:', error);
+        return false;
     }
 };
 

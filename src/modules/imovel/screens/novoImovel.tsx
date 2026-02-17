@@ -39,6 +39,7 @@ export const NovoImovel = () => {
     enviarRegistro,
     handleOnChangeAreaImovel,
     validateImovel,
+    handleLocationChange,
     disabled} = useNovoImovel(entrevistado, imovel);
     
 
@@ -229,12 +230,15 @@ export const NovoImovel = () => {
                  Longitude informada anteriormente:  {valorSalvoLongitude}
                 </Text>
               )}
-            <LocationInput
-                onLocationChange={(lat, lon) => {
-                  handleOnChangeInput(lat, 'latitude');
-                  handleOnChangeInput(lon, 'longitude');
-                }}
-              />
+           <LocationInput
+            initialLatitude={valorSalvoLatitude || undefined}
+            initialLongitude={valorSalvoLongitude || undefined}
+            onLocationChange={(lat, lon) => {
+              handleLocationChange(lat, 'latitude');
+              handleLocationChange(lon, 'longitude');
+             }}
+             />
+
 
               {valorSalvoAreaImovel && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>

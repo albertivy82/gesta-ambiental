@@ -125,6 +125,12 @@ export const setIdBenfeitoriaFromApiOnAtvProd = (idBenfeitoriaApi: number, benfe
     const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
     const atividadesQueue = realmInstance.objects('AtividadeProdutiva').filtered(query);
 
+    if (atividadesQueue.length === 0) {
+      // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+      return false;
+  }
+
+
     if (atividadesQueue.length > 0) {
       realmInstance.write(() => {
         atividadesQueue.forEach(atividadeOrfan => {
@@ -133,8 +139,10 @@ export const setIdBenfeitoriaFromApiOnAtvProd = (idBenfeitoriaApi: number, benfe
         });
       });
     }
+    return true;
   } catch (error) {
-    console.error('Erro ao atualizar atividades produtivas:', error);
+    //console.error('Erro ao atualizar atividades produtivas:', error);
+    return false;
   }
 };
 

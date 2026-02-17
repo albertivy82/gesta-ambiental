@@ -1,6 +1,8 @@
 import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect } from 'react';
-import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
+import { useCallback } from 'react';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { getImovel } from '../../../realm/services/imovelService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import { renderField } from '../../../shared/components/input/renderFilds';
@@ -12,9 +14,6 @@ import { imovelBody } from '../../../shared/types/imovelType';
 import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
-import { getImovel } from '../../../realm/services/imovelService';
-import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
-import { ActivityIndicator } from 'react-native-paper';
 
 
 // Para entidades MULTIPLAS (vegetacao, peixes, etc.)

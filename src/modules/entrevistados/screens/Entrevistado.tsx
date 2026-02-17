@@ -7,15 +7,20 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
-import { useEntrevistados } from '../../localidade/hooks/useEntrevistados';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
 import { ActivityIndicator } from 'react-native-paper';
+import { useEntrevistados } from '../hooks/useEntrevistados';
+
+
 
 
 export interface entrevistadoParam {
   localidadeId: number;
 }
+
+
+
 
 
 
@@ -25,49 +30,41 @@ const Entrevistados = () => {
   const { localidadeId } = route.params;
   const foccus =useIsFocused();
   const { contagemEntrevistados } = useEntrevistados(localidadeId, foccus);
-
-  
-  
   const flatListRef = useRef<FlatList>(null);
   const [entrevistados, setEntrevistados] = useState<EntrevistadoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
- useEffect(() => {
-   setIsLoading(true);
-    if (localidadeId) {
-      const entrevistadoRealm = getEntrevistados(localidadeId);
-      setEntrevistados(entrevistadoRealm);
-    
-    }
-    setIsLoading(false);
-  }, [localidadeId]);
+ 
+  useEffect(() => {
+    setIsLoading(true);
   
-  // Rola até o final da lista
-  const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
-
-  const fetchEntrevistados = useCallback(async () => {
-      setIsLoading(true);
-      if (localidadeId) {
-        const eentrevistadosRealm = getEntrevistados(localidadeId);
-        setEntrevistados(eentrevistadosRealm);
-      }
+          if (localidadeId) {
+            const entrevistadoRealm = getEntrevistados(localidadeId);
+            setEntrevistados(entrevistadoRealm);
+          }
       setIsLoading(false);
-    }, [localidadeId]);
-
-    useEffect(() => {
-      fetchEntrevistados();
-    }, [fetchEntrevistados]);
-
-    const handleRefresh = () => {
-      fetchEntrevistados();
-      handleScrollToEnd();
+  }, [localidadeId, foccus]);
+  
+ 
+  const handleRefresh = () => {
+        setIsLoading(true);
+      
+            if (localidadeId) {
+              const entrevistadoRealm = getEntrevistados(localidadeId);
+              setEntrevistados(entrevistadoRealm);}
+        setIsLoading(false);
+      
+        handleScrollToEnd();
+      };
+      
+    // Rola até o final da lista
+    const handleScrollToEnd = () => {
+      flatListRef.current?.scrollToEnd({ animated: true });
     };
 
   const handleNovoEntrevistado = () => {
     navigation.navigate('NovoEntrevistado', { localidadeId: localidadeId });
   };
+
 
   return (
     <EntrevistadoContainer>
@@ -87,6 +84,7 @@ const Entrevistados = () => {
         </Text>
       </View>
 
+
       <View
         style={{
           flexDirection: 'row',
@@ -104,14 +102,18 @@ const Entrevistados = () => {
           </Text>
         </TouchableOpacity>
 
+
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
+
 
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh} disabled={isLoading}>
           <Icon size={20} name="spinner11" color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white}>Atualizar</Text>
         </TouchableOpacity>
 
+
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
+
 
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleNovoEntrevistado}>
           <Icon size={20} name="plus" color={theme.colors.whiteTheme.white} />
@@ -120,6 +122,7 @@ const Entrevistados = () => {
           </Text>
         </TouchableOpacity>
       </View>
+
 
       {isLoading ? (
         <ActivityIndicator
@@ -141,4 +144,10 @@ const Entrevistados = () => {
   );
 };
 
+
 export default Entrevistados;
+
+
+
+
+

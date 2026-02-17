@@ -121,6 +121,10 @@ export const setIdBenfeitoriaFromApiOnRendasOF = (idBenfeitoriaApi: number, benf
         const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
         const rendaQueue = realmInstance.objects('RendaOutrasFontes').filtered(query);
 
+        if (rendaQueue.length === 0) {
+            // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+            return false;
+          }
         if (rendaQueue.length > 0) {
             realmInstance.write(() => {
                 rendaQueue.forEach(rendaOrfan => {
@@ -129,8 +133,10 @@ export const setIdBenfeitoriaFromApiOnRendasOF = (idBenfeitoriaApi: number, benf
                 });
             });
         }
+        return true;
     } catch (error) {
         console.error('Erro ao atualizar registros de renda:', error);
+        return false;
     }
 };
 

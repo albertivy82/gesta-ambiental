@@ -121,6 +121,10 @@ export const setIdMoradorFromApiOnInstituicao = (idMoradoriaApi: number, morador
         const query = `idFather == "${moradorIdLocal}" AND sincronizado == false`;
         const instituicaoQueue = realmInstance.objects('ParticipacaoInstituicao').filtered(query);
 
+        if (!instituicaoQueue) {
+           return false;
+          }
+
         if (instituicaoQueue.length > 0) {
             realmInstance.write(() => {
                 instituicaoQueue.forEach(instituicaoOrfan => {
@@ -129,8 +133,10 @@ export const setIdMoradorFromApiOnInstituicao = (idMoradoriaApi: number, morador
                 });
             });
         }
+        return true;
     } catch (error) {
         console.error('Erro ao atualizar registros de instituicoes:', error);
+        return false;
     }
 };
 

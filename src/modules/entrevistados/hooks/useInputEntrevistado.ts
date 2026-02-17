@@ -63,7 +63,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
   }, [novoEntrevistado]);
     
     const objetoFila = () => {
-          
+        
       const entrevistadoData: EntrevistadoInput = {
         
           ...novoEntrevistado, 
@@ -96,11 +96,11 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
              }
       
           } catch (error) {
-            objetoFila();
+            return await objetoFila();
           }
       } else {
-         
-          return objetoFila();
+        console.log("está neste looping")
+        return await objetoFila();
                   
       }
       

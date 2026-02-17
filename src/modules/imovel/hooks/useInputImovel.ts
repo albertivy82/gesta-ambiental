@@ -16,8 +16,8 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     numero: '',
     bairro: '',
     referencial: '',
-    latitude: '',
-    longitude: '',
+    latitude: 'Indisponível',
+    longitude: 'Indisponível',
     areaImovel: 0,
     tipoSolo: '',
     vizinhosConfinantes: '',
@@ -200,6 +200,10 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
     value: NativeSyntheticEvent<TextInputChangeEventData> | string,
     name: string
   ) => {
+    // 🔒 impede qualquer mudança manual (ou acidental) nesses campos
+      if (name === 'latitude' || name === 'longitude') {
+        return;
+  }
     // Verifica se "value" é um evento ou uma string diretamente
     const newValue = typeof value === 'string' ? value : value.nativeEvent.text;
   
@@ -250,7 +254,14 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         }));
       };
       
-       
+      const handleLocationChange = (lat: string, lon: string) => {
+        setNovoImovel((current) => ({
+          ...current,
+          latitude: lat,
+          longitude: lon,
+        }));
+      };
+      
 
     return {
         novoImovel,
@@ -261,6 +272,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
         handleOnChangeData,
         handleOnChangeAreaImovel,
         validateImovel,
+        handleLocationChange,
         disabled,
     };
 };

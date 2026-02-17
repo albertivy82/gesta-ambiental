@@ -126,6 +126,11 @@ export const setIdBenfeitoriaFromApiCredito = (idBenfeitoriaApi: number, benfeit
     const query = `idFather == "${benfeitoriaIdLocal}" AND sincronizado == false`;
     const creditosQueue = realmInstance.objects('Credito').filtered(query);
 
+    if (creditosQueue.length === 0) {
+      // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+      return false;
+    }
+
     if (creditosQueue.length > 0) {
       realmInstance.write(() => {
         creditosQueue.forEach(creditoOrfan => {
@@ -134,8 +139,10 @@ export const setIdBenfeitoriaFromApiCredito = (idBenfeitoriaApi: number, benfeit
         });
       });
     }
+    return true;
   } catch (error) {
     console.error('Erro ao atualizar créditos:', error);
+    return false;
   }
 };
 
