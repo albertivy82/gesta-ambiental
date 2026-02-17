@@ -1,11 +1,11 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, ParamListBase, RouteProp, useRoute } from "@react-navigation/native";
 import { View } from 'react-native';
 import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
-import EditConfirmation from "../ui-component/UseEditUser";
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { UserBody } from '../../../shared/types/userBody';
 import { UserContainer } from "../styles/Userdetail.style";
+import EditConfirmation from "../ui-component/UseEditUser";
 
 
 export const GoToUserEdit= (navigate: NavigationProp<ParamListBase>['navigate'], user: UserBody) =>{

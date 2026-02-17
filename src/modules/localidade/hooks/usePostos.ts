@@ -1,6 +1,5 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { apagarPostoQueue, getPostos, getPostosDessincronizados, salvarPostos, salvarPostoSaudeQueue } from "../../../realm/services/postoService";
+import { apagarPostoQueue, getPostos, getPostosDessincronizados, salvarPostos } from "../../../realm/services/postoService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { PostoType } from "../../../shared/types/postoTypes";

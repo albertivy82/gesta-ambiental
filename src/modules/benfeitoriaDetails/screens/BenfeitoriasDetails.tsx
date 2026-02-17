@@ -1,5 +1,6 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import { renderField } from '../../../shared/components/input/renderFilds';
@@ -15,7 +16,6 @@ import { useRendasOutrasFontes } from '../hooks/useRendaOutrasfontes';
 import { useServicosComunicacao } from '../hooks/useSevicoComunicacao';
 import { BenfeitoriaDetailContainer, Icones } from '../styles/BenfeitoriaDetails.style';
 import EditConfirmation from '../ui-components/UseEditBenfeitoria';
-import { ActivityIndicator } from 'react-native-paper';
 
 
 export const handleNavigation = <T,>(

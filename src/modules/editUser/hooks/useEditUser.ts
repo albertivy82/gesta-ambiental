@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import { senhasType } from "../../../shared/types/senhasType";
+import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { getUser } from "../../../context/userStore";
+import { connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
+import { senhasType } from "../../../shared/types/senhasType";
 
 export const DEFAULT_EDIT_PASSWORD = {
     senhaAtual:'',

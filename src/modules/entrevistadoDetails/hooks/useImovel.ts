@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { setIdImovelFromApiOnBenfeitoria } from "../../../realm/services/benfeitoriaService";
-import { apagarImovelQueue, getImoveisDessincronizados, getImovel, getTodosImoveis, salvarImoveis } from "../../../realm/services/imovelService";
+import { apagarImovelQueue, getImoveisDessincronizados, getImovel, salvarImoveis } from "../../../realm/services/imovelService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { imovelInput } from "../../../shared/types/imovelInput";

@@ -1,9 +1,9 @@
-import NetInfo from "@react-native-community/netinfo";
-import { useEffect, useState } from "react";import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
-import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
-import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesInput";
+import { useEffect, useState } from "react";
 import { apagarRendaOutrasFontesQueue, getRendaOutrasFontes, getRendaOutrasFontesDessincronizadas, salvarRendaOutrasFontes } from "../../../realm/services/rendaOutrasFontes";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesInput";
+import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 
 export const convertToRendaOFInput = (renda: any): RendaOutrasFontesInput => {
   console.log(renda.benfeitoria.id);

@@ -7,9 +7,9 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EscolaType } from '../../../shared/types/EscolaType';
+import { useEscolas } from '../../localidade/hooks/useEscolas';
 import { EscolaContainer } from '../styles/Escolas.style';
 import RenderItemEscola from '../ui-components/listaEscolas';
-import { useEscolas } from '../../localidade/hooks/useEscolas';
 
 export interface EscolasParam {
   localidadeId: number;

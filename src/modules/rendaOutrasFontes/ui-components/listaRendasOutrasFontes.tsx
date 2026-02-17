@@ -1,12 +1,12 @@
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
+import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { RendaOutrasFontesType } from "../../../shared/types/rendaOutrasFontesType";
-import { useState } from "react";
-import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
-import { getBenfeitoria } from "../../../realm/services/benfeitoriaService";
 
 
 const RenderItemRendaOutrasFontes = ({ item }: { item: RendaOutrasFontesType }) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarParticipacaoInstituicao, salvarParticipacaoInstituicaoQueue } from "../../../realm/services/ParticipacaoInstituicaoService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";

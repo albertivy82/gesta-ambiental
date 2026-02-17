@@ -1,7 +1,3 @@
-import { MetodoTratamentoAgua } from "../../enums/MetodoTratamentoAgua.enum";
-import { PocoEnum } from "../../enums/Poco.enum";
-import { QualidadeAguaEnum } from "../../enums/qualidadeAgua.enum";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface AguaInput {
     

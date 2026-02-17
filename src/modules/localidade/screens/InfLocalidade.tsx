@@ -9,12 +9,12 @@ import DeleteConfirmation from '../../../shared/components/input/DeleteComponent
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
+import { useContagemEntrevistados } from '../hooks/useContagemEntrevistados';
 import { useEscolas } from '../hooks/useEscolas';
 import { usePostos } from '../hooks/usePostos';
 import { LocalidadeContainer } from '../styles/Localidade.style';
 import EditConfirmation from '../ui-components/UseEditLocalidade';
 import QuadroDeItens from '../ui-components/quadroDeItens';
-import { useContagemEntrevistados } from '../hooks/useContagemEntrevistados';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;

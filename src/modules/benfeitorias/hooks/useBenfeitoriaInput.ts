@@ -1,8 +1,7 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarBenfeitoria, salvarBenfeitoriaQueue, salvarBenfeitorias } from "../../../realm/services/benfeitoriaService";
+import { salvarBenfeitoria, salvarBenfeitoriaQueue } from "../../../realm/services/benfeitoriaService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";

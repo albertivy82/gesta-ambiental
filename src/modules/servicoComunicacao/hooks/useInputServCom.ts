@@ -1,6 +1,5 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
-import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarservicosComunicacao, salvarservicosComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
@@ -12,8 +11,8 @@ import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 
 
 export const DEFAULT_SERVICOS_COMUNICACAO_INPUT: ServicosComunicacaoInput = {
-  tipoServicoComunicacao: null,
-  operadoraServicoComunicacao: null,
+  tipoServicoComunicacao: '',
+  operadoraServicoComunicacao: '',
   benfeitoria: {
     id: 0,
   },

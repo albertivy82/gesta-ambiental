@@ -1,10 +1,9 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { apagarParticipacaoInstituicaoQueue, getParticipacoesIntitucionais, getParticipacoesIntitucionaisDessincronizadas, salvarParticipacoesIntitucionais } from "../../../realm/services/ParticipacaoInstituicaoService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { ParticipacaoInstituicaoInput } from "../../../shared/types/ParticipacaoInstituicaoInput";
 import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
-import { apagarParticipacaoInstituicaoQueue, getParticipacoesIntitucionais, getParticipacoesIntitucionaisDessincronizadas, salvarParticipacaoInstituicao, salvarParticipacoesIntitucionais } from "../../../realm/services/ParticipacaoInstituicaoService";
 
 export const convertToParticipacaoInstituicaoInput = (ParticipacaoInstituicao: any): ParticipacaoInstituicaoInput => {
   return {

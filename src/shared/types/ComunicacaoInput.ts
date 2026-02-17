@@ -1,11 +1,9 @@
-import { Operadora } from "../../enums/Operadora.enum";
-import { servicoComunicacaoEnum } from "../../enums/servicoComunicacao.enum";
 
 export interface ServicosComunicacaoInput {
     
-    tipoServicoComunicacao: servicoComunicacaoEnum |null|'';
-    operadoraServicoComunicacao: Operadora | null |'';
-    benfeitoria?: {
+    tipoServicoComunicacao: string;
+    operadoraServicoComunicacao: string;
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

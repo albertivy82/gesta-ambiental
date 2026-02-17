@@ -12,7 +12,7 @@ export interface MoradorInput{
     trabalho: string; 
     religiao: string;
     doencas:string;
-    benfeitoria?: {
+    benfeitoria: {
         id: number;
     };
     sincronizado?: boolean;

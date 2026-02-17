@@ -1,11 +1,11 @@
 import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { Alert, TouchableOpacity, View } from "react-native";
+import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
 import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { PostoType } from "../../../shared/types/postoTypes";
-import DeleteConfirmation from "../../../shared/components/input/DeleteComponent";
-import { useState } from "react";
 
 
 const RenderItemPosto = ({ item }: { item: PostoType}) => {

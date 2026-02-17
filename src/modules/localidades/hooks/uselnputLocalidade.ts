@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react"
-import { senhasType } from "../../../shared/types/senhasType";
+import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import { connectionAPIGet, connectionAPIPost} from "../../../shared/functions/connection/connectionAPI";
-import { getToken } from "../../../context/tokenStore";
-import { localidadeInputType } from "../../../shared/types/localidadeInputType ";
-import { municipiosEnum } from "../../../enums/municipios.enum";
 import { EsferaEnum } from "../../../enums/esfera.enum";
-import { LocalidadeType } from "../../../shared/types/LocalidadeType";
+import { municipiosEnum } from "../../../enums/municipios.enum";
 import { salvarLocalidade } from "../../../realm/services/localidadeServices";
+import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
+import { localidadeInputType } from "../../../shared/types/localidadeInputType ";
+import { LocalidadeType } from "../../../shared/types/LocalidadeType";
 
 
 export const DEFAUL_LOCALIDADE_INPUT = {

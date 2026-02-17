@@ -1,16 +1,16 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getAtividadesProdutivas } from '../../../realm/services/atividadeProdutivaService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import RenderItemAtividade from '../ui-components/listaAtvProdutivas';
 import { AtividadeProdutivaType } from '../../../shared/types/AtividadeProdutiva';
-import { AtividadeDetailContainer } from '../styles/ativdade.style';
-import { getAtividadesProdutivas } from '../../../realm/services/atividadeProdutivaService';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { useAtividadesProdutivas } from '../../benfeitoriaDetails/hooks/useAtividadeProdutiva';
+import { AtividadeDetailContainer } from '../styles/ativdade.style';
+import RenderItemAtividade from '../ui-components/listaAtvProdutivas';
 
 export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;

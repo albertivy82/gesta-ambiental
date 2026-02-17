@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
-import { LocalidadeType } from "../../../shared/types/LocalidadeType";
 import { getLocalidades, salvarLocalidades } from "../../../realm/services/localidadeServices";
+import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { LocalidadeType } from "../../../shared/types/LocalidadeType";
 
 
 

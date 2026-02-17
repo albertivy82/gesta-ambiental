@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { setIdMoradorFromApiOnInstituicao } from "../../../realm/services/instituicaoConhecidaService";
 import { apagarMoradorQueue, getMoradores, getMoradoresDessincronizados, salvarMoradores } from "../../../realm/services/moradorService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { MoradorInput } from "../../../shared/types/MoradorInput";
 import { MoradorType } from "../../../shared/types/MoradorType";
+import { setIdEntrevitadoFromApiOnParticipacaoInstituicao } from "../../../realm/services/ParticipacaoInstituicaoService";
 
 export const convertToMoradorInput = (morador: any): MoradorInput => {
   console.log(morador.benfeitoria);
@@ -45,7 +45,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
                 const moradorAPI = response as MoradorType;
               
                 if (moradorAPI.id) {
-                  const upadated = setIdMoradorFromApiOnInstituicao(moradorAPI.id, morador.idLocal!)
+                  const upadated = setIdEntrevitadoFromApiOnParticipacaoInstituicao(moradorAPI.id, morador.idLocal!)
                       if (upadated){apagarMoradorQueue(morador.idLocal!)};
                 }
               } catch (error) {

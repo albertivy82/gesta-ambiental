@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { apagarAguaQueue, getAguaDessincronizadas, getAguas, salvarAguas } from "../../../realm/services/aguasService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";

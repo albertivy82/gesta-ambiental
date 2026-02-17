@@ -1,16 +1,16 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getServicosComunicacao } from '../../../realm/services/servicosComunicacaoService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { ServicoComunicacaoDetailContainer } from '../styles/servicoComunicacao.style';
-import { getServicosComunicacao } from '../../../realm/services/servicosComunicacaoService';
-import { ServicosComunicacaoType } from '../../../shared/types/ComunicacaoType';
-import RenderItemServicoComunicacao from '../ui-components/listaServicoComunicacao';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { ServicosComunicacaoType } from '../../../shared/types/ComunicacaoType';
 import { useServicosComunicacao } from '../../benfeitoriaDetails/hooks/useSevicoComunicacao';
+import { ServicoComunicacaoDetailContainer } from '../styles/servicoComunicacao.style';
+import RenderItemServicoComunicacao from '../ui-components/listaServicoComunicacao';
 
 export interface BenfeitoriaParams {
   benfeitoria: BenfeitoriaType;

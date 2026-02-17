@@ -1,7 +1,7 @@
 import { View } from 'react-native';
-import { theme } from '../../../shared/themes/theme';
-import { textTypes } from '../../../shared/components/text/textTypes';
 import Text from '../../../shared/components/text/Text';
+import { textTypes } from '../../../shared/components/text/textTypes';
+import { theme } from '../../../shared/themes/theme';
 
 export const renderField = (label: string, value: string | null| undefined) => {
     return (

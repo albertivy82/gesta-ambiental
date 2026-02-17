@@ -133,6 +133,11 @@ export const setIdEntrevitadoFromApiOnParticipacaoInstituicao = (idEntrevistadoA
     const query = `idFather == "${moradorIdLocal}" AND sincronizado == false`;
     const participacoesIntitucionaisQueue = realmInstance.objects('ParticipacaoInstituicao').filtered(query);
 
+    if (participacoesIntitucionaisQueue.length === 0) {
+      // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
+      return false;
+    }
+
     if (participacoesIntitucionaisQueue.length > 0) {
       realmInstance.write(() => {
         participacoesIntitucionaisQueue.forEach(participacaoInstituicaoOrfan => {
@@ -141,8 +146,10 @@ export const setIdEntrevitadoFromApiOnParticipacaoInstituicao = (idEntrevistadoA
         });
       });
     }
+    return true;
   } catch (error) {
     console.error('Erro ao atualizar vegetações:', error);
+    return false;
   }
 };
 

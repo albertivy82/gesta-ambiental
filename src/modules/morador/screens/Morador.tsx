@@ -8,9 +8,9 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { MoradorType } from '../../../shared/types/MoradorType';
+import { useMoradores } from '../../benfeitoriaDetails/hooks/useMorador';
 import { MoradorDetailContainer } from '../styles/morador.style';
 import RenderItemMorador from '../ui-components/listaMoradores';
-import { useMoradores } from '../../benfeitoriaDetails/hooks/useMorador';
 
 
 

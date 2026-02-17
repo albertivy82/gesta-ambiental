@@ -1,6 +1,5 @@
 import { EsferaEnum } from "../../enums/esfera.enum";
 import { SimNao } from "../../enums/simNao.enum";
-import { SimNaoTalvez } from "../../enums/simNaoTalvez.enum";
 
 export interface escolaInput {
   nome: string;

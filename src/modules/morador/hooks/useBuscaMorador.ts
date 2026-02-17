@@ -1,10 +1,6 @@
 import { useState } from "react";
-import { getBenfeitoria, getBenfeitoriaDessincronizadaPorId } from "../../../realm/services/benfeitoriaService";
-import { getEntrevistadoDessincronizadoPorId, getEntrevistadoPorId } from "../../../realm/services/entrevistado";
-import { getImovelDessincronizadoPorId, getImovelPorId } from "../../../realm/services/imovelService";
-import { getMoradorComPaiOffLine, getMoradores } from "../../../realm/services/moradorService";
+import { getMoradores } from "../../../realm/services/moradorService";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { MoradorType } from "../../../shared/types/MoradorType";
 
 export const useBuscaMorador = (

@@ -1,5 +1,6 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { Icon } from '../../../shared/components/icon/Icon';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import { renderField } from '../../../shared/components/input/renderFilds';
@@ -10,7 +11,6 @@ import { MoradorType } from '../../../shared/types/MoradorType';
 import { useParticipacaoInstituicoes } from '../hooks/useParticipacaoInstituicao';
 import { MoradorDetailContainer } from '../styles/morador.style';
 import EditConfirmation from '../ui-components/UseEditMorador';
-import { ActivityIndicator } from 'react-native-paper';
 
 
 

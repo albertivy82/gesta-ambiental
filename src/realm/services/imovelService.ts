@@ -1,4 +1,3 @@
-import { configureStore } from "@reduxjs/toolkit";
 import { imovelInput } from "../../shared/types/imovelInput";
 import { imovelBody } from "../../shared/types/imovelType";
 import { realmInstance } from "./databaseService";

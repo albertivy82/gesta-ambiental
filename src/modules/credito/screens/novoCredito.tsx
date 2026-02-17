@@ -1,14 +1,13 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Alert, Button, ScrollView } from "react-native";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
+import Text from "../../../shared/components/text/Text";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { CreditoType } from "../../../shared/types/CreditoType";
 import { useNovoCredito } from "../hooks/useInputCredito";
 import { CreditoDetailContainer } from "../styles/credito.style";
-import { CreditoType } from "../../../shared/types/CreditoType";
-import Text from "../../../shared/components/text/Text";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoCreditoParams {

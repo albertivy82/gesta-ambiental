@@ -1,16 +1,16 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { getEntrevistados } from '../../../realm/services/entrevistado';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import { useEntrevistados } from '../hooks/useEntrevistados';
 import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
-import { ActivityIndicator } from 'react-native-paper';
-import { useEntrevistados } from '../hooks/useEntrevistados';
 
 
 

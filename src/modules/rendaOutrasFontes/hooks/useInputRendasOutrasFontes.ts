@@ -1,12 +1,11 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
-import { salvarRenda, salvarRendaOutrasFontes, salvarRendaQueue } from "../../../realm/services/rendaOutrasFontes";
+import { salvarRenda, salvarRendaQueue } from "../../../realm/services/rendaOutrasFontes";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesInput } from "../../../shared/types/RendaOutrasFontesInput";
-import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 
 

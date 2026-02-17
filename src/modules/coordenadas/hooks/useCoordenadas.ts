@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react"
-import { senhasType } from "../../../shared/types/senhasType";
+import { useEffect, useState } from "react";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
-import { getUser } from "../../../context/userStore";
 import { coordenadasInput } from "../../../shared/types/coordenadaInput";
 
 export const DEFAULT_COORDENADAS = {

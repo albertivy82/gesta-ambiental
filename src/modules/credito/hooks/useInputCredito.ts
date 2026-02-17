@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';

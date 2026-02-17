@@ -7,7 +7,6 @@ import { ServicoPublicos } from "../../../enums/ServicoPublicos";
 import { Sexo } from "../../../enums/Sexo";
 import { SimNao } from "../../../enums/simNao.enum";
 import { SimNaoTalvez } from "../../../enums/simNaoTalvez.enum";
-import { getAllEntrevistados } from "../../../realm/services/entrevistado";
 import { FormErrors } from "../../../shared/components/FormErrors";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";

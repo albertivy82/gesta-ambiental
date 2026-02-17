@@ -1,11 +1,9 @@
-import NetInfo from "@react-native-community/netinfo";
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, TouchableOpacity, View } from 'react-native';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
-import { testConnection } from '../../../shared/functions/connection/testConnection';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
 interface EditConfirmationProps {

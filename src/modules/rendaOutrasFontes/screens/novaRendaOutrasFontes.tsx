@@ -1,16 +1,15 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { FontesRenda } from "../../../enums/fontesRenda.enum";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import Text from "../../../shared/components/text/Text";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
 import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
-import Text from "../../../shared/components/text/Text";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 export interface NovoCreditoParams {
   benfeitoria: BenfeitoriaType;

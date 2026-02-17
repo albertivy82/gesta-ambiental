@@ -1,7 +1,7 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Alert, Button, ScrollView } from "react-native";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
@@ -9,7 +9,6 @@ import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAtvProd } from "../hooks/useInputAtvProd";
 import { AtividadeDetailContainer } from "../styles/ativdade.style";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovaAtividadeParams {
@@ -39,7 +38,7 @@ export const NovaAtividade = () => {
 
          
 const atividadeOptions =  Object.values(
-  ["PESCA ARTESANAL", "COMÉRCIO",	"SERVIÇO","INDÚSTRIA E COMÉRCIO", "SERVIÇOE COMÉRCIO", 	"NENHUMA"]
+  ["PESCA ARTESANAL", "COMÉRCIO",	"SERVIÇO","INDÚSTRIA E COMÉRCIO", "SERVIÇOE COMÉRCIO"]
 );
     
     const handleEnviar = async () => {

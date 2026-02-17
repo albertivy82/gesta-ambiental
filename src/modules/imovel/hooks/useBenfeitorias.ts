@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useRef, useState } from "react";
 import { setIdBenfeitoriaFromApiOnAguas } from "../../../realm/services/aguasService";
 import { setIdBenfeitoriaFromApiOnAtvProd } from "../../../realm/services/atividadeProdutivaService";

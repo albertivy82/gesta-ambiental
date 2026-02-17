@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { apagarEscolaQueue, getEscolas, getEscolasDessincronizadas, salvarEscolas } from "../../../realm/services/escolaService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";

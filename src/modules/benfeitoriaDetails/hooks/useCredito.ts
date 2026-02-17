@@ -1,4 +1,3 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import {
   apagarCreditoQueue,
@@ -8,8 +7,8 @@ import {
 } from "../../../realm/services/creditoService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
-import { CreditoType } from "../../../shared/types/CreditoType";
 import { CreditoInput } from "../../../shared/types/CreditoInput";
+import { CreditoType } from "../../../shared/types/CreditoType";
 
 export const convertToCreditoInput = (credito: any): CreditoInput => {
   console.log(credito.benfeitoria.id);

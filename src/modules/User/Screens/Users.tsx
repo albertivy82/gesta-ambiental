@@ -1,16 +1,16 @@
+import { Picker } from '@react-native-picker/picker';
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, TextInput, View } from "react-native";
-import { GetaUserContainer } from "../styles/Users.style";
-import { useInputUsers } from "../hooks/useInputUsers";
-import Input from "../../../shared/components/input/input";
-import { UserBody } from '../../../shared/types/userBody';
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { theme } from '../../../shared/themes/theme';
 import { grupoEnum } from '../../../enums/grupo.enum';
-import { Picker } from '@react-native-picker/picker';
+import { FormErrors } from '../../../shared/components/FormErrors';
+import Input from "../../../shared/components/input/input";
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
-import { FormErrors } from '../../../shared/components/FormErrors';
+import { theme } from '../../../shared/themes/theme';
+import { UserBody } from '../../../shared/types/userBody';
+import { useInputUsers } from "../hooks/useInputUsers";
+import { GetaUserContainer } from "../styles/Users.style";
 
 
 

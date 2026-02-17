@@ -1,17 +1,14 @@
-import { NavigationProp, ParamListBase, RouteProp, useRoute } from "@react-navigation/native";
-import { Alert, Button, ScrollView, View } from "react-native";
+import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { Alert, Button, ScrollView } from "react-native";
+import { SimNao } from "../../../enums/simNao.enum";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
+import { theme } from "../../../shared/themes/theme";
+import { PostoType } from "../../../shared/types/postoTypes";
 import { useNovoPosto } from "../hooks/useNovoPosto";
 import { PostoContainer } from "../styles/Postos.style";
-import { useEffect, useState } from "react";
-import { useNavigation } from '@react-navigation/native';
-import { ActivityIndicator } from "react-native-paper";
-import { LocalidadeType } from "../../../shared/types/LocalidadeType";
-import { SimNao } from "../../../enums/simNao.enum";
-import { PostoType } from "../../../shared/types/postoTypes";
-import { theme } from "../../../shared/themes/theme";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovoPostoParams {

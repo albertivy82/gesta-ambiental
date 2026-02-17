@@ -1,9 +1,9 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { MetodoTratamentoAgua } from "../../../enums/MetodoTratamentoAgua.enum";
 import { QualidadeAguaEnum } from "../../../enums/qualidadeAgua.enum";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
@@ -13,7 +13,6 @@ import { AguaType } from "../../../shared/types/AguaType";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAgua } from "../hooks/useInputAgua";
 import { AguaDetailContainer } from "../styles/agua.style";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 export interface NovaAguaParams {

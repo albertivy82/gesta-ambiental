@@ -1,16 +1,16 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { getCreditos } from '../../../realm/services/creditoService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
+import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { CreditoType } from '../../../shared/types/CreditoType';
+import { useCreditos } from '../../benfeitoriaDetails/hooks/useCredito';
 import { CreditoDetailContainer } from '../styles/credito.style';
 import RenderItemCredito from '../ui-components/listaCredito';
-import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
-import { getCreditos } from '../../../realm/services/creditoService';
-import { useCreditos } from '../../benfeitoriaDetails/hooks/useCredito';
 
 
 export interface BenfeitoriaParams {

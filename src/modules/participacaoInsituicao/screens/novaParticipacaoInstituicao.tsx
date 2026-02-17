@@ -1,14 +1,13 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Alert, Button, ScrollView } from "react-native";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { MoradorType } from "../../../shared/types/MoradorType";
 import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
 import { useNovaParticipacaoInstituicao } from "../hooks/useInputParticipacaoInstituicao";
 import { ParticipacaoInstituicaoDetailContainer } from "../styles/ParticipacaoInstituicao.style";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 
 

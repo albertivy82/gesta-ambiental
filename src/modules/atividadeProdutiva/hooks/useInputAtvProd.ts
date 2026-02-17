@@ -1,13 +1,12 @@
-import NetInfo from "@react-native-community/netinfo";
 import { useEffect, useState } from "react";
 import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
+import { salvarAtividade, salvarAtividadeQueue } from "../../../realm/services/atividadeProdutivaService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
+import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
 import { AtividadeProdutivaInput } from "../../../shared/types/AtividadeProdutivaInput";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
-import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
-import { salvarAtividade, salvarAtividadeQueue } from "../../../realm/services/atividadeProdutivaService";
 
 export const DEFAULT_ATIVIDADE_PRODUTIVA_INPUT: AtividadeProdutivaInput = {
   atividade: '',

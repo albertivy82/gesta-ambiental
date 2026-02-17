@@ -1,7 +1,7 @@
 import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { FormErrors } from "../../../shared/components/FormErrors";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
@@ -9,7 +9,6 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 import { useNovoServicoComunicacao } from "../hooks/useInputServCom";
 import { ServicoComunicacaoDetailContainer } from "../styles/servicoComunicacao.style";
-import { FormErrors } from "../../../shared/components/FormErrors";
 
 export interface NovoServicoParams {
   benfeitoria: BenfeitoriaType;

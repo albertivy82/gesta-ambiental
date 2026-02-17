@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useRequest } from '../../../context/Auth';
-import pkceChallenge from 'react-native-pkce-challenge';
 import qs from 'qs';
-import {WebView, WebViewNavigation } from 'react-native-webview';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import pkceChallenge from 'react-native-pkce-challenge';
+import { WebView, WebViewNavigation } from 'react-native-webview';
+import { useRequest } from '../../../context/Auth';
 import { Icon } from '../../../shared/components/icon/Icon';
 import { theme } from '../../../shared/themes/theme';
 import { ContainerSplash, ImagelogoSplash } from '../../splash/styles/splash.style';

@@ -1,6 +1,7 @@
 import { NavigationProp, ParamListBase, useIsFocused, useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { removeAuthData } from '../../../context/authStore';
 import { removeToken } from '../../../context/tokenStore';
 import { getLocalidades } from '../../../realm/services/localidadeServices';
@@ -12,7 +13,6 @@ import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
 import { useLocalidades } from '../hook/useLocalidades';
 import { HomeContainer } from '../styles/Home.style';
-import { ActivityIndicator } from 'react-native-paper';
 
 
 

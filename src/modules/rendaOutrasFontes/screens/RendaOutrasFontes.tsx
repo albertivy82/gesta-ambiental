@@ -8,9 +8,9 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { RendaOutrasFontesType } from '../../../shared/types/rendaOutrasFontesType';
+import { useRendasOutrasFontes } from '../../benfeitoriaDetails/hooks/useRendaOutrasfontes';
 import { RendaOutrasFontesDetailContainer } from '../styles/rendaOutrasFontes.style';
 import RenderItemRendaOutrasFontes from '../ui-components/listaRendasOutrasFontes';
-import { useRendasOutrasFontes } from '../../benfeitoriaDetails/hooks/useRendaOutrasfontes';
 
 
 export interface BenfeitoriaParams {
