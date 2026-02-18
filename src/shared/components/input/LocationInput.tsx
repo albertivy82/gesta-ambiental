@@ -7,22 +7,17 @@ import { Icon } from '../icon/Icon';
 import Text from '../text/Text';
 import { textTypes } from '../text/textTypes';
 import Input from './input';
+import { LOCATION_INDISPONIVEL } from '../constants/location';
 
 interface LocationInputProps {
   onLocationChange: (latitude: string, longitude: string) => void;
-  initialLatitude?: string;
-  initialLongitude?: string;
 }
 
-const INDISPONIVEL = 'Indisponível';
 
-const LocationInput: React.FC<LocationInputProps> = ({
-  onLocationChange,
-  initialLatitude,
-  initialLongitude,
-}) => {
-  const [latitude, setLatitude] = useState(initialLatitude ?? INDISPONIVEL);
-  const [longitude, setLongitude] = useState(initialLongitude ?? INDISPONIVEL);
+
+const LocationInput: React.FC<LocationInputProps> = ({ onLocationChange }) => {
+  const [latitude, setLatitude] = useState(LOCATION_INDISPONIVEL);
+  const [longitude, setLongitude] = useState(LOCATION_INDISPONIVEL);
   const [loading, setLoading] = useState(false);
 
   const updateLocation = (lat: string, lon: string) => {
@@ -32,17 +27,20 @@ const LocationInput: React.FC<LocationInputProps> = ({
   };
 
   const getLocation = () => {
+    if (loading) return; // evita spam/duplo clique
     setLoading(true);
+
     Geolocation.getCurrentPosition(
       (position) => {
         setLoading(false);
         const lat = String(position.coords.latitude);
         const lon = String(position.coords.longitude);
-        updateLocation(lat, lon);
+        updateLocation(lat, lon); // ✅ substitui "Indisponível"
       },
       (error) => {
         setLoading(false);
-        // mantém "Indisponível" (não altera nada)
+        // ✅ não prejudica nada: continua "Indisponível"
+        // Se você NÃO quer alert ao abrir, dá pra controlar com flag (abaixo).
         Alert.alert('Não foi possível obter a localização', error.message);
       },
       { enableHighAccuracy: true, timeout: 60000, maximumAge: 3600000, distanceFilter: 0 }
@@ -51,9 +49,11 @@ const LocationInput: React.FC<LocationInputProps> = ({
 
   useEffect(() => {
     Geolocation.requestAuthorization?.();
-    // opcional: tenta 1 vez automaticamente ao abrir
-    // getLocation();
-    // (se você não quiser tentativa automática, deixe comentado)
+
+    // ✅ tenta automaticamente ao abrir
+    // (se falhar, não prejudica: "Indisponível" já está lá)
+    getLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -63,7 +63,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
         placeholder="Latitude"
         margin="15px 10px 30px 5px"
         title="Latitude"
-        editable={false}          // 🔒 travado
+        editable={false}
         selectTextOnFocus={false}
       />
 
@@ -72,19 +72,19 @@ const LocationInput: React.FC<LocationInputProps> = ({
         placeholder="Longitude"
         margin="15px 10px 30px 5px"
         title="Longitude"
-        editable={false}          // 🔒 travado
+        editable={false}
         selectTextOnFocus={false}
       />
 
       <TouchableOpacity
         onPress={getLocation}
+        disabled={loading}
         style={{
           padding: 10,
           backgroundColor: '#E6E8FA',
           borderRadius: 2,
           alignItems: 'center',
         }}
-        disabled={loading}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {loading ? (
@@ -92,7 +92,6 @@ const LocationInput: React.FC<LocationInputProps> = ({
           ) : (
             <Icon size={30} name="location2" color={theme.colors.mainTheme.black} />
           )}
-
           <Text
             margin="0px 0px 0px 0px"
             color={theme.colors.mainTheme.black}

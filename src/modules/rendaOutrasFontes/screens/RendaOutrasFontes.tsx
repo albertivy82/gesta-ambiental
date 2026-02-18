@@ -18,7 +18,7 @@ export interface BenfeitoriaParams {
 }
 
 export const novoCredito = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
-  navigate('NovoCredito', { benfeitoria });
+  navigate('NovaRendaOutrasFontes', { benfeitoria });
 }
 
 const RendaOutrasFontes = () => {

@@ -135,7 +135,7 @@ export const setIdEntrevitadoFromApiOnParticipacaoInstituicao = (idEntrevistadoA
 
     if (participacoesIntitucionaisQueue.length === 0) {
       // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-      return false;
+      return true;
     }
 
     if (participacoesIntitucionaisQueue.length > 0) {

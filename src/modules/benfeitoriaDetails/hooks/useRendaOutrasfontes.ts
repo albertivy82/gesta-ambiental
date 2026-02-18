@@ -42,35 +42,41 @@ export const useRendasOutrasFontes = (benfeitoriaId: number, foccus: Boolean) =>
 
   const fetchRendasRealm = () => {
     const dadosRealm = getRendaOutrasFontes(benfeitoriaId);
-    if (dadosRealm.length > 0) {
-      setRendasOF(prev => [...prev, ...dadosRealm]);
-    }
+   
+      setRendasOF(dadosRealm);
+    
   };
 
   const fetchRendasAPI = async () => {
+    const isConnected = await testConnection();
+  
+    if (!isConnected) {
+      console.log(`SYNC|RENDA|API_SKIP_OFFLINE benfeitoria=${benfeitoriaId}`);
+      return;
+    }
+  
     try {
-      const response = await connectionAPIGet<RendaOutrasFontesType[]>(`http://192.168.100.28:8080/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${benfeitoriaId}`);
+      const response = await connectionAPIGet<RendaOutrasFontesType[]>(
+        `http://192.168.100.28:8080/outras-fontes-de-renda/benfeitoria-outras-fontes-de-renda/${benfeitoriaId}`
+      );
+  
       const dadosAPI = response.map(renda => ({
         ...renda,
         sincronizado: true,
         idLocal: '',
         idFather: '',
       }));
+  
       if (dadosAPI.length > 0) {
         await salvarRendaOutrasFontes(dadosAPI);
-        setRendasOF(prev => [...prev, ...dadosAPI]);
       }
     } catch (error) {
-    //  console.error("Erro ao buscar rendas da API:", error);
+      // console.error("Erro ao buscar rendas da API:", error);
     }
   };
-
-  useEffect(() => {
-    fetchRendasRealm();
-    fetchRendasAPI();
-    sincronizeRendaOFQueue();
-  }, [foccus]);
   
+
+    
   useEffect(() => {
     const sincronizarTudo = async () => {
       setLoadingOutrasRendas(true);

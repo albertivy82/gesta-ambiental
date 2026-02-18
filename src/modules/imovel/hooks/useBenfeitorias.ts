@@ -57,6 +57,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
         const benfeitoriaQueue = getBenfeitoriaDessincronizadas(imovelId);
       
         if (benfeitoriaQueue.length > 0) {
+          
             for (const benfeitoria of benfeitoriaQueue) {
                const novaBenfeitoriaInput = convertToBenfeitoriaInput(benfeitoria)
             
@@ -65,9 +66,9 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                     if (isConnected) {
                        // console.log("useBenfeitorias/isConnected", isConnected)
                         try {
-                           // console.log("benfeitoria enviada",novaBenfeitoriaInput)
+                            //console.log("benfeitoria enviada",novaBenfeitoriaInput)
                             const response = await connectionAPIPost('http://192.168.100.28:8080/benfeitoria', novaBenfeitoriaInput);
-                           // console.log("benfeitpria. ponto de sisncronização 5")
+                            //console.log("benfeitpria. ponto de sisncronização 5")
                             const benfeitoriaAPI = response as BenfeitoriaType;
                            
                                 if(benfeitoriaAPI.id && benfeitoria.idLocal){
@@ -79,7 +80,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                                     const r6 = setIdBenfeitoriaFromApiCredito(benfeitoriaAPI.id, benfeitoria.idLocal!);
                                     const results = [r1, r2, r3, r4, r5, r6];
                                     const ok = !results.includes(false);
-                                    console.log("será que eu coloquei o ide em todas  as filhas de benfeitoris ",ok)
+                                    console.log("será que eu coloquei o ide em todas  as filhas de benfeitoris ", r1, r2, r3, r4, r5, r6)
                                      if(ok){
                                          apagarBenfeitiaQueue(benfeitoria.idLocal!)
                                         //console.log("benfeitpria. ponto de sisncronização 6", )  
@@ -100,12 +101,12 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
     };
  
 
-     const fetchBenfeitoriasRealm = () => {
-            const benfeitoriaRealm = getBenfeitorias(imovelId);
-            if (benfeitoriaRealm.length > 0) {
-               setBenfeitoria((prevBenf) => [...prevBenf, ...benfeitoriaRealm]); // Aqui usamos benfeitoriaRealm
-            }
-        };
+    const fetchBenfeitoriasRealm = () => {
+      const benfeitoriaRealm = getBenfeitorias(imovelId);
+      //console.log("salvando benfeitorias", benfeitoriaRealm)
+      setBenfeitoria(benfeitoriaRealm); 
+    };
+    
 
     const fetchBefeitoriasAPI = async() =>{
         
@@ -116,7 +117,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
 
         try{
             const response = await connectionAPIGet<BenfeitoriaType[]>(`http://192.168.100.28:8080/benfeitoria/imovel-benfeitoria/${imovelId}`);
-                
+            console.log("executou post?")
             const bftData = (response ?? []).map((bft) => ({
                 ...bft,
                 sincronizado: true,
@@ -126,12 +127,10 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
 
               //  console.log("benfeitpria. circuito da API")  
               //PONTO DE ATENÇÃO. se houver duplicadas o problema será aqui.  
-                if(bftData && Array.isArray(bftData) && bftData.length>0){
-                      await salvarBenfeitorias(bftData);
-                       setBenfeitoria((prevBenf) => [...prevBenf, ...bftData]);
-                }else{
-                    throw new Error('Dados de benfeitoria Inválidos'); 
-                }
+              if (bftData && Array.isArray(bftData) && bftData.length > 0) {
+                //console.log("salvando benfeitorias de novo?", bftData)
+                await salvarBenfeitorias(bftData);
+               }
         } catch (error) {
                 //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
         }

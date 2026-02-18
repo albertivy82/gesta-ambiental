@@ -137,7 +137,7 @@ export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfe
 
         if (moradorQueue.length === 0) {
             // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-            return false;
+            return true;
         }
 
         if (moradorQueue.length > 0) {
@@ -147,6 +147,7 @@ export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfe
                     moradorOrfan.idFather = '';
                 });
             });
+            console.log("reentrando aqui?:");
         }
         return true;
     } catch (error) {

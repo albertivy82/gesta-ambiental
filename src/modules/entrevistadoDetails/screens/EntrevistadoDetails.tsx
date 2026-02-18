@@ -15,7 +15,6 @@ import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
 
-
 // Para entidades MULTIPLAS (vegetacao, peixes, etc.)
 export const handleNavegacaoFilhas = (
   navigate: NavigationProp<ParamListBase>['navigate'], 
@@ -74,6 +73,7 @@ const EntrevistadoDetails = () => {
     }
   };
   
+    
   if (loading) {
     return (
       <EntrevistadoDetailContainer
@@ -100,6 +100,9 @@ const EntrevistadoDetails = () => {
       </EntrevistadoDetailContainer>
     );
   }
+
+  
+
   return (
     
        <ScrollView style={{ flex: 1 }}>

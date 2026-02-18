@@ -129,7 +129,7 @@ export const setIdBenfeitoriaFromApiOnCS = (idBenfeitoriaApi: number, benfeitori
 
     if (servicosQueue.length === 0) {
       // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-      return false;
+      return true;
     }
 
     if (servicosQueue.length > 0) {

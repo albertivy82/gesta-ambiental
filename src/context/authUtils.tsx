@@ -1,11 +1,12 @@
-import { Button, TouchableOpacity } from 'react-native';
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
-import { removeAuthData } from './authStore';
-import { removeToken } from './tokenStore';
 import React from 'react';
-import { theme } from '../shared/themes/theme';
+import { TouchableOpacity } from 'react-native';
 import Text from '../shared/components/text/Text';
-import { Icon } from '../shared/components/icon/Icon';
+import { theme } from '../shared/themes/theme';
+import { removeAuthData } from './authStore';
+import { removeRefreshToken } from './refreshTokenStore';
+import { removeToken } from './tokenStore';
+import { removeUser } from './userStore';
 
 interface TransparentRedButtonProps {
   onPress: () => void; // Defina o tipo da propriedade onPress
@@ -35,8 +36,12 @@ const LogoutButton: React.FC = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
 
   const handleLogout = async () => {
+
     await removeAuthData();
     await removeToken();
+    await removeRefreshToken();
+    await removeUser();
+    
     navigation.reset({
       index: 0,
       routes: [{ name: 'Splash' }],

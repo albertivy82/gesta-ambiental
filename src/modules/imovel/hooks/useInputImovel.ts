@@ -9,6 +9,7 @@ import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelInput } from "../../../shared/types/imovelInput";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { validateImovel } from "../components/validateImovel";
+import { LOCATION_INDISPONIVEL } from "../../../shared/components/constants/location";
 
 
 export const DEFAUL_IMOVEL_INPUT: imovelInput = {
@@ -16,8 +17,8 @@ export const DEFAUL_IMOVEL_INPUT: imovelInput = {
     numero: '',
     bairro: '',
     referencial: '',
-    latitude: 'Indisponível',
-    longitude: 'Indisponível',
+    latitude: LOCATION_INDISPONIVEL,
+    longitude: LOCATION_INDISPONIVEL,
     areaImovel: 0,
     tipoSolo: '',
     vizinhosConfinantes: '',

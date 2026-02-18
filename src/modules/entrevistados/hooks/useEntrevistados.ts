@@ -106,7 +106,7 @@ export const useEntrevistados = (localidadeId: number, foccus: boolean) => {
                         apagarEntrevistadoQueue(entrevistado.idLocal!);
                         console.log(`SYNC|ENTREV|DEL_QUEUE_DONE idLocal=${entrevistado.idLocal}`);
                       } else {
-                        console.warn(
+                        console.log(
                           `SYNC|ENTREV|WARN link_imovel_updated_false idLocal=${entrevistado.idLocal} apiId=${EntrevistadoAPI.id}`
                         );
                       }

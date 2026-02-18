@@ -86,9 +86,10 @@ const objetoFila = () => {
 
 const enviarRegistro = async () => {
   if (benfeitoria) {
-  
+    console.log("enviando?")
       return await enviaBenfeitoriaEdicao();
   } else {
+    console.log("enviando?")
      return await enviaBenfeitoriaNova();
   }
 };

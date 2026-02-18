@@ -18,7 +18,6 @@ import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
 import { estadoCivilOptions, saudeOptions, sexoEscolaridade, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
 
-
 export interface NovoEntrevistadoParams {
 localidadeId?: number
 entrevistado?: EntrevistadoType;
@@ -280,9 +279,7 @@ export const NovoEntrevistado = ()=>{
               }
     };
     
-    
-
-    
+        
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'}}>

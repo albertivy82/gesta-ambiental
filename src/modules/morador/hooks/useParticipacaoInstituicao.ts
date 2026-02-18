@@ -52,13 +52,12 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
 
   const fetchParticipacaoInstituicoesRealm = () => {
     const realmData = getParticipacoesIntitucionais(moradorId);
-    console.log("aaaa", realmData)
-    if (realmData.length > 0) {
-      setParticipacaoInstituicoes(realmData);
-    }
+     setParticipacaoInstituicoes(realmData);
   };
 
           const fetchParticipacaoInstituicoesAPI = async () => {
+            const isConnected = await testConnection();
+            if (isConnected) {
             try {
               const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://192.168.100.28:8080/participacao-instituicao/morador-pariticipacao-instituicao/${moradorId}`);
              console.log("baixando da api", response)
@@ -72,7 +71,6 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
                            //  console.log("benfeitpria. circuito da API")    
                              if(ptcData && Array.isArray(ptcData) && ptcData.length>0){
                                    await salvarParticipacoesIntitucionais(ptcData);
-                                    setParticipacaoInstituicoes((prevptcData) => [...prevptcData, ...ptcData]);
                              }else{
                                //  throw new Error('Dados de benfeitoria Inválidos'); 
                              }
@@ -81,13 +79,9 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
               //console.error('Erro ao recuperar participacaoInsituicaoes da API:', error);
             }
           };
+          };
 
-  useEffect(() => {
-    sincronizeParticipacaoInstituicoesQueue();
-    fetchParticipacaoInstituicoesAPI();
-    fetchParticipacaoInstituicoesRealm();
-    
-  }, [foccus]);
+ 
 
   useEffect(() => {
     const sincronizarTudo = async () => {

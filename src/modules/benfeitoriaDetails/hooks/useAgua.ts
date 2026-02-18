@@ -45,30 +45,38 @@ export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
 
   const fetchAguaRealm = () => {
     const locais = getAguas(benfeitoriaId);
-    if (locais.length > 0) {
-      setAguas((prevAguas) => [...prevAguas, ...locais]);
-    }
+      setAguas(locais);
+    
   };
 
   const fetchAguaAPI = async () => {
-    try {
-      const response = await connectionAPIGet<AguaType[]>(`http://192.168.100.28:8080/agua/benfeitoria-agua/${benfeitoriaId}`);
-      
-      const aguaData = response.map(agua => ({
+    const isConnected = await testConnection();
+  
+          if (!isConnected) {
+            console.log(`SYNC|AGUA|API_SKIP_OFFLINE benfeitoria=${benfeitoriaId}`);
+            return;
+          }
+  
+            try {
+                    const response = await connectionAPIGet<AguaType[]>(
+                      `http://192.168.100.28:8080/agua/benfeitoria-agua/${benfeitoriaId}`
+                    );
+                
+                    const aguaData = response.map(agua => ({
                       ...agua,
                       sincronizado: true,
                       idLocal: '',
                       idFather: '',
-                  }));
-                  
-                  if (aguaData && Array.isArray(aguaData) && aguaData.length > 0) {
-                      await salvarAguas(aguaData);
-                      setAguas((prevAguas) => [...prevAguas, ...aguaData]);
-                  }
-    } catch (error) {
-     // console.error("Erro ao buscar águas da API:", error);
-    }
-  };
+                    }));
+          
+                    if (aguaData && Array.isArray(aguaData) && aguaData.length > 0) {
+                     await salvarAguas(aguaData);
+              }
+            } catch (error) {
+              // console.error("Erro ao buscar águas da API:", error);
+            }
+    };
+  
 
   useEffect(() => {
     const sincronizarTudo = async () => {

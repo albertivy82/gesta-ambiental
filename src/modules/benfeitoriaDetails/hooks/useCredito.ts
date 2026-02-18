@@ -47,28 +47,39 @@ export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
 
   const fetchCreditoRealm = () => {
     const locais = getCreditos(benfeitoriaId);
-    if (locais.length > 0) {
-      setCreditos(prev => [...prev, ...locais]);
-    }
+   
+      setCreditos(locais);
+    
   };
 
   const fetchCreditoAPI = async () => {
+    const isConnected = await testConnection();
+  
+    if (!isConnected) {
+      console.log(`SYNC|CREDITO|API_SKIP_OFFLINE benfeitoria=${benfeitoriaId}`);
+      return;
+    }
+  
     try {
-      const response = await connectionAPIGet<CreditoType[]>(`http://192.168.100.28:8080/credito/benfeitoria-credito/${benfeitoriaId}`);
+      const response = await connectionAPIGet<CreditoType[]>(
+        `http://192.168.100.28:8080/credito/benfeitoria-credito/${benfeitoriaId}`
+      );
+  
       const dados = response.map(item => ({
         ...item,
         sincronizado: true,
         idLocal: '',
         idFather: '',
       }));
+  
       if (dados.length > 0) {
         await salvarCreditos(dados);
-        setCreditos(prev => [...prev, ...dados]);
       }
     } catch (error) {
-     // console.error("Erro ao buscar créditos da API:", error);
+      // console.error("Erro ao buscar créditos da API:", error);
     }
   };
+  
 
   
   useEffect(() => {

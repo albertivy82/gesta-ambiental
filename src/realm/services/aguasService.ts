@@ -126,7 +126,7 @@ export const setIdBenfeitoriaFromApiOnAguas = (idBenfeitoriaApi: number, benfeit
 
     if (aguaQueue.length === 0) {
       // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-      return false;
+      return true;
     }
 
     if (aguaQueue.length > 0) {

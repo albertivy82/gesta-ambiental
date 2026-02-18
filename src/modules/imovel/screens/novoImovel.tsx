@@ -231,9 +231,7 @@ export const NovoImovel = () => {
                 </Text>
               )}
            <LocationInput
-            initialLatitude={valorSalvoLatitude || undefined}
-            initialLongitude={valorSalvoLongitude || undefined}
-            onLocationChange={(lat, lon) => {
+              onLocationChange={(lat, lon) => {
               handleLocationChange(lat, 'latitude');
               handleLocationChange(lon, 'longitude');
              }}

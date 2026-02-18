@@ -30,7 +30,7 @@ const Credito = () => {
   const flatListRef = useRef<FlatList>(null);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
    const {} = useCreditos(benfeitoria.id, foccus);
-
+    console.log(creditos)
     const isFocused = useIsFocused();
    
      const carregarCreditos = () => {

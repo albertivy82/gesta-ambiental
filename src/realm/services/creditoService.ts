@@ -128,7 +128,7 @@ export const setIdBenfeitoriaFromApiCredito = (idBenfeitoriaApi: number, benfeit
 
     if (creditosQueue.length === 0) {
       // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-      return false;
+      return true;
     }
 
     if (creditosQueue.length > 0) {

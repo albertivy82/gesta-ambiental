@@ -52,29 +52,39 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
 
   const fetchFromRealm = () => {
     const data = getServicosComunicacao(benfeitoriaId);
-    if (data.length > 0) {
-      setServicos((prev) => [...prev, ...data]);
-    }
+    
+      setServicos(data);
+   
   };
 
   const fetchFromAPI = async () => {
+    const isConnected = await testConnection();
+  
+    if (!isConnected) {
+      console.log(`SYNC|CS|API_SKIP_OFFLINE benfeitoria=${benfeitoriaId}`);
+      return;
+    }
+  
     try {
-      const response = await connectionAPIGet<ServicosComunicacaoType[]>(`http://192.168.100.28:8080/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`);
+      const response = await connectionAPIGet<ServicosComunicacaoType[]>(
+        `http://192.168.100.28:8080/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`
+      );
+  
       const data = response.map((item) => ({
         ...item,
         sincronizado: true,
         idLocal: '',
         idFather: '',
       }));
+  
       if (data.length > 0) {
         await salvarServicosComunicacao(data);
-        setServicos((prev) => [...prev, ...data]);
       }
     } catch (error) {
-      //console.error("Erro ao recuperar serviços de comunicação da API:", error);
+      // console.error("Erro ao recuperar serviços de comunicação da API:", error);
     }
   };
-
+  
   
 
   useEffect(() => {

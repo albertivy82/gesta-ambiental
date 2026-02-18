@@ -205,7 +205,7 @@ export const setIdImovelFromApiOnBenfeitoria = (idImovelApi: number, imovelIdLoc
   
       if (benfeitoriaQueue.length === 0) {
         // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-        return false;
+        return true;
       }
   
       realmInstance.write(() => {

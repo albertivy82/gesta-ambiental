@@ -60,9 +60,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
 
   const fetchMoradoresRealm = () => {
     const realmData = getMoradores(benfeitoriaId);
-    if (realmData.length > 0) {
-      setMoradores((prev) => [...prev, ...realmData]);
-    }
+    setMoradores(realmData);
   };
 
   const fetchMoradoresAPI = async () => {
@@ -85,8 +83,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
 
           if (apiData.length > 0) {
             await salvarMoradores(apiData);
-            setMoradores((prev) => [...prev, ...apiData]);
-          } else {
+           } else {
             throw new Error('Dados de moradores inválidos');
           }
         } catch (error) {

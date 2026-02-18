@@ -127,8 +127,8 @@ export const setIdEntrevistadoFromApiOnImovel = (
       const imovel = imoveis[0];
  
       if (!imovel) {
-        console.log("Nenhum imóvel encontrado para idLocal:", entrevistadoIdLocal);
-        return false;
+        //console.log("Nenhum imóvel encontrado para idLocal:", entrevistadoIdLocal);
+        return true;
       }
  
       realmInstance.write(() => {

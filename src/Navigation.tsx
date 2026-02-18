@@ -117,6 +117,18 @@ const Navigation =() =>{
          <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false}}/>
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false}}/>
           <Stack.Screen name="Home" component={TabNavigation} 
+
+                listeners={{
+                  focus: async () => {
+                    const currentUser = await getUser();
+                    if (currentUser) {
+                      const userDataParsed: UserBody = JSON.parse(currentUser);
+                      setUserData(userDataParsed);
+                    } else {
+                      setUserData(null);
+                    }
+                  },
+                }}
               options={{
                 title: '',
                 headerTransparent: true, // Deixa o cabeçalho transparente

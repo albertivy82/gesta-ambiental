@@ -59,34 +59,41 @@ export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) 
 
   const fetchAtividadesRealm = () => {
     const atividadesRealm = getAtividadesProdutivas(benfeitoriaId);
-    if (atividadesRealm.length > 0) {
-      setAtividades((prev) => [...prev, ...atividadesRealm]);
-    }
+   
+      setAtividades(atividadesRealm);
+  
   };
 
   const fetchAtividadesAPI = async () => {
+    const isConnected = await testConnection();
+  
+    if (!isConnected) {
+      console.log(`SYNC|ATVPROD|API_SKIP_OFFLINE benfeitoria=${benfeitoriaId}`);
+      return;
+    }
+  
     try {
       const response = await connectionAPIGet<AtividadeProdutivaType[]>(
         `http://192.168.100.28:8080/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
       );
-
+  
       const data = response.map((atividade) => ({
         ...atividade,
         sincronizado: true,
         idLocal: "",
         idFather: "",
       }));
-
+  
       if (data.length > 0) {
-         await salvarAtividadesProdutivas(data);
-          setAtividades((prev) => [...prev, ...data]);
+        await salvarAtividadesProdutivas(data);
       } else {
         throw new Error("Dados de atividade produtiva inválidos");
       }
     } catch (error) {
-     console.log("Erro ao recuperar atividades produtivas da API:", error);
+      console.log("Erro ao recuperar atividades produtivas da API:", error);
     }
   };
+  
 
   
   useEffect(() => {

@@ -123,7 +123,7 @@ export const setIdBenfeitoriaFromApiOnRendasOF = (idBenfeitoriaApi: number, benf
 
         if (rendaQueue.length === 0) {
             // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-            return false;
+            return true;
           }
         if (rendaQueue.length > 0) {
             realmInstance.write(() => {

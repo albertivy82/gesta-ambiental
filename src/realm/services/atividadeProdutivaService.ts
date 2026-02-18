@@ -127,7 +127,7 @@ export const setIdBenfeitoriaFromApiOnAtvProd = (idBenfeitoriaApi: number, benfe
 
     if (atividadesQueue.length === 0) {
       // console.log("Nenhuma benfeitoria encontrada para o ID local:", imovelIdLocal);
-      return false;
+      return true;
   }
 
 
