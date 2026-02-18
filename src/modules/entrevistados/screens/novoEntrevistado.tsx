@@ -23,16 +23,18 @@ localidadeId?: number
 entrevistado?: EntrevistadoType;
 }
 
-
+/*
+antigo método que gusrdava apilha na memória
 export const detalharEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType)=>{
     navigate('EntrevistadoDetails', {entrevistado})
 }
-
+*/
 export const NovoEntrevistado = ()=>{
   const { params } = useRoute<RouteProp<Record<string, NovoEntrevistadoParams>, string>>();
   const localidadeId = params.localidadeId ?? params.entrevistado?.localidade.id;
   const entrevistado = params.entrevistado;
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  //const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const navigation = useNavigation<any>();
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const { novoEntrevistado,
@@ -267,7 +269,9 @@ export const NovoEntrevistado = ()=>{
           setLoading(true);
            const entrevistadoSalvo = await enviarRegistro(); 
                if (entrevistadoSalvo){
-                 detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
+                 //detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
+                 navigation.replace("EntrevistadoDetails", { entrevistado: entrevistadoSalvo });
+
                } else {
                  Alert.alert("Erro", "Não foi possível salvar o entrevistado. Tente novamente.");
                  navigation.goBack();

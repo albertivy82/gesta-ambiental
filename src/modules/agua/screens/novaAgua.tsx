@@ -20,13 +20,11 @@ export interface NovaAguaParams {
   agua?: AguaType;
 }
 
-export const detalharAgua = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
-  navigate('AguaLista', { benfeitoria });
-};
+
 
 export const NovaAgua = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, NovaAguaParams>, string>>();
+  const navigation = useNavigation<any>();
   const benfeitoria = params.benfeitoria;
   const agua = params.agua;
   const [showErrors, setShowErrors] = useState(false);
@@ -101,7 +99,7 @@ export const NovaAgua = () => {
       setLoading(true);
       const aguaSalva = await enviarRegistro();
       if (aguaSalva) {
-        detalharAgua(navigation.navigate, benfeitoria);
+        navigation.replace("AguaLista", { benfeitoria });
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

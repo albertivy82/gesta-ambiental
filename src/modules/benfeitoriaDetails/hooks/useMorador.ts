@@ -40,7 +40,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
             const isConnected = await testConnection();
             if (isConnected) {
               try {
-                const response = await connectionAPIPost('http://192.168.100.28:8080/morador', novoMoradorInput);
+                const response = await connectionAPIPost('http://177.74.56.24/morador', novoMoradorInput);
                 
                 const moradorAPI = response as MoradorType;
               
@@ -71,7 +71,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
     if (isConnected) {
         try {
           const response = await connectionAPIGet<MoradorType[]>(
-            `http://192.168.100.28:8080/morador/benfeitoria-morador/${benfeitoriaId}`
+            `http://177.74.56.24/morador/benfeitoria-morador/${benfeitoriaId}`
           );
 
           const apiData = response.map((item) => ({

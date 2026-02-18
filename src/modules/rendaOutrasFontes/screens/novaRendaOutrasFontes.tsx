@@ -16,16 +16,13 @@ export interface NovoCreditoParams {
   renda?: RendaOutrasFontesType;
 }
 
-export const detalharRenda = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
-  navigate('RendaOutrasFontesLista', { benfeitoria });
-};
 
 
 export const NovaRendaOutrasFontes = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
   const benfeitoria = params.benfeitoria;
   const renda = params.renda;
+  const navigation = useNavigation<any>();
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const [fonteRenda, setFonteRenda] = useState<string>('');     
@@ -75,7 +72,7 @@ export const NovaRendaOutrasFontes = () => {
    
       const rendaSalva = await enviarRegistro(); 
       if (rendaSalva) {
-        detalharRenda(navigation.navigate, benfeitoria);
+        navigation.replace("RendaOutrasFontesLista", { benfeitoria });
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

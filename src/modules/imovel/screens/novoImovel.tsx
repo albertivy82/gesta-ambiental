@@ -21,15 +21,13 @@ export interface NovoReptilParams {
   imovel?: imovelBody;
 }
 
-export const detalharImovel = (navigate: NavigationProp<ParamListBase>['navigate'], imovel: imovelBody) => {
-  navigate('ImovelDetail', { imovel });
-};
+
 
 export const NovoImovel = () => {
   const { params } = useRoute<RouteProp<Record<string, NovoReptilParams>, string>>();
   const entrevistado = params.entrevistado ?? params.imovel?.entrevistado;
   const imovel = params.imovel;
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const navigation = useNavigation<any>();
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
   const { novoImovel,
@@ -161,7 +159,7 @@ export const NovoImovel = () => {
               setLoading(true);
                const imovelSalvo = await enviarRegistro(); 
                    if (imovelSalvo){
-                     detalharImovel(navigation.navigate, imovelSalvo);
+                    navigation.replace("ImovelDetail", { imovel: imovelSalvo });
                    } else {
                      Alert.alert("Erro", "Não foi possível salvar a imovel. Tente novamente.");
                      navigation.goBack();

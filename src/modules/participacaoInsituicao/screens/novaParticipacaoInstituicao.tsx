@@ -17,15 +17,14 @@ export interface NovaParticipacaoInstituicaoParams {
   participacaoInstituicao?: ParticipacaoInstituicaoType;
 }
 
-export const detalharParticipacaoInstituicao = (navigate: NavigationProp<ParamListBase>['navigate'], morador: MoradorType)=>{
-    navigate('ParticipacaoInstituicao', {morador})
-}
+
+
 
 export const NovaParticipacaoInstituicao = ()=>{
    const { params } = useRoute<RouteProp<Record<string, NovaParticipacaoInstituicaoParams>, string>>();
    const morador = params.morador;
    const participacaoInstituicao = params.participacaoInstituicao;
-   const navigation = useNavigation<NavigationProp<ParamListBase>>();
+   const navigation = useNavigation<any>();
    const [showErrors, setShowErrors] = useState(false);
    const [loading, setLoading] = useState(false); 
    const {  novaParticipacaoInstituicao,
@@ -67,7 +66,8 @@ useEffect(() => {
           setLoading(true);
            const participacaoInstituicaoSalva = await enviarRegistro(); 
              if (participacaoInstituicaoSalva){
-                  detalharParticipacaoInstituicao(navigation.navigate, morador);
+                 navigation.replace("ParticipacaoInstituicao", { morador });
+ 
                 } else {
                   Alert.alert("Erro", "Não foi possível salvar a participacaoInstituicao. Tente novamente.");
                  navigation.goBack();

@@ -52,7 +52,7 @@ const AdmUsers = ()=>{
       useEffect(() => {
         const fetchUsers = async () => {
           try {
-            const usersData = await connectionAPIGet('http://192.168.100.28:8080/usuario');
+            const usersData = await connectionAPIGet('http://177.74.56.24/usuario');
             if (typeof usersData === 'object' && usersData !== null) {
               //console.log(usersData)
               setUser(usersData as UserBody[]); 

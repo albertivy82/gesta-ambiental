@@ -16,13 +16,10 @@ export interface NovaAtividadeParams {
   atividadeProdutiva?: AtividadeProdutivaType;
 }
 
-export const detalharAtividadeProdutiva = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
-  navigate('Atividades', { benfeitoria });
-};
 
 export const NovaAtividade = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const { params } = useRoute<RouteProp<Record<string, NovaAtividadeParams>, string>>();
+  const navigation = useNavigation<any>();
   const benfeitoria = params.benfeitoria;
   const atividadeProdutiva = params.atividadeProdutiva;
   const [showErrors, setShowErrors] = useState(false);
@@ -64,7 +61,7 @@ const atividadeOptions =  Object.values(
            const atividadeSalva = await enviarRegistro(); 
            console.log("ppp", atividadeSalva);
                if (atividadeSalva){
-                 detalharAtividadeProdutiva(navigation.navigate, benfeitoria);
+                navigation.replace("Atividades", { benfeitoria });
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
                  navigation.goBack();

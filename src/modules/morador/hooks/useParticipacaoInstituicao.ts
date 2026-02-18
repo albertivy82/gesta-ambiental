@@ -34,7 +34,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
             if (isConnected) {
           //    console.log("participação enviada3", novoParticipacaoInstituicaoInput)
               try {
-                const response = await connectionAPIPost('http://192.168.100.28:8080/participacao-instituicao', novoParticipacaoInstituicaoInput);
+                const response = await connectionAPIPost('http://177.74.56.24/participacao-instituicao', novoParticipacaoInstituicaoInput);
                 const participacaoInsituicaoAPI = response as ParticipacaoInstituicaoType;
                // console.log("participação enviada4", participacaoInsituicaoAPI)
                 if (participacaoInsituicaoAPI.id) {
@@ -59,7 +59,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
             const isConnected = await testConnection();
             if (isConnected) {
             try {
-              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://192.168.100.28:8080/participacao-instituicao/morador-pariticipacao-instituicao/${moradorId}`);
+              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`http://177.74.56.24/participacao-instituicao/morador-pariticipacao-instituicao/${moradorId}`);
              console.log("baixando da api", response)
              const ptcData = response.map(ptcData=>({
                                  ...ptcData,

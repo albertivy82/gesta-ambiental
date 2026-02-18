@@ -111,7 +111,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                     
             try{
 
-               const response = await connectionAPIPost('http://192.168.100.28:8080/posto-de-saude', novoPosto) as PostoType;
+               const response = await connectionAPIPost('http://177.74.56.24/posto-de-saude', novoPosto) as PostoType;
                     if (response && response.id) {
                         return fetchPostoAPI(response.id);
                       }
@@ -149,7 +149,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                             try{
                               console.log("enviando para edição", postoCorrigido)
-                              const response = await connectionAPIPut(`http://192.168.100.28:8080/posto/${posto!.id}`, postoCorrigido) as PostoType;
+                              const response = await connectionAPIPut(`http://177.74.56.24/posto/${posto!.id}`, postoCorrigido) as PostoType;
                               console.log("recebendo edição", response)
                               if (response && response.id) {
                                    return fetchPostoAPI(response.id);
@@ -188,7 +188,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
    const fetchPostoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<PostoType>(`http://192.168.100.28:8080/posto-de-saude/${id}`);
+              const response = await connectionAPIGet<PostoType>(`http://177.74.56.24/posto-de-saude/${id}`);
               if (response) {
                 const postoData = {
                     ...response,

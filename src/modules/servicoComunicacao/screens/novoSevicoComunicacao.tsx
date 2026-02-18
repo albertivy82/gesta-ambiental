@@ -16,14 +16,14 @@ export interface NovoServicoParams {
 }
 
 export const detalharServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
-  navigate('ServicosComunicacaoLista', {benfeitoria})
+  navigate('', {benfeitoria})
 }
 
 export const NovoServicoComunicacao = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
     const { params } = useRoute<RouteProp<Record<string, NovoServicoParams>, string>>();
     const benfeitoria = params.benfeitoria;
     const servicosComunicacao = params.servicosComunicacao;
+    const navigation = useNavigation<any>();
     const [showErrors, setShowErrors] = useState(false);
     const [loading, setLoading] = useState(false); 
   const [serviCom, setServCom] = useState<string>('');     
@@ -94,7 +94,7 @@ try {
   setLoading(true);
       const servicoComunicacaoSalvo = await enviarRegistro(); 
       if (servicoComunicacaoSalvo) {
-        detalharServicoComunicacao(navigation.navigate, benfeitoria);
+          navigation.replace("ServicosComunicacaoLista", { benfeitoria });
       } else {
         Alert.alert("Erro", "Não foi possível salvar serviço de comunicação. Tente novamente.");
         navigation.goBack();

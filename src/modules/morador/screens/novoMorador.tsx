@@ -23,15 +23,12 @@ export interface NovoMoradorParams {
   morador?: MoradorType;
 }
 
-export const detalharMorador = (navigate: NavigationProp<ParamListBase>['navigate'], morador: MoradorType)=>{
-  navigate('MoradorDetails', {morador})
-}
 
 export const NovoMorador = ()=>{
-   const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const { params } = useRoute<RouteProp<Record<string, NovoMoradorParams>, string>>();
    const benfeitoria = params.benfeitoria ?? params.morador?.benfeitoria;
    const morador = params.morador;
+   const navigation = useNavigation<any>();
    const [loading, setLoading] = useState(false); 
    const [showErrors, setShowErrors] = useState(false);
    const [validator, setValidator] = useState(false); 
@@ -141,7 +138,7 @@ useEffect(() => {
     setLoading(true);
            const moradorSalvo = await enviarRegistro(); 
                if (moradorSalvo){
-                 detalharMorador(navigation.navigate, moradorSalvo);
+                navigation.replace("MoradorDetails", { morador: moradorSalvo });
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a morador. Tente novomente.");
                  navigation.goBack();

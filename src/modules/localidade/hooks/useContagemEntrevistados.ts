@@ -19,7 +19,7 @@ export const useContagemEntrevistados = (localidadeId: number, foccus: boolean) 
     if (!isConnected) return;
 
     const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(
-      `http://192.168.100.28:8080/entrevistado/localidade-entrevistado/${localidadeId}`
+      `http://177.74.56.24/entrevistado/localidade-entrevistado/${localidadeId}`
     );
 
     const entrevistadoData: EntrevistadoType[] = (entrevistadoAPI ?? []).map((entrevistado) => ({

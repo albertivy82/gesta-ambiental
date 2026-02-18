@@ -34,15 +34,13 @@ imovel: imovelBody,
 benfeitoria?: BenfeitoriaType,
 }
 
-export const detalharBenfeitoria = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
-    navigate('BenfeitoriaDetails', {benfeitoria})
-}
+
 
 export const NovaBenfeitoria=()=>{
   const { params } = useRoute<RouteProp<Record<string, imovelParam>, string>>();
   const imovel = params.imovel ?? params.benfeitoria?.imovel;
   const benfeitoria = params.benfeitoria;
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
+  const navigation = useNavigation<any>();
   const {novaBenfeitoria, 
            enviarRegistro,
            handleEnumChange,
@@ -172,7 +170,7 @@ export const NovaBenfeitoria=()=>{
         setLoading(true);
         const benfeitoriaSalva = await enviarRegistro(); 
             if (benfeitoriaSalva){
-              detalharBenfeitoria(navigation.navigate, benfeitoriaSalva);
+              navigation.replace("BenfeitoriaDetails", { benfeitoria: benfeitoriaSalva });
             } else {
               Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
               navigation.goBack();

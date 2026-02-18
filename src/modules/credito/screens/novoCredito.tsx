@@ -15,15 +15,13 @@ export interface NovoCreditoParams {
   credito?: CreditoType;
 }
 
-export const detalharCredito = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
-  navigate('CreditoLista', { benfeitoria });
-};
+
 
 
 
 export const NovoCredito = () => {
- const navigation = useNavigation<NavigationProp<ParamListBase>>();
    const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
+   const navigation = useNavigation<any>();
    const benfeitoria = params.benfeitoria;
    const [showErrors, setShowErrors] = useState(false);
    const credito = params.credito;
@@ -61,7 +59,7 @@ export const NovoCredito = () => {
     try {
       const creditoSalva = await enviarRegistro(); 
       if (creditoSalva){
-        detalharCredito(navigation.navigate, benfeitoria);
+        navigation.replace("CreditoLista", { benfeitoria });
       } else {
         Alert.alert("Erro", "Não foi possível salvar o crédito. Tente novamente.");
         navigation.goBack();
