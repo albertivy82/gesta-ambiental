@@ -110,7 +110,7 @@ const EntrevistadoDetails = () => {
               <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
             {renderField('Nome', params.entrevistado.nome)}
             {renderField('Naturalidade', params.entrevistado.naturalidade)}
-            {renderField('Idade do entrevistado', params.entrevistado.nascimentoData?.toString())}
+            {renderField('Idade do entrevistado', params.entrevistado.idade?.toString())}
             {renderField('Sexo', params.entrevistado.sexo)}
             {renderField('Apelido', params.entrevistado.apelido)}
             {renderField('Escolaridade', params.entrevistado.escolaridade)}

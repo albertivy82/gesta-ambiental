@@ -26,8 +26,8 @@ const fetchLocalidadeFromAPI = async () => {
          if (isConnected) {
       
                 try {
-                  const response = await connectionAPIGet<LocalidadeType[]>('http://177.74.56.24/localidade');
-
+                  const response = await connectionAPIGet<LocalidadeType[]>('/api/localidade');
+                console.log("Lista de lovcalidades iniciais", response)
                                   const data = response as LocalidadeType[];
                                   if (data && Array.isArray(data) && data.length > 0) {
                                           await salvarLocalidades(data); 

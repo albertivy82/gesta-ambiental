@@ -98,7 +98,7 @@ useEffect(() => {
   },[doencaInformada])
 
   useEffect(()=>{
-    handleSetNumber(idade!,'dataNascimento');
+    handleSetNumber(idade!,'idade');
  },[idade])
    
   const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
@@ -153,13 +153,13 @@ useEffect(() => {
 
        useEffect(() => {
         if (!morador) return;
-        handleSetNumber(morador.dataNascimento ?? 0, 'dataNascimento');
+        handleSetNumber(morador.idade ?? 0, 'idade');
         handleEnumChange('perfil', morador.perfil);
         handleEnumChange('sexo', morador.sexo);
         handleEnumChange('estadoCivil', morador.estadoCivil);
         handleEnumChange('escolaridade', morador.escolaridade);
         handleEnumChange('religiao', morador.religiao);
-        setIdade(morador.dataNascimento);
+        setIdade(morador.idade);
         
       }, [morador]);
 
@@ -176,7 +176,7 @@ useEffect(() => {
         
           if(entrevistado){
            
-                handleSetNumber(entrevistado.nascimentoData ?? 0, 'dataNascimento');
+                handleSetNumber(entrevistado.idade ?? 0, 'idade');
                 handleEnumChange('sexo', entrevistado.sexo ?? null);
                 handleEnumChange('estadoCivil', entrevistado.estadoCivil ?? null);
                 handleEnumChange('escolaridade', entrevistado.escolaridade ?? '');
@@ -189,7 +189,7 @@ useEffect(() => {
           
         } else if(novoMorador.perfil==='COABITANTE'){
                   
-              handleSetNumber( 0, 'dataNascimento');
+              handleSetNumber( 0, 'idade');
               handleEnumChange('sexo', null);
               handleEnumChange('estadoCivil', null);
               handleEnumChange('escolaridade', '');

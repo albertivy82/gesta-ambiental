@@ -4,7 +4,7 @@ import { Sexo } from "../../enums/Sexo";
 export interface MoradorInput{
    
     perfil: Perfil| null| ''; 
-    dataNascimento: number;
+    idade: number;
     sexo: Sexo| null| ''; 
     escolaridade: string; 
     estadoCivil: string;  

@@ -90,7 +90,7 @@ const MoradorDetails = () => {
         <MoradorDetailContainer>
               <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
                 {renderField('Perfil', params.morador.perfil)}  
-                {renderField('ata de nascimento', params.morador.dataNascimento.toString())}
+                {renderField('ata de nascimento', params.morador.idade.toString())}
                 {renderField('Sexo', params.morador.sexo)}
                 {renderField('Escolaridade', params.morador.escolaridade)}
                 {renderField('Estado civil', params.morador.estadoCivil)}

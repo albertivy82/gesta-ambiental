@@ -135,7 +135,7 @@ export const useInputUsers = () => {
     }
 
     const formattedUser = formatUserData(novoUsuario);
-    await connectionAPIPost("http://177.74.56.24/usuario", formattedUser);
+    await connectionAPIPost("https://dadoseconomicos.ideflorbio.pa.gov.br/usuario", formattedUser);
     navigation.navigate("Users");
   };
 
@@ -146,7 +146,7 @@ export const useInputUsers = () => {
     }
 
     const formattedUser = formatUserData(novoUsuario);
-    await connectionAPIPut(`http://177.74.56.24/usuario/${id}`, formattedUser);
+    await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/usuario/${id}`, formattedUser);
     navigation.navigate("Users");
   };
 

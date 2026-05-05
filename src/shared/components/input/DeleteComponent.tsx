@@ -88,7 +88,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
         if (isConnected) {
 
           
-          await connectionAPIDelete(`http://177.74.56.24/${deleteEndpoint}/${id}`);
+          await connectionAPIDelete(`https://dadoseconomicos.ideflorbio.pa.gov.br/${deleteEndpoint}/${id}`);
   
           switch (deleteEndpoint) {
             case "localidade":

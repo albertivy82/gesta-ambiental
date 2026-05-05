@@ -4,7 +4,7 @@ export const MoradorSchema = {
     properties: {
         id: 'int',
         perfil: 'string', 
-        dataNascimento: 'int',
+        idade: 'int',
         sexo: 'string', 
         escolaridade: 'string', 
         estadoCivil: 'string', 

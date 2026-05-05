@@ -5,7 +5,7 @@ export const EntrevistadoSchema = {
       id: 'int',
       nome: 'string',
       naturalidade: 'string',
-      nascimentoData: 'int',
+      idade: 'int',
       sexo: 'string',
       apelido: 'string',
       escolaridade: 'string',

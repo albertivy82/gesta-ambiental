@@ -34,7 +34,7 @@ export const useEditUser = () =>{
 
         const editLocalidade = async () => {
            
-            const localidade = await connectionAPIPost('http://177.74.56.24/localidade', novaLocalidade) as LocalidadeType;
+            const localidade = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/localidade', novaLocalidade) as LocalidadeType;
                 if (localidade && localidade.id) {
                    fetchLocalidadeAPI(localidade.id);
                 }
@@ -45,7 +45,7 @@ export const useEditUser = () =>{
         const fetchLocalidadeAPI = async(id:number) =>{
             
           try{
-            const response = await connectionAPIGet<LocalidadeType>(`http://177.74.56.24/localidade/${id}`);
+            const response = await connectionAPIGet<LocalidadeType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/localidade/${id}`);
               await salvarLocalidade(response);
           } catch (error) {
               //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);

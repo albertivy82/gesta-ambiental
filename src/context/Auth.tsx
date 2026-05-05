@@ -5,8 +5,7 @@ import qs from 'qs';
 import { storeAuthData } from './authStore';
 
 const authServer = axios.create({
-   baseURL: 'http://177.74.56.24'
-   //baseURL: 'http://192.168.100.28:8080'
+   baseURL: 'https://dadoseconomicos.ideflorbio.pa.gov.br'
 });
 
 export interface OAuthAuthorizationTokenResponse {
@@ -34,7 +33,7 @@ export const useRequest = () => {
 
     const encodedData = qs.stringify(data);
     try {
-      console.log(encodedData)
+     
       const response = await authServer.post<OAuthAuthorizationTokenResponse>(
         '/oauth2/token',
         encodedData,

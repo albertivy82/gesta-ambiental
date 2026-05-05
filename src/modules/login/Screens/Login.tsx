@@ -34,7 +34,7 @@ const Login = () => {
     code_challenge_method: 'S256',
   });
 
-  const authorizationUrl = `http://177.74.56.24/oauth2/authorize?${config}`;
+  const authorizationUrl = `https://dadoseconomicos.ideflorbio.pa.gov.br/oauth2/authorize?${config}`;
 
 
   const extrairCodigoDaURL = (url:string) => {

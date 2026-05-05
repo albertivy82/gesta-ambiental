@@ -45,16 +45,16 @@ export const validateEntrevistado = (data: EntrevistadoInput) => {
       }
     });
   
-    // 2) idade (nascimentoData no seu modelo)
+    // 2) idade (idade no seu modelo)
     if (
-      data.nascimentoData === undefined ||
-      data.nascimentoData === null ||
-      Number.isNaN(data.nascimentoData) ||
-      data.nascimentoData < 18 ||
-      data.nascimentoData > 120
+      data.idade === undefined ||
+      data.idade === null ||
+      Number.isNaN(data.idade) ||
+      data.idade < 18 ||
+      data.idade > 120
     ) {
       errors.push({
-        field: 'nascimentoData',
+        field: 'idade',
         message: 'Informe uma idade entre 18 e 120 anos.',
       });
     }

@@ -5,6 +5,10 @@ import { errorCase } from "./errorCase";
 
 export type MethodType = 'get'|'post'|'put'|'delete';
 
+const api = axios.create({
+  baseURL: 'https://dadoseconomicos.ideflorbio.pa.gov.br'
+});
+
 
 export default class ConnectionAPI {
 
@@ -28,11 +32,11 @@ export default class ConnectionAPI {
             switch (method){
                 case MethodEnum.GET:
                 case MethodEnum.DELETE:
-                    return (await axios[method]<T>(url, config2)).data;
+                    return (await api[method]<T>(url, config2)).data;
                 case MethodEnum.POST:
                 case MethodEnum.PUT:
                 default:
-                    return (await axios[method]<T>(url, body, config2)).data;
+                    return (await api[method]<T>(url, body, config2)).data;
             }
 
         }

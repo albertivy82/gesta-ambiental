@@ -6,7 +6,7 @@ export interface EntrevistadoInput {
 
     nome: string;
     naturalidade: string;
-    nascimentoData: number;
+    idade: number;
     sexo: Sexo | "" | null;
     apelido: string;
     escolaridade: string;

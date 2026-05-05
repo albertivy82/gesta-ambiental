@@ -14,21 +14,23 @@ export const userData = async ()=>{
 
     if (token) {
             
-      const decodedToken = jwtDecode(token);
+      const decodedToken = jwtDecode(token) as any;
 
       
-      const matricula = decodedToken["matrícula"];    
+      const matricula = decodedToken["matricula"];    
        
-      const usuarioAtual = await connectionAPIGet<UserBody>(`http://177.74.56.24/usuario/buscapormatricula/${matricula}`);
-      //const usuarioAtual = await connectionAPIGet<UserBody>(`http://177.74.56.24/usuario/buscapormatricula/${matricula}`);
+      const usuarioAtual = await connectionAPIGet<UserBody>(
+      `https://dadoseconomicos.ideflorbio.pa.gov.br/usuario/buscapormatricula/${matricula}`
+      );
+      //const usuarioAtual = await connectionAPIGet<UserBody>(`https://dadoseconomicos.ideflorbio.pa.gov.br/usuario/buscapormatricula/${matricula}`);
 
-      console.log('consulta', usuarioAtual)
+      //console.log('consulta', usuarioAtual)
       
       storeUser(usuarioAtual);
     
 
   } else {
-    console.log('Token de autenticação não encontrado.');
+    //console.log('Token de autenticação não encontrado.');
   }
 
  
@@ -39,7 +41,7 @@ const storeUser = async (user: UserBody) => {
   try {
     await AsyncStorage.setItem('user', JSON.stringify(user));
   } catch (error) {
-    console.log('Error storing user:', error);
+   // console.log('Error storing user:', error);
   }
 };
 
@@ -50,7 +52,7 @@ try {
 const user = await AsyncStorage.getItem('user');
 return user;
 } catch (error) {
-console.log('Error getting User:', error);
+//console.log('Error getting User:', error);
 return null;
 }
 };
@@ -60,6 +62,6 @@ export const removeUser = async () => {
 try {
 await AsyncStorage.removeItem('user');
 } catch (error) {
-console.log('Error removing informações do usuário:', error);
+//console.log('Error removing informações do usuário:', error);
 }
 };

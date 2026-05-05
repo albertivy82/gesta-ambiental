@@ -56,7 +56,7 @@ export const NovoEntrevistado = ()=>{
             handleOnChangeInput(entrevistado.naturalidade, 'naturalidade');
             handleOnChangeInput(entrevistado.apelido, 'apelido');
             handleOnChangeInput(entrevistado.religiao, 'religiao');
-            setIdade(entrevistado.nascimentoData);
+            setIdade(entrevistado.idade);
             // Enums
             handleEnumChange('dataChegada', entrevistado.dataChegada);
             handleEnumChange('sexo', entrevistado.sexo);
@@ -93,7 +93,7 @@ export const NovoEntrevistado = ()=>{
             // Campos numéricos
             handleNumberChange({ nativeEvent: { text: entrevistado.sofreuAssaltos?.toString() ?? '' } } as any, 'sofreuAssaltos');
             handleNumberChange({ nativeEvent: { text: entrevistado.presenciouAssalto?.toString() ?? '' } } as any, 'presenciouAssalto');
-            handleNumberChange({ nativeEvent: { text: entrevistado.nascimentoData?.toString() ?? '' } } as any, 'nascimentoData');
+            handleNumberChange({ nativeEvent: { text: entrevistado.idade?.toString() ?? '' } } as any, 'idade');
           }, [entrevistado]);
 
           const valorSalvoUsoArea = entrevistado?.utilizaAreaUc ?? '';
@@ -231,7 +231,7 @@ export const NovoEntrevistado = ()=>{
     },[cuidadoMedico, outrosCuidados ])
 
     useEffect(()=>{
-       handleSetNumber(idade!,'nascimentoData');
+       handleSetNumber(idade!,'idade');
     },[idade])
 
     useEffect(() => {
@@ -324,7 +324,7 @@ export const NovoEntrevistado = ()=>{
               title="Qual sua idade?"
             />
 
-             {Number(novoEntrevistado.nascimentoData) < 18 && (
+             {Number(novoEntrevistado.idade) < 18 && (
                 <Text style={{ fontStyle: 'italic', color: 'grey', marginTop: 8 }}>
                      O entrevistado precisa ter 18 anos ou mais
                 </Text>

@@ -7,7 +7,7 @@ export interface EntrevistadoType {
 id: number;
 nome: string;
 naturalidade: string;
-nascimentoData: number;
+idade: number;
 sexo: Sexo | "" | null;
 apelido: string;
 escolaridade: string;

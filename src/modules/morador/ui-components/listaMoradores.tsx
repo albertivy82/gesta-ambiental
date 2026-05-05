@@ -46,7 +46,7 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
                 color={item.sincronizado ? "#000000": theme.colors.redTheme.red}
               >
                
-                idade: {item.dataNascimento}
+                idade: {item.idade}
                
               </Text>
               <Text

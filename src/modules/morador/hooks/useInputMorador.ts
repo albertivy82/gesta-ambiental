@@ -11,7 +11,7 @@ import { MoradorType } from "../../../shared/types/MoradorType";
 export const DEFAULT_MORADOR_INPUT: MoradorInput = {
   
   perfil: null,
-  dataNascimento: 0,
+  idade: 0,
   sexo: null,
   escolaridade: '',
   estadoCivil: '',
@@ -27,7 +27,7 @@ export const DEFAULT_MORADOR_INPUT: MoradorInput = {
 // 🔹 rótulos dos campos
 export const FIELD_LABEL: Partial<Record<keyof MoradorInput, string>> = {
   perfil: 'Perfil do morador',
-  dataNascimento: 'Idade do morador',
+  idade: 'Idade do morador',
   sexo: 'Sexo do morador',
   escolaridade: 'Escolaridade do morador',
   estadoCivil: 'Estado civil do morador',
@@ -58,17 +58,17 @@ export const validateMorador = (data: MoradorInput) => {
   });
   
 
-  // idade (dataNascimento = idade em anos)
+  // idade (idade = idade em anos)
   if (
-    data.dataNascimento === undefined ||
-    data.dataNascimento === null ||
-    Number.isNaN(data.dataNascimento) ||
-    data.dataNascimento <= 0 ||
-    data.dataNascimento > 120
+    data.idade === undefined ||
+    data.idade === null ||
+    Number.isNaN(data.idade) ||
+    data.idade <= 0 ||
+    data.idade > 120
   ) {
     errors.push({
-      field: 'dataNascimento',
-      message: `Informe ${FIELD_LABEL.dataNascimento} entre 1 e 120 anos.`,
+      field: 'idade',
+      message: `Informe ${FIELD_LABEL.idade} entre 1 e 120 anos.`,
     });
   }
 
@@ -220,7 +220,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
                     
                     try{
                          
-                      const response = await connectionAPIPost('http://177.74.56.24/morador', novoMorador) as MoradorType;
+                      const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/morador', novoMorador) as MoradorType;
                       console.log("vamos verificar !", response, response.id);
                       if (response && response.id) {
                         console.log("vamos verificar !", response, response.id);
@@ -265,7 +265,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
                 //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                 try{
                   
-                  const response = await connectionAPIPut(`http://177.74.56.24/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
+                  const response = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/morador/${morador!.id}`, moradorCorrigida) as MoradorType;
                 
                   if (response && response.id) {
                         
@@ -305,7 +305,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
    const fetchMoradorAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<MoradorType>(`http://177.74.56.24/morador/${id}`);
+              const response = await connectionAPIGet<MoradorType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/morador/${id}`);
               console.log("vamos verificar", response);
               if (response) {
                 const moradorData = {

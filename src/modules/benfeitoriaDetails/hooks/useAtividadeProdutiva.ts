@@ -41,7 +41,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) 
             if (isConnected) {
               try {
                 const response = await connectionAPIPost(
-                  "http://177.74.56.24/atividade-produtiva",novaAtividadeInput);
+                  "https://dadoseconomicos.ideflorbio.pa.gov.br/atividade-produtiva",novaAtividadeInput);
                    const atividadeAPI = response as AtividadeProdutivaType;
 
                 if (atividadeAPI.id) {
@@ -74,7 +74,7 @@ export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) 
   
     try {
       const response = await connectionAPIGet<AtividadeProdutivaType[]>(
-        `http://177.74.56.24/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
+        `https://dadoseconomicos.ideflorbio.pa.gov.br/atividade-produtiva/benfeitoria-atividadeProdutiva/${benfeitoriaId}`
       );
   
       const data = response.map((atividade) => ({

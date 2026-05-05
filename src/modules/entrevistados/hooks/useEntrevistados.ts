@@ -15,7 +15,7 @@ export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput
   return {
     nome: entrevistado.nome,
     naturalidade: entrevistado.naturalidade,
-    nascimentoData: entrevistado.nascimentoData,
+    idade: entrevistado.idade,
     sexo: entrevistado.sexo,
     apelido: entrevistado.apelido,
     escolaridade: entrevistado.escolaridade,
@@ -82,7 +82,7 @@ export const useEntrevistados = (localidadeId: number, foccus: boolean) => {
             console.log(`SYNC|ENTREV|POST_START idLocal=${entrevistado?.idLocal ?? "null"}`);
 
             const response = await connectionAPIPost(
-              "http://177.74.56.24/entrevistado",
+              "/api/entrevistado",
               novoEntrevistadoIput
             );
 
@@ -149,7 +149,7 @@ export const useEntrevistados = (localidadeId: number, foccus: boolean) => {
     if (isConnected) {
       try {
         const entrevistadoAPI = await connectionAPIGet<EntrevistadoType[]>(
-          `http://177.74.56.24/entrevistado/localidade-entrevistado/${localidadeId}`
+          `/api/entrevistado/localidade-entrevistado/${localidadeId}`
         );
 
         console.log(`SYNC|ENTREV|API_FETCH_DONE localidadeId=${localidadeId} count=${entrevistadoAPI?.length ?? 0}`);

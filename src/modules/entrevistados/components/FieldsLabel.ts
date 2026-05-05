@@ -4,7 +4,7 @@ import { EntrevistadoInput } from "../../../shared/types/EntrevistadoInput";
 export const FIELD_LABEL_ENTREVISTADO: Partial<Record<keyof EntrevistadoInput, string>> = {
     nome: 'Nome',
     naturalidade: 'Naturalidade',
-    nascimentoData: 'Idade',
+    idade: 'Idade',
     sexo: 'Sexo',
     apelido: 'Apelido',
     escolaridade: 'Escolaridade',
