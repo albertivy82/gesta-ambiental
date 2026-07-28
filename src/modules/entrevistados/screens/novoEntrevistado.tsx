@@ -134,7 +134,7 @@ export const NovoEntrevistado = ()=>{
 
 
 
-  
+    const [sexoSelecionado, setSexoSelecionado] = useState<string[]>([]);   
     const [alimentacoInformada, setAlimentacoInformada] = useState<string[]>([]);  
     const [outrasInformadas, setOutrasInformadas] = useState<string>('');
 
@@ -177,6 +177,10 @@ export const NovoEntrevistado = ()=>{
       }, [indicacaoTipo]);
 
 
+
+    //controlador de estado de sexo
+    useEffect(()=>{handleEnumChange('sexo', sexoSelecionado[0] ?? '')},[sexoSelecionado]);  
+    
     useEffect(()=>{
       const consolidaDados = [
         ...alimentacoInformada.filter((item) => item !== 'Outras'),
@@ -331,11 +335,17 @@ export const NovoEntrevistado = ()=>{
               )}
             
 
-            <RenderPicker
+            <CheckboxSelector
+              options={sexoOptions}
+              selectedValues={sexoSelecionado}
               label="Sexo"
-              selectedValue={novoEntrevistado.sexo}
-               onValueChange={(value) => handleEnumChange('sexo', value)}
-               options={sexoOptions}
+              onSave={(selectedValues) => {
+                const novaOpcao = selectedValues.find(
+                  (valor) => !sexoSelecionado.includes(valor)
+                );
+
+                setSexoSelecionado(novaOpcao ? [novaOpcao] : []);
+              }}
             />
 
             <Input 
