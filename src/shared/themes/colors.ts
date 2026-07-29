@@ -21,5 +21,9 @@ export const mainTheme = {
   export const whiteTheme = {
     white: '#FFFFFF',
   };
+
+  export const greenTheme = {
+    green: '#2E7D32',
+  };
   
   
