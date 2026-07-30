@@ -1,5 +1,5 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { Alimentacao } from "../../../enums/Alimentacao.enum";
 import { Compras } from "../../../enums/Compras.enum";
@@ -16,24 +16,18 @@ import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
 import { EntrevistadoContainer } from "../styles/entrevistado.style";
-import { estadoCivilOptions, saudeOptions, sexoEscolaridade, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
+import { Escolaridade, estadoCivilOptions, Naturalidade, saudeOptions, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
+import FormSection from "../../../shared/components/FormSection";
 
 export interface NovoEntrevistadoParams {
-localidadeId?: number
-entrevistado?: EntrevistadoType;
+  localidadeId?: number;
+  entrevistado?: EntrevistadoType;
 }
 
-/*
-antigo método que gusrdava apilha na memória
-export const detalharEntrevistado = (navigate: NavigationProp<ParamListBase>['navigate'], entrevistado: EntrevistadoType)=>{
-    navigate('EntrevistadoDetails', {entrevistado})
-}
-*/
-export const NovoEntrevistado = ()=>{
+export const NovoEntrevistado = () => {
   const { params } = useRoute<RouteProp<Record<string, NovoEntrevistadoParams>, string>>();
   const localidadeId = params.localidadeId ?? params.entrevistado?.localidade.id;
   const entrevistado = params.entrevistado;
-  //const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const navigation = useNavigation<any>();
   const [showErrors, setShowErrors] = useState(false);
   const [loading, setLoading] = useState(false); 
@@ -55,18 +49,39 @@ export const NovoEntrevistado = ()=>{
             handleOnChangeInput(entrevistado.nome, 'nome');
             handleOnChangeInput(entrevistado.naturalidade, 'naturalidade');
             handleOnChangeInput(entrevistado.apelido, 'apelido');
-            handleOnChangeInput(entrevistado.religiao, 'religiao');
             setIdade(entrevistado.idade);
-            // Enums
+
+            // Campos de seleção única
+            setSexoSelecionado(entrevistado.sexo ? [entrevistado.sexo] : []);
+            setEscolaridadeSelecionada(
+              entrevistado.escolaridade ? [entrevistado.escolaridade] : []
+            );
+            setEstadoCivilSelecionado(
+              entrevistado.estadoCivil ? [entrevistado.estadoCivil] : []
+            );
+            setReligiaoSelecionada(
+              entrevistado.religiao ? [entrevistado.religiao] : []
+            );
+            setMoradorSelecionado(
+              entrevistado.morador ? [entrevistado.morador] : []
+            );
+            setPretendeMudarSelecionado(
+              entrevistado.pretendeMudar ? [entrevistado.pretendeMudar] : []
+            );
+            setConheceUcsSelecionado(
+              entrevistado.conheceUcs ? [entrevistado.conheceUcs] : []
+            );
+            setConheceUcPropostaSelecionado(
+              entrevistado.conheceUcProposta
+                ? [entrevistado.conheceUcProposta]
+                : []
+            );
+            setConheceAreaUcSelecionado(
+              entrevistado.conheceAreaUc ? [entrevistado.conheceAreaUc] : []
+            );
+
+            // Enum ainda mantido como picker
             handleEnumChange('dataChegada', entrevistado.dataChegada);
-            handleEnumChange('sexo', entrevistado.sexo);
-            handleEnumChange('escolaridade', entrevistado.escolaridade);
-            handleEnumChange('estadoCivil', entrevistado.estadoCivil);
-            handleEnumChange('morador', entrevistado.morador);
-            handleEnumChange('pretendeMudar', entrevistado.pretendeMudar);
-            handleEnumChange('conheceUcs', entrevistado.conheceUcs);
-            handleEnumChange('conheceUcProposta', entrevistado.conheceUcProposta);
-            handleEnumChange('conheceAreaUc', entrevistado.conheceAreaUc);
             
 
 
@@ -106,8 +121,21 @@ export const NovoEntrevistado = ()=>{
           
             
    
-    const religiaoOptions = Object.values(['Católica', 'Evangélica', 'Espírita', 'Matriz Africana', 'Sem Religião']);
-    const relacaoVizinhosOptions = ['Boa','Muito boa','Indiferente','Conflituosa','Não se relaciona', 'Outros',];
+    const religiaoOptions = [
+      'Católica',
+      'Evangélica',
+      'Espírita',
+      'Matriz Africana',
+      'Sem Religião',
+    ];
+    const relacaoVizinhosOptions = [
+      'Boa',
+      'Muito boa',
+      'Indiferente',
+      'Conflituosa',
+      'Não se relaciona',
+      'Outros',
+    ];
     const simNaoOptions = Object.values(SimNao);
     const simNaoTalvezOptions = Object.values(SimNaoTalvez);
     const alimentacaoOptions = Object.values(Alimentacao);
@@ -133,9 +161,31 @@ export const NovoEntrevistado = ()=>{
 
 
 
+    const selecionarOpcaoUnica = (
+      selectedValues: string[],
+      currentValues: string[],
+      setValues: Dispatch<SetStateAction<string[]>>
+    ) => {
+      const novaOpcao = selectedValues.find(
+        (valor) => !currentValues.includes(valor)
+      );
 
-  
-    const [alimentacoInformada, setAlimentacoInformada] = useState<string[]>([]);  
+      setValues(novaOpcao ? [novaOpcao] : []);
+    };
+
+    const [sexoSelecionado, setSexoSelecionado] = useState<string[]>([]);
+    const [escolaridadeSelecionada, setEscolaridadeSelecionada] = useState<string[]>([]);
+    const [estadoCivilSelecionado, setEstadoCivilSelecionado] = useState<string[]>([]);
+    const [religiaoSelecionada, setReligiaoSelecionada] = useState<string[]>([]);
+    const [moradorSelecionado, setMoradorSelecionado] = useState<string[]>([]);
+    const [pretendeMudarSelecionado, setPretendeMudarSelecionado] = useState<string[]>([]);
+    const [conheceUcsSelecionado, setConheceUcsSelecionado] = useState<string[]>([]);
+    const [conheceUcPropostaSelecionado, setConheceUcPropostaSelecionado] =
+      useState<string[]>([]);
+    const [conheceAreaUcSelecionado, setConheceAreaUcSelecionado] =
+      useState<string[]>([]);
+
+    const [alimentacoInformada, setAlimentacoInformada] = useState<string[]>([]);
     const [outrasInformadas, setOutrasInformadas] = useState<string>('');
 
     const [localCompras, setLocalCompras] = useState<string[]>([]);  
@@ -177,6 +227,47 @@ export const NovoEntrevistado = ()=>{
       }, [indicacaoTipo]);
 
 
+
+    // Sincronização dos checkboxes de seleção única com o objeto do formulário
+    useEffect(() => {
+      handleEnumChange('sexo', sexoSelecionado[0] ?? '');
+    }, [sexoSelecionado]);
+
+    useEffect(() => {
+      handleEnumChange('escolaridade', escolaridadeSelecionada[0] ?? '');
+    }, [escolaridadeSelecionada]);
+
+    useEffect(() => {
+      handleEnumChange('estadoCivil', estadoCivilSelecionado[0] ?? '');
+    }, [estadoCivilSelecionado]);
+
+    useEffect(() => {
+      handleEnumChange('religiao', religiaoSelecionada[0] ?? '');
+    }, [religiaoSelecionada]);
+
+    useEffect(() => {
+      handleEnumChange('morador', moradorSelecionado[0] ?? '');
+    }, [moradorSelecionado]);
+
+    useEffect(() => {
+      handleEnumChange('pretendeMudar', pretendeMudarSelecionado[0] ?? '');
+    }, [pretendeMudarSelecionado]);
+
+    useEffect(() => {
+      handleEnumChange('conheceUcs', conheceUcsSelecionado[0] ?? '');
+    }, [conheceUcsSelecionado]);
+
+    useEffect(() => {
+      handleEnumChange(
+        'conheceUcProposta',
+        conheceUcPropostaSelecionado[0] ?? ''
+      );
+    }, [conheceUcPropostaSelecionado]);
+
+    useEffect(() => {
+      handleEnumChange('conheceAreaUc', conheceAreaUcSelecionado[0] ?? '');
+    }, [conheceAreaUcSelecionado]);
+    
     useEffect(()=>{
       const consolidaDados = [
         ...alimentacoInformada.filter((item) => item !== 'Outras'),
@@ -245,52 +336,63 @@ export const NovoEntrevistado = ()=>{
     
    
        
-    
-    const handleEnviar = async () => {
-            
-        if (loading) return;
-            
-        const result = validateEntrevistado(novoEntrevistado);
-        if (!result.isValid) {
-          setShowErrors(true);
-      
-          Alert.alert(
-            'Campos Obrigatórios',
-            [
-              'Por favor, corrija os campos abaixo:',
-              '',
-              ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
-            ].join('\n')
-          );
-          return;
-        }
-       
-         try {
-          setLoading(true);
-           const entrevistadoSalvo = await enviarRegistro(); 
-               if (entrevistadoSalvo){
-                 //detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
-                 navigation.replace("EntrevistadoDetails", { entrevistado: entrevistadoSalvo });
+    //FUNÇÃO PARA ENVIAR O ENTREVISTADO PARA O BACKEND
+                    const handleEnviar = async () => {
+                            
+                        if (loading) return;
+                            
+                        const result = validateEntrevistado(novoEntrevistado);
+                        if (!result.isValid) {
+                          setShowErrors(true);
+                      
+                          Alert.alert(
+                            'Campos Obrigatórios',
+                            [
+                              'Por favor, corrija os campos abaixo:',
+                              '',
+                              ...result.errors.map((e, idx) => `${idx + 1}. ${e.message}`),
+                            ].join('\n')
+                          );
+                          return;
+                        }
+                      
+                        try {
+                          setLoading(true);
+                          const entrevistadoSalvo = await enviarRegistro(); 
+                              if (entrevistadoSalvo){
+                                //detalharEntrevistado(navigation.navigate, entrevistadoSalvo);
+                                navigation.replace("EntrevistadoDetails", { entrevistado: entrevistadoSalvo });
 
-               } else {
-                 Alert.alert("Erro", "Não foi possível salvar o entrevistado. Tente novamente.");
-                 navigation.goBack();
-               }
-              } catch (e) {
-                Alert.alert('Erro', 'Não foi possível realizar a operação.');
-              } finally {
-                setLoading(false); // 👈 desliga
-              }
-    };
+                              } else {
+                                Alert.alert("Erro", "Não foi possível salvar o entrevistado. Tente novamente.");
+                                navigation.goBack();
+                              }
+                              } catch (e) {
+                                Alert.alert('Erro', 'Não foi possível realizar a operação.');
+                              } finally {
+                                setLoading(false); // 👈 desliga
+                              }
+                    };
     
         
 
-    return(
-      <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'}}>
+    return (
+      <ScrollView
+        style={{ flex: 1, backgroundColor: '#E6E8FA' }}
+        contentContainerStyle={{ paddingBottom: 24 }}
+      >
        
         <EntrevistadoContainer>
-           
-           <Input 
+          <FormSection
+            title="Dados pessoais"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {novoEntrevistado.nome || 'Nome não informado'}
+                {novoEntrevistado.idade ? ` • ${novoEntrevistado.idade} anos` : ''}
+              </Text>
+            }
+          >
+            <Input 
               value={novoEntrevistado.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
               maxLength={255}
@@ -301,15 +403,12 @@ export const NovoEntrevistado = ()=>{
               ref={nomeInput}
               onSubmitEditing={() => naturalidadeInput.current?.focus()}
             />
-           <Input 
-              value={novoEntrevistado.naturalidade} 
-              onChange={(event)=> handleOnChangeInput(event, 'naturalidade')}
-              maxLength={100}
-              placeholder="naturalidade"
-              placeholderTextColor={theme.colors.grayTheme.gray80}
-              margin="15px 10px 30px 5px"
-              title="Naturalidade:"
-              ref={naturalidadeInput}
+          
+           <RenderPicker
+              label="Naturalidade - em qual cidade você nasceu?"
+              selectedValue={novoEntrevistado.naturalidade}
+              onValueChange={(value) => handleEnumChange('naturalidade', value)}
+              options={Naturalidade}
               />
 
            <Input
@@ -331,11 +430,17 @@ export const NovoEntrevistado = ()=>{
               )}
             
 
-            <RenderPicker
+            <CheckboxSelector
+              options={sexoOptions}
+              selectedValues={sexoSelecionado}
               label="Sexo"
-              selectedValue={novoEntrevistado.sexo}
-               onValueChange={(value) => handleEnumChange('sexo', value)}
-               options={sexoOptions}
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  sexoSelecionado,
+                  setSexoSelecionado
+                )
+              }
             />
 
             <Input 
@@ -349,33 +454,70 @@ export const NovoEntrevistado = ()=>{
               ref={apelidoInput}
             />
              
-            <RenderPicker
+            <CheckboxSelector
+              options={Escolaridade}
+              selectedValues={escolaridadeSelecionada}
               label="Escolaridade"
-              selectedValue={novoEntrevistado.escolaridade}
-               onValueChange={(value) => handleEnumChange('escolaridade', value)}
-               options={sexoEscolaridade}
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  escolaridadeSelecionada,
+                  setEscolaridadeSelecionada
+                )
+              }
             />
                    
-            <RenderPicker
-                label="Estado Civil"
-                selectedValue={novoEntrevistado.estadoCivil}
-                onValueChange={(value) => handleEnumChange('estadoCivil', value)}
-                options={estadoCivilOptions}
-             />
+            <CheckboxSelector
+              options={estadoCivilOptions}
+              selectedValues={estadoCivilSelecionado}
+              label="Estado Civil"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  estadoCivilSelecionado,
+                  setEstadoCivilSelecionado
+                )
+              }
+            />
 
-            <RenderPicker
-                label="Qual a sua religião"
-                selectedValue={novoEntrevistado.religiao}
-                onValueChange={(value) => handleEnumChange('religiao', value)}
-                options={religiaoOptions}
-             />
+            <CheckboxSelector
+              options={religiaoOptions}
+              selectedValues={religiaoSelecionada}
+              label="Qual a sua religião"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  religiaoSelecionada,
+                  setReligiaoSelecionada
+                )
+              }
+            />
 
-             <RenderPicker
-                label="É morador do imóvel?"
-                selectedValue={novoEntrevistado.morador}
-                onValueChange={(value) => handleEnumChange('morador', value)}
-                options={simNaoOptions}
-              />
+          </FormSection>
+
+          <FormSection
+            title="Moradia e relações locais"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {novoEntrevistado.morador || 'Situação de moradia não informada'}
+                {novoEntrevistado.dataChegada
+                  ? ` • ${novoEntrevistado.dataChegada}`
+                  : ''}
+              </Text>
+            }
+          >
+            <CheckboxSelector
+              options={simNaoOptions}
+              selectedValues={moradorSelecionado}
+              label="É morador do imóvel?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  moradorSelecionado,
+                  setMoradorSelecionado
+                )
+              }
+            />
            
              <RenderPicker
                 label={
@@ -388,16 +530,22 @@ export const NovoEntrevistado = ()=>{
                 options={tempomoradiaOptions}
               />
 
-                <RenderPicker
-                    label={
-                    novoEntrevistado.morador === 'Sim'
+              <CheckboxSelector
+                options={simNaoTalvezOptions}
+                selectedValues={pretendeMudarSelecionado}
+                label={
+                  novoEntrevistado.morador === 'Sim'
                     ? 'Pretende Mudar?'
                     : 'Pretende deixar o local?'
-                    }
-                    selectedValue={novoEntrevistado.pretendeMudar}
-                    onValueChange={(value) => handleEnumChange('pretendeMudar', value)}
-                    options={simNaoTalvezOptions}
-                />
+                }
+                onSave={(values) =>
+                  selecionarOpcaoUnica(
+                    values,
+                    pretendeMudarSelecionado,
+                    setPretendeMudarSelecionado
+                  )
+                }
+              />
                 
 
                 {novoEntrevistado.pretendeMudar === SimNaoTalvez.Sim && (
@@ -434,7 +582,19 @@ export const NovoEntrevistado = ()=>{
                 options={relacaoVizinhosOptions}
               />
 
-              {valorSalvoTipoAlimentacao && (
+          </FormSection>
+
+          <FormSection
+            title="Alimentação e compras"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {novoEntrevistado.tipoAlimentacao ||
+                  novoEntrevistado.localCompras ||
+                  'Não informado'}
+              </Text>
+            }
+          >
+            {valorSalvoTipoAlimentacao && (
                   <View style={{ marginBottom: 5 }}>
                     <Text style={{ fontStyle: 'italic', color: 'gray' }}>
                       Valor salvo sobre a alimentação: {valorSalvoTipoAlimentacao}
@@ -500,10 +660,22 @@ export const NovoEntrevistado = ()=>{
                 </View>
             )}
 
+          </FormSection>
+
+          <FormSection
+            title="Saúde e serviços públicos"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {novoEntrevistado.comoCuidaSaudeFamilia ||
+                  novoEntrevistado.servicosDeficitarios ||
+                  'Não informado'}
+              </Text>
+            }
+          >
             {valorSalvoCuidadosSaude && (
                         <View style={{ marginBottom: 5 }}>
                           <Text style={{ fontStyle: 'italic', color: 'gray' }}>
-                            Valor salvo sobre  o atendimento de saúde: {valorSalvoCuidadosSaude}
+                            Valor salvo sobre o atendimento de saúde: {valorSalvoCuidadosSaude}
                           </Text>
                         </View>
             )}
@@ -565,12 +737,22 @@ export const NovoEntrevistado = ()=>{
             )}
 
 
-              <Input
+          </FormSection>
+
+          <FormSection
+            title="Segurança"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {`Assaltos sofridos: ${novoEntrevistado.sofreuAssaltos ?? 0} • Presenciados: ${novoEntrevistado.presenciouAssalto ?? 0}`}
+              </Text>
+            }
+          >
+            <Input
                 value={novoEntrevistado.sofreuAssaltos?.toString() || ''}
                 onChange={(event) => handleNumberChange(event, 'sofreuAssaltos')}
                 maxLength={3}
                 keyboardType="numeric"
-                placeholder="Área em m²"
+                placeholder="Quantas vezes?"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
                 title="Já sofreu Assaltos nesse local? Quantas vezes?"
@@ -602,10 +784,22 @@ export const NovoEntrevistado = ()=>{
                 ref={violenciaLocalInput}
               />
 
-              {valorSalvoInstituicaoConhecida && (
+          </FormSection>
+
+          <FormSection
+            title="Meio ambiente e unidades de conservação"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {novoEntrevistado.conheceUcs
+                  ? `Conhece UCs: ${novoEntrevistado.conheceUcs}`
+                  : 'Não informado'}
+              </Text>
+            }
+          >
+            {valorSalvoInstituicaoConhecida && (
                 <View style={{ marginBottom: 5 }}>
                   <Text style={{ fontStyle: 'italic', color: 'gray' }}>
-                    Valor salvo sobre Intituições conhecidas: {valorSalvoInstituicaoConhecida}
+                    Valor salvo sobre instituições conhecidas: {valorSalvoInstituicaoConhecida}
                   </Text>
                 </View>
               )}
@@ -679,31 +873,49 @@ export const NovoEntrevistado = ()=>{
 
 
               
-              <RenderPicker
+              <CheckboxSelector
+                options={simNaoOptions}
+                selectedValues={conheceUcsSelecionado}
                 label="Já ouviu falar de Unidades de Conservação?"
-                selectedValue={novoEntrevistado.conheceUcs}
-                onValueChange={(value) => handleEnumChange('conheceUcs', value)}
-                options={simNaoOptions}
+                onSave={(values) =>
+                  selecionarOpcaoUnica(
+                    values,
+                    conheceUcsSelecionado,
+                    setConheceUcsSelecionado
+                  )
+                }
               />
 
-              <RenderPicker
+              <CheckboxSelector
+                options={simNaoOptions}
+                selectedValues={conheceUcPropostaSelecionado}
                 label="Conhece a proposta da Unidade de Conservação no local?"
-                selectedValue={novoEntrevistado.conheceUcProposta}
-                onValueChange={(value) => handleEnumChange('conheceUcProposta', value)}
-                options={simNaoOptions}
+                onSave={(values) =>
+                  selecionarOpcaoUnica(
+                    values,
+                    conheceUcPropostaSelecionado,
+                    setConheceUcPropostaSelecionado
+                  )
+                }
               />
 
-              <RenderPicker
-                label="Conhece a Área onde a Unidade de Conservação pode ser implantada?"
-                selectedValue={novoEntrevistado.conheceAreaUc}
-                onValueChange={(value) => handleEnumChange('conheceAreaUc', value)}
+              <CheckboxSelector
                 options={simNaoOptions}
+                selectedValues={conheceAreaUcSelecionado}
+                label="Conhece a Área onde a Unidade de Conservação pode ser implantada?"
+                onSave={(values) =>
+                  selecionarOpcaoUnica(
+                    values,
+                    conheceAreaUcSelecionado,
+                    setConheceAreaUcSelecionado
+                  )
+                }
               />
 
                 {valorSalvoUsoArea && (
                   <View style={{ marginBottom: 5 }}>
                     <Text style={{ fontStyle: 'italic', color: 'gray' }}>
-                      Valor salvo no banco de dados parao campo abaixo: {valorSalvoUsoArea}
+                      Valor salvo no banco de dados para o campo abaixo: {valorSalvoUsoArea}
                     </Text>
                   </View>
                 )}
@@ -733,7 +945,17 @@ export const NovoEntrevistado = ()=>{
             )}
 
 
-          <Input 
+          </FormSection>
+
+          <FormSection
+            title="Consulta pública"
+            summary={
+              <Text style={{ color: 'gray' }}>
+                {novoEntrevistado.indicadoConsultaPublica || 'Sem indicação informada'}
+              </Text>
+            }
+          >
+            <Input 
             value={novoEntrevistado.propostaMelhorarArea} 
             onChange={(event) => handleOnChangeInput(event, 'propostaMelhorarArea')}
             maxLength={255}
@@ -780,6 +1002,8 @@ export const NovoEntrevistado = ()=>{
         )}
        
          
+          </FormSection>
+
           <FormErrors
             visible={showErrors && disabled}
             errors={validateEntrevistado(novoEntrevistado).errors}
@@ -789,12 +1013,12 @@ export const NovoEntrevistado = ()=>{
           title={loading ? "Enviando..." : "Enviar"}
           onPress={handleEnviar}
           color={"#ff4500"}
-          disabled={loading}   // 👈 trava só enquanto envia
+          disabled={loading}
           />
     
       
 
         </EntrevistadoContainer>
-        </ScrollView>
-    )
-}
+      </ScrollView>
+    );
+};
