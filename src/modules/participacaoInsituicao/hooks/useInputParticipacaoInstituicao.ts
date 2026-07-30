@@ -126,7 +126,7 @@ const objetoFila = () => {
                       
                       try{
                         
-                        const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
+                        const response = await connectionAPIPost('/api/participacao-instituicao', novaParticipacaoInstituicao) as ParticipacaoInstituicaoType;
                         console.log(response)
                         if (response && response.id) {
                               return fetchParticipacaoInstituicaoAPI(response.id);
@@ -170,7 +170,7 @@ const objetoFila = () => {
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
                 
-                const response = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/participacao-instituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
+                const response = await connectionAPIPut(`/api/participacao-instituicao/${participacaoInstituicao!.id}`, participacaoInstituicaoCorrigida) as ParticipacaoInstituicaoType;
                     if (response && response.id) {
                     return fetchParticipacaoInstituicaoAPI(response.id);
                     }else{
@@ -209,7 +209,7 @@ const objetoFila = () => {
      const fetchParticipacaoInstituicaoAPI = async(id:number) =>{
     
             try{
-                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/participacao-instituicao/${id}`);
+                const response = await connectionAPIGet<ParticipacaoInstituicaoType>(`/api/participacao-instituicao/${id}`);
                 if (response) {
                   const participacaoInstituicaoData = {
                       ...response,

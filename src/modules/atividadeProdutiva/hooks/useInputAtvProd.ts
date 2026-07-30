@@ -140,7 +140,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
                     
                     try{
                        
-                      const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/atividade-produtiva', novaAtividade) as AtividadeProdutivaType;
+                      const response = await connectionAPIPost('/api/atividade-produtiva', novaAtividade) as AtividadeProdutivaType;
                      
                       if (response && response.id) {
                             return fetchAtividadeAPI(response.id);
@@ -186,7 +186,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/atividade-produtiva/${atividade!.id}`, atividadeCorrigida) as AtividadeProdutivaType;
+              const response = await connectionAPIPut(`/api/atividade-produtiva/${atividade!.id}`, atividadeCorrigida) as AtividadeProdutivaType;
                     if (response && response.id) {
                       return fetchAtividadeAPI(response.id);
                     }else{
@@ -225,7 +225,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
    const fetchAtividadeAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<AtividadeProdutivaType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/atividade-produtiva/${id}`);
+              const response = await connectionAPIGet<AtividadeProdutivaType>(`/api/atividade-produtiva/${id}`);
               
               if (response) {
                 const atividadeData = {

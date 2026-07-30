@@ -39,7 +39,7 @@ export const useEditUser = () =>{
                 const user = JSON.parse(userString);
                 const id = user.id;
 
-           const resultBack = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/usuario/alterar-senha/${id}`, senhaNova);
+           const resultBack = await connectionAPIPut(`/api/usuario/alterar-senha/${id}`, senhaNova);
            console.log(resultBack);
             }
         };

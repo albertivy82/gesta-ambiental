@@ -63,7 +63,7 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
           if (isConnected) {
             try {
              
-              const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/imovel', novoImovelInput) as imovelBody;
+              const response = await connectionAPIPost('/api/imovel', novoImovelInput) as imovelBody;
               const imovelAPI = response as imovelBody;
              
               if (imovelAPI.id && imovelQueue.idLocal) {
@@ -128,7 +128,7 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
     
       try {
         const response = await connectionAPIGet<imovelBody>(
-          `https://dadoseconomicos.ideflorbio.pa.gov.br/imovel/imovel-entrevistado/${idEntrevistado}`
+          `/api/imovel/imovel-entrevistado/${idEntrevistado}`
         );
     
         if (response && response.id) {

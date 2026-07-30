@@ -135,7 +135,7 @@ export const useInputUsers = () => {
     }
 
     const formattedUser = formatUserData(novoUsuario);
-    await connectionAPIPost("https://dadoseconomicos.ideflorbio.pa.gov.br/usuario", formattedUser);
+    await connectionAPIPost("/api/usuario", formattedUser);
     navigation.navigate("Users");
   };
 
@@ -146,7 +146,7 @@ export const useInputUsers = () => {
     }
 
     const formattedUser = formatUserData(novoUsuario);
-    await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/usuario/${id}`, formattedUser);
+    await connectionAPIPut(`/api/usuario/${id}`, formattedUser);
     navigation.navigate("Users");
   };
 

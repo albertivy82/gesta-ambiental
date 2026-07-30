@@ -121,7 +121,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
                     
                     try{
                        
-                      const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/credito', novoCredito) as CreditoType;
+                      const response = await connectionAPIPost('/api/credito', novoCredito) as CreditoType;
                           
                       if (response && response.id) {
                             return fetchCreditoAPI(response.id);
@@ -165,7 +165,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/credito/${credito!.id}`, creditoCorrigida) as CreditoType;
+              const response = await connectionAPIPut(`/api/credito/${credito!.id}`, creditoCorrigida) as CreditoType;
                     if (response && response.id) {
                       return fetchCreditoAPI(response.id);
                     }else{
@@ -203,7 +203,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
    const fetchCreditoAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<CreditoType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/credito/${id}`);
+              const response = await connectionAPIGet<CreditoType>(`/api/credito/${id}`);
               if (response) {
                 const creditoData = {
                     ...response,

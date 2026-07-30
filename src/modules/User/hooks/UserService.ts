@@ -7,10 +7,10 @@ const ImovelService = ()=>{
   export const sendImovelToServer = async (imovelData) => {
     try {
       if (imovelData.id) {
-        const imovel = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/imovel/${imovelData.id}`, imovelData);
+        const imovel = await connectionAPIPut(`/api/imovel/${imovelData.id}`, imovelData);
         return imovel;
       } else {
-        const imovel = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/imovel', imovelData);
+        const imovel = await connectionAPIPost('/api/imovel', imovelData);
         return imovel;
       }
     } catch (error) {

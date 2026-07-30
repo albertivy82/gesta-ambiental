@@ -139,7 +139,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
                     
                     try{
                        
-                      const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
+                      const response = await connectionAPIPost('/api/outras-fontes-de-renda', novaRendaOutrasFontes) as RendaOutrasFontesType;
                           
                       if (response && response.id) {
                             return fetchRendaOutrasFontesAPI(response.id);
@@ -183,7 +183,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
             try{
               
-              const response = await connectionAPIPut(`https://dadoseconomicos.ideflorbio.pa.gov.br/outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
+              const response = await connectionAPIPut(`/api/outras-fontes-de-renda/${rendaOutrasFontes!.id}`, rendaOutrasFontesCorrigida) as RendaOutrasFontesType;
                     if (response && response.id) {
                       return fetchRendaOutrasFontesAPI(response.id);
                     }else{
@@ -222,7 +222,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
    const fetchRendaOutrasFontesAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<RendaOutrasFontesType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/outras-fontes-de-renda/${id}`);
+              const response = await connectionAPIGet<RendaOutrasFontesType>(`/api/outras-fontes-de-renda/${id}`);
               if (response) {
                 const rendaOutrasFontesData = {
                     ...response,

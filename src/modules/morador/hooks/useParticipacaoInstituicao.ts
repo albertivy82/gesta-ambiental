@@ -34,7 +34,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
             if (isConnected) {
           //    console.log("participação enviada3", novoParticipacaoInstituicaoInput)
               try {
-                const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/participacao-instituicao', novoParticipacaoInstituicaoInput);
+                const response = await connectionAPIPost('/api/participacao-instituicao', novoParticipacaoInstituicaoInput);
                 const participacaoInsituicaoAPI = response as ParticipacaoInstituicaoType;
                // console.log("participação enviada4", participacaoInsituicaoAPI)
                 if (participacaoInsituicaoAPI.id) {
@@ -59,7 +59,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
             const isConnected = await testConnection();
             if (isConnected) {
             try {
-              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`https://dadoseconomicos.ideflorbio.pa.gov.br/participacao-instituicao/morador-pariticipacao-instituicao/${moradorId}`);
+              const response = await connectionAPIGet<ParticipacaoInstituicaoType[]>(`/api/participacao-instituicao/morador-pariticipacao-instituicao/${moradorId}`);
              console.log("baixando da api", response)
              const ptcData = response.map(ptcData=>({
                                  ...ptcData,

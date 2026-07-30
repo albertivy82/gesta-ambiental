@@ -32,7 +32,7 @@ export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
         const isConnected = await testConnection();
          if (isConnected) {
           try {
-            const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/agua', aguaInput);
+            const response = await connectionAPIPost('/api/agua', aguaInput);
             const aguaAPI = response as AguaType;
             if (aguaAPI.id) apagarAguaQueue(agua.idLocal!);
           } catch (error) {
@@ -59,7 +59,7 @@ export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
   
             try {
                     const response = await connectionAPIGet<AguaType[]>(
-                      `https://dadoseconomicos.ideflorbio.pa.gov.br/agua/benfeitoria-agua/${benfeitoriaId}`
+                      `/api/agua/benfeitoria-agua/${benfeitoriaId}`
                     );
                 
                     const aguaData = response.map(agua => ({

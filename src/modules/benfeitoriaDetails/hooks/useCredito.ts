@@ -34,7 +34,7 @@ export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
         const isConnected = await testConnection();
          if (isConnected) {
           try {
-            const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/credito', creditoInput);
+            const response = await connectionAPIPost('/api/credito', creditoInput);
             const creditoAPI = response as CreditoType;
             if (creditoAPI.id) apagarCreditoQueue(credito.idLocal!);
           } catch (error) {
@@ -62,7 +62,7 @@ export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
   
     try {
       const response = await connectionAPIGet<CreditoType[]>(
-        `https://dadoseconomicos.ideflorbio.pa.gov.br/credito/benfeitoria-credito/${benfeitoriaId}`
+        `/api/credito/benfeitoria-credito/${benfeitoriaId}`
       );
   
       const dados = response.map(item => ({

@@ -36,7 +36,7 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
           if (isConnected) {
             try {
               
-              const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/servico-de-comunicacao', input);
+              const response = await connectionAPIPost('/api/servico-de-comunicacao', input);
               
                const servComAPI = response as ServicosComunicacaoType;
               
@@ -67,7 +67,7 @@ export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) =
   
     try {
       const response = await connectionAPIGet<ServicosComunicacaoType[]>(
-        `https://dadoseconomicos.ideflorbio.pa.gov.br/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`
+        `/api/servico-de-comunicacao/benfeitoria-servico-de-comunicacao/${benfeitoriaId}`
       );
   
       const data = response.map((item) => ({

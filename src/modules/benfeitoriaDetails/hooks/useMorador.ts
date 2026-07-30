@@ -40,7 +40,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
             const isConnected = await testConnection();
             if (isConnected) {
               try {
-                const response = await connectionAPIPost('https://dadoseconomicos.ideflorbio.pa.gov.br/morador', novoMoradorInput);
+                const response = await connectionAPIPost('/api/morador', novoMoradorInput);
                 
                 const moradorAPI = response as MoradorType;
               
@@ -71,7 +71,7 @@ export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
     if (isConnected) {
         try {
           const response = await connectionAPIGet<MoradorType[]>(
-            `https://dadoseconomicos.ideflorbio.pa.gov.br/morador/benfeitoria-morador/${benfeitoriaId}`
+            `/api/morador/benfeitoria-morador/${benfeitoriaId}`
           );
 
           const apiData = response.map((item) => ({
