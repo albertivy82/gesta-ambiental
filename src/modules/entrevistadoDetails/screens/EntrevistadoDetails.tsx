@@ -14,6 +14,7 @@ import { imovelBody } from '../../../shared/types/imovelType';
 import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
 import EditConfirmation from '../ui-component/UseEditEntrevistado';
+import FormSection from '../../../shared/components/FormSection';
 
 // Para entidades MULTIPLAS (vegetacao, peixes, etc.)
 export const handleNavegacaoFilhas = (
@@ -107,7 +108,22 @@ const EntrevistadoDetails = () => {
     
        <ScrollView style={{ flex: 1 }}>
         <EntrevistadoDetailContainer>
-              <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
+          <FormSection
+                title="Dados do entrevistado"
+                helperText="Toque para visualizar"
+                summary={
+                    <>
+                        <Text type={textTypes.BUTTON_BOLD}>
+                            {params.entrevistado.nome}
+                        </Text>
+
+                        <Text type={textTypes.BUTTON_REGULAR}>
+                            {params.entrevistado.idade} anos • {params.entrevistado.naturalidade}
+                        </Text>
+                    </>
+                }
+        >
+           <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
             {renderField('Nome', params.entrevistado.nome)}
             {renderField('Naturalidade', params.entrevistado.naturalidade)}
             {renderField('Idade do entrevistado', params.entrevistado.idade?.toString())}
@@ -143,16 +159,17 @@ const EntrevistadoDetails = () => {
 
             </View>
 
-            
 
-            <View style={{ flexDirection: 'row', 
-                      justifyContent: 'space-around', 
-                      padding: 10,
-                      marginTop: 40, 
-                      borderWidth: 5, 
-                      borderColor: "#808080", 
-                      backgroundColor: '#000000'
-                    }}>                     
+                 
+              <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    marginTop: 5,
+                    paddingVertical: 12,
+                    borderTopWidth: 1,
+                    borderTopColor: '#dcdcdc',
+                  }}>                     
                      <EditConfirmation 
                       entrevistado={params.entrevistado} 
                       destino="NovoEntrevistado" 
@@ -161,7 +178,10 @@ const EntrevistadoDetails = () => {
                       }} 
                       />
 
-                      <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#9b9999' }} />
+                      <View style={{width: 1,
+                                    height: 22,
+                                    backgroundColor: '#dcdcdc',
+                      }} />
                               
                       <DeleteConfirmation 
                       id={params.entrevistado.id} 
@@ -171,11 +191,9 @@ const EntrevistadoDetails = () => {
                             //volta para infLocalidade
                       }} 
                       />
-            </View>
-
-            <View style={{ padding: 10, borderWidth: 1, borderColor: theme.colors.grayTheme.gray100 }}>
-                 
-          </View>
+               </View>
+         </FormSection>
+            
                 
           <TouchableOpacity
                  onPress={() => handleImovelNavigation(navigation.navigate, "ImovelDetail", imovelPresente, params.entrevistado)}>
@@ -199,7 +217,7 @@ const EntrevistadoDetails = () => {
                       borderColor: theme.colors.grayTheme.gray100 
                     }}>
                       <Icon size={30} name='home3' color='red' />
-                      <Text type={textTypes.BUTTON_BOLD} color={theme.colors.redTheme.red}> Adicionar Imovel</Text>
+                      <Text type={textTypes.BUTTON_BOLD} color={theme.colors.redTheme.red}> Sem imóvel cadastrado - Adicionar Imovel</Text>
                   </View>
                   )}
         </TouchableOpacity>

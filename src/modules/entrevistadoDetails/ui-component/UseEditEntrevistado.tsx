@@ -36,10 +36,10 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
     <>
      <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='pencil2' color={"#ff4500"} />
+          <Icon size={40} name='pencil2' color={"#0c8d10f2"} />
           <Text 
             type={textTypes.PARAGRAPH_LIGHT} 
-            color={"#ff4500"} 
+            color={"#0c8d10f2"} 
             style={{ alignItems: 'baseline' }}
           >
             Editar Item
@@ -64,14 +64,14 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
             <Text type={textTypes.PARAGRAPH_LIGHT} color="#030303">Deseja realmente editar este item?</Text>
             
             {loading ? (
-              <ActivityIndicator size="large" color="#ff4500" />
+              <ActivityIndicator size="large" color="#0c8d10f2" />
             ) : (
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 10 }}>
                 <TouchableOpacity onPress={() => setModalVisible(false)} style={{ padding: 10 }}>
                   <Text type={textTypes.BUTTON_REGULAR} color="#0c0c0c">Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleConfirmEdit} style={{ padding: 10 }}>
-                  <Text type={textTypes.BUTTON_REGULAR} color="#ff4500">Confirmar</Text>
+                  <Text type={textTypes.BUTTON_REGULAR} color="#0c8d10f2">Confirmar</Text>
                 </TouchableOpacity>
               </View>
             )}

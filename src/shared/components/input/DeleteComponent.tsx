@@ -155,8 +155,8 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
     <>
       <TouchableOpacity style={{ marginHorizontal: 10 }} onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='bin' color="#ff4500" />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500">Apagar Item</Text>
+          <Icon size={40} name='bin' color="#0c8d10f2" />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#0c8d10f2">Apagar Item</Text>
         </View>
       </TouchableOpacity>
 
@@ -177,14 +177,14 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
             <Text type={textTypes.PARAGRAPH_LIGHT } color="#888">Deseja realmente excluir este item?</Text>
             
             {loading ? (
-              <ActivityIndicator size="large" color="#ff4500" />
+              <ActivityIndicator size="large" color="#0c8d10f2" />
             ) : (
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 10 }}>
                 <TouchableOpacity onPress={() => setModalVisible(false)} style={{ padding: 10 }}>
                   <Text type={textTypes.BUTTON_REGULAR} color="#888">Cancelar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleConfirmDelete} style={{ padding: 10 }}>
-                  <Text type={textTypes.BUTTON_REGULAR} color="#ff4500">Confirmar</Text>
+                  <Text type={textTypes.BUTTON_REGULAR} color="#0c8d10f2">Confirmar</Text>
                 </TouchableOpacity>
               </View>
             )}

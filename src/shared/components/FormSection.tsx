@@ -10,13 +10,13 @@ import { theme } from '../themes/theme';
 import { textTypes } from './text/textTypes';
 import Text from './text/Text';
 
-
 interface FormSectionProps {
   title: string;
   children: React.ReactNode;
   initiallyOpen?: boolean;
   collapsible?: boolean;
   summary?: React.ReactNode;
+  helperText?: string;
 }
 
 if (
@@ -32,6 +32,7 @@ const FormSection: React.FC<FormSectionProps> = ({
   initiallyOpen = false,
   collapsible = true,
   summary,
+  helperText = 'Toque para visualizar',
 }) => {
   const [open, setOpen] = useState(initiallyOpen);
 
@@ -67,36 +68,51 @@ const FormSection: React.FC<FormSectionProps> = ({
           alignItems: 'center',
         }}
       >
-        <Text
-          color={theme.colors.whiteTheme.white}
-          type={textTypes.SUB_TITLE_BOLD}
-        >
-          {title}
-        </Text>
+        <View style={{ flex: 1 }}>
+          <Text
+            color={theme.colors.whiteTheme.white}
+            type={textTypes.SUB_TITLE_BOLD}
+          >
+            {title}
+          </Text>
+
+          {collapsible && (
+            <Text
+              type={textTypes.BUTTON_REGULAR}
+              color="#dff5df"
+              style={{
+                fontSize: 11,
+                marginTop: 2,
+              }}
+            >
+              {open ? 'Toque para recolher' : helperText}
+            </Text>
+          )}
+        </View>
 
         {collapsible && (
           <Text
             color={theme.colors.whiteTheme.white}
             type={textTypes.SUB_TITLE_BOLD}
           >
-            {open ? '▼' : '▶'}
+            {open ? '−' : '+'}
           </Text>
         )}
       </TouchableOpacity>
 
       {!open && summary && (
-            <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={toggleSection}
-                disabled={!collapsible}
-                style={{
-                padding: 12,
-                backgroundColor: '#f8f8f8',
-                }}
-            >
-                {summary}
-            </TouchableOpacity>
-       )}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={toggleSection}
+          disabled={!collapsible}
+          style={{
+            padding: 12,
+            backgroundColor: '#f8f8f8',
+          }}
+        >
+          {summary}
+        </TouchableOpacity>
+      )}
 
       {open && (
         <View
