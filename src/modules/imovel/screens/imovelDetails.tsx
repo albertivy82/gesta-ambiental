@@ -11,6 +11,7 @@ import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import EditConfirmation from '../ui-component/UseEditImovel';
 import { renderField } from '../ui-component/renderFilds';
+import ImovelSection from '../ui-component/imovelSeccion';
 
 
 
@@ -42,28 +43,7 @@ const ImovelDetails = () => {
     
        <ScrollView style={{ flex: 1 }}>
         <ImovelDetailContainer>
-              <View style={{ padding: 10, borderWidth: 1,  borderColor: theme.colors.grayTheme.gray100 }}>
-              {renderField('Número', params.imovel.numero)}
-              {renderField('Rua', params.imovel.rua)}
-              {renderField('Referencial', params.imovel.referencial)}
-              {renderField('Bairro', params.imovel.bairro)}
-              {renderField('Latitude', params.imovel.latitude)}
-              {renderField('Longitude', params.imovel.longitude)}
-              {renderField('Área do Imóvel (m²)', params.imovel.areaImovel?.toString())}
-              {renderField('Tipo de Solo', params.imovel.tipoSolo)}
-              {renderField('Vizinhos Confinantes', params.imovel.vizinhosConfinantes)}
-              {renderField('Situação Fundiária', params.imovel.situacaoFundiaria)}
-              {renderField('Documentação do Imóvel', params.imovel.documentacaoImovel)}
-              {renderField('Material utilizado no entorno do imóvel (Limites)', params.imovel.limites)}
-              {renderField('Linhas de Barco Disponíveis', params.imovel.linhasDeBarco)}
-              {renderField('Linhas de ônibus Disponíveis', params.imovel.linhasOnibus)}
-              {renderField('Pavimentação', params.imovel.pavimentacao)}
-              {renderField('Iluminação Pública', params.imovel.iluminacaoPublica)}
-              {renderField('Equipamentos Urbanos Presentes', params.imovel.equipamentosUrbanos)}
-              {renderField('Espaços de Esporte e Lazer', params.imovel.espacosEsporteLazer)}
-              {renderField('Programa de Infraestrutura e Saneamento', params.imovel.programaInfraSaneamento)}
-            
-            </View>
+             <ImovelSection imovel={params.imovel} />
 
             
             <View style={{ flexDirection: 'row', 

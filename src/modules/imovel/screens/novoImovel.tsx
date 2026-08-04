@@ -14,6 +14,7 @@ import { imovelBody } from "../../../shared/types/imovelType";
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
 import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 
 
 export interface NovoReptilParams {
@@ -176,6 +177,8 @@ export const NovoImovel = () => {
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
         <ImovelDetailContainer>
+
+          <EntrevistadoSection entrevistado={params.entrevistado} />
            <Input 
               value={novoImovel.rua} 
               maxLength={255}
