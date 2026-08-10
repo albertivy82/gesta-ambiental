@@ -12,7 +12,7 @@ interface EditConfirmationProps {
   onEditSuccess: () => void;
 }
 
-const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, destino, onEditSuccess }) => {
+const EditEntrevistadoConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, destino, onEditSuccess }) => {
 
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -82,4 +82,4 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, desti
   );
 };
 
-export default EditConfirmation;
+export default EditEntrevistadoConfirmation;

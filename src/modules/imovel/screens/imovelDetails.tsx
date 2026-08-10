@@ -7,7 +7,7 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { imovelBody } from '../../../shared/types/imovelType';
-import { useBenfeitorias } from '../hooks/useBenfeitorias';
+import { useBenfeitorias } from '../../entrevistadoDetails/hooks/useBenfeitorias';
 import { ImovelDetailContainer } from '../styles/ImovelDetails.style';
 import EditConfirmation from '../ui-component/UseEditImovel';
 import { renderField } from '../ui-component/renderFilds';
@@ -24,7 +24,7 @@ const ImovelDetails = () => {
   const { params } = useRoute<RouteProp<Record<string, ImovelParam>>>();
   const imovel = params.imovel;
   const foccus =useIsFocused();
-  const {benfeitoria} = useBenfeitorias(params.imovel.id, foccus);
+  const {benfeitoria} = useBenfeitorias( false, params.imovel.id);
 
   
   
@@ -72,7 +72,7 @@ const ImovelDetails = () => {
                             
                       }} 
                       />
-                      </View>
+        </View>
             
             
             <TouchableOpacity onPress={() => handleDecision(benfeitoria)}>

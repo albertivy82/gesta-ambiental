@@ -7,9 +7,13 @@ import { imovelBody } from '../../../shared/types/imovelType';
 
 interface ImovelSectionProps {
   imovel: imovelBody;
+  children?: React.ReactNode;
 }
 
-const ImovelSection = ({ imovel }: ImovelSectionProps) => {
+const ImovelSection = ({
+  imovel,
+  children,
+}: ImovelSectionProps) => {
   return (
     <View style={{ width: '100%' }}>
       <FormSection
@@ -79,6 +83,8 @@ const ImovelSection = ({ imovel }: ImovelSectionProps) => {
           'Programa de Infraestrutura e Saneamento',
           imovel.programaInfraSaneamento
         )}
+
+        {children}
       </FormSection>
     </View>
   );

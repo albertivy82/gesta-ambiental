@@ -44,14 +44,17 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
   
 
 
- export const useBenfeitorias = (imovelId:number, foccus:boolean)=>{
+ export const useBenfeitorias = (
+  foccus: boolean,
+  imovelId?: number
+) => {
      const [loadingBenfeitoria, setLoadingBenfeitoria] = useState<boolean>(true);
      const syncingRef = useRef(false);
      const [benfeitoria, setBenfeitoria] = useState<BenfeitoriaType[]>([]);
 
    const sinconizeBenfeitoriaQueue = async () => {
    
-
+    if (!imovelId) return;
     if(imovelId>0){
        
         const benfeitoriaQueue = getBenfeitoriaDessincronizadas(imovelId);
@@ -102,6 +105,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
  
 
     const fetchBenfeitoriasRealm = () => {
+       if (!imovelId) return;
       const benfeitoriaRealm = getBenfeitorias(imovelId);
       //console.log("salvando benfeitorias", benfeitoriaRealm)
       setBenfeitoria(benfeitoriaRealm); 
@@ -112,7 +116,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
         
 
     const isConnected = await testConnection();
- 
+     if (!imovelId) return;
     if (isConnected) {
 
         try{
@@ -164,5 +168,5 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
       
     
 
-    return {benfeitoria};
+    return {benfeitoria, loadingBenfeitoria};
 }

@@ -182,4 +182,3 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
 
  
    
-

@@ -1,98 +1,101 @@
-import { NavigationProp, ParamListBase, RouteProp, useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import { useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { getImovel } from '../../../realm/services/imovelService';
-import { Icon } from '../../../shared/components/icon/Icon';
+
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
-import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
-import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
-import { imovelBody } from '../../../shared/types/imovelType';
+
+import BenfeitoriaSection from '../../benfeitoriaDetails/ui-components/BenfeitoriaSection';
+import EditBenfeitoriaConfirmation from '../../benfeitoriaDetails/ui-components/UseEditBenfeitoria';
+import ImovelSection from '../../imovel/ui-component/imovelSeccion';
+import EditImovelConfirmation from '../../imovel/ui-component/UseEditImovel';
+import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
-import EditConfirmation from '../ui-component/UseEditEntrevistado';
-import FormSection from '../../../shared/components/FormSection';
-import ImovelSection from '../../imovel/ui-component/imovelSeccion';
 import EntrevistadoSection from '../ui-component/EntrevistadoSection';
-
-// Para entidades MULTIPLAS (vegetacao, peixes, etc.)
-export const handleNavegacaoFilhas = (
-  navigate: NavigationProp<ParamListBase>['navigate'], 
-  rota: string, 
-  entrevistado: EntrevistadoType
-) => {
-  navigate(rota, { entrevistado });
-};
-
-// Para entidade ÚNICA (imóvel)
-export const handleImovelNavigation = (
-  navigate: NavigationProp<ParamListBase>['navigate'], 
-  rota: string, 
-  imovel?: imovelBody,
-  entrevistado?: EntrevistadoType
-) => {
-  if (imovel) {
-    navigate(rota, { imovel });
-  } else if (entrevistado) {
-    navigate("NovoImovel", { entrevistado });
-  }
-};
-
-
-
-
+import EditEntrevistadoConfirmation from '../ui-component/UseEditEntrevistado';
 
 export interface EntrevistadoParam {
- entrevistado: EntrevistadoType;
+  entrevistado: EntrevistadoType;
 }
 
 const EntrevistadoDetails = () => {
-  const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const { params } = useRoute<RouteProp<Record<string, EntrevistadoParam>>>();
-  const foccus =useIsFocused();
-  const {imovelPresente, loadingImovel} = useImovel(params.entrevistado.id, foccus);
- 
-  const loading = loadingImovel;   
+  const navigation = useNavigation<any>();
 
-  useFocusEffect(
-      useCallback(() => {
-        getImovel(params.entrevistado.id);
-      }, [params.entrevistado.id])
-    );
+  const { params } = useRoute<
+    RouteProp<Record<string, EntrevistadoParam>, string>
+  >();
 
- 
-  const handleDecision = (
-    data: any[] | undefined,
-    detailRoute: string,
-    newRoute: string
-  ) => {
-    if (data && data.length > 0) {
-      handleNavegacaoFilhas(navigation.navigate, detailRoute, params.entrevistado);
-    } else {
-      handleNavegacaoFilhas(navigation.navigate, newRoute, params.entrevistado);
+  const entrevistado = params.entrevistado;
+  const isFocused = useIsFocused();
+
+  const {
+    imovelPresente,
+    loadingImovel,
+  } = useImovel(entrevistado.id, isFocused);
+
+  const podeBuscarBenfeitorias =
+  isFocused &&
+  !loadingImovel &&
+  !!imovelPresente;
+
+  const { 
+    benfeitoria,
+    loadingBenfeitoria,
+  } = useBenfeitorias(podeBuscarBenfeitorias,imovelPresente?.id);
+
+  /*
+   * A decisão só acontece depois que o useImovel termina
+   * todo o fluxo de sincronização e consulta ao Realm.
+   */
+  useEffect(() => {
+    if (loadingImovel || !isFocused) {
+      return;
     }
-  };
-  
-    
-  if (loading) {
+
+    if (!imovelPresente) {
+      navigation.replace('NovoImovel', {
+        entrevistado,
+      });
+    }
+  }, [
+    loadingImovel,
+    imovelPresente,
+    isFocused,
+    navigation,
+    entrevistado,
+  ]);
+
+  console.log("benfeitoria",benfeitoria)
+  /*
+   * Mantém a tela retida enquanto o hook:
+   * 1. sincroniza a fila;
+   * 2. consulta a API, quando possível;
+   * 3. consulta o Realm.
+   */
+  if (loadingImovel) {
     return (
       <EntrevistadoDetailContainer
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center"
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <ActivityIndicator
-          animating={true}
-          size={80}      
+          animating
+          size={80}
           color="#ff4500"
-          style={{ marginTop: 20 }}
         />
-  
+
         <Text
           type={textTypes.BUTTON_REGULAR}
           color="#000"
@@ -104,73 +107,166 @@ const EntrevistadoDetails = () => {
     );
   }
 
-  
+  /*
+   * Evita mostrar rapidamente a tela vazia durante
+   * o redirecionamento para NovoImovel.
+   */
+  if (!imovelPresente) {
+    return (
+      <EntrevistadoDetailContainer
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ActivityIndicator
+          animating
+          size={50}
+          color="#ff4500"
+        />
+
+        <Text
+          type={textTypes.BUTTON_REGULAR}
+          color="#000"
+          margin="20px 0 0 0"
+        >
+          Abrindo cadastro do imóvel...
+        </Text>
+      </EntrevistadoDetailContainer>
+    );
+  }
 
   return (
-    
-       <ScrollView style={{ flex: 1 }}>
-        <EntrevistadoDetailContainer>
-          <EntrevistadoSection entrevistado={params.entrevistado}>
+    <ScrollView style={{ flex: 1 }}>
+      <EntrevistadoDetailContainer>
+        <EntrevistadoSection entrevistado={entrevistado}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              marginTop: 5,
+              paddingVertical: 12,
+              borderTopWidth: 1,
+              borderTopColor: '#dcdcdc',
+            }}
+          >
+            <EditEntrevistadoConfirmation
+              entrevistado={entrevistado}
+              destino="NovoEntrevistado"
+              onEditSuccess={() => {
+                // Navegação atual preservada.
+              }}
+            />
 
+            <View
+              style={{
+                width: 1,
+                height: 22,
+                backgroundColor: '#dcdcdc',
+              }}
+            />
 
-                 
-              <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    alignItems: 'center',
-                    marginTop: 5,
-                    paddingVertical: 12,
-                    borderTopWidth: 1,
-                    borderTopColor: '#dcdcdc',
-                  }}>                     
-                     <EditConfirmation 
-                      entrevistado={params.entrevistado} 
-                      destino="NovoEntrevistado" 
-                      onEditSuccess={() => {
-                       //voltar para listagem de entrevistados
-                      }} 
-                      />
+            <DeleteConfirmation
+              id={entrevistado.id}
+              idLocal={entrevistado.idLocal}
+              deleteEndpoint="entrevistado"
+              onDeleteSuccess={() => {
+                // Voltar para a localidade.
+              }}
+            />
+          </View>
+        </EntrevistadoSection>
 
-                      <View style={{width: 1,
-                                    height: 22,
-                                    backgroundColor: '#dcdcdc',
-                      }} />
-                              
-                      <DeleteConfirmation 
-                      id={params.entrevistado.id} 
-                      idLocal={params.entrevistado.idLocal}
-                      deleteEndpoint="entrevistado" 
-                      onDeleteSuccess={() => {
-                            //volta para infLocalidade
-                      }} 
-                      />
-               </View>
-         </EntrevistadoSection>
-            
-                
-          <TouchableOpacity
-                 onPress={() => handleImovelNavigation(navigation.navigate, "ImovelDetail", imovelPresente, params.entrevistado)}>
-                  {imovelPresente ? (
-                    <ImovelSection imovel={imovelPresente} />
-                  ) : (
-                    <View style={{ alignItems: 'stretch', flexDirection: 'row', 
-                      padding: 10,
-                      borderWidth: 2, 
-                      borderColor: theme.colors.grayTheme.gray100 
-                    }}>
-                      <Icon size={30} name='home3' color='red' />
-                      <Text type={textTypes.BUTTON_BOLD} color={theme.colors.redTheme.red}> Sem imóvel cadastrado - Adicionar Imovel</Text>
-                  </View>
-                  )}
-        </TouchableOpacity>
+        <ImovelSection imovel={imovelPresente} >
+        <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              marginTop: 5,
+              paddingVertical: 12,
+              borderTopWidth: 1,
+              borderTopColor: '#dcdcdc',
+            }}
+          >
+            <EditImovelConfirmation
+              imovel={imovelPresente} 
+              destino="NovoImovel" 
+              onEditSuccess={() => {
+                // Navegação atual preservada.
+              }}
+            />
 
-                   
-     
-       </EntrevistadoDetailContainer>
-    </ScrollView>     
-   
-   
+            <View
+              style={{
+                width: 1,
+                height: 22,
+                backgroundColor: '#dcdcdc',
+              }}
+            />
+
+            <DeleteConfirmation 
+               id={imovelPresente.id} 
+               idLocal={imovelPresente.idLocal}
+               deleteEndpoint="imovel" 
+               onDeleteSuccess={() => {
+                            
+             }} 
+            />
+          </View>
+           </ImovelSection>
+
+           {benfeitoria.map((item, index) => (
+              <BenfeitoriaSection
+                key={item.idLocal || item.id}
+                benfeitoria={item}
+                title={`Benfeitoria ${index + 1}`}
+              >
+                {/* botões e, depois, os filhos desta benfeitoria */}
+
+                <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      alignItems: 'center',
+                      marginTop: 5,
+                      paddingVertical: 12,
+                      borderTopWidth: 1,
+                      borderTopColor: '#dcdcdc',
+                    }}
+                  >
+                  <EditBenfeitoriaConfirmation
+                    benfeitoria={item} 
+                    destino="NovaBenfeitoria" 
+                    onEditSuccess={() => {
+                      // Navegação atual preservada.
+                    }}
+                  />
+
+                  <View
+                    style={{
+                      width: 1,
+                      height: 22,
+                      backgroundColor: '#dcdcdc',
+                    }}
+                  />
+
+                  <DeleteConfirmation 
+                    id={item.id} 
+                    idLocal={item.idLocal}
+                    deleteEndpoint="benfeitoria" 
+                    onDeleteSuccess={() => {
+                                  
+                  }} 
+                  />
+                </View>
+           </BenfeitoriaSection>
+))}
+      </EntrevistadoDetailContainer>
+    </ScrollView>
   );
-}
+};
 
 export default EntrevistadoDetails;

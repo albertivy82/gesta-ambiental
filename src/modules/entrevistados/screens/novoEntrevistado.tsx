@@ -403,6 +403,17 @@ export const NovoEntrevistado = () => {
               ref={nomeInput}
               onSubmitEditing={() => naturalidadeInput.current?.focus()}
             />
+
+             <Input 
+              value={novoEntrevistado.apelido} 
+              onChange={(event)=> handleOnChangeInput(event, 'apelido')}
+              maxLength={100}
+              placeholder="como você é mais conhecido na região"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
+              margin="15px 10px 30px 5px"
+              title="Apelido:"
+              ref={apelidoInput}
+            />
           
            <RenderPicker
               label="Naturalidade - em qual cidade você nasceu?"
@@ -443,16 +454,7 @@ export const NovoEntrevistado = () => {
               }
             />
 
-            <Input 
-              value={novoEntrevistado.apelido} 
-              onChange={(event)=> handleOnChangeInput(event, 'apelido')}
-              maxLength={100}
-              placeholder="como você é mais conhecido na região"
-              placeholderTextColor={theme.colors.grayTheme.gray80}
-              margin="15px 10px 30px 5px"
-              title="Apelido:"
-              ref={apelidoInput}
-            />
+           
              
             <CheckboxSelector
               options={Escolaridade}
