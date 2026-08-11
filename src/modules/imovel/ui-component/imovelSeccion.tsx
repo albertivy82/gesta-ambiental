@@ -4,13 +4,18 @@ import FormSection from '../../../shared/components/FormSection';
 import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { imovelBody } from '../../../shared/types/imovelType';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import EditImovelConfirmation from './UseEditImovel';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 
 interface ImovelSectionProps {
+  entrevistado: EntrevistadoType;
   imovel: imovelBody;
   children?: React.ReactNode;
 }
 
 const ImovelSection = ({
+  entrevistado,
   imovel,
   children,
 }: ImovelSectionProps) => {
@@ -83,6 +88,42 @@ const ImovelSection = ({
           'Programa de Infraestrutura e Saneamento',
           imovel.programaInfraSaneamento
         )}
+
+        <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              marginTop: 5,
+              paddingVertical: 12,
+              borderTopWidth: 1,
+              borderTopColor: '#dcdcdc',
+            }}
+          >
+            <EditImovelConfirmation
+              entrevistado={entrevistado}
+              imovel={imovel}
+              destino="NovoImovel"
+              onEditSuccess={() => {}}
+            />
+
+            <View
+              style={{
+                width: 1,
+                height: 22,
+                backgroundColor: '#dcdcdc',
+              }}
+            />
+
+            <DeleteConfirmation  
+               id={imovel.id} 
+               idLocal={imovel.idLocal}
+               deleteEndpoint="imovel" 
+               onDeleteSuccess={() => {
+                            
+             }} 
+            />
+          </View>
 
         {children}
       </FormSection>

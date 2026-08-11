@@ -6,14 +6,22 @@ import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import { imovelBody } from '../../../shared/types/imovelType';
+import EditBenfeitoriaConfirmation from './UseEditBenfeitoria';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 
 interface BenfeitoriaSectionProps {
+  entrevistado: EntrevistadoType;
+  imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
-  children?: React.ReactNode;
   title?: string;
+  children?: React.ReactNode;
 }
 
 const BenfeitoriaSection = ({
+  entrevistado,
+  imovel,
   benfeitoria,
   children,
   title = 'Benfeitoria',
@@ -93,6 +101,45 @@ const BenfeitoriaSection = ({
           'Informativo predominante',
           benfeitoria.informativoPredominante
         )}
+
+        <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      alignItems: 'center',
+                      marginTop: 5,
+                      paddingVertical: 12,
+                      borderTopWidth: 1,
+                      borderTopColor: '#dcdcdc',
+                    }}
+                  >
+                  <EditBenfeitoriaConfirmation
+                    entrevistado={entrevistado}
+                    imovel={imovel}
+                    benfeitoria={benfeitoria} 
+                    destino="NovaBenfeitoria" 
+                    onEditSuccess={() => {
+                      // Navegação atual preservada.
+                    }}
+                  />
+
+                  <View
+                    style={{
+                      width: 1,
+                      height: 22,
+                      backgroundColor: '#dcdcdc',
+                    }}
+                  />
+
+                  <DeleteConfirmation 
+                    id={benfeitoria.id} 
+                    idLocal={benfeitoria.idLocal}
+                    deleteEndpoint="benfeitoria" 
+                    onDeleteSuccess={() => {
+                                  
+                  }} 
+                  />
+                </View>
 
         {children}
       </FormSection>

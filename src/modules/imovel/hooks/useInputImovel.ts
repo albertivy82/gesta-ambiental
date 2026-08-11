@@ -141,7 +141,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                     try{
                      
                       const response = await connectionAPIPut(`/api/imovel/${imovel!.id}`, imovelCorrigido) as imovelBody;
-                      
+                       console.log("useInputImovel, enviaImovelEdicao erro: ",  response);
                       if (response && response.id) {
                           return fetchImovelAPI(response.id);
                       }else{
@@ -149,6 +149,7 @@ export const useNovoImovel = (entrevistado:EntrevistadoType, imovel?: imovelBody
                           return local;
                       }
                     } catch (error) {
+                      console.log("useInputImovel, enviaImovelEdicao erro: ",  error);
                       const local = await salvarImovel(buildImovelAtualizada());
                       Alert.alert("Erro ao enviar edição", "Tente novamente online.");
                       return local;

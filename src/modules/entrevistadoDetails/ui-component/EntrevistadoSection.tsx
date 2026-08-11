@@ -4,6 +4,8 @@ import FormSection from '../../../shared/components/FormSection';
 import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+import EditEntrevistadoConfirmation from './UseEditEntrevistado';
 
 interface EntrevistadoSectionProps {
   entrevistado: EntrevistadoType;
@@ -130,6 +132,43 @@ const EntrevistadoSection = ({
           'Contato do indicado',
           entrevistado.contatoIndicadoConsultaPublica
         )}
+
+         <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+              marginTop: 5,
+              paddingVertical: 12,
+              borderTopWidth: 1,
+              borderTopColor: '#dcdcdc',
+            }}
+          >
+            <EditEntrevistadoConfirmation
+              entrevistado={entrevistado}
+              destino="NovoEntrevistado"
+              onEditSuccess={() => {
+                // Navegação atual preservada.
+              }}
+            />
+
+            <View
+              style={{
+                width: 1,
+                height: 22,
+                backgroundColor: '#dcdcdc',
+              }}
+            />
+
+            <DeleteConfirmation
+              id={entrevistado.id}
+              idLocal={entrevistado.idLocal}
+              deleteEndpoint="entrevistado"
+              onDeleteSuccess={() => {
+                // Voltar para a localidade.
+              }}
+            />
+          </View>
 
         {children}
       </FormSection>

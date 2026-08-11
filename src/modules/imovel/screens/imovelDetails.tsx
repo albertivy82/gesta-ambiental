@@ -54,13 +54,13 @@ const ImovelDetails = () => {
                       borderColor: "#808080", 
                       backgroundColor: '#000000'
                     }}>                     
-                     <EditConfirmation 
+                     {/*<EditConfirmation 
                       imovel={params.imovel} 
                       destino="NovoImovel" 
                       onEditSuccess={() => {
                       
                       }} 
-                      />
+                      />*/}
 
                       <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#9b9999' }} />
                               

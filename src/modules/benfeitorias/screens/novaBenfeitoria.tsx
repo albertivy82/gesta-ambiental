@@ -28,8 +28,12 @@ import {
   optionsTipoSolo,
   vizinhoOptions
 } from "../ui-components/opcoesBenfeitoria";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 
 export interface imovelParam {
+entrevistado: EntrevistadoType;
 imovel: imovelBody, 
 benfeitoria?: BenfeitoriaType,
 }
@@ -170,7 +174,7 @@ export const NovaBenfeitoria=()=>{
         setLoading(true);
         const benfeitoriaSalva = await enviarRegistro(); 
             if (benfeitoriaSalva){
-              navigation.replace("BenfeitoriaDetails", { benfeitoria: benfeitoriaSalva });
+             navigation.replace('EntrevistadoDetails', { entrevistado: params.entrevistado});
             } else {
               Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
               navigation.goBack();
@@ -216,6 +220,11 @@ export const NovaBenfeitoria=()=>{
     
     <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
             <BenfeitoriaContainer>
+
+              <EntrevistadoSection entrevistado={params.entrevistado} />
+              <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
+
+
 
              <RenderPicker
                label="Qual é a finalidade da benfeitoria?"

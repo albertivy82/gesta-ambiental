@@ -75,6 +75,27 @@ const EntrevistadoDetails = () => {
   ]);
 
   console.log("benfeitoria",benfeitoria)
+
+
+  useEffect(() => {
+  if (!isFocused) return;
+  if (!imovelPresente) return;
+  if (loadingBenfeitoria) return;
+
+  if (benfeitoria.length === 0) {
+    navigation.replace('NovaBenfeitoria', {
+      entrevistado,
+      imovel: imovelPresente,
+    });
+  }
+}, [
+  isFocused,
+  imovelPresente,
+  loadingBenfeitoria,
+  benfeitoria,
+  entrevistado,
+  navigation,
+]);
   /*
    * Mantém a tela retida enquanto o hook:
    * 1. sincroniza a fila;
@@ -141,127 +162,25 @@ const EntrevistadoDetails = () => {
     <ScrollView style={{ flex: 1 }}>
       <EntrevistadoDetailContainer>
         <EntrevistadoSection entrevistado={entrevistado}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              marginTop: 5,
-              paddingVertical: 12,
-              borderTopWidth: 1,
-              borderTopColor: '#dcdcdc',
-            }}
-          >
-            <EditEntrevistadoConfirmation
-              entrevistado={entrevistado}
-              destino="NovoEntrevistado"
-              onEditSuccess={() => {
-                // Navegação atual preservada.
-              }}
-            />
-
-            <View
-              style={{
-                width: 1,
-                height: 22,
-                backgroundColor: '#dcdcdc',
-              }}
-            />
-
-            <DeleteConfirmation
-              id={entrevistado.id}
-              idLocal={entrevistado.idLocal}
-              deleteEndpoint="entrevistado"
-              onDeleteSuccess={() => {
-                // Voltar para a localidade.
-              }}
-            />
-          </View>
+         
         </EntrevistadoSection>
 
-        <ImovelSection imovel={imovelPresente} >
-        <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              marginTop: 5,
-              paddingVertical: 12,
-              borderTopWidth: 1,
-              borderTopColor: '#dcdcdc',
-            }}
-          >
-            <EditImovelConfirmation
-              imovel={imovelPresente} 
-              destino="NovoImovel" 
-              onEditSuccess={() => {
-                // Navegação atual preservada.
-              }}
-            />
+        <ImovelSection entrevistado={entrevistado} imovel={imovelPresente} >
+        
+        </ImovelSection>
 
-            <View
-              style={{
-                width: 1,
-                height: 22,
-                backgroundColor: '#dcdcdc',
-              }}
-            />
-
-            <DeleteConfirmation 
-               id={imovelPresente.id} 
-               idLocal={imovelPresente.idLocal}
-               deleteEndpoint="imovel" 
-               onDeleteSuccess={() => {
-                            
-             }} 
-            />
-          </View>
-           </ImovelSection>
-
+          
+          
            {benfeitoria.map((item, index) => (
               <BenfeitoriaSection
                 key={item.idLocal || item.id}
+                entrevistado={entrevistado}
+                imovel={imovelPresente}
                 benfeitoria={item}
                 title={`Benfeitoria ${index + 1}`}
               >
                 {/* botões e, depois, os filhos desta benfeitoria */}
 
-                <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                      alignItems: 'center',
-                      marginTop: 5,
-                      paddingVertical: 12,
-                      borderTopWidth: 1,
-                      borderTopColor: '#dcdcdc',
-                    }}
-                  >
-                  <EditBenfeitoriaConfirmation
-                    benfeitoria={item} 
-                    destino="NovaBenfeitoria" 
-                    onEditSuccess={() => {
-                      // Navegação atual preservada.
-                    }}
-                  />
-
-                  <View
-                    style={{
-                      width: 1,
-                      height: 22,
-                      backgroundColor: '#dcdcdc',
-                    }}
-                  />
-
-                  <DeleteConfirmation 
-                    id={item.id} 
-                    idLocal={item.idLocal}
-                    deleteEndpoint="benfeitoria" 
-                    onDeleteSuccess={() => {
-                                  
-                  }} 
-                  />
-                </View>
            </BenfeitoriaSection>
 ))}
       </EntrevistadoDetailContainer>

@@ -160,7 +160,7 @@ export const NovoImovel = () => {
               setLoading(true);
                const imovelSalvo = await enviarRegistro(); 
                    if (imovelSalvo){
-                    navigation.replace("ImovelDetail", { imovel: imovelSalvo });
+                    navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
                    } else {
                      Alert.alert("Erro", "Não foi possível salvar a imovel. Tente novamente.");
                      navigation.goBack();

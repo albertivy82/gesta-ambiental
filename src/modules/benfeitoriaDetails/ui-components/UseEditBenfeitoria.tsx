@@ -5,14 +5,18 @@ import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
+import { imovelBody } from '../../../shared/types/imovelType';
 
 interface EditConfirmationProps {
+  entrevistado: EntrevistadoType;
+  imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
   destino: string;
   onEditSuccess: () => void;
 }
 
-const EditBenfeitoriaConfirmation: React.FC<EditConfirmationProps> = ({ benfeitoria, destino, onEditSuccess }) => {
+const EditBenfeitoriaConfirmation: React.FC<EditConfirmationProps> = ({ entrevistado, imovel, benfeitoria, destino, onEditSuccess }) => {
 
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
   const [isModalVisible, setModalVisible] = useState(false);
@@ -22,7 +26,7 @@ const EditBenfeitoriaConfirmation: React.FC<EditConfirmationProps> = ({ benfeito
     setLoading(true);
     try {
     
-      navigation.navigate(destino, {benfeitoria});
+      navigation.navigate(destino, { entrevistado, imovel, benfeitoria  });
       setModalVisible(false);
       onEditSuccess();
     } catch (error) {
