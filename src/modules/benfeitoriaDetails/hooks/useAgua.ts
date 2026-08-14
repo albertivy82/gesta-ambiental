@@ -20,7 +20,7 @@ export const convertToAguaInput = (agua: any): AguaInput => {
   };
 };
 
-export const useAguas = (benfeitoriaId: number, foccus: Boolean) => {
+export const useAguas = (foccus: Boolean, benfeitoriaId: number) => {
   const [loadingAguas, setLoadingAguas] = useState<boolean>(true);
   const [aguas, setAguas] = useState<AguaType[]>([]);
  

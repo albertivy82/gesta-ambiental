@@ -5,23 +5,26 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
+import { useAguas } from '../../benfeitoriaDetails/hooks/useAgua';
+import { useMoradores } from '../../benfeitoriaDetails/hooks/useMorador';
+import { useRendasOutrasFontes } from '../../benfeitoriaDetails/hooks/useRendaOutrasfontes';
 import BenfeitoriaSection from '../../benfeitoriaDetails/ui-components/BenfeitoriaSection';
-import EditBenfeitoriaConfirmation from '../../benfeitoriaDetails/ui-components/UseEditBenfeitoria';
 import ImovelSection from '../../imovel/ui-component/imovelSeccion';
-import EditImovelConfirmation from '../../imovel/ui-component/UseEditImovel';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
 import EntrevistadoSection from '../ui-component/EntrevistadoSection';
-import EditEntrevistadoConfirmation from '../ui-component/UseEditEntrevistado';
+import { useAtividadesProdutivas } from '../../benfeitoriaDetails/hooks/useAtividadeProdutiva';
+import { useCreditos } from '../../benfeitoriaDetails/hooks/useCredito';
+import { useServicosComunicacao } from '../../benfeitoriaDetails/hooks/useSevicoComunicacao';
+import FilhasBenfeitoria from '../ui-component/FilhasBenfeitoria';
 
 export interface EntrevistadoParam {
   entrevistado: EntrevistadoType;
@@ -52,7 +55,15 @@ const EntrevistadoDetails = () => {
     loadingBenfeitoria,
   } = useBenfeitorias(podeBuscarBenfeitorias,imovelPresente?.id);
 
-  /*
+
+  const podeBuscarFilhas =
+  isFocused &&
+  !loadingImovel &&
+  !loadingBenfeitoria &&
+  !!imovelPresente &&
+  benfeitoria.length > 0;
+
+   /*
    * A decisão só acontece depois que o useImovel termina
    * todo o fluxo de sincronização e consulta ao Realm.
    */
@@ -180,6 +191,11 @@ const EntrevistadoDetails = () => {
                 title={`Benfeitoria ${index + 1}`}
               >
                 {/* botões e, depois, os filhos desta benfeitoria */}
+
+                <FilhasBenfeitoria
+                  benfeitoria={item}
+                  ativo={podeBuscarFilhas}
+                />
 
            </BenfeitoriaSection>
 ))}

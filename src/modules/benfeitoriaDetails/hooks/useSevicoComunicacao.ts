@@ -20,7 +20,7 @@ export const convertToServicoComunicacaoInput = (item: any) => {
   };
 };
 
-export const useServicosComunicacao = (benfeitoriaId: number, foccus: Boolean) => {
+export const useServicosComunicacao = (foccus: Boolean, benfeitoriaId: number) => {
   const [loadingComunicacoes, setLoadingComunicacoes] = useState<boolean>(true);
   const [servicos, setServicos] = useState<ServicosComunicacaoType[]>([]);
 

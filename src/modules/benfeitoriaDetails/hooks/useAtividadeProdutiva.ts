@@ -25,7 +25,7 @@ export const convertToAtividadeProdutivaInput = (atividade: any) => {
   };
 };
 
-export const useAtividadesProdutivas = (benfeitoriaId: number, foccus: Boolean) => {
+export const useAtividadesProdutivas = (foccus: Boolean, benfeitoriaId: number) => {
   const [loadingAtividadesProdutivas, setLoadingAtividadesProdutivas] = useState<boolean>(true);
   const [atividades, setAtividades] = useState<AtividadeProdutivaType[]>([]);
 

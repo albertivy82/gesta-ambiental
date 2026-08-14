@@ -17,7 +17,7 @@ export const convertToRendaOFInput = (renda: any): RendaOutrasFontesInput => {
   };
 };
 
-export const useRendasOutrasFontes = (benfeitoriaId: number, foccus: Boolean) => {
+export const useRendasOutrasFontes = (foccus: Boolean, benfeitoriaId: number) => {
   const [loadingOutrasRendas, setLoadingOutrasRendas] = useState<boolean>(true);
   const [rendasOF, setRendasOF] = useState<RendaOutrasFontesType[]>([]);
 

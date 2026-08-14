@@ -21,7 +21,7 @@ export const convertToCreditoInput = (credito: any): CreditoInput => {
   };
 };
 
-export const useCreditos = (benfeitoriaId: number, foccus: Boolean) => {
+export const useCreditos = (foccus: Boolean, benfeitoriaId: number) => {
   const [loadingCreditos, setLoadingCreditos] = useState<boolean>(true);
   const [creditos, setCreditos] = useState<CreditoType[]>([]);
 

@@ -25,7 +25,7 @@ export const convertToMoradorInput = (morador: any): MoradorInput => {
   };
 };
 
-export const useMoradores = (benfeitoriaId: number, foccus: Boolean) => {
+export const useMoradores = (foccus: Boolean, benfeitoriaId: number) => {
   const [loadingMoradores, setLoadingMoradores] = useState<boolean>(true);
   const [moradores, setMoradores] = useState<MoradorType[]>([]);
 

@@ -151,39 +151,17 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
       
         syncingRef.current = true;
       
-       const run = async () => {
-  const inicioTotal = Date.now();
-
-  try {
-    setLoadingBenfeitoria(true);
-
-    const inicioQueue = Date.now();
-    await sinconizeBenfeitoriaQueue();
-    console.log(
-      `BENFEITORIA_QUEUE: ${Date.now() - inicioQueue} ms`
-    );
-
-    const inicioAPI = Date.now();
-    await fetchBefeitoriasAPI();
-    console.log(
-      `BENFEITORIA_API: ${Date.now() - inicioAPI} ms`
-    );
-
-    const inicioRealm = Date.now();
-    fetchBenfeitoriasRealm();
-    console.log(
-      `BENFEITORIA_REALM: ${Date.now() - inicioRealm} ms`
-    );
-
-  } finally {
-    console.log(
-      `BENFEITORIA_TOTAL: ${Date.now() - inicioTotal} ms`
-    );
-
-    setLoadingBenfeitoria(false);
-    syncingRef.current = false;
-  }
-};
+        const run = async () => {
+          try {
+            setLoadingBenfeitoria(true);
+            await sinconizeBenfeitoriaQueue();
+            await fetchBefeitoriasAPI();
+            fetchBenfeitoriasRealm();
+          } finally {
+            setLoadingBenfeitoria(false);
+            syncingRef.current = false;
+          }
+        };
       
         run();
       }, [foccus, imovelId]);
