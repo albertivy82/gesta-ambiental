@@ -12,18 +12,12 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
-import { useAguas } from '../../benfeitoriaDetails/hooks/useAgua';
-import { useMoradores } from '../../benfeitoriaDetails/hooks/useMorador';
-import { useRendasOutrasFontes } from '../../benfeitoriaDetails/hooks/useRendaOutrasfontes';
 import BenfeitoriaSection from '../../benfeitoriaDetails/ui-components/BenfeitoriaSection';
 import ImovelSection from '../../imovel/ui-component/imovelSeccion';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { useImovel } from '../hooks/useImovel';
 import { EntrevistadoDetailContainer } from '../styles/EntrevistadoDetails.style';
 import EntrevistadoSection from '../ui-component/EntrevistadoSection';
-import { useAtividadesProdutivas } from '../../benfeitoriaDetails/hooks/useAtividadeProdutiva';
-import { useCreditos } from '../../benfeitoriaDetails/hooks/useCredito';
-import { useServicosComunicacao } from '../../benfeitoriaDetails/hooks/useSevicoComunicacao';
 import FilhasBenfeitoria from '../ui-component/FilhasBenfeitoria';
 
 export interface EntrevistadoParam {
@@ -46,27 +40,27 @@ const EntrevistadoDetails = () => {
   } = useImovel(entrevistado.id, isFocused);
 
   const podeBuscarBenfeitorias =
-  isFocused &&
-  !loadingImovel &&
-  !!imovelPresente;
+    isFocused &&
+    !loadingImovel &&
+    !!imovelPresente;
 
-  const { 
+  const {
     benfeitoria,
     loadingBenfeitoria,
-  } = useBenfeitorias(podeBuscarBenfeitorias,imovelPresente?.id);
+  } = useBenfeitorias(podeBuscarBenfeitorias, imovelPresente?.id);
 
 
   const podeBuscarFilhas =
-  isFocused &&
-  !loadingImovel &&
-  !loadingBenfeitoria &&
-  !!imovelPresente &&
-  benfeitoria.length > 0;
+    isFocused &&
+    !loadingImovel &&
+    !loadingBenfeitoria &&
+    !!imovelPresente &&
+    benfeitoria.length > 0;
 
-   /*
-   * A decisão só acontece depois que o useImovel termina
-   * todo o fluxo de sincronização e consulta ao Realm.
-   */
+  /*
+  * A decisão só acontece depois que o useImovel termina
+  * todo o fluxo de sincronização e consulta ao Realm.
+  */
   useEffect(() => {
     if (loadingImovel || !isFocused) {
       return;
@@ -85,28 +79,28 @@ const EntrevistadoDetails = () => {
     entrevistado,
   ]);
 
-  console.log("benfeitoria",benfeitoria)
+  console.log("benfeitoria", benfeitoria)
 
 
   useEffect(() => {
-  if (!isFocused) return;
-  if (!imovelPresente) return;
-  if (loadingBenfeitoria) return;
+    if (!isFocused) return;
+    if (!imovelPresente) return;
+    if (loadingBenfeitoria) return;
 
-  if (benfeitoria.length === 0) {
-    navigation.replace('NovaBenfeitoria', {
-      entrevistado,
-      imovel: imovelPresente,
-    });
-  }
-}, [
-  isFocused,
-  imovelPresente,
-  loadingBenfeitoria,
-  benfeitoria,
-  entrevistado,
-  navigation,
-]);
+    if (benfeitoria.length === 0) {
+      navigation.replace('NovaBenfeitoria', {
+        entrevistado,
+        imovel: imovelPresente,
+      });
+    }
+  }, [
+    isFocused,
+    imovelPresente,
+    loadingBenfeitoria,
+    benfeitoria,
+    entrevistado,
+    navigation,
+  ]);
   /*
    * Mantém a tela retida enquanto o hook:
    * 1. sincroniza a fila;
@@ -173,32 +167,34 @@ const EntrevistadoDetails = () => {
     <ScrollView style={{ flex: 1 }}>
       <EntrevistadoDetailContainer>
         <EntrevistadoSection entrevistado={entrevistado}>
-         
+
         </EntrevistadoSection>
 
         <ImovelSection entrevistado={entrevistado} imovel={imovelPresente} >
-        
+
         </ImovelSection>
 
-          
-          
-           {benfeitoria.map((item, index) => (
-              <BenfeitoriaSection
-                key={item.idLocal || item.id}
-                entrevistado={entrevistado}
-                imovel={imovelPresente}
-                benfeitoria={item}
-                title={`Benfeitoria ${index + 1}`}
-              >
-                {/* botões e, depois, os filhos desta benfeitoria */}
 
-                <FilhasBenfeitoria
-                  benfeitoria={item}
-                  ativo={podeBuscarFilhas}
-                />
 
-           </BenfeitoriaSection>
-))}
+        {benfeitoria.map((item, index) => (
+          <BenfeitoriaSection
+            key={item.idLocal || item.id}
+            entrevistado={entrevistado}
+            imovel={imovelPresente}
+            benfeitoria={item}
+            title={`Benfeitoria ${index + 1}`}
+          >
+            {/* botões e, depois, os filhos desta benfeitoria */}
+
+            <FilhasBenfeitoria
+              entrevistado={entrevistado}
+              imovel={imovelPresente}
+              benfeitoria={item}
+              ativo={podeBuscarFilhas}
+            />
+
+          </BenfeitoriaSection>
+        ))}
       </EntrevistadoDetailContainer>
     </ScrollView>
   );

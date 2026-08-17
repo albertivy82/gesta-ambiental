@@ -16,9 +16,16 @@ import { useBuscaEntrevistado } from "../hooks/useBuscaEntrevistado";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
 import { estadoCivilOptions } from "../ui-components/opcoesMorador";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
+import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 
 export interface NovoMoradorParams {
+  entrevistado: EntrevistadoType;
+  imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
   morador?: MoradorType;
 }
@@ -138,7 +145,7 @@ useEffect(() => {
     setLoading(true);
            const moradorSalvo = await enviarRegistro(); 
                if (moradorSalvo){
-                navigation.replace("MoradorDetails", { morador: moradorSalvo });
+                 navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a morador. Tente novomente.");
                  navigation.goBack();
@@ -208,6 +215,10 @@ useEffect(() => {
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
         <MoradorDetailContainer>
+
+             <EntrevistadoSection entrevistado={params.entrevistado} />
+             <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
+             <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria}  />
 
         
              <RenderPicker

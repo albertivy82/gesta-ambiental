@@ -9,26 +9,33 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 import { useNovoServicoComunicacao } from "../hooks/useInputServCom";
 import { ServicoComunicacaoDetailContainer } from "../styles/servicoComunicacao.style";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { imovelBody } from "../../../shared/types/imovelType";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
+import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
 
 export interface NovoServicoParams {
+  entrevistado: EntrevistadoType;
+  imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
   servicosComunicacao?: ServicosComunicacaoType;
 }
 
-export const detalharServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType)=>{
-  navigate('', {benfeitoria})
+export const detalharServicoComunicacao = (navigate: NavigationProp<ParamListBase>['navigate'], benfeitoria: BenfeitoriaType) => {
+  navigate('', { benfeitoria })
 }
 
 export const NovoServicoComunicacao = () => {
-    const { params } = useRoute<RouteProp<Record<string, NovoServicoParams>, string>>();
-    const benfeitoria = params.benfeitoria;
-    const servicosComunicacao = params.servicosComunicacao;
-    const navigation = useNavigation<any>();
-    const [showErrors, setShowErrors] = useState(false);
-    const [loading, setLoading] = useState(false); 
-  const [serviCom, setServCom] = useState<string>('');     
+  const { params } = useRoute<RouteProp<Record<string, NovoServicoParams>, string>>();
+  const benfeitoria = params.benfeitoria;
+  const servicosComunicacao = params.servicosComunicacao;
+  const navigation = useNavigation<any>();
+  const [showErrors, setShowErrors] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [serviCom, setServCom] = useState<string>('');
   const [outroServCom, SetOutroServCom] = useState<string>('');
-  const {  
+  const {
     novoServicoComunicacao,
     enviarRegistro,
     handleEnumChange,
@@ -37,48 +44,48 @@ export const NovoServicoComunicacao = () => {
     validateServicosComunicacao,
     disabled
   } = useNovoServicoComunicacao(benfeitoria, servicosComunicacao);
- const servicosOptions = Object.values([
-  "Telefonia rural",
-  "Telefonia móvel",
-  "Internet",
-  "Rádio comunicador",
-  "Sinal de TV",
-  "Não possui",
-  "Não declarado",
-  "Outros"
-]);
- const operadoraOptions = Object.values([
-  "Oi",
-  "Vivo",
-  "Tim",
-  "Claro",
-  "Não declarado",
-  "Outro"
-]);
+  const servicosOptions = Object.values([
+    "Telefonia rural",
+    "Telefonia móvel",
+    "Internet",
+    "Rádio comunicador",
+    "Sinal de TV",
+    "Não possui",
+    "Não declarado",
+    "Outros"
+  ]);
+  const operadoraOptions = Object.values([
+    "Oi",
+    "Vivo",
+    "Tim",
+    "Claro",
+    "Não declarado",
+    "Outro"
+  ]);
 
 
- useEffect(() => {
-     const servicoInformado = serviCom === 'Outros' 
-     ? (outroServCom ? [`QUAIS: ${outroServCom}`] : [])  // Se for "SIM", adiciona sobreUso se houver
-     : [serviCom];
- 
-     handleArrayFieldChange('tipoServicoComunicacao', servicoInformado);
-   }, [serviCom, outroServCom]);
+  useEffect(() => {
+    const servicoInformado = serviCom === 'Outros'
+      ? (outroServCom ? [`QUAIS: ${outroServCom}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+      : [serviCom];
 
-   useEffect(() => {
+    handleArrayFieldChange('tipoServicoComunicacao', servicoInformado);
+  }, [serviCom, outroServCom]);
+
+  useEffect(() => {
     if (!servicosComunicacao) return;
-     handleEnumChange('operadoraServicoComunicacao', servicosComunicacao.operadoraServicoComunicacao)
+    handleEnumChange('operadoraServicoComunicacao', servicosComunicacao.operadoraServicoComunicacao)
   }, [servicosComunicacao]);
 
-   const val1 = servicosComunicacao?.tipoServicoComunicacao? servicosComunicacao.tipoServicoComunicacao: '';
+  const val1 = servicosComunicacao?.tipoServicoComunicacao ? servicosComunicacao.tipoServicoComunicacao : '';
 
   const handleEnviar = async () => {
     if (loading) return;
-                
+
     const result = validateServicosComunicacao(novoServicoComunicacao);
     if (!result.isValid) {
       setShowErrors(true);
-  
+
       Alert.alert(
         'Campos Obrigatórios',
         [
@@ -90,11 +97,11 @@ export const NovoServicoComunicacao = () => {
       return;
     }
 
-try {
-  setLoading(true);
-      const servicoComunicacaoSalvo = await enviarRegistro(); 
+    try {
+      setLoading(true);
+      const servicoComunicacaoSalvo = await enviarRegistro();
       if (servicoComunicacaoSalvo) {
-          navigation.replace("ServicosComunicacaoLista", { benfeitoria });
+         navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
       } else {
         Alert.alert("Erro", "Não foi possível salvar serviço de comunicação. Tente novamente.");
         navigation.goBack();
@@ -109,35 +116,39 @@ try {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <ServicoComunicacaoDetailContainer>
-        
-        { val1 && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                   Informação cadastrada anteriormente:  {val1}
-                </Text>
+
+        <EntrevistadoSection entrevistado={params.entrevistado} />
+        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
+        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
+
+        {val1 && (
+          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+            Informação cadastrada anteriormente:  {val1}
+          </Text>
         )}
-      <RenderPicker
-       label="Selecione o tipo de serviço de comunicação informado"
-       selectedValue={serviCom}
-       onValueChange={(value) => {
-       setServCom(value ?? 'Outros'); 
-          if (value !== '') {
-           SetOutroServCom('');
-           }
-        }}
-        options={servicosOptions}
-              />
-               {serviCom.includes('Outros') && (
-                <View style={{ marginTop: 10 }}>
-                   <Input
-                        value={outroServCom}
-                        maxLength={100}
-                        onChangeText={SetOutroServCom}
-                        placeholder="Separe por vírgulas"
-                        margin="15px 10px 30px 5px"
-                        title="Informe qual ou quais?"
-                    />
-                </View>
-       )}
+        <RenderPicker
+          label="Selecione o tipo de serviço de comunicação informado"
+          selectedValue={serviCom}
+          onValueChange={(value) => {
+            setServCom(value ?? 'Outros');
+            if (value !== '') {
+              SetOutroServCom('');
+            }
+          }}
+          options={servicosOptions}
+        />
+        {serviCom.includes('Outros') && (
+          <View style={{ marginTop: 10 }}>
+            <Input
+              value={outroServCom}
+              maxLength={100}
+              onChangeText={SetOutroServCom}
+              placeholder="Separe por vírgulas"
+              margin="15px 10px 30px 5px"
+              title="Informe qual ou quais?"
+            />
+          </View>
+        )}
 
         <RenderPicker
           label="Selecione a operadora"
@@ -146,18 +157,18 @@ try {
           options={operadoraOptions}
         />
 
-       
 
-       <FormErrors
-        visible={showErrors && disabled}
-        errors={validateServicosComunicacao(novoServicoComunicacao).errors}
-      />
 
-       <Button
-        title={loading ? "Enviando..." : "Enviar"}
-        onPress={handleEnviar}
-        color={"#ff4500"}
-        disabled={loading}   // 👈 trava só enquanto envia
+        <FormErrors
+          visible={showErrors && disabled}
+          errors={validateServicosComunicacao(novoServicoComunicacao).errors}
+        />
+
+        <Button
+          title={loading ? "Enviando..." : "Enviar"}
+          onPress={handleEnviar}
+          color={"#ff4500"}
+          disabled={loading}   // 👈 trava só enquanto envia
         />
 
 

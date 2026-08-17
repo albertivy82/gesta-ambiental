@@ -8,9 +8,16 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { CreditoType } from "../../../shared/types/CreditoType";
 import { useNovoCredito } from "../hooks/useInputCredito";
 import { CreditoDetailContainer } from "../styles/credito.style";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { imovelBody } from "../../../shared/types/imovelType";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
+import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
 
 
 export interface NovoCreditoParams {
+  entrevistado: EntrevistadoType;
+  imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
   credito?: CreditoType;
 }
@@ -20,30 +27,30 @@ export interface NovoCreditoParams {
 
 
 export const NovoCredito = () => {
-   const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
-   const navigation = useNavigation<any>();
-   const benfeitoria = params.benfeitoria;
-   const [showErrors, setShowErrors] = useState(false);
-   const credito = params.credito;
-   const [loading, setLoading] = useState(false); 
-   const {  
+  const { params } = useRoute<RouteProp<Record<string, NovoCreditoParams>, string>>();
+  const navigation = useNavigation<any>();
+  const benfeitoria = params.benfeitoria;
+  const [showErrors, setShowErrors] = useState(false);
+  const credito = params.credito;
+  const [loading, setLoading] = useState(false);
+  const {
     novoCredito,
     handleOnChangeRendimentoMensal,
     handleOnChangeInput,
     enviarRegistro,
     validateCredito,
     disabled
-  } = useNovoCredito(params.benfeitoria, credito );
+  } = useNovoCredito(params.benfeitoria, credito);
 
- 
+
 
   const handleEnviar = async () => {
     if (loading) return;
-  
+
     const result = validateCredito(novoCredito);
     if (!result.isValid) {
       setShowErrors(true);
-  
+
       Alert.alert(
         'Campos Obrigatórios',
         [
@@ -54,12 +61,12 @@ export const NovoCredito = () => {
       );
       return;
     }
-  
+
     setLoading(true);
     try {
-      const creditoSalva = await enviarRegistro(); 
-      if (creditoSalva){
-        navigation.replace("CreditoLista", { benfeitoria });
+      const creditoSalva = await enviarRegistro();
+      if (creditoSalva) {
+         navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
       } else {
         Alert.alert("Erro", "Não foi possível salvar o crédito. Tente novamente.");
         navigation.goBack();
@@ -71,20 +78,25 @@ export const NovoCredito = () => {
       setLoading(false);
     }
   };
-  
-      useEffect(() => {
-        if (!credito) return;
-         handleOnChangeInput(credito.nome, 'nome');
-      }, [credito]); 
-                      
-    const valorSalvo = credito?.valor? credito.valor  : '';
+
+  useEffect(() => {
+    if (!credito) return;
+    handleOnChangeInput(credito.nome, 'nome');
+  }, [credito]);
+
+  const valorSalvo = credito?.valor ? credito.valor : '';
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <CreditoDetailContainer>
+
+        <EntrevistadoSection entrevistado={params.entrevistado} />
+        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
+        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
         
-        <Input 
-          value={novoCredito.nome} 
+        
+        <Input
+          value={novoCredito.nome}
           maxLength={250}
           onChange={(event) => handleOnChangeInput(event, 'nome')}
           placeholder="..."
@@ -92,31 +104,31 @@ export const NovoCredito = () => {
           title="Informe qual linha de crédito é acessada pelos moradores da residência:"
         />
         {valorSalvo && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                  Informação cadastrada anteriormente: R$ {valorSalvo}
-                </Text>
+          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+            Informação cadastrada anteriormente: R$ {valorSalvo}
+          </Text>
         )}
-         <Input
-              value={novoCredito.valor.toFixed(2)}
-              maxLength={10}
-              onChange={handleOnChangeRendimentoMensal}
-              keyboardType='numeric'
-              placeholder="R$"
-              margin="15px 10px 30px 5px"
-              title="Valor"
-            />
+        <Input
+          value={novoCredito.valor.toFixed(2)}
+          maxLength={10}
+          onChange={handleOnChangeRendimentoMensal}
+          keyboardType='numeric'
+          placeholder="R$"
+          margin="15px 10px 30px 5px"
+          title="Valor"
+        />
 
         <FormErrors
           visible={showErrors && disabled}
           errors={validateCredito(novoCredito).errors}
         />
 
-         <Button
-              title={loading ? "Enviando..." : "Enviar"}
-              onPress={handleEnviar}
-              color={"#ff4500"}
-              disabled={loading}   // 👈 trava só enquanto envia
-              />
+        <Button
+          title={loading ? "Enviando..." : "Enviar"}
+          onPress={handleEnviar}
+          color={"#ff4500"}
+          disabled={loading}   // 👈 trava só enquanto envia
+        />
 
 
       </CreditoDetailContainer>

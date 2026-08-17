@@ -10,8 +10,15 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
 import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
+import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { imovelBody } from "../../../shared/types/imovelType";
 
 export interface NovoCreditoParams {
+  entrevistado: EntrevistadoType;
+  imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
   renda?: RendaOutrasFontesType;
 }
@@ -24,38 +31,38 @@ export const NovaRendaOutrasFontes = () => {
   const renda = params.renda;
   const navigation = useNavigation<any>();
   const [showErrors, setShowErrors] = useState(false);
-  const [loading, setLoading] = useState(false); 
-  const [fonteRenda, setFonteRenda] = useState<string>('');     
+  const [loading, setLoading] = useState(false);
+  const [fonteRenda, setFonteRenda] = useState<string>('');
   const [outraFonte, SetOutraFonte] = useState<string>('');
-  const {  
+  const {
     novaRendaOutrasFontes,
     enviarRegistro,
     handleArrayFieldChange,
     handleNumberChange,
     handleOnChangeRendimentoMensal,
-    validateRendaOutrasFontes, 
+    validateRendaOutrasFontes,
     disabled
   } = useNovaRendaOutrasFontes(benfeitoria, renda);
-  
+
   const fontesOptions = Object.values(FontesRenda);
-  
+
   useEffect(() => {
-    const fonteInformada = fonteRenda === 'OUTROS' 
-    ? (outraFonte ? [`QUAIS: ${outraFonte}`] : [])  // Se for "SIM", adiciona sobreUso se houver
-    : [fonteRenda];
+    const fonteInformada = fonteRenda === 'OUTROS'
+      ? (outraFonte ? [`QUAIS: ${outraFonte}`] : [])  // Se for "SIM", adiciona sobreUso se houver
+      : [fonteRenda];
 
     handleArrayFieldChange('fonte', fonteInformada);
   }, [fonteRenda, outraFonte]);
 
-  
-    
+
+
   const handleEnviar = async () => {
     if (loading) return;
-                
+
     const result = validateRendaOutrasFontes(novaRendaOutrasFontes);
     if (!result.isValid) {
       setShowErrors(true);
-  
+
       Alert.alert(
         'Campos Obrigatórios',
         [
@@ -67,12 +74,12 @@ export const NovaRendaOutrasFontes = () => {
       return;
     }
 
-  try {
-  setLoading(true);
-   
-      const rendaSalva = await enviarRegistro(); 
+    try {
+      setLoading(true);
+
+      const rendaSalva = await enviarRegistro();
       if (rendaSalva) {
-        navigation.replace("RendaOutrasFontesLista", { benfeitoria });
+        navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();
@@ -85,89 +92,93 @@ export const NovaRendaOutrasFontes = () => {
     }
   };
 
-                
-   const val1 = renda?.fonte? renda.fonte: '';
-   const val2 = renda?.beneficiarios? renda.beneficiarios  : '';
-   const val3 = renda?.rendaMesTotal? renda.rendaMesTotal : '';
+
+  const val1 = renda?.fonte ? renda.fonte : '';
+  const val2 = renda?.beneficiarios ? renda.beneficiarios : '';
+  const val3 = renda?.rendaMesTotal ? renda.rendaMesTotal : '';
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <RendaOutrasFontesDetailContainer>
-        
-      {val1 && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                   Informação cadastrada anteriormente:  {val1}
-                </Text>
+
+        <EntrevistadoSection entrevistado={params.entrevistado} />
+        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
+        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
+
+        {val1 && (
+          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+            Informação cadastrada anteriormente:  {val1}
+          </Text>
         )}
-      <RenderPicker
-       label="Selecione uma fonte de renda (além da atividade produtiva principal):"
-       selectedValue={fonteRenda}
-       onValueChange={(value) => {
-       setFonteRenda(value ?? 'OUTROS'); 
-          if (value !== '') {
-           SetOutraFonte('');
-           }
-        }}
-        options={fontesOptions}
-              />
-               {fonteRenda.includes('OUTROS') && (
-                <View style={{ marginTop: 10 }}>
-                   <Input
-                        value={outraFonte}
-                        maxLength={150}
-                        onChangeText={SetOutraFonte}
-                        placeholder="Separe por vírgulas"
-                        margin="15px 10px 30px 5px"
-                        title="Informe qual(is):"
-                    />
-                </View>
-       )}
+        <RenderPicker
+          label="Selecione uma fonte de renda (além da atividade produtiva principal):"
+          selectedValue={fonteRenda}
+          onValueChange={(value) => {
+            setFonteRenda(value ?? 'OUTROS');
+            if (value !== '') {
+              SetOutraFonte('');
+            }
+          }}
+          options={fontesOptions}
+        />
+        {fonteRenda.includes('OUTROS') && (
+          <View style={{ marginTop: 10 }}>
+            <Input
+              value={outraFonte}
+              maxLength={150}
+              onChangeText={SetOutraFonte}
+              placeholder="Separe por vírgulas"
+              margin="15px 10px 30px 5px"
+              title="Informe qual(is):"
+            />
+          </View>
+        )}
 
         {val2 && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                   Informação cadastrada anteriormente: {val2}
-                </Text>
+          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+            Informação cadastrada anteriormente: {val2}
+          </Text>
         )}
-       
-       <Input
-              value={novaRendaOutrasFontes.beneficiarios?.toString() || ''}
-              onChange={(event)=> handleNumberChange(event, 'beneficiarios')}
-              maxLength={3}
-              keyboardType='numeric'
-              placeholder="..."
-              margin="15px 10px 30px 5px"
-              title="Quantos beneficiários dessa fonte?"
-       />
+
+        <Input
+          value={novaRendaOutrasFontes.beneficiarios?.toString() || ''}
+          onChange={(event) => handleNumberChange(event, 'beneficiarios')}
+          maxLength={3}
+          keyboardType='numeric'
+          placeholder="..."
+          margin="15px 10px 30px 5px"
+          title="Quantos beneficiários dessa fonte?"
+        />
 
 
         {val3 && (
-                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-                   Informação cadastrada anteriormente: {val3}
-                </Text>
+          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+            Informação cadastrada anteriormente: {val3}
+          </Text>
         )}
-             
-      <Input
-              value={novaRendaOutrasFontes.rendaMesTotal.toFixed(2)}
-              onChange={handleOnChangeRendimentoMensal}
-              maxLength={10}
-              keyboardType='numeric'
-              placeholder="R$"
-              margin="15px 10px 30px 5px"
-              title="Total mensal dessa renda"
-      />
 
-      
+        <Input
+          value={novaRendaOutrasFontes.rendaMesTotal.toFixed(2)}
+          onChange={handleOnChangeRendimentoMensal}
+          maxLength={10}
+          keyboardType='numeric'
+          placeholder="R$"
+          margin="15px 10px 30px 5px"
+          title="Total mensal dessa renda"
+        />
 
-     <FormErrors
-        visible={showErrors && disabled}
-        errors={validateRendaOutrasFontes(novaRendaOutrasFontes).errors}
-      />
 
-      <Button
-        title={loading ? "Enviando..." : "Enviar"}
-        onPress={handleEnviar}
-        color={"#ff4500"}
-        disabled={loading}   // 👈 trava só enquanto envia
-       />
+
+        <FormErrors
+          visible={showErrors && disabled}
+          errors={validateRendaOutrasFontes(novaRendaOutrasFontes).errors}
+        />
+
+        <Button
+          title={loading ? "Enviando..." : "Enviar"}
+          onPress={handleEnviar}
+          color={"#ff4500"}
+          disabled={loading}   // 👈 trava só enquanto envia
+        />
 
 
       </RendaOutrasFontesDetailContainer>
