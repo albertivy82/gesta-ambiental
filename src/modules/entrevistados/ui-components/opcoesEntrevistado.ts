@@ -17,10 +17,9 @@ export const tempomoradiaOptions = [
       'Acima de 30 anos'];
       
  export const saudeOptions =[
-        'Consulta com técnico no posto de saúde da comunidade',
-        'Consulta com o enfermeiro no posto de saúde',
+        'Consulta com médico no posto de saúde da comunidade',
         'Atendimento no Programa Saúde da Família',
-        'Atendimento por agentes comunitários de saúde',
+        'Atendimento por Agentes Comunitários de Saúde',
         'Trata com curandeiro',
         'Participa das campanhas de vacinação',
         'Atendimento por parteiras',

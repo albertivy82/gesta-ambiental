@@ -27,7 +27,6 @@ import { NovoImovel } from "./modules/imovel/screens/novoImovel";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
 import Login from "./modules/login";
-import Morador from "./modules/morador/screens/Morador";
 import MoradorDetails from "./modules/morador/screens/MoradorDetails";
 import { NovoMorador } from "./modules/morador/screens/novoMorador";
 import { NovaParticipacaoInstituicao } from "./modules/participacaoInsituicao/screens/novaParticipacaoInstituicao";
@@ -176,7 +175,6 @@ const Navigation =() =>{
           <Stack.Screen name="ServicosComunicacaoLista" component={ServicosComunicacao} options={{ title: 'Registro de Serviços de Comunicação' }} />
           <Stack.Screen name="Atividades" component={Atividades} options={{ title: 'Atividade Produtiva' }} />
           <Stack.Screen name="NovaAtividade" component={NovaAtividade} options={{ title: 'Cadastro de Atividade Produtiva' }} />
-          <Stack.Screen name="Morador" component={Morador} options={{ title: 'Listagem de Moradores' }} />
           <Stack.Screen name="MoradorDetails" component={MoradorDetails} options={{ title: 'Morador' }} />
           <Stack.Screen name="NovoMorador" component={NovoMorador} options={{ title: 'Cadastro de Morador' }} />
           <Stack.Screen name="NovaParticipacaoInstituicao" component={NovaParticipacaoInstituicao} options={{ title: 'Instituição' }} />

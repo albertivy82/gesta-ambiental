@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { Molestias } from "../../../enums/molestias.enum";
@@ -11,16 +11,15 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { imovelBody } from "../../../shared/types/imovelType";
 import { MoradorType } from "../../../shared/types/MoradorType";
-import { useBuscaEntrevistado } from "../hooks/useBuscaEntrevistado";
+import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { MoradorDetailContainer } from "../styles/morador.style";
 import { estadoCivilOptions } from "../ui-components/opcoesMorador";
-import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
-import ImovelSection from "../../imovel/ui-component/imovelSeccion";
-import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { imovelBody } from "../../../shared/types/imovelType";
 
 
 export interface NovoMoradorParams {
@@ -33,7 +32,7 @@ export interface NovoMoradorParams {
 
 export const NovoMorador = ()=>{
    const { params } = useRoute<RouteProp<Record<string, NovoMoradorParams>, string>>();
-   const benfeitoria = params.benfeitoria ?? params.morador?.benfeitoria;
+   const benfeitoria = params.benfeitoria
    const morador = params.morador;
    const navigation = useNavigation<any>();
    const [loading, setLoading] = useState(false); 
@@ -53,9 +52,7 @@ export const NovoMorador = ()=>{
             validateMorador,
             disabled
           } = useNovoMorador(benfeitoria, morador);
- const {entrevistado} = useBuscaEntrevistado(benfeitoria, morador);
- //const {temEntrevistado} = useBuscaMorador(benfeitoria, morador);
-
+ 
      
  useEffect(() => {
   let consolidaDados: string[] = [];
@@ -181,18 +178,15 @@ useEffect(() => {
            
          if (novoMorador.perfil==='ENTREVISTADO'){
         
-          if(entrevistado){
+          
            
-                handleSetNumber(entrevistado.idade ?? 0, 'idade');
-                handleEnumChange('sexo', entrevistado.sexo ?? null);
-                handleEnumChange('estadoCivil', entrevistado.estadoCivil ?? null);
-                handleEnumChange('escolaridade', entrevistado.escolaridade ?? '');
-                handleEnumChange('religiao', entrevistado.religiao ?? '');
+                handleSetNumber(params.entrevistado.idade ?? 0, 'idade');
+                handleEnumChange('sexo', params.entrevistado.sexo ?? null);
+                handleEnumChange('estadoCivil', params.entrevistado.estadoCivil ?? null);
+                handleEnumChange('escolaridade', params.entrevistado.escolaridade ?? '');
+                handleEnumChange('religiao', params.entrevistado.religiao ?? '');
                   setValidator(true);
-           }else{
-                 setValidator(false);
-            Alert.alert("Não foi possíel encontrar entrevistado!")
-           }
+          
           
         } else if(novoMorador.perfil==='COABITANTE'){
                   
