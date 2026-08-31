@@ -6,8 +6,8 @@ import { textTypes } from "../../../shared/components/text/textTypes";
 import { connectionAPIGet } from "../../../shared/functions/connection/connectionAPI";
 import { UserBody } from "../../../shared/types/userBody";
 import { useUserReducer } from "../../../store/reducers/userReducer/useUserReducer";
-import { AdmUsersContainer } from "../styles/AdmUser.style";
 import { theme } from "../../../shared/themes/theme";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 
@@ -79,20 +79,20 @@ const AdmUsers = ()=>{
 
     if (loading) {
       return (
-        <AdmUsersContainer
+        <GlobalContainer
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <ActivityIndicator size="large" color={theme.colors.redTheme.red2} />
           <Text type={textTypes.BUTTON_REGULAR} color={"#000"}>
             Carregando Lista...
           </Text>
-        </AdmUsersContainer>
+        </GlobalContainer>
       );
     }
     
       return(
 
-       <AdmUsersContainer>
+       <GlobalContainer>
           <View style={{ borderBottomWidth: 3, borderColor: "#000000", marginBottom: 10 }}>
             <Text 
             type={textTypes.PARAGRAPH_BOLD} 
@@ -113,7 +113,7 @@ const AdmUsers = ()=>{
               onPress={handlegestUser}
               color={"#ff4500"}
          />
-        </AdmUsersContainer>
+        </GlobalContainer>
     );
 
 };

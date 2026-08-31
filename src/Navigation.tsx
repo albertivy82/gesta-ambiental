@@ -5,15 +5,10 @@ import { useEffect, useState } from 'react';
 import LogoutButton from "./context/authUtils";
 import { getUser } from "./context/userStore";
 import admUsers from "./modules/admUsers/screens/AdmUsers";
-import Aguas from "./modules/agua/screens/Agua";
 import { NovaAgua } from "./modules/agua/screens/novaAgua";
-import Atividades from "./modules/atividadeProdutiva/screens/AtividadeProdutiva";
 import { NovaAtividade } from "./modules/atividadeProdutiva/screens/novaAtividade";
-import BenfeitoriaDetails from "./modules/benfeitoriaDetails/screens/BenfeitoriasDetails";
-import Benfeitorias from "./modules/benfeitorias/screens/Benfeitorias";
 import { NovaBenfeitoria } from "./modules/benfeitorias/screens/novaBenfeitoria";
 import Coordenadas from "./modules/coordenadas";
-import Credito from "./modules/credito/screens/Credito";
 import { NovoCredito } from "./modules/credito/screens/novoCredito";
 import EditUser from "./modules/editUser";
 import EntrevistadoDetails from "./modules/entrevistadoDetails/screens/EntrevistadoDetails";
@@ -22,21 +17,17 @@ import { NovoEntrevistado } from "./modules/entrevistados/screens/novoEntrevista
 import Escolas from "./modules/escolas/screens/Escolas";
 import { NovaEscola } from "./modules/escolas/screens/novaEscola";
 import Home from "./modules/home";
-import ImovelDetails from "./modules/imovel/screens/imovelDetails";
 import { NovoImovel } from "./modules/imovel/screens/novoImovel";
 import InfLocalidade from "./modules/localidade/screens/InfLocalidade";
 import Localidade from "./modules/localidades";
 import Login from "./modules/login";
-import MoradorDetails from "./modules/morador/screens/MoradorDetails";
 import { NovoMorador } from "./modules/morador/screens/novoMorador";
 import { NovaParticipacaoInstituicao } from "./modules/participacaoInsituicao/screens/novaParticipacaoInstituicao";
 import ParticipacaoInstituicao from "./modules/participacaoInsituicao/screens/ParticipacaoInstituicao";
 import { NovoPosto } from "./modules/postos/screens/novoPosto";
 import Postos from "./modules/postos/screens/Postos";
 import { NovaRendaOutrasFontes } from "./modules/rendaOutrasFontes/screens/novaRendaOutrasFontes";
-import RendaOutrasFontes from "./modules/rendaOutrasFontes/screens/RendaOutrasFontes";
 import { NovoServicoComunicacao } from "./modules/servicoComunicacao/screens/novoSevicoComunicacao";
-import ServicosComunicacao from "./modules/servicoComunicacao/screens/ServicoComunicacao";
 import Splash from "./modules/splash";
 import User from "./modules/User";
 import UserDetails from "./modules/userDetails";
@@ -157,25 +148,16 @@ const Navigation =() =>{
           <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />
           <Stack.Screen name="EntrevistadoDetails" component={EntrevistadoDetails} options={{title: 'Entrevistado'}} />
           <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
-          <Stack.Screen name="ImovelDetail" component={ImovelDetails} options={{title: 'Imóvel'}} />
-          <Stack.Screen name="Benfeitorias" component={Benfeitorias} options={{title: 'Benfeitorias'}} />
-          <Stack.Screen name="BenfeitoriaDetails" component={BenfeitoriaDetails} options={{title: 'Benfeitoria'}} />
           <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
           <Stack.Screen name="Postos" component={Postos} options={{title: 'Postos'}} />
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
           <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Escolas'}} />
           <Stack.Screen name="NovaEscola" component={NovaEscola} options={{title: 'Cadastro de Escolas'}} />
           <Stack.Screen name="NovoCredito" component={NovoCredito} options={{ title: 'Cadastro de Crédito' }} />
-          <Stack.Screen name="CreditoLista" component={Credito} options={{ title: 'Registro de Crédito' }} />
           <Stack.Screen name="NovaRendaOutrasFontes" component={NovaRendaOutrasFontes} options={{ title: 'Cadastro de Outras Fontes de Renda' }} />
-          <Stack.Screen name="RendaOutrasFontesLista" component={RendaOutrasFontes} options={{ title: 'Registro de Outras Fontes de Renda' }} />
           <Stack.Screen name="NovaAgua" component={NovaAgua} options={{ title: 'Cadastro de Água' }} />
-          <Stack.Screen name="AguaLista" component={Aguas} options={{ title: 'Registro de Água' }} />
           <Stack.Screen name="NovoServicoComunicacao" component={NovoServicoComunicacao} options={{ title: 'Cadastro de Serviço de Comunicação' }} />
-          <Stack.Screen name="ServicosComunicacaoLista" component={ServicosComunicacao} options={{ title: 'Registro de Serviços de Comunicação' }} />
-          <Stack.Screen name="Atividades" component={Atividades} options={{ title: 'Atividade Produtiva' }} />
           <Stack.Screen name="NovaAtividade" component={NovaAtividade} options={{ title: 'Cadastro de Atividade Produtiva' }} />
-          <Stack.Screen name="MoradorDetails" component={MoradorDetails} options={{ title: 'Morador' }} />
           <Stack.Screen name="NovoMorador" component={NovoMorador} options={{ title: 'Cadastro de Morador' }} />
           <Stack.Screen name="NovaParticipacaoInstituicao" component={NovaParticipacaoInstituicao} options={{ title: 'Instituição' }} />
           <Stack.Screen name="ParticipacaoInstituicao" component={ParticipacaoInstituicao} options={{ title: 'Instituições' }} />

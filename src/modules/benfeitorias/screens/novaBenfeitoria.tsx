@@ -10,7 +10,6 @@ import { theme } from "../../../shared/themes/theme";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
-import { BenfeitoriaContainer } from "../styles/benfeitoria.style";
 import {
   limitesOptions,
   optionsEfluentes,
@@ -31,6 +30,7 @@ import {
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 export interface imovelParam {
 entrevistado: EntrevistadoType;
@@ -219,7 +219,7 @@ export const NovaBenfeitoria=()=>{
     return( 
     
     <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
-            <BenfeitoriaContainer>
+            <GlobalContainer>
 
               <EntrevistadoSection entrevistado={params.entrevistado} />
               <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
@@ -559,7 +559,7 @@ export const NovaBenfeitoria=()=>{
               disabled={loading}   // 👈 trava só enquanto envia
               />
     
-        </BenfeitoriaContainer>
+        </GlobalContainer>
     </ScrollView>
     )
 }

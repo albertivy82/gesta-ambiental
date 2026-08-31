@@ -14,12 +14,12 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { MoradorType } from "../../../shared/types/MoradorType";
-import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import { useNovoMorador } from "../hooks/useInputMorador";
-import { MoradorDetailContainer } from "../styles/morador.style";
 import { estadoCivilOptions } from "../ui-components/opcoesMorador";
+import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 export interface NovoMoradorParams {
@@ -208,7 +208,7 @@ useEffect(() => {
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
-        <MoradorDetailContainer>
+        <GlobalContainer>
 
              <EntrevistadoSection entrevistado={params.entrevistado} />
              <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
@@ -355,7 +355,7 @@ useEffect(() => {
               />
       
 
-        </MoradorDetailContainer>
+        </GlobalContainer>
         </ScrollView>
     )
 } 

@@ -195,7 +195,10 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
                                         }
            } catch (error) {
               const local = await salvarAtividade(buildAtividadeProdutivaAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+               Alert.alert(
+                      "Registro salvo localmente",
+                      "Quando houver conexão com a internet, ele será sincronizado."
+                    );
               return local;
           }
           

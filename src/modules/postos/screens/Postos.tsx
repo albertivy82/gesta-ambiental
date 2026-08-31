@@ -8,8 +8,8 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { PostoType } from '../../../shared/types/postoTypes';
 import { usePostos } from '../../localidade/hooks/usePostos';
-import { PostoContainer } from '../styles/Postos.style';
 import RenderItemImovel from '../ui-components/listaPostos';
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 export interface EscolaParam {
   localidadeId: number;
@@ -60,7 +60,7 @@ const Postos = () => {
 
   
   return (
-    <PostoContainer>
+    <GlobalContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -127,7 +127,7 @@ const Postos = () => {
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       )}
-    </PostoContainer>
+    </GlobalContainer>
   );
 }
 

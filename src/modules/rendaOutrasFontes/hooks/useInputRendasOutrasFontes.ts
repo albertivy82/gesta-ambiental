@@ -192,7 +192,10 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
                                         }
            } catch (error) {
               const local = await salvarRenda(buildRendaOutrasFontesAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+               Alert.alert(
+                      "Registro salvo localmente",
+                      "Quando houver conexão com a internet, ele será sincronizado."
+                    );
               return local;
           }
           
@@ -235,7 +238,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
                       throw new Error('Dados de rendaOutrasFontes Inválidos'); 
                   }
           } catch (error) {
-                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                console.error("ERRO AO BUSCAR RENDA APÓS SALVAR:", error);
           }
     };
   

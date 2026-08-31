@@ -12,7 +12,7 @@ import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 
-import BenfeitoriaSection from '../../benfeitoriaDetails/ui-components/BenfeitoriaSection';
+import BenfeitoriaSection from '../ui-component/BenfeitoriaSection';
 import ImovelSection from '../../imovel/ui-component/imovelSeccion';
 import { useBenfeitorias } from '../hooks/useBenfeitorias';
 import { useImovel } from '../hooks/useImovel';

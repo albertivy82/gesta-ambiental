@@ -174,7 +174,10 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
                                         }
            } catch (error) {
               const local = await salvarCredito(buildCreditoAtualizada());
-              Alert.alert("Erro ao enviar edição", "Tente novomente online.");
+               Alert.alert(
+                      "Registro salvo localmente",
+                      "Quando houver conexão com a internet, ele será sincronizado."
+                    );
               return local;
           }
           

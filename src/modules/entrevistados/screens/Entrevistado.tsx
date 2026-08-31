@@ -9,8 +9,8 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { useEntrevistados } from '../hooks/useEntrevistados';
-import { EntrevistadoContainer } from '../styles/entrevistado.style';
 import RenderItemEntrevistado from '../ui-components/listaEntrevistados';
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 
 
@@ -67,7 +67,7 @@ const Entrevistados = () => {
 
 
   return (
-    <EntrevistadoContainer>
+    <GlobalContainer>
       <View
         style={{
           alignItems: 'center',
@@ -140,7 +140,7 @@ const Entrevistados = () => {
           keyExtractor={(item) => (item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id')}
         />
       )}
-    </EntrevistadoContainer>
+    </GlobalContainer>
   );
 };
 

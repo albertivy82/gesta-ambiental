@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { Alert, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import { v4 as uuidv4 } from 'uuid';
 import { salvarservicosComunicacao, salvarservicosComunicacaoQueue } from "../../../realm/services/servicosComunicacaoService";
 import { connectionAPIGet, connectionAPIPost, connectionAPIPut } from "../../../shared/functions/connection/connectionAPI";
@@ -182,7 +182,10 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
                                         }
            } catch (error) {
               const local = await salvarservicosComunicacao(buildServicoComunicacaoAtualizada());
-              //Alert.alert("Erro ao enviar edição", "Tente novamente online.");
+               Alert.alert(
+                      "Registro salvo localmente",
+                      "Quando houver conexão com a internet, ele será sincronizado."
+                    );
               return local;
           }
           
@@ -208,25 +211,32 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
     idFather: servicoComunicacao?.idFather,
 });
   
-   const fetchServicoComunicacaoAPI = async(id:number) =>{
-  
-          try{
-              const response = await connectionAPIGet<ServicosComunicacaoType>(`/api/servico-de-comunicacao/${id}`);
-              if (response) {
-                const servComData = {
-                    ...response,
-                    sincronizado: true,
-                    idLocal: '',
-                    idFather: '',
-                };
-                   return await salvarservicosComunicacaoQueue(servComData);
-              }else{
-                      throw new Error('Dados de servCom Inválidos'); 
-                  }
-          } catch (error) {
-                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
-          }
-    };
+   const fetchServicoComunicacaoAPI = async (id: number) => {
+  try {
+    const response =
+      await connectionAPIGet<ServicosComunicacaoType>(
+        `/api/servico-de-comunicacao/${id}`
+      );
+
+    if (response) {
+      const servComData = {
+        ...response,
+        sincronizado: true,
+        idLocal: '',
+        idFather: '',
+      };
+
+      return await salvarservicosComunicacao(servComData);
+    } else {
+      throw new Error('Dados de servCom inválidos');
+    }
+  } catch (error) {
+    console.error(
+      'ERRO AO BUSCAR SERVIÇO DE COMUNICAÇÃO:',
+      error
+    );
+  }
+};
   
   
 

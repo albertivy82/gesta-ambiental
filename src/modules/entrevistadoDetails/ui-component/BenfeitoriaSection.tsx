@@ -2,14 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 
 import FormSection from '../../../shared/components/FormSection';
+import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
 import { renderField } from '../../../shared/components/input/renderFilds';
 import Text from '../../../shared/components/text/Text';
-import { textTypes } from '../../../shared/components/text/textTypes';
 import { BenfeitoriaType } from '../../../shared/types/BenfeitoriaType';
 import { EntrevistadoType } from '../../../shared/types/EntrevistadoType';
 import { imovelBody } from '../../../shared/types/imovelType';
 import EditBenfeitoriaConfirmation from './UseEditBenfeitoria';
-import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
+
 
 interface BenfeitoriaSectionProps {
   entrevistado: EntrevistadoType;

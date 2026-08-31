@@ -9,12 +9,12 @@ import Text from "../../../shared/components/text/Text";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { RendaOutrasFontesType } from "../../../shared/types/RendaOutrasFontesType";
 import { useNovaRendaOutrasFontes } from "../hooks/useInputRendasOutrasFontes";
-import { RendaOutrasFontesDetailContainer } from "../styles/rendaOutrasFontes.style";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
-import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 export interface NovoCreditoParams {
   entrevistado: EntrevistadoType;
@@ -98,7 +98,7 @@ export const NovaRendaOutrasFontes = () => {
   const val3 = renda?.rendaMesTotal ? renda.rendaMesTotal : '';
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
-      <RendaOutrasFontesDetailContainer>
+      <GlobalContainer>
 
         <EntrevistadoSection entrevistado={params.entrevistado} />
         <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
@@ -181,7 +181,7 @@ export const NovaRendaOutrasFontes = () => {
         />
 
 
-      </RendaOutrasFontesDetailContainer>
+      </GlobalContainer>
     </ScrollView>
   );
 };

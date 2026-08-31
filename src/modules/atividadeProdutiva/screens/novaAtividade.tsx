@@ -8,12 +8,12 @@ import Text from "../../../shared/components/text/Text";
 import { AtividadeProdutivaType } from "../../../shared/types/AtividadeProdutiva";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAtvProd } from "../hooks/useInputAtvProd";
-import { AtividadeDetailContainer } from "../styles/ativdade.style";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
-import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 export interface NovaAtividadeParams {
@@ -90,7 +90,7 @@ export const NovaAtividade = () => {
   const valorSalvoRendimento = atividadeProdutiva?.faturamentoAtividadeMesTotal ? atividadeProdutiva.faturamentoAtividadeMesTotal : '';
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
-      <AtividadeDetailContainer>
+      <GlobalContainer>
          <EntrevistadoSection entrevistado={params.entrevistado} />
         <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
         <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
@@ -146,7 +146,7 @@ export const NovaAtividade = () => {
         />
 
 
-      </AtividadeDetailContainer>
+      </GlobalContainer>
     </ScrollView>
   )
 } 

@@ -8,7 +8,7 @@ import Text from "../../../shared/components/text/Text";
 import { textTypes } from "../../../shared/components/text/textTypes";
 import { theme } from "../../../shared/themes/theme";
 import { useEditUser } from "../hooks/uselnputLocalidade";
-import { EditUserContainer } from "../styles/Localidade.style";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 const Localidade = () => {
   const { novaLocalidade, handleOnChangeInput, handleMunicipioChange, editLocalidade, handleEsferaChange, disabled } = useEditUser();
@@ -31,7 +31,7 @@ const Localidade = () => {
   const esferaOptions = Object.values(EsferaEnum);
 
   return (
-    <EditUserContainer>
+    <GlobalContainer>
       <Input 
         value={novaLocalidade.nome} 
         onChange={(event) => handleOnChangeInput(event, 'nome')}
@@ -77,7 +77,7 @@ const Localidade = () => {
       <View style={{ marginTop: 40 }}>
         <Button title="Enviar" disabled={disabled} onPress={handleEnviar} color={"#ff4500"} />
       </View>
-    </EditUserContainer>
+    </GlobalContainer>
   );
 };
 

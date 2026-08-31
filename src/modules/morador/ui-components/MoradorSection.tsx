@@ -39,8 +39,8 @@ const MoradorSection = ({
         {renderField('Sexo', morador.sexo?.toString())}
         {renderField('Escolaridade', morador.escolaridade)}
         {renderField('Estado Civil', morador.estadoCivil)}
-        {renderField('Onde estuda', morador.ondeEstuda)}
-        {renderField('Trabalho', morador.trabalho)}
+        {renderField('Estuda', morador.ondeEstuda)}
+        {renderField('Trabalha', morador.trabalho)}
         {renderField('Religião', morador.religiao)}
         {renderField('Doenças', morador.doencas)}
         {renderField(

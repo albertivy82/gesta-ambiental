@@ -12,9 +12,9 @@ import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { useContagemEntrevistados } from '../hooks/useContagemEntrevistados';
 import { useEscolas } from '../hooks/useEscolas';
 import { usePostos } from '../hooks/usePostos';
-import { LocalidadeContainer } from '../styles/Localidade.style';
 import EditConfirmation from '../ui-components/UseEditLocalidade';
 import QuadroDeItens from '../ui-components/quadroDeItens';
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 export interface LocalidadeParam {
   localidade: LocalidadeType;
@@ -110,7 +110,7 @@ const InfLocalidade = () => {
    
        if (loading) {
         return (
-          <LocalidadeContainer
+          <GlobalContainer
             style={{
               flex: 1,
               justifyContent: "center",
@@ -131,7 +131,7 @@ const InfLocalidade = () => {
             >
               Sincronizando dados...
             </Text>
-          </LocalidadeContainer>
+          </GlobalContainer>
         );
       }
         
@@ -141,7 +141,7 @@ const InfLocalidade = () => {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
-      <LocalidadeContainer>
+      <GlobalContainer>
         {/* Informação básica da localidade */}
         <View style={{ padding: 10, borderWidth: 1, borderColor: "#ff4500" }}>
           <Text type={textTypes.BUTTON_BOLD} color="#000000">Nome: {localidade.nome}</Text>
@@ -200,7 +200,7 @@ const InfLocalidade = () => {
                       }} 
                       />
          </View>
-    </LocalidadeContainer>
+    </GlobalContainer>
     </ScrollView>
   );
 };

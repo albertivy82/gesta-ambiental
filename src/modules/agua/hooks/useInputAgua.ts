@@ -212,7 +212,10 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
                                             }
               } catch (error) {
                   const local = await salvarAgua(buildAguaAtualizada());
-                  console.log("Erro ao enviar edição", "Tente novamente online.");
+                   Alert.alert(
+                      "Registro salvo localmente",
+                      "Quando houver conexão com a internet, ele será sincronizado."
+                    );
                   return local;
               }
               
@@ -243,7 +246,7 @@ export const useNovaAgua = (benfeitoria: BenfeitoriaType, agua?: AguaType) => {
    const fetchAguaAPI = async(id:number) =>{
   
           try{
-              const response = await connectionAPIGet<AguaType>(`https://dadoseconomicos.ideflorbio.pa.gov.br/agua/${id}`);
+              const response = await connectionAPIGet<AguaType>(`/api/agua/${id}`);
               
               if (response) {
                 const aguaData = {

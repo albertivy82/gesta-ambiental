@@ -8,7 +8,7 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { theme } from "../../../shared/themes/theme";
 import { PostoType } from "../../../shared/types/postoTypes";
 import { useNovoPosto } from "../hooks/useNovoPosto";
-import { PostoContainer } from "../styles/Postos.style";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 export interface NovoPostoParams {
@@ -99,7 +99,7 @@ export const NovoPosto = ()=>{
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
-        <PostoContainer>
+        <GlobalContainer>
            <Input 
               value={novoPosto.nome} 
               onChange={(event)=> handleOnChangeInput(event, 'nome')}
@@ -144,7 +144,7 @@ export const NovoPosto = ()=>{
       disabled={loading}   // 👈 trava só enquanto envia
       />
      
-        </PostoContainer>
+        </GlobalContainer>
         </ScrollView>
     )
 }

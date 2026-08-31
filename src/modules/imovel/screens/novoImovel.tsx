@@ -1,4 +1,4 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { Alert, Button, ScrollView, TextInput, View } from "react-native";
 import { SimNao } from "../../../enums/simNao.enum";
@@ -11,10 +11,10 @@ import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
-import { useNovoImovel } from "../hooks/useInputImovel";
-import { ImovelDetailContainer } from "../styles/ImovelDetails.style";
-import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import { useNovoImovel } from "../hooks/useInputImovel";
+import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 export interface NovoReptilParams {
@@ -176,7 +176,7 @@ export const NovoImovel = () => {
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
-        <ImovelDetailContainer>
+        <GlobalContainer>
 
           <EntrevistadoSection entrevistado={params.entrevistado} />
            <Input 
@@ -479,7 +479,7 @@ export const NovoImovel = () => {
     
       
 
-        </ImovelDetailContainer>
+        </GlobalContainer>
         </ScrollView>
     )
 }

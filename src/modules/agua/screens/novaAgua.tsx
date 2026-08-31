@@ -12,12 +12,12 @@ import { theme } from "../../../shared/themes/theme";
 import { AguaType } from "../../../shared/types/AguaType";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { useNovaAgua } from "../hooks/useInputAgua";
-import { AguaDetailContainer } from "../styles/agua.style";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
-import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 export interface NovaAguaParams {
@@ -132,7 +132,7 @@ export const NovaAgua = () => {
   const profundidade = agua?.profundidadePoco ? agua.profundidadePoco.toFixed(2) : '';
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
-      <AguaDetailContainer>
+      <GlobalContainer>
 
         <EntrevistadoSection entrevistado={params.entrevistado} />
         <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
@@ -257,7 +257,7 @@ export const NovaAgua = () => {
           disabled={loading}   // 👈 trava só enquanto envia
         />
 
-      </AguaDetailContainer>
+      </GlobalContainer>
     </ScrollView>
   );
 };

@@ -2,7 +2,8 @@ import { useRef } from "react";
 import { Button, TextInput } from "react-native";
 import Input from "../../../shared/components/input/input";
 import { useEditUser } from "../hooks/useEditUser";
-import { EditUserContainer } from "../styles/EditUser.style";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+
 
 const EditUser = () =>{
 
@@ -17,7 +18,7 @@ const EditUser = () =>{
   };
 
     return(
-        <EditUserContainer>
+        <GlobalContainer>
 
 
               <Input 
@@ -40,7 +41,7 @@ const EditUser = () =>{
               />
 
               <Button title="enviar" disabled={disabled} onPress={handleEnviar} color={"#ff4500"} />
-        </EditUserContainer>
+        </GlobalContainer>
   );
 
 };

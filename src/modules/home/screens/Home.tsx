@@ -12,8 +12,7 @@ import { theme } from '../../../shared/themes/theme';
 import { LocalidadeType } from '../../../shared/types/LocalidadeType';
 import { useLocalidadeRducer } from '../../../store/reducers/localidadeReducer/useLocalidadeReducer';
 import { useLocalidades } from '../hook/useLocalidades';
-import { HomeContainer } from '../styles/Home.style';
-
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 
 
@@ -49,14 +48,14 @@ const Home = () =>{
 
   if (loading) {
     return (
-      <HomeContainer
+      <GlobalContainer
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
       >
         <ActivityIndicator animating={true} size={80} color="#ff4500" style={{ marginTop: 20 }}/>
         <Text type={textTypes.BUTTON_REGULAR} color={"#000"}>
           Carregando localidades...
         </Text>
-      </HomeContainer>
+      </GlobalContainer>
     );
   }
   
@@ -106,7 +105,7 @@ const Home = () =>{
     return (
         
 
-        <HomeContainer>
+        <GlobalContainer>
            <View style={{  
             alignItems: 'center', 
             flexDirection: 'row',
@@ -146,7 +145,7 @@ const Home = () =>{
                </View>
           </TouchableOpacity>
                        
-        </HomeContainer>
+        </GlobalContainer>
       );
 }
 export default Home;

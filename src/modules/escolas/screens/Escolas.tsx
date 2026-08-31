@@ -8,8 +8,8 @@ import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
 import { EscolaType } from '../../../shared/types/EscolaType';
 import { useEscolas } from '../../localidade/hooks/useEscolas';
-import { EscolaContainer } from '../styles/Escolas.style';
 import RenderItemEscola from '../ui-components/listaEscolas';
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 export interface EscolasParam {
   localidadeId: number;
@@ -61,7 +61,7 @@ const Escolas = () => {
   };
 
   return (
-    <EscolaContainer>
+    <GlobalContainer>
       <View style={{  
         alignItems: 'center', 
         flexDirection: 'row',
@@ -128,7 +128,7 @@ const Escolas = () => {
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />
       )}
-    </EscolaContainer>
+    </GlobalContainer>
   );
 }
 

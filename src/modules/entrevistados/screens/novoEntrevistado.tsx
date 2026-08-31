@@ -15,9 +15,9 @@ import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
-import { EntrevistadoContainer } from "../styles/entrevistado.style";
 import { Escolaridade, estadoCivilOptions, Naturalidade, saudeOptions, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
 import FormSection from "../../../shared/components/FormSection";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 export interface NovoEntrevistadoParams {
   localidadeId?: number;
@@ -382,7 +382,7 @@ export const NovoEntrevistado = () => {
         contentContainerStyle={{ paddingBottom: 24 }}
       >
        
-        <EntrevistadoContainer>
+        <GlobalContainer>
           <FormSection
             title="Dados pessoais"
             summary={
@@ -1020,7 +1020,7 @@ export const NovoEntrevistado = () => {
     
       
 
-        </EntrevistadoContainer>
+        </GlobalContainer>
       </ScrollView>
     );
 };

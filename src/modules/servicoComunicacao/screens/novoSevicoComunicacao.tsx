@@ -8,12 +8,12 @@ import Text from "../../../shared/components/text/Text";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { ServicosComunicacaoType } from "../../../shared/types/ComunicacaoType";
 import { useNovoServicoComunicacao } from "../hooks/useInputServCom";
-import { ServicoComunicacaoDetailContainer } from "../styles/servicoComunicacao.style";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
-import BenfeitoriaSection from "../../benfeitoriaDetails/ui-components/BenfeitoriaSection";
+import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 export interface NovoServicoParams {
   entrevistado: EntrevistadoType;
@@ -115,7 +115,7 @@ export const NovoServicoComunicacao = () => {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
-      <ServicoComunicacaoDetailContainer>
+      <GlobalContainer>
 
         <EntrevistadoSection entrevistado={params.entrevistado} />
         <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
@@ -172,7 +172,7 @@ export const NovoServicoComunicacao = () => {
         />
 
 
-      </ServicoComunicacaoDetailContainer>
+      </GlobalContainer>
     </ScrollView>
   );
 };
