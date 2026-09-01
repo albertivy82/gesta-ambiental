@@ -126,9 +126,9 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
        if(isConnected){
               //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
               try{
-                console.log("enviando para edição", entrevistadoCorrigido)
+              //  console.log("enviando para edição", entrevistadoCorrigido)
                 const response = await connectionAPIPut(`/api/entrevistado/${entrevistado!.id}`, entrevistadoCorrigido) as EntrevistadoType;
-                console.log("recebendo edição", response)
+               // console.log("recebendo edição", response)
                 if (response && response.id) {
                      return fetchEntrevistadoAPI(response.id);
                 }else{

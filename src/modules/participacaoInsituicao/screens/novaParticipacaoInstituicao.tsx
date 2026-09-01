@@ -7,7 +7,7 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { MoradorType } from "../../../shared/types/MoradorType";
 import { ParticipacaoInstituicaoType } from "../../../shared/types/ParticipacaoInstituicaoType";
 import { useNovaParticipacaoInstituicao } from "../hooks/useInputParticipacaoInstituicao";
-import { ParticipacaoInstituicaoDetailContainer } from "../styles/ParticipacaoInstituicao.style";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 
@@ -83,7 +83,7 @@ useEffect(() => {
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
-        <ParticipacaoInstituicaoDetailContainer>
+        <GlobalContainer>
 
             <RenderPicker
                label="Qual instituição?"
@@ -123,7 +123,7 @@ useEffect(() => {
     
       
 
-        </ParticipacaoInstituicaoDetailContainer>
+        </GlobalContainer>
         </ScrollView>
     )
 }

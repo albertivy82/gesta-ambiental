@@ -9,8 +9,8 @@ import { theme } from '../../../shared/themes/theme';
 import { MoradorType } from '../../../shared/types/MoradorType';
 import { ParticipacaoInstituicaoType } from '../../../shared/types/ParticipacaoInstituicaoType';
 import { useParticipacaoInstituicoes } from '../../morador/hooks/useParticipacaoInstituicao';
-import { ParticipacaoInstituicaoDetailContainer } from '../styles/ParticipacaoInstituicao.style';
 import RenderItemParticipacaoInstituicao from '../ui-components/listaParticipacaoInstituicao';
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 
 export interface ParticipacaoInstituicaoParam {
@@ -68,7 +68,7 @@ const ParticipacaoInstituicao = () => {
   };
 
   return (
-    <ParticipacaoInstituicaoDetailContainer>
+    <GlobalContainer>
       <View style={{
         alignItems: 'center',
         flexDirection: 'row',
@@ -129,7 +129,7 @@ const ParticipacaoInstituicao = () => {
         renderItem={({ item }) => <RenderItemParticipacaoInstituicao item={item} />}
         keyExtractor={(item) => item.id?.toString() ?? item.idLocal ?? 'sem-id'}
       />
-    </ParticipacaoInstituicaoDetailContainer>
+    </GlobalContainer>
   );
 };
 

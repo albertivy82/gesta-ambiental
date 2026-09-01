@@ -146,9 +146,9 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                          if(isConnected){
                                 //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                                 try{
-                                  console.log("enviando para edição", escolaCorrigida)
+                                  //console.log("enviando para edição", escolaCorrigida)
                                   const response = await connectionAPIPut(`/api/escola/${escola!.id}`, escolaCorrigida) as EscolaType;
-                                  console.log("recebendo edição", response)
+                                  //console.log("recebendo edição", response)
                                   if (response && response.id) {
                                        return fetchEscolaAPI(response.id);
                                   }else{

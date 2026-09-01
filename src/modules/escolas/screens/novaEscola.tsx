@@ -9,8 +9,7 @@ import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import { theme } from "../../../shared/themes/theme";
 import { EscolaType } from "../../../shared/types/EscolaType";
 import { useNovaEscola } from "../hooks/useNovaEscola";
-import { EscolaContainer } from "../styles/Escolas.style";
-
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 
 
@@ -97,7 +96,7 @@ export const NovaEscola = ()=>{
 
     return(
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
-        <EscolaContainer>
+        <GlobalContainer>
 
         <Input 
               value={novaEscola.nome} 
@@ -150,7 +149,7 @@ export const NovaEscola = ()=>{
             disabled={loading}   // 👈 trava só enquanto envia
             />
  
-        </EscolaContainer>
+        </GlobalContainer>
         </ScrollView>
     )
 }

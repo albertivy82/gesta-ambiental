@@ -26,9 +26,10 @@ interface DeleteConfirmationProps {
   idLocal: string | undefined;
   deleteEndpoint: string;
   onDeleteSuccess: () => void;
+  showIcon?: boolean;
 }
 
-const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, deleteEndpoint, onDeleteSuccess }) => {
+const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, deleteEndpoint, onDeleteSuccess,  showIcon = true, }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation(); // Inicialização do hook de navegação
@@ -155,8 +156,13 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = ({ id, idLocal, de
     <>
       <TouchableOpacity style={{ marginHorizontal: 10 }} onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='bin' color="#0c8d10f2" />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color="#0c8d10f2">Apagar Item</Text>
+          {showIcon && (
+            <Icon size={40} name="bin" color="#0c8d10f2" />
+          )}
+
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#0c8d10f2">
+            Apagar Item
+          </Text>
         </View>
       </TouchableOpacity>
 

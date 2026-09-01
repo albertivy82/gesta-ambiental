@@ -1,7 +1,8 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
 import { getEscolas } from '../../../realm/services/escolaService';
+import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
@@ -9,7 +10,6 @@ import { theme } from '../../../shared/themes/theme';
 import { EscolaType } from '../../../shared/types/EscolaType';
 import { useEscolas } from '../../localidade/hooks/useEscolas';
 import RenderItemEscola from '../ui-components/listaEscolas';
-import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
 
 export interface EscolasParam {
   localidadeId: number;
@@ -31,18 +31,17 @@ const Escolas = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Carrega a lista inicial de escolas
-  const fetchEscolas = useCallback(async () => {
-    setIsLoading(true);
-    if (localidadeId) {
-      const escolasRealm = getEscolas(localidadeId);
-      setEscola(escolasRealm);
-    }
-    setIsLoading(false);
-  }, [localidadeId]);
-
   useEffect(() => {
-    fetchEscolas();
-  }, [fetchEscolas]);
+  setIsLoading(true);
+
+  if (localidadeId) {
+    const escolasRealm = getEscolas(localidadeId);
+    setEscola(escolasRealm);
+  }
+
+  setIsLoading(false);
+
+}, [localidadeId, foccus]);
 
   // Rola até o final da lista
   const handleScrollToEnd = () => {
@@ -52,9 +51,17 @@ const Escolas = () => {
  
   // Atualiza a lista de escolas
   const handleRefresh = () => {
-    fetchEscolas();
-    handleScrollToEnd();
-  };
+  setIsLoading(true);
+
+  if (localidadeId) {
+    const escolasRealm = getEscolas(localidadeId);
+    setEscola(escolasRealm);
+  }
+
+  setIsLoading(false);
+
+  handleScrollToEnd();
+};
 
   const handleNovaEscola = () => {
     navigation.navigate('NovaEscola', { localidadeId: localidadeId });

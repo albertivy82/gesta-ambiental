@@ -96,6 +96,7 @@ const FilhasBenfeitoria = ({ entrevistado, imovel,  benfeitoria,  ativo,}: Filha
               idLocal={morador.idLocal}
               deleteEndpoint="morador"
               onDeleteSuccess={() => {}}
+              showIcon={false}
             />
           </View>
         </MoradorSection>
@@ -137,6 +138,7 @@ const FilhasBenfeitoria = ({ entrevistado, imovel,  benfeitoria,  ativo,}: Filha
               idLocal={agua.idLocal}
               deleteEndpoint="agua"
               onDeleteSuccess={() => {}}
+              showIcon={false}
             />
           </View>
         </AguaSection>
@@ -178,6 +180,7 @@ const FilhasBenfeitoria = ({ entrevistado, imovel,  benfeitoria,  ativo,}: Filha
               idLocal={atividade.idLocal}
               deleteEndpoint="atividade-produtiva"
               onDeleteSuccess={() => {}}
+              showIcon={false}
             />
           </View>
         </AtividadeProdutivaSection>
@@ -219,6 +222,7 @@ const FilhasBenfeitoria = ({ entrevistado, imovel,  benfeitoria,  ativo,}: Filha
               idLocal={credito.idLocal}
               deleteEndpoint="credito"
               onDeleteSuccess={() => {}}
+              showIcon={false}
             />
           </View>
         </CreditoSection>
@@ -260,6 +264,7 @@ const FilhasBenfeitoria = ({ entrevistado, imovel,  benfeitoria,  ativo,}: Filha
               idLocal={renda.idLocal}
               deleteEndpoint="outras-fontes-de-renda"
               onDeleteSuccess={() => {}}
+              showIcon={false}
             />
           </View>
         </RendaOutrasFontesSection>
@@ -301,6 +306,7 @@ const FilhasBenfeitoria = ({ entrevistado, imovel,  benfeitoria,  ativo,}: Filha
               idLocal={servico.idLocal}
               deleteEndpoint="servico-de-comunicacao"
               onDeleteSuccess={() => {}}
+              showIcon={false}
             />
           </View>
         </ServicosComunicacaoSection>

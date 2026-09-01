@@ -177,7 +177,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
         sincronizado: false,  
         idLocal: uuidv4(),
   };
-  console.log(benfeitoria.id);
+  //console.log(benfeitoria.id);
     if (benfeitoria.id > 0) {
         moradorData.benfeitoria!.id = benfeitoria.id;
         moradorData.idFather = "";
@@ -201,7 +201,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
   };
 
   const enviaMoradorNova = async () =>{
-
+  
  
     //benfeitoria offline
         if(!benfeitoria.sincronizado && benfeitoria.id<=0){
@@ -221,9 +221,9 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
                     try{
                          
                       const response = await connectionAPIPost('/api/morador', novoMorador) as MoradorType;
-                      console.log("vamos verificar !", response, response.id);
+                     // console.log("vamos verificar !", response, response.id);
                       if (response && response.id) {
-                        console.log("vamos verificar !", response, response.id);
+                       // console.log("vamos verificar !", response, response.id);
                             return fetchMoradorAPI(response.id);
                       }
   

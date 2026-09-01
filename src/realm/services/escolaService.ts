@@ -132,33 +132,53 @@ export const apagarEscolaQueue = (escolaIdLocal: string) => {
     }
 };
 
-export const salvarEscolaQueue = (escola: escolaInput) =>{
+export const salvarEscolaQueue = (
+  escola: escolaInput
+): Promise<EscolaType> => {
 
+  return new Promise((resolve, reject) => {
 
-    return new Promise<void>((resolve, reject) => {
-        // Função para gerar um ID aleatório
-        const Id = () => {
-            const min = Math.ceil(0);
-            const max = -Math.floor(1000);
-            return Math.floor(Math.random() * (max - min + 1)) + min; 
+    const Id = () => {
+      const min = Math.ceil(0);
+      const max = -Math.floor(1000);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    try {
+      let escolaSalva;
+
+      realmInstance.write(() => {
+
+        const escolaPadrao = {
+          ...escola,
+          id: Id(),
+          localidade: escola.localidade.id,
         };
-               
-        try {
-            realmInstance.write(() => {
-               
-                const escolaPadrao = {
-                    ...escola,
-                    id: Id(), 
-                    localidade: escola.localidade.id,
-                };
-                realmInstance.create('Escola', escolaPadrao, true);
-            });
-    
-            resolve();
-        } catch (error) {
-            reject(error);
-        }
-    });
+
+        escolaSalva = realmInstance.create(
+          'Escola',
+          escolaPadrao,
+          true
+        );
+      });
+
+      if (escolaSalva) {
+        const cleanEscola = JSON.parse(
+          JSON.stringify(escolaSalva)
+        );
+
+        resolve(cleanEscola as EscolaType);
+
+      } else {
+        throw new Error(
+          'Erro ao recuperar a escola salva.'
+        );
+      }
+
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 
