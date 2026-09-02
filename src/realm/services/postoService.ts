@@ -106,6 +106,7 @@ export const salvarPosto= (posto:PostoType): Promise<PostoType> => {
             });
     if (postoSalvo) {
         const cleanPosto = JSON.parse(JSON.stringify(postoSalvo))
+        
         resolve(cleanPosto as PostoType);
     } else {
     throw new Error("Erro ao recuperar a posto salva.");

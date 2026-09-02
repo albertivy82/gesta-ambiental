@@ -1,17 +1,18 @@
 import { NavigationProp, ParamListBase, RouteProp, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from 'react-native';
-import { getPostos } from '../../../realm/services/postoService';
 import { Icon } from '../../../shared/components/icon/Icon';
 import Text from '../../../shared/components/text/Text';
 import { textTypes } from '../../../shared/components/text/textTypes';
 import { theme } from '../../../shared/themes/theme';
-import { PostoType } from '../../../shared/types/postoTypes';
 import { usePostos } from '../../localidade/hooks/usePostos';
 import RenderItemImovel from '../ui-components/listaPostos';
 import { GlobalContainer } from '../../../shared/components/globalStyles/GlobalContainer';
+import { PostoType } from '../../../shared/types/postoTypes';
+import { getPostos } from '../../../realm/services/postoService';
 
-export interface EscolaParam {
+
+export interface postoParam {
   localidadeId: number;
 }
 
@@ -21,38 +22,46 @@ export const novoPosto = (navigate: NavigationProp<ParamListBase>['navigate'], l
 
 const Postos = () => {
   const navigation = useNavigation<NavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<Record<string, EscolaParam>, 'Posto'>>();
+  const route = useRoute<RouteProp<Record<string, postoParam>, 'Posto'>>();
   const { localidadeId } = route.params;
   const foccus=useIsFocused();
-  const {contagemPostos} = usePostos(localidadeId, foccus);
+  const {contagemPostos, loadingPostos } = usePostos(localidadeId, foccus);
   const flatListRef = useRef<FlatList>(null);
-  const [posto, setPosto] = useState<PostoType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [postos, setPostos] = useState<PostoType[]>([]);
+  
+ useEffect(() => {
 
-  // Carrega a lista inicial de imóveis
-  const fetchPosto = useCallback(async () => {
-    setIsLoading(true);
-    if (localidadeId) {
-      const imovelRealm = getPostos(localidadeId);
-      setPosto(imovelRealm);
-    }
-    setIsLoading(false);
-  }, [localidadeId]);
+  if (!foccus || loadingPostos || !localidadeId) {
+    return;
+  }
 
-  useEffect(() => {
-    fetchPosto();
-  }, [fetchPosto]);
+  const postosDoRealm = getPostos(localidadeId);
+  setPostos(postosDoRealm);
 
+}, [localidadeId, foccus, loadingPostos]);
+    
+   
+    const handleRefresh = () => {
+      console.log('localidadeId', localidadeId);
+          setIsLoading(true);
+        
+              if (localidadeId) {
+                const postodoRealm = getPostos(localidadeId);
+                console.log('postodoRealm', postodoRealm);
+                setPostos(postodoRealm);}
+          setIsLoading(false);
+        
+          handleScrollToEnd();
+        };
   // Rola até o final da lista
+  
+  
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({ animated: true });
   };
 
-  // Atualiza a lista de imóveis
-  const handleRefresh = () => {
-    fetchPosto();
-    handleScrollToEnd();
-  };
+  
 
   const handleNovoImovel = () => {
      novoPosto(navigation.navigate, localidadeId);
@@ -85,7 +94,7 @@ const Postos = () => {
         padding: 1,
         borderBottomWidth: 3,
         borderColor: theme.colors.grayTheme.gray100,
-        backgroundColor: '#ff4500'
+        backgroundColor: theme.colors.greenTheme.green
       }}>
         {/* Botão "Ir para o Fim" */}
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
@@ -98,7 +107,7 @@ const Postos = () => {
         <View style={{ width: 1, backgroundColor: theme.colors.grayTheme.gray80 }} />
 
         {/* Botão "Atualizar" */}
-        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh} disabled={isLoading}>
+        <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleRefresh} disabled={loadingPostos}>
           <Icon size={20} name='spinner11' color={theme.colors.whiteTheme.white} />
           <Text type={textTypes.PARAGRAPH_LIGHT} color={theme.colors.whiteTheme.white} margin="0px 0 0 0">
             Atualizar
@@ -116,13 +125,13 @@ const Postos = () => {
         </TouchableOpacity>
       </View>
 
-      {isLoading ? (
+      {loadingPostos ? (
         <ActivityIndicator size="large" color={theme.colors.grayTheme.gray80} style={{ marginTop: 20 }} />
       ) : (
         <FlatList
           ref={flatListRef}
-          data={posto}
-          extraData={posto} 
+          data={postos}
+          extraData={postos} 
           renderItem={({ item }) => <RenderItemImovel item={item} />}
           keyExtractor={(item) => item.id ? item.id.toString() : item.idLocal ? item.idLocal : 'Sem Id'}
         />

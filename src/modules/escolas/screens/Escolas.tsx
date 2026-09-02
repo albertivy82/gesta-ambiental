@@ -24,44 +24,41 @@ const Escolas = () => {
    const route = useRoute<RouteProp<Record<string, EscolasParam>, 'Localidade'>>();
    const { localidadeId } = route.params;
    const foccus=useIsFocused();
-  const {contagemEscolas} = useEscolas(localidadeId, foccus);
+  const {escolas, loadingEscolas} = useEscolas(localidadeId, foccus);
   const flatListRef = useRef<FlatList>(null);
-
   const [escola, setEscola] = useState<EscolaType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Carrega a lista inicial de escolas
   useEffect(() => {
-  setIsLoading(true);
-
-  if (localidadeId) {
-    const escolasRealm = getEscolas(localidadeId);
-    setEscola(escolasRealm);
-  }
-
-  setIsLoading(false);
-
-}, [localidadeId, foccus]);
-
-  // Rola até o final da lista
-  const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({ animated: true });
-  };
-   
- 
-  // Atualiza a lista de escolas
-  const handleRefresh = () => {
-  setIsLoading(true);
-
-  if (localidadeId) {
-    const escolasRealm = getEscolas(localidadeId);
-    setEscola(escolasRealm);
-  }
-
-  setIsLoading(false);
-
-  handleScrollToEnd();
-};
+  
+    if (!foccus || loadingEscolas || !localidadeId) {
+      return;
+    }
+  
+    const EscolasDoRealm = getEscolas(localidadeId);
+    setEscola(EscolasDoRealm);
+  
+  }, [localidadeId, foccus, loadingEscolas]);
+      
+     
+      const handleRefresh = () => {
+        console.log('localidadeId', localidadeId);
+            setIsLoading(true);
+          
+                if (localidadeId) {
+                  const EscoladoRealm = getEscolas(localidadeId);
+                  console.log('EscoladoRealm', EscoladoRealm);
+                  setEscola(EscoladoRealm);}
+            setIsLoading(false);
+          
+            handleScrollToEnd();
+          };
+    // Rola até o final da lista
+    
+    
+    const handleScrollToEnd = () => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    };
 
   const handleNovaEscola = () => {
     navigation.navigate('NovaEscola', { localidadeId: localidadeId });
@@ -93,7 +90,7 @@ const Escolas = () => {
         padding: 1,
         borderBottomWidth: 3,
         borderColor: theme.colors.grayTheme.gray100,
-        backgroundColor: '#ff4500'
+        backgroundColor: theme.colors.greenTheme.green
       }}>
         {/* Botão "Ir para o Fim" */}
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>

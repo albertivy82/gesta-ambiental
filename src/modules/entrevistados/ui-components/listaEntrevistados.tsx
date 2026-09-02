@@ -24,7 +24,7 @@ const navigation = useNavigation<NavigationProp<ParamListBase>>();
 
     return (
       <TouchableOpacity onPress={() => handleGoToEntrevistadoDetail(item)}>
-         <View style={{ borderBottomWidth: 1, borderColor: 'gray', marginBottom: 10 }}>
+         <View style={{ borderBottomWidth: 1, borderColor: theme.colors.greenTheme.green, marginBottom: 10 }}>
               
              <Text
                 type={textTypes.BUTTON_REGULAR}

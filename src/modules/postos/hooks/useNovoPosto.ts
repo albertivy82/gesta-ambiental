@@ -148,9 +148,9 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                      if(isConnected){
                             //este fluxo atende a objetos que estão sincronizados e estão na api. Somente podem ser edicatos se forem efetivamente salvos 
                             try{
-                              console.log("enviando para edição", postoCorrigido)
-                              const response = await connectionAPIPut(`/api/posto/${posto!.id}`, postoCorrigido) as PostoType;
-                              console.log("recebendo edição", response)
+                              //console.log("enviando para edição", postoCorrigido)
+                              const response = await connectionAPIPut(`/api/posto-de-saude/${posto!.id}`, postoCorrigido) as PostoType;
+                             // console.log("recebendo edição", response)
                               if (response && response.id) {
                                    return fetchPostoAPI(response.id);
                               }else{
@@ -158,13 +158,13 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                                   return local;
                               }
                             } catch (error) {
-                               const local = await await salvarPosto(builPostoAtualizada());
+                               const local = await salvarPosto(builPostoAtualizada());
                                Alert.alert("Erro ao enviar edição", "Tente novamente online.");
                                return local;
                              }
                     } else {
                             if (!posto!.sincronizado && posto!.idLocal) {
-                                return await await salvarPosto(builPostoAtualizada());
+                                return await salvarPosto(builPostoAtualizada());
                             } else {
                                 Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
                                 return null;
@@ -195,6 +195,7 @@ export const useNovoPosto = (localidadeId: number, posto?: PostoType) => {
                     sincronizado: true,
                     idLocal: '',
               };
+              
                    return await salvarPosto(postoData);
               }else{
                       throw new Error('Dados de posto Inválidos'); 

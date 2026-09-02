@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apagarPostoQueue, getPostos, getPostosDessincronizados, salvarPostos } from "../../../realm/services/postoService";
 import { connectionAPIGet, connectionAPIPost } from "../../../shared/functions/connection/connectionAPI";
 import { testConnection } from "../../../shared/functions/connection/testConnection";
@@ -20,8 +20,11 @@ export const convertToPostoInput = (posto: any) => {
 };
 
 export const usePostos = (localidadeId: number, foccus:boolean) => {
+    const [postos, setPostos] = useState<PostoType[]>([]);
     const [contagemPostos, setContagemPostos] = useState<number>(0);
     const [loadingPostos, setLoadingPostos] = useState<boolean>(true);
+
+    const syncingRef = useRef(false);
 
     const sinconizeQueue = async () => {
         const postosQueue = getPostosDessincronizados(localidadeId);
@@ -49,10 +52,8 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
 
     const fetchPostosFromLocalDb = () =>{
             const localData = getPostos(localidadeId);
-                  if (localData.length>0){
-                    const contagem = localData.length;
-                    setContagemPostos(contagem);
-                  }
+            setPostos(localData);
+            setContagemPostos(localData.length);
     }
 
     const fetchPostosFromAPI = async () => {
@@ -72,12 +73,10 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
               }));
               
 
-             if(postoData && Array.isArray(postoData) && postoData.length> 0){
+             if(postoData && Array.isArray(postoData) && postoData.length > 0){
                    await salvarPostos(postoData)
                    const contagem = postoData.length;
                    setContagemPostos(contagem);
-              } else {
-                    throw new Error('Dados de postos Inválidos');
               }
     
           } catch (error) {
@@ -90,15 +89,30 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
     
 
     useEffect(() => {
+      if (!foccus || !localidadeId) {
+        return;
+      }
+
+      if (syncingRef.current) {
+        return;
+      }
+
+      syncingRef.current = true;
+
       const sincronizarTudo = async () => {
-        setLoadingPostos(true);
-            await sinconizeQueue();
-            await fetchPostosFromAPI();
-            fetchPostosFromLocalDb();
-        setLoadingPostos(false);
+        try {
+          setLoadingPostos(true);
+          await sinconizeQueue();
+          await fetchPostosFromAPI();
+          fetchPostosFromLocalDb();
+        } finally {
+          setLoadingPostos(false);
+          syncingRef.current = false;
+        }
       };
+
       sincronizarTudo();
-    }, [foccus]);
+    }, [foccus, localidadeId]);
   
-    return { contagemPostos, loadingPostos};
+    return { postos, contagemPostos, loadingPostos};
 }

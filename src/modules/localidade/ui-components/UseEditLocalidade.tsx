@@ -35,8 +35,8 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ localidade, destino
     <>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={{ alignItems: 'center' }}>
-          <Icon size={40} name='pencil2' color="#ff4500" />
-          <Text type={textTypes.PARAGRAPH_LIGHT} color="#ff4500" style={{alignItems: 'baseline'}}>Editar Item</Text>
+          <Icon size={40} name='pencil2' color="#0c8d10f2" />
+          <Text type={textTypes.PARAGRAPH_LIGHT} color="#0c8d10f2" style={{alignItems: 'baseline'}}>Editar Item</Text>
         </View>
       </TouchableOpacity>
 
@@ -45,7 +45,7 @@ const EditConfirmation: React.FC<EditConfirmationProps> = ({ localidade, destino
           flex: 1, 
           justifyContent: 'center', 
           alignItems: 'center', 
-          backgroundColor: 'rgba(0,0,0,0.5)'
+          backgroundColor: '#e81111f2'
         }}>
           <View style={{
             width: 300, 

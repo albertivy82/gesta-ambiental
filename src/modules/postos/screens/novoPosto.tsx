@@ -18,9 +18,17 @@ posto?: PostoType;
 
 
 
-export const detalharPosto = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
-    navigate('Postos', {localidadeId})
-}
+export const detalharPosto = (
+  navigate: NavigationProp<ParamListBase>['navigate'],
+  postoSalvo: PostoType
+) => {
+  const localidadeId =
+    typeof postoSalvo.localidade === 'number'
+      ? postoSalvo.localidade
+      : postoSalvo.localidade.id;
+
+  navigate('Postos', { localidadeId });
+};
 
 export const NovoPosto = ()=>{
   const { params } = useRoute<RouteProp<Record<string, NovoPostoParams>, string>>();
@@ -83,7 +91,9 @@ export const NovoPosto = ()=>{
                   setLoading(true);
                    const postoSalvo = await enviarRegistro(); 
                        if (postoSalvo){
-                         detalharPosto(navigation.navigate, localidadeId!);
+                        console.log('qual localidade está sebdo enviada???:', localidadeId);
+                              detalharPosto(navigation.navigate, postoSalvo!);
+                              
                        } else {
                          Alert.alert("Erro", "Não foi possível salvar o posto de saúde. Tente novamente.");
                          navigation.goBack();

@@ -34,7 +34,7 @@ export const useEscolas = (
   localidadeId: number,
   foccus: boolean
 ) => {
-
+  const [escolas, setEscolas] = useState<EscolaType[]>([]);
   const [contagemEscolas, setContagemEscolas] = useState<number>(0);
   const [loadingEscolas, setLoadingEscolas] = useState<boolean>(true);
 
@@ -138,10 +138,12 @@ export const useEscolas = (
   };
 
 
-  const fetchEscolasFromLocalDb = () => {
+const fetchEscolasFromLocalDb = () => {
 
     const localData =
       getEscolas(localidadeId);
+
+      setEscolas(localData);
 
     setContagemEscolas(
       localData.length
@@ -167,6 +169,7 @@ export const useEscolas = (
       await sincronizeQueue();
       await fetchEscolasFromAPI();
       fetchEscolasFromLocalDb();
+     
 
     } finally {
       setLoadingEscolas(false);
@@ -180,6 +183,7 @@ export const useEscolas = (
 
 
   return {
+    escolas,
     contagemEscolas,
     loadingEscolas,
   };

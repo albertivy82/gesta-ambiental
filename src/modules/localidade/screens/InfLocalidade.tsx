@@ -120,13 +120,13 @@ const InfLocalidade = () => {
             <ActivityIndicator
               animating={true}
               size={80}      
-              color="#ff4500"
+              color="#178011"
               style={{ marginTop: 20 }}
             />
       
             <Text
               type={textTypes.BUTTON_REGULAR}
-              color="#000"
+              color="#33b612"
               margin="20px 0 0 0"
             >
               Sincronizando dados...
@@ -143,10 +143,10 @@ const InfLocalidade = () => {
     <ScrollView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
       <GlobalContainer>
         {/* Informação básica da localidade */}
-        <View style={{ padding: 10, borderWidth: 1, borderColor: "#ff4500" }}>
-          <Text type={textTypes.BUTTON_BOLD} color="#000000">Nome: {localidade.nome}</Text>
-          <Text type={textTypes.BUTTON_BOLD} color="#000000">Município: {localidade.municipio}</Text>
-          <Text type={textTypes.BUTTON_BOLD} color="#000000">Esfera: {localidade.esfera}</Text>
+        <View style={{ padding: 10, borderWidth: 1, borderColor: "#0c8d10f2" }}>
+          <Text type={textTypes.BUTTON_BOLD} color="#046a08f2">Nome: {localidade.nome}</Text>
+          <Text type={textTypes.BUTTON_REGULAR} color="#000000">Município: {localidade.municipio}</Text>
+          <Text type={textTypes.BUTTON_REGULAR} color="#000000">Esfera: {localidade.esfera}</Text>
         </View>
 
                    
@@ -178,8 +178,8 @@ const InfLocalidade = () => {
                       padding: 10,
                       marginTop: 40, 
                       borderWidth: 5, 
-                      borderColor: "#808080", 
-                      backgroundColor: '#000000'
+                      borderColor: "#25770adf", 
+                      backgroundColor: '#f2eaea00'
                     }}>                     
                      <EditConfirmation 
                       localidade={localidade} 
@@ -189,7 +189,7 @@ const InfLocalidade = () => {
                       }} 
                       />
 
-                      <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#9b9999' }} />
+                      <View style={{ width: 1, height: '100%', borderWidth: 2.5,  borderColor: '#0c8d10f2' }} />
                               
                       <DeleteConfirmation 
                       id={localidade.id} 

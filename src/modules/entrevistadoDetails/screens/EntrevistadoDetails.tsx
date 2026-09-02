@@ -119,7 +119,7 @@ const EntrevistadoDetails = () => {
         <ActivityIndicator
           animating
           size={80}
-          color="#ff4500"
+          color="#318d0f"
         />
 
         <Text
@@ -149,7 +149,7 @@ const EntrevistadoDetails = () => {
         <ActivityIndicator
           animating
           size={50}
-          color="#ff4500"
+          color="#0b891a"
         />
 
         <Text

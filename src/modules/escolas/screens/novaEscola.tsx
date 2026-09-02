@@ -19,9 +19,17 @@ escola?: EscolaType;
 }
 
 
-export const detalharEscola = (navigate: NavigationProp<ParamListBase>['navigate'], localidadeId: number)=>{
-    navigate('Escolas', {localidadeId})
-}
+export const detalharEscola = (
+  navigate: NavigationProp<ParamListBase>['navigate'],
+  EscolaSalvo: EscolaType
+) => {
+  const localidadeId =
+    typeof EscolaSalvo.localidade === 'number'
+      ? EscolaSalvo.localidade
+      : EscolaSalvo.localidade.id;
+
+  navigate('Escolas', { localidadeId });
+};
 
 
 export const NovaEscola = ()=>{
@@ -79,7 +87,7 @@ export const NovaEscola = ()=>{
               setLoading(true);
                const vegetacaoSalva = await enviarRegistro(); 
                    if (vegetacaoSalva){
-                     detalharEscola(navigation.navigate, params.localidadeId! );
+                     detalharEscola(navigation.navigate, vegetacaoSalva );
                    } else {
                      Alert.alert("Erro", "Não foi possível salvar a escola. Tente novamente.");
                      navigation.goBack();

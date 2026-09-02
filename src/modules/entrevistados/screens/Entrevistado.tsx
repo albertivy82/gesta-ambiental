@@ -92,7 +92,7 @@ const Entrevistados = () => {
           padding: 1,
           borderBottomWidth: 3,
           borderColor: theme.colors.grayTheme.gray100,
-          backgroundColor: '#ff4500',
+          backgroundColor: theme.colors.greenTheme.green,
         }}
       >
         <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} onPress={handleScrollToEnd}>
@@ -128,7 +128,7 @@ const Entrevistados = () => {
         <ActivityIndicator
         animating={true}
         size={80}      
-        color="#ff4500"
+        color="#0e7b06"
         style={{ marginTop: 20 }}
       />
       ) : (
