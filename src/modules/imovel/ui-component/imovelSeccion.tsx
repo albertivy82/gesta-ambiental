@@ -22,7 +22,7 @@ const ImovelSection = ({
   return (
     <View style={{ width: '100%' }}>
       <FormSection
-        title="Imóvel cadastrado"
+        title="B - Imóvel cadastrado"
         helperText="Toque para visualizar"
         summary={
           <Text style={{ color: 'gray' }}>
@@ -36,6 +36,17 @@ const ImovelSection = ({
           </Text>
         }
       >
+
+        <Text
+             style={{
+              color: imovel.sincronizado ? 'black' : 'red',
+              fontWeight: 'normal',
+              alignSelf: 'flex-end',
+              }}
+>
+         {imovel.sincronizado ? 'Item Sincronizado ✓' : ' Item Não Nincronizado ⦻'}
+        
+         </Text>
         {renderField('Número', imovel.numero)}
         {renderField('Rua', imovel.rua)}
         {renderField('Referencial', imovel.referencial)}

@@ -24,7 +24,7 @@ const BenfeitoriaSection = ({
   imovel,
   benfeitoria,
   children,
-  title = 'Benfeitoria',
+  title = 'C - Construções e estruturas do imóvel',
 }: BenfeitoriaSectionProps) => {
   return (
     <View style={{ width: '100%' }}>
@@ -41,6 +41,17 @@ const BenfeitoriaSection = ({
           </>
         }
       >
+
+        <Text
+             style={{
+              color: benfeitoria.sincronizado ? 'black' : 'red',
+              fontWeight: 'normal',
+              alignSelf: 'flex-end',
+              }}
+>
+         {benfeitoria.sincronizado ? 'Item Sincronizado ✓' : ' Item Não Nincronizado ⦻'}
+         </Text>
+
         {renderField('Tipo', benfeitoria.tipoBenfeitoria)}
         {renderField('Função', benfeitoria.funcao)}
         {renderField(

@@ -182,7 +182,7 @@ const EntrevistadoDetails = () => {
             entrevistado={entrevistado}
             imovel={imovelPresente}
             benfeitoria={item}
-            title={`Benfeitoria ${index + 1}`}
+            title={`C - Construção do Imóvel ${index + 1}`}
           >
             {/* botões e, depois, os filhos desta benfeitoria */}
 

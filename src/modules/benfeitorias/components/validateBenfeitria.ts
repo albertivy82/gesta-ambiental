@@ -2,7 +2,7 @@ import { BenfeitoriaInput } from "../../../shared/types/BenfeitoriaInput";
 import { FIELD_LABEL_BENFEITORIA } from "./FieldsLabel";
 
 
-export const validateBenfeitoria = (data: BenfeitoriaInput) => {
+export const validateBenfeitoria = (data: BenfeitoriaInput,  areaImovel?: number) => {
   const errors: { field: keyof BenfeitoriaInput; message: string }[] = [];
 
   // 1) Campos obrigatórios "simples"
@@ -56,8 +56,19 @@ export const validateBenfeitoria = (data: BenfeitoriaInput) => {
       message: 'Informe uma área da benfeitoria maior que 0 e menor ou igual a 1.000.000 m².',
     });
   }
+ // 4) validação do tamanho da benfeitoria em relação ao imóvel
+  if (
+  areaImovel &&
+  data.areaBenfeitoria &&
+  data.areaBenfeitoria > areaImovel
+) {
+  errors.push({
+    field: 'areaBenfeitoria',
+    message: `A área da construção/estrutura não pode ser maior que a área do imóvel (${areaImovel.toFixed(2)} m²).`,
+  });
+}
 
-  // 4) Pavimentos – número inteiro em faixa razoável (ex.: 1 a 50)
+  // 5) Pavimentos – número inteiro em faixa razoável (ex.: 1 a 50)
   if (
     data.pavimentos === undefined ||
     data.pavimentos === null ||
@@ -71,7 +82,7 @@ export const validateBenfeitoria = (data: BenfeitoriaInput) => {
     });
   }
 
-  // 5) Alagamentos – se houve ocorrência, época é obrigatória
+  // 6) Alagamentos – se houve ocorrência, época é obrigatória
   // (no hook, você grava "Não" ou algo tipo "ocorrencia: BAIXA")
   if (!data.alagamentos || data.alagamentos.trim() === '') {
     errors.push({

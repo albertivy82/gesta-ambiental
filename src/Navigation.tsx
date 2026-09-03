@@ -147,8 +147,8 @@ const Navigation =() =>{
           <Stack.Screen name="Entrevistados" component={Entrevistados} options={{title: 'Entrevistados'}} />
           <Stack.Screen name="NovoEntrevistado" component={NovoEntrevistado} options={{title: 'Cadastro de Entrevistado'}} />
           <Stack.Screen name="EntrevistadoDetails" component={EntrevistadoDetails} options={{title: 'Entrevistado'}} />
-          <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Cadastro de Imóveis'}} />
-          <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Cadastro de Benfeitoria'}} />
+          <Stack.Screen name="NovoImovel" component={NovoImovel} options={{title: 'Informações sobre a área do imóvel'}} />
+          <Stack.Screen name="NovaBenfeitoria" component={NovaBenfeitoria} options={{title: 'Construções e estruturas do imóvel'}} />
           <Stack.Screen name="Postos" component={Postos} options={{title: 'Postos'}} />
           <Stack.Screen name="NovoPosto" component={NovoPosto} options={{title: 'Cadastro de Postos'}} />
           <Stack.Screen name="Escolas" component={Escolas} options={{title: 'Escolas'}} />

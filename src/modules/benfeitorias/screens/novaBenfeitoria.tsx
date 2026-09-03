@@ -1,15 +1,19 @@
-import { NavigationProp, ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
 import { FormErrors } from "../../../shared/components/FormErrors";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
+import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
+import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
+import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import { UseNovaBenfeitoria } from "../hooks/useBenfeitoriaInput";
+import FormSection from "../../../shared/components/FormSection";
 import {
   limitesOptions,
   optionsEfluentes,
@@ -27,10 +31,6 @@ import {
   optionsTipoSolo,
   vizinhoOptions
 } from "../ui-components/opcoesBenfeitoria";
-import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
-import ImovelSection from "../../imovel/ui-component/imovelSeccion";
-import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
-import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
 export interface imovelParam {
 entrevistado: EntrevistadoType;
@@ -71,6 +71,18 @@ export const NovaBenfeitoria=()=>{
     const [outrasEnergias, SetOutrasEnergias] = useState<string>('');
     const [meioInofrmativo, setMeioInformativo] = useState<string[]>([]);     
     const [outrosMeioInformativos, SetOutrosMeioInformativos] = useState<string>('');
+
+    const selecionarOpcaoUnica = (
+      selectedValues: string[],
+      currentValue: string,
+      onSelect: (value: string) => void
+    ) => {
+      const novaOpcao = selectedValues.find(
+        (valor) => valor !== currentValue
+      );
+
+      onSelect(novaOpcao ?? '');
+    };
 
     useEffect(() => {
       
@@ -155,7 +167,7 @@ export const NovaBenfeitoria=()=>{
       
       if (loading) return;
                 
-          const result = validateBenfeitoria(novaBenfeitoria);
+          const result = validateBenfeitoria(novaBenfeitoria, imovel.areaImovel );
           if (!result.isValid) {
             setShowErrors(true);
         
@@ -226,18 +238,41 @@ export const NovaBenfeitoria=()=>{
 
 
 
-             <RenderPicker
-               label="Qual é a finalidade da benfeitoria?"
-               selectedValue={novaBenfeitoria.tipoBenfeitoria}
-               onValueChange={(value) => handleEnumChange('tipoBenfeitoria', value)}
+              <FormSection
+                title="C.1 - Caracterização de Área Construída"
+                initiallyOpen
+                summary={
+                  <Text style={{ color: 'gray' }}>
+                    {novaBenfeitoria.tipoBenfeitoria || novaBenfeitoria.funcao
+                      ? `${novaBenfeitoria.tipoBenfeitoria || 'Finalidade não informada'} • ${novaBenfeitoria.funcao || 'Função não informada'}`
+                      : 'Nenhuma informação cadastrada'}
+                  </Text>
+                }
+              >
+             <CheckboxSelector
                options={optionsTipoBenfeitoria}
+               selectedValues={novaBenfeitoria.tipoBenfeitoria ? [novaBenfeitoria.tipoBenfeitoria] : []}
+               label="Qual é a finalidade desta benfeitoria?"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novaBenfeitoria.tipoBenfeitoria ?? '',
+                   (value) => handleEnumChange('tipoBenfeitoria', value)
+                 )
+               }
             />
 
-             <RenderPicker
-               label="Qual é a função da benfeitoria?"
-               selectedValue={novaBenfeitoria.funcao}
-               onValueChange={(value) => handleEnumChange('funcao', value)}
+             <CheckboxSelector
                options={optionsFuncao}
+               selectedValues={novaBenfeitoria.funcao ? [novaBenfeitoria.funcao] : []}
+               label="Qual é a função desta benfeitoria?"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novaBenfeitoria.funcao ?? '',
+                   (value) => handleEnumChange('funcao', value)
+                 )
+               }
             />
 
               {afastamentoDaPrincipalvelha && (
@@ -257,22 +292,6 @@ export const NovaBenfeitoria=()=>{
                   handleArrayFieldChange('afastamentoDaPrincipal', selectedValues); 
                 }}
             /> )}
-
-
-            <RenderPicker
-               label="Impermeabilização do Solo"
-               selectedValue={novaBenfeitoria.impermeabilizacaoSolo}
-               onValueChange={(value) => handleEnumChange('impermeabilizacaoSolo', value)}
-               options={optionsTipoSolo}
-            />
-
-            <RenderPicker
-              label="Tipo de limites da benfeitoria"
-              selectedValue={novaBenfeitoria.limites}
-              onValueChange={(value) => handleEnumChange('limites', value)}
-              options={limitesOptions}
-             />
-
                {areaBenfeitoriaVelha && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
                  Informação dada anteiormente:  {areaBenfeitoriaVelha}
@@ -285,7 +304,7 @@ export const NovaBenfeitoria=()=>{
               placeholder="Área em m²"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
-              title="Área da benfeitoria (m²)"
+              title="Área desta benfeitoria (m²)"
             />
 
 
@@ -302,53 +321,143 @@ export const NovaBenfeitoria=()=>{
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
               title="Nº de pavimentos (térreo e altos):"
+             />
+              </FormSection>
+
+              <FormSection
+                title="C.2 - Características da construção"
+                summary={
+                  <Text style={{ color: 'gray' }}>
+                    {novaBenfeitoria.impermeabilizacaoSolo ||
+                    novaBenfeitoria.limites ||
+                    novaBenfeitoria.paredes ||
+                    novaBenfeitoria.tipoCobertura ||
+                    novaBenfeitoria.tipoEsquadrias ||
+                    novaBenfeitoria.origemMadeiraDaConstrucao ||
+                    novaBenfeitoria.origemPedraDaConstrucao ||
+                    novaBenfeitoria.origemAreiaDaConstrucao
+                      ? 'Informações cadastradas'
+                      : 'Nenhuma informação cadastrada'}
+                  </Text>
+                }
+              >
+            <CheckboxSelector
+               options={optionsTipoSolo}
+               selectedValues={novaBenfeitoria.impermeabilizacaoSolo ? [novaBenfeitoria.impermeabilizacaoSolo] : []}
+               label="Impermeabilização do Solo"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novaBenfeitoria.impermeabilizacaoSolo ?? '',
+                   (value) => handleEnumChange('impermeabilizacaoSolo', value)
+                 )
+               }
             />
 
-             
-             <RenderPicker
-              label="Qual é o material das paredes da benfeitoria?"
-              selectedValue={novaBenfeitoria.paredes}
-              onValueChange={(value) => handleEnumChange('paredes', value)}
+            <CheckboxSelector
+              options={limitesOptions}
+              selectedValues={novaBenfeitoria.limites ? [novaBenfeitoria.limites] : []}
+              label="Tipo de limites desta benfeitoria"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.limites ?? '',
+                  (value) => handleEnumChange('limites', value)
+                )
+              }
+             />
+             <CheckboxSelector
               options={optionsTipoConstrucao}
+              selectedValues={novaBenfeitoria.paredes ? [novaBenfeitoria.paredes] : []}
+              label="Qual é o material das paredes desta benfeitoria?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.paredes ?? '',
+                  (value) => handleEnumChange('paredes', value)
+                )
+              }
              />
 
-             <RenderPicker
-              label="Qual é o material da cobertura da benfeitoria?"
-              selectedValue={novaBenfeitoria.tipoCobertura}
-              onValueChange={(value) => handleEnumChange('tipoCobertura', value)}
+             <CheckboxSelector
               options={optionsTipoCobertura}
+              selectedValues={novaBenfeitoria.tipoCobertura ? [novaBenfeitoria.tipoCobertura] : []}
+              label="Qual é o material da cobertura desta benfeitoria?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.tipoCobertura ?? '',
+                  (value) => handleEnumChange('tipoCobertura', value)
+                )
+              }
              />
 
-              <RenderPicker
-              label="Qual é o material da esquadria da benfeitoria?"
-              selectedValue={novaBenfeitoria.tipoEsquadrias}
-              onValueChange={(value) => handleEnumChange('tipoEsquadrias', value)}
+              <CheckboxSelector
               options={optionsTipoEsquadrias}
+              selectedValues={novaBenfeitoria.tipoEsquadrias ? [novaBenfeitoria.tipoEsquadrias] : []}
+              label="Qual é o material da esquadria desta benfeitoria?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.tipoEsquadrias ?? '',
+                  (value) => handleEnumChange('tipoEsquadrias', value)
+                )
+              }
              />
 
-             <RenderPicker
+             <CheckboxSelector
+              options={optionsOrigemMaterial}
+              selectedValues={novaBenfeitoria.origemMadeiraDaConstrucao ? [novaBenfeitoria.origemMadeiraDaConstrucao] : []}
               label="Qual é a origem da madeira utilizada na construção?"
-              selectedValue={novaBenfeitoria.origemMadeiraDaConstrucao}
-              onValueChange={(value) => handleEnumChange('origemMadeiraDaConstrucao', value)}
-              options={optionsOrigemMaterial}
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.origemMadeiraDaConstrucao ?? '',
+                  (value) => handleEnumChange('origemMadeiraDaConstrucao', value)
+                )
+              }
              />
 
-             <RenderPicker
+             <CheckboxSelector
+              options={optionsOrigemMaterial}
+              selectedValues={novaBenfeitoria.origemPedraDaConstrucao ? [novaBenfeitoria.origemPedraDaConstrucao] : []}
               label="Qual é a origem da pedra utilizada na construção?"
-              selectedValue={novaBenfeitoria.origemPedraDaConstrucao}
-              onValueChange={(value) => handleEnumChange('origemPedraDaConstrucao', value)}
-              options={optionsOrigemMaterial}
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.origemPedraDaConstrucao ?? '',
+                  (value) => handleEnumChange('origemPedraDaConstrucao', value)
+                )
+              }
              />
 
 
-             <RenderPicker
+             <CheckboxSelector
+              options={optionsOrigemMaterial}
+              selectedValues={novaBenfeitoria.origemAreiaDaConstrucao ? [novaBenfeitoria.origemAreiaDaConstrucao] : []}
               label="Qual é a origem da areia utilizada na construção?"
-              selectedValue={novaBenfeitoria.origemAreiaDaConstrucao}
-              onValueChange={(value) => handleEnumChange('origemAreiaDaConstrucao', value)}
-              options={optionsOrigemMaterial}
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.origemAreiaDaConstrucao ?? '',
+                  (value) => handleEnumChange('origemAreiaDaConstrucao', value)
+                )
+              }
              />
-              
-              
+              </FormSection>
+
+              <FormSection
+                title="C.3 - Condições ambientais e saneamento"
+                summary={
+                  <Text style={{ color: 'gray' }}>
+                    {alagamento ||
+                    efluenteSanitario.length > 0 ||
+                    residuosSolidos.length > 0
+                      ? 'Informações cadastradas'
+                      : 'Nenhuma informação cadastrada'}
+                  </Text>
+                }
+              >
               {alagamentosVelha && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
                  Informação dada anteriormente:  {alagamentosVelha}
@@ -359,24 +468,36 @@ export const NovaBenfeitoria=()=>{
                   Informação dada anteriormente:  {epocaOcorrenciaVelha}
                 </Text>
               )}
-              <RenderPicker
-                  label="Há ou já houve ocorrência de Alagamento ou Enchentes?"
-                  selectedValue={alagamento}
-                  onValueChange={(value) => {
-                    setAlagamento(value ?? ''); 
-                    if (value !== 'Sim') {
-                      SetOcorrencia('');
-                    }
-                  }}
+              <CheckboxSelector
                   options={['Sim', 'Não']}
+                  selectedValues={alagamento ? [alagamento] : []}
+                  label="Há ou já houve ocorrência de Alagamento ou Enchentes?"
+                  onSave={(values) =>
+                    selecionarOpcaoUnica(
+                      values,
+                      alagamento,
+                      (value) => {
+                        setAlagamento(value);
+                        if (value !== 'Sim') {
+                          SetOcorrencia('');
+                        }
+                      }
+                    )
+                  }
               />
                     {alagamento === 'Sim' && (
                       <View style={{ marginTop: 10 }}>
-                            <RenderPicker
-                            label="Qual é a ocorrência"
-                            selectedValue={ocorrencia}
-                            onValueChange={(value) => {SetOcorrencia(value ?? '');}}
+                            <CheckboxSelector
                             options={['BAIXA', 'PERÍODICA']}
+                            selectedValues={ocorrencia ? [ocorrencia] : []}
+                            label="Qual é a ocorrência"
+                            onSave={(values) =>
+                              selecionarOpcaoUnica(
+                                values,
+                                ocorrencia,
+                                SetOcorrencia
+                              )
+                            }
                         />
                       </View>
                       )}
@@ -441,17 +562,32 @@ export const NovaBenfeitoria=()=>{
                 }}
               />
                   {residuosSolidos.includes('Outro') && (
-                      <View style={{ marginTop: 10 }}>
-                          <Input
-                              value={outrosDescartes}
-                              onChangeText={SetOutrosDescartes}
-                              placeholder="Separe as informações por vírgula"
-                              margin="15px 10px 30px 5px"
-                              title="Qual é o destino?"
-                          />
-                      </View>
-                  )}
+                  <View style={{ marginTop: 10 }}>
+                    <Input
+                      value={outrosDescartes}
+                      onChangeText={SetOutrosDescartes}
+                      placeholder="Separe as informações por vírgula"
+                      margin="15px 10px 30px 5px"
+                      title="Qual é o destino?"
+                    />
+                  </View>
+)}
 
+ </FormSection>
+
+              <FormSection
+                title="C.4 - Infraestrutura e rotina da família"
+                summary={
+                  <Text style={{ color: 'gray' }}>
+                    {fonteEnergia.length > 0 ||
+                    energiAlimento.length > 0 ||
+                    novaBenfeitoria.meiosLocomocao ||
+                    meioInofrmativo.length > 0
+                      ? 'Informações cadastradas'
+                      : 'Nenhuma informação cadastrada'}
+                  </Text>
+                }
+              >
                {fonteEnergiaVelha && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
                   Informação dada anteriormente:  {fonteEnergiaVelha}
@@ -510,11 +646,17 @@ export const NovaBenfeitoria=()=>{
                   )}
 
 
-             <RenderPicker
-              label="Qual o meio de locomoção mais usado para deslocamento?"
-              selectedValue={novaBenfeitoria.meiosLocomocao}
-              onValueChange={(value) => handleEnumChange('meiosLocomocao', value)}
+             <CheckboxSelector
               options={optionsLocomocao}
+              selectedValues={novaBenfeitoria.meiosLocomocao ? [novaBenfeitoria.meiosLocomocao] : []}
+              label="Qual o meio de locomoção mais usado para deslocamento?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novaBenfeitoria.meiosLocomocao ?? '',
+                  (value) => handleEnumChange('meiosLocomocao', value)
+                )
+              }
              />
 
                          
@@ -545,11 +687,14 @@ export const NovaBenfeitoria=()=>{
                           />
                       </View>
                   )}
-            
-           
+              </FormSection>
+
               <FormErrors
                 visible={showErrors && disabled}
-                errors={validateBenfeitoria(novaBenfeitoria).errors}
+                errors={validateBenfeitoria(
+                  novaBenfeitoria,
+                  imovel.areaImovel
+                ).errors}
               />
                                
               <Button
@@ -562,4 +707,5 @@ export const NovaBenfeitoria=()=>{
         </GlobalContainer>
     </ScrollView>
     )
+
 }

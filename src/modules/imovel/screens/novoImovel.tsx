@@ -6,7 +6,6 @@ import { FormErrors } from "../../../shared/components/FormErrors";
 import LocationInput from "../../../shared/components/input/LocationInput";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
@@ -52,6 +51,18 @@ export const NovoImovel = () => {
   const [espacosLazer, setEspacosLazer]  = useState<string[]>([]);
   const [outrosEspacosLazer, setOutrosEspacosLazer] = useState<string>('');
   const simNaoOptions =  Object.values(SimNao);
+
+  const selecionarOpcaoUnica = (
+    selectedValues: string[],
+    currentValue: string,
+    onSelect: (value: string) => void
+  ) => {
+    const novaOpcao = selectedValues.find(
+      (valor) => valor !== currentValue
+    );
+
+    onSelect(novaOpcao ?? '');
+  };
       
    
   useEffect(()=>{
@@ -249,18 +260,24 @@ export const NovoImovel = () => {
               maxLength={20}
               onChange={handleOnChangeAreaImovel}
               keyboardType='numeric'
-              placeholder="Área em m²"
+              placeholder="Informe a área aproximada em m²"
               placeholderTextColor={theme.colors.grayTheme.gray80}
               margin="15px 10px 30px 5px"
-              title="Área do Imóvel (m²)"
+              title="Qual é a área do terreno do imóvel? (aproximada em m²)"
               ref={areaImovelInput}
            />
 
-            <RenderPicker
-                    label="Qual o tipo de solo no imóvel?"
-                    selectedValue={novoImovel.tipoSolo}
-                    onValueChange={(value) => handleEnumChange('tipoSolo', value)}
-                    options={soloOptions}
+            <CheckboxSelector
+              options={soloOptions}
+              selectedValues={novoImovel.tipoSolo ? [novoImovel.tipoSolo] : []}
+              label="Qual o tipo de solo no imóvel?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novoImovel.tipoSolo ?? '',
+                  (value) => handleEnumChange('tipoSolo', value)
+                )
+              }
             />
 
                 {valorSalvoVizinhosConfinantes  && (
@@ -272,7 +289,7 @@ export const NovoImovel = () => {
                 <CheckboxSelector
                  options={vizinhoOptions}
                  selectedValues={vizinhosConfinantesInformados}
-                 label="Vizinhos Confinantes:"
+                 label="Vizinhos Confinantes do Imóvel:"
                  exclusiveOptions={[ 'Não declarado','Não possui']}
                  onSave={(selectedValues) => {
                       setVizinhosConfinantesInformados(selectedValues);
@@ -281,27 +298,45 @@ export const NovoImovel = () => {
                  />
                
 
-             <RenderPicker
+             <CheckboxSelector
+              options={fundiarioOptions}
+              selectedValues={novoImovel.situacaoFundiaria ? [novoImovel.situacaoFundiaria] : []}
               label="Situação Fundiária"
-              selectedValue={novoImovel.situacaoFundiaria}
-              onValueChange={(value) => handleEnumChange('situacaoFundiaria', value)}
-               options={fundiarioOptions}
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novoImovel.situacaoFundiaria ?? '',
+                  (value) => handleEnumChange('situacaoFundiaria', value)
+                )
+              }
             />
 
 
-             <RenderPicker
-              label="Possui documentação?"
-              selectedValue={novoImovel.documentacaoImovel}
-              onValueChange={(value) => handleEnumChange('documentacaoImovel', value)}
+             <CheckboxSelector
               options={documentacaoOptions}
+              selectedValues={novoImovel.documentacaoImovel ? [novoImovel.documentacaoImovel] : []}
+              label="Possui documentação?"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novoImovel.documentacaoImovel ?? '',
+                  (value) => handleEnumChange('documentacaoImovel', value)
+                )
+              }
              />
 
 
-             <RenderPicker
-              label="Tipo de limites do imóvel"
-              selectedValue={novoImovel.limites}
-              onValueChange={(value) => handleEnumChange('limites', value)}
+             <CheckboxSelector
               options={limitesOptions}
+              selectedValues={novoImovel.limites ? [novoImovel.limites] : []}
+              label="Tipo de limites do imóvel"
+              onSave={(values) =>
+                selecionarOpcaoUnica(
+                  values,
+                  novoImovel.limites ?? '',
+                  (value) => handleEnumChange('limites', value)
+                )
+              }
              />
 
               <Input 
@@ -322,17 +357,23 @@ export const NovoImovel = () => {
                 </Text>
               )}
              
-              <RenderPicker
-                  label="Existem linhas de ônibus que atendem o local?"
-                  selectedValue={linhaOnibus}
-                  onValueChange={(value) => {
-                    setLinhaOnibus(value ?? ''); 
-                    if (value !== 'Sim') {
-                      SetQual('');
+              <CheckboxSelector
+                options={['Sim', 'Não']}
+                selectedValues={linhaOnibus ? [linhaOnibus] : []}
+                label="Existem linhas de ônibus que atendem o local?"
+                onSave={(values) =>
+                  selecionarOpcaoUnica(
+                    values,
+                    linhaOnibus,
+                    (value) => {
+                      setLinhaOnibus(value);
+                      if (value !== 'Sim') {
+                        SetQual('');
+                      }
                     }
-                  }}
-                  options={['Sim', 'Não']}
-                 />
+                  )
+                }
+              />
                     {linhaOnibus.includes('Sim') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
@@ -380,11 +421,17 @@ export const NovoImovel = () => {
             )}
 
                             
-              <RenderPicker
-              label="Iluminação pública?"
-              selectedValue={novoImovel.iluminacaoPublica}
-              onValueChange={(value) => handleEnumChange('iluminacaoPublica', value)}
-              options={simNaoOptions}
+              <CheckboxSelector
+                options={simNaoOptions}
+                selectedValues={novoImovel.iluminacaoPublica ? [novoImovel.iluminacaoPublica] : []}
+                label="Iluminação pública?"
+                onSave={(values) =>
+                  selecionarOpcaoUnica(
+                    values,
+                    novoImovel.iluminacaoPublica ?? '',
+                    (value) => handleEnumChange('iluminacaoPublica', value)
+                  )
+                }
               />
 
                  {valorSalvoEquipamentosUrbanos    && (
@@ -393,16 +440,22 @@ export const NovoImovel = () => {
                 </Text>
                  )}
 
-                <RenderPicker
-                  label="Equipamentos Urbanos Disponíveis:"  
-                  selectedValue={equipamentosUrbanosInformados}
-                  onValueChange={(value) => {
-                      setEquipamentosUrbanosInformados(value ?? ''); 
-                      if (value !== 'Sim') {
-                        setOutrosEquipamentosUrbanos('');
-                      }
-                  }}
+                <CheckboxSelector
                   options={['Sim', 'Não']}
+                  selectedValues={equipamentosUrbanosInformados ? [equipamentosUrbanosInformados] : []}
+                  label="Equipamentos Urbanos Disponíveis:"
+                  onSave={(values) =>
+                    selecionarOpcaoUnica(
+                      values,
+                      equipamentosUrbanosInformados,
+                      (value) => {
+                        setEquipamentosUrbanosInformados(value);
+                        if (value !== 'Sim') {
+                          setOutrosEquipamentosUrbanos('');
+                        }
+                      }
+                    )
+                  }
                 />
 
                  {equipamentosUrbanosInformados.includes('Sim') && (

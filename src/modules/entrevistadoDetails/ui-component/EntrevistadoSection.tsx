@@ -19,7 +19,7 @@ const EntrevistadoSection = ({
   return (
     <View style={{ width: '100%' }}>
       <FormSection
-        title="Dados do entrevistado"
+        title="A - Dados do entrevistado"
         helperText="Toque para visualizar"
         summary={
           <Text style={{ color: 'gray' }}>
@@ -33,6 +33,19 @@ const EntrevistadoSection = ({
           </Text>
         }
       >
+          <Text
+             style={{
+              color: entrevistado.sincronizado ? 'black' : 'red',
+              fontWeight: 'normal',
+              alignSelf: 'flex-end',
+              }}
+>
+         {entrevistado.sincronizado ? 'Item Sincronizado ✓' : ' Item Não Nincronizado ⦻'}
+         </Text>
+
+
+
+
         {renderField('Nome', entrevistado.nome)}
         {renderField('Naturalidade', entrevistado.naturalidade)}
         {renderField(
@@ -132,6 +145,8 @@ const EntrevistadoSection = ({
           'Contato do indicado',
           entrevistado.contatoIndicadoConsultaPublica
         )}
+
+       
 
          <View
             style={{
