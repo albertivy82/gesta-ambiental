@@ -186,5 +186,19 @@ export const tempomoradiaOptions = [
   'Vitória do Xingu',
   'Xinguara',
 ];
+
+
+export const participacaoOptions = [
+        "Sindicato",
+        "Associação Profissional",
+        "Organização Comunitária",
+        "Organização Religiosa",
+        "Colônia de Pescadores",
+        "Não participa de nenhuma",
+        "Não informado",
+        "Outras"
+      ];
+
+
   
  

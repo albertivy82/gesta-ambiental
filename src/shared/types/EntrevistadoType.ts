@@ -38,6 +38,7 @@ utilizaAreaUc: string;
 propostaMelhorarArea: string;
 indicadoConsultaPublica: string;
 contatoIndicadoConsultaPublica: string;
+participacaoInstituicao?: string;
 localidade: {
     id: number;
 };

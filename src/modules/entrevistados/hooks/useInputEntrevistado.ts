@@ -44,6 +44,7 @@ export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
   propostaMelhorarArea: "",
   indicadoConsultaPublica: "",
   contatoIndicadoConsultaPublica: "",
+  participacaoInstituicao: "",
   localidade: {
     id: 0,
   },

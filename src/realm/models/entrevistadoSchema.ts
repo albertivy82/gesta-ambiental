@@ -36,6 +36,7 @@ export const EntrevistadoSchema = {
       propostaMelhorarArea: 'string',
       indicadoConsultaPublica: 'string',
       contatoIndicadoConsultaPublica: 'string',
+      participacaoInstituicao: 'string?',
       localidade: 'int?',
       sincronizado: 'bool?',
       idLocal: 'string?'

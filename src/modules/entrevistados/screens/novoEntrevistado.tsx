@@ -15,7 +15,7 @@ import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { useNovoEntrevistado } from "../hooks/useInputEntrevistado";
-import { Escolaridade, estadoCivilOptions, Naturalidade, saudeOptions, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
+import { Escolaridade, estadoCivilOptions, Naturalidade, participacaoOptions, saudeOptions, tempomoradiaOptions } from "../ui-components/opcoesEntrevistado";
 import FormSection from "../../../shared/components/FormSection";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 
@@ -203,6 +203,9 @@ export const NovoEntrevistado = () => {
     const [conheceInstituicao, setConheceInstituicao] = useState<string>('');     
     const [quaisConhece, SetQuaisConhece] = useState<string>('');
 
+    const [participacaoInformada, setParticipacaoInformada] = useState<string[]>([]);
+    const [outrasParticipacoes, setOutrasParticipacoes] = useState<string>('');
+
     const [idade, setIdade] = useState<number>();
 
    // estado do picker (se ainda não tiver)
@@ -333,6 +336,18 @@ export const NovoEntrevistado = () => {
       handleArrayFieldChange('instituicaoConhecida', consolidaDados);
     
     }, [conheceInstituicao, quaisConhece]);
+
+
+     useEffect(()=>{
+      const consolidaDados = [
+        ...participacaoInformada.filter((item) => item !== 'Outras'),
+        ...(outrasParticipacoes ? [`Outras: ${outrasParticipacoes}`] : []),
+      ];
+
+      handleArrayFieldChange('participacaoInstituicao', consolidaDados);
+    
+    },[alimentacoInformada, outrasInformadas ])
+
     
    
        
@@ -665,7 +680,7 @@ export const NovoEntrevistado = () => {
           </FormSection>
 
           <FormSection
-            title="Saúde e serviços públicos"
+            title="Saúde, serviços públicos e Instituições sociais"
             summary={
               <Text style={{ color: 'gray' }}>
                 {novoEntrevistado.comoCuidaSaudeFamilia ||
@@ -681,6 +696,37 @@ export const NovoEntrevistado = () => {
                           </Text>
                         </View>
             )}
+
+            {valorSalvoInstituicaoConhecida && (
+                <View style={{ marginBottom: 5 }}>
+                  <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                    Valor salvo sobre instituições conhecidas: {valorSalvoInstituicaoConhecida}
+                  </Text>
+                </View>
+              )}
+              <RenderPicker
+                  label="Você conhece o trabalho de alguma instituição governamental ou não governamental na sua localidade?"
+                  selectedValue={conheceInstituicao}
+                  onValueChange={(value) => {
+                    setConheceInstituicao(value ?? ''); 
+                    if (value !== '') {
+                      SetQuaisConhece('');
+                    }
+                  }}
+                  options={['Sim', 'Não']}
+              />
+               {conheceInstituicao.includes('Sim') && (
+                <View style={{ marginTop: 10 }}>
+                   <Input
+                        value={quaisConhece}
+                        maxLength={100}
+                        onChangeText={SetQuaisConhece}
+                        placeholder="Separe por vírgulas"
+                        margin="15px 10px 30px 5px"
+                        title="Qual(is) a(s) instituição(ões) e que tipo de trabalho desenvolve?"
+                    />
+                </View>
+               )}
 
             <CheckboxSelector
                 options={saudeOptions}
@@ -738,6 +784,32 @@ export const NovoEntrevistado = () => {
                 </View>
             )}
 
+           
+            <CheckboxSelector
+                options={participacaoOptions}
+                selectedValues={participacaoInformada}
+                label="Faz parte de alguma Instituição social ou política?
+                Selecione as opções que se aplicam."
+
+                onSave={(selectedValues) => {
+                    setParticipacaoInformada(selectedValues);
+                    if (!selectedValues.includes('Outras')) {
+                        setOutrasParticipacoes('');
+                    }
+                }}
+            />
+            {participacaoInformada.includes('Outras') && (
+                <View style={{ marginTop: 10 }}>
+                    <Input
+                        maxLength={255}
+                        value={outrasParticipacoes}
+                        onChangeText={setOutrasParticipacoes}
+                        placeholder="Separe as informações por vírgula"
+                        margin="15px 10px 30px 5px"
+                        title="Informe qual:"
+                    />
+                </View>
+             )}
 
           </FormSection>
 
@@ -798,38 +870,7 @@ export const NovoEntrevistado = () => {
               </Text>
             }
           >
-            {valorSalvoInstituicaoConhecida && (
-                <View style={{ marginBottom: 5 }}>
-                  <Text style={{ fontStyle: 'italic', color: 'gray' }}>
-                    Valor salvo sobre instituições conhecidas: {valorSalvoInstituicaoConhecida}
-                  </Text>
-                </View>
-              )}
-              <RenderPicker
-                  label="Você conhece o trabalho de alguma instituição governamental ou não governamental na sua localidade?"
-                  selectedValue={conheceInstituicao}
-                  onValueChange={(value) => {
-                    setConheceInstituicao(value ?? ''); 
-                    if (value !== '') {
-                      SetQuaisConhece('');
-                    }
-                  }}
-                  options={['Sim', 'Não']}
-              />
-               {conheceInstituicao.includes('Sim') && (
-                <View style={{ marginTop: 10 }}>
-                   <Input
-                        value={quaisConhece}
-                        maxLength={100}
-                        onChangeText={SetQuaisConhece}
-                        placeholder="Separe por vírgulas"
-                        margin="15px 10px 30px 5px"
-                        title="Qual(is) a(s) instituição(ões) e que tipo de trabalho desenvolve?"
-                    />
-                </View>
-               )}
-
-             
+                         
               <Input 
                 value={novoEntrevistado.importanciaDeProtegerAmbiente} 
                 onChange={(event) => handleOnChangeInput(event, 'importanciaDeProtegerAmbiente')}
