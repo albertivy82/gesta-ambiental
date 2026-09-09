@@ -57,6 +57,7 @@ const EntrevistadoSection = ({
         {renderField('Escolaridade', entrevistado.escolaridade)}
         {renderField('Estado Civil', entrevistado.estadoCivil)}
         {renderField('Religião', entrevistado.religiao)}
+        {renderField('Participação em instituição social ou política', entrevistado.participacaoInstituicao)}
         {renderField('Morador do imóvel', entrevistado.morador)}
         {renderField('Data de Chegada', entrevistado.dataChegada)}
         {renderField('Pretende Mudar', entrevistado.pretendeMudar)}

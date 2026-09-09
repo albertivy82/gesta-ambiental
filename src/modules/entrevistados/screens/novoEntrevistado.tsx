@@ -117,6 +117,7 @@ export const NovoEntrevistado = () => {
           const valorSalvoTipoAlimentacao = entrevistado?.tipoAlimentacao ?? '';
           const valorSalvoLocalCompras = entrevistado?.localCompras ?? '';
           const valorSalvoServicosDeficitarios = entrevistado?.servicosDeficitarios ?? '';
+          const valorSalvoParticipacaoInstituicao = entrevistado?.participacaoInstituicao ?? '';
           
           
             
@@ -346,7 +347,7 @@ export const NovoEntrevistado = () => {
 
       handleArrayFieldChange('participacaoInstituicao', consolidaDados);
     
-    },[alimentacoInformada, outrasInformadas ])
+    },[participacaoInformada, outrasParticipacoes ])
 
     
    
@@ -784,20 +785,31 @@ export const NovoEntrevistado = () => {
                 </View>
             )}
 
-           
+           {valorSalvoParticipacaoInstituicao && (
+              <View style={{ marginBottom: 5 }}>
+                <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                  Valor salvo sobre participação em instituições: {valorSalvoParticipacaoInstituicao}
+                </Text>
+              </View>
+            )}
+            
             <CheckboxSelector
-                options={participacaoOptions}
-                selectedValues={participacaoInformada}
-                label="Faz parte de alguma Instituição social ou política?
-                Selecione as opções que se aplicam."
-
-                onSave={(selectedValues) => {
+                  options={participacaoOptions}
+                  selectedValues={participacaoInformada}
+                  exclusiveOptions={[
+                    'Não participa de nenhuma',
+                    'Não informado',
+                  ]}
+                  label="Faz parte de alguma Instituição social ou política?
+                  Selecione as opções que se aplicam."
+                  onSave={(selectedValues) => {
                     setParticipacaoInformada(selectedValues);
+
                     if (!selectedValues.includes('Outras')) {
-                        setOutrasParticipacoes('');
+                      setOutrasParticipacoes('');
                     }
-                }}
-            />
+                  }}
+                />
             {participacaoInformada.includes('Outras') && (
                 <View style={{ marginTop: 10 }}>
                     <Input

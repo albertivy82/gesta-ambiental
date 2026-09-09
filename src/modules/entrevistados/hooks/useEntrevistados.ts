@@ -46,6 +46,7 @@ export const convertToEntrevistadoInput = (entrevistado: any): EntrevistadoInput
     propostaMelhorarArea: entrevistado.propostaMelhorarArea,
     indicadoConsultaPublica: entrevistado.indicadoConsultaPublica,
     contatoIndicadoConsultaPublica: entrevistado.contatoIndicadoConsultaPublica,
+    participacaoInstituicao: entrevistado.participacaoInstituicao,
     localidade: {
       id: entrevistado.localidade,
     },

@@ -1,10 +1,10 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Alert, Button, ScrollView, View } from "react-native";
-import { Molestias } from "../../../enums/molestias.enum";
 import { Perfil } from "../../../enums/Perfil";
 import { Sexo } from "../../../enums/Sexo";
 import { FormErrors } from "../../../shared/components/FormErrors";
+import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
 import { RenderPicker } from "../../../shared/components/input/renderPicker";
@@ -14,12 +14,11 @@ import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { MoradorType } from "../../../shared/types/MoradorType";
+import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import { useNovoMorador } from "../hooks/useInputMorador";
-import { estadoCivilOptions } from "../ui-components/opcoesMorador";
-import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
-import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+import { doencasOptions, estadoCivilOptions } from "../ui-components/opcoesMorador";
 
 
 export interface NovoMoradorParams {
@@ -118,7 +117,7 @@ useEffect(() => {
     "Ensino superior incompleto",
     "Pós-graduação"
   ]);
-  const molestiasOptions =  Object.values(Molestias);
+  const molestiasOptions =  Object.values(doencasOptions);
     
     const handleEnviar = async () => {
       if (loading) return;

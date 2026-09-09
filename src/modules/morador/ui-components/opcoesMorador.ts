@@ -6,5 +6,22 @@ export const estadoCivilOptions = [
     'Viúvo(a)',
     'Separado(a)'
   ];
+
+  export const doencasOptions =[
+'Malária',
+'Leishmaniose',
+'Hepatite',
+'Diabete',
+'Pressão arterial',
+'Dengue',
+'Intestinais',
+'Leptospirose',
+'Cardíaca',
+'Tuberculose',
+'Câncer',
+'COVID',
+'Respiratórias',
+'Outra'
+];
   
  
