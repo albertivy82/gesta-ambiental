@@ -14,6 +14,7 @@ import EntrevistadoSection from "../../entrevistadoDetails/ui-component/Entrevis
 import { useNovoImovel } from "../hooks/useInputImovel";
 import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+import FormSection from "../../../shared/components/FormSection";
 
 
 export interface NovoReptilParams {
@@ -190,6 +191,18 @@ export const NovoImovel = () => {
         <GlobalContainer>
 
           <EntrevistadoSection entrevistado={params.entrevistado} />
+
+            <FormSection
+                title="B - Caracterização de Imóvel"
+                initiallyOpen
+                summary={
+                  <Text style={{ color: 'gray' }}>
+                    {novoImovel.rua || novoImovel.sincronizado
+                      ? `${novoImovel.rua || 'Finalidade não informada'} • ${novoImovel.sincronizado || 'Função não informada'}`
+                      : 'Nenhuma informação cadastrada'}
+                  </Text>
+                }
+              >
            <Input 
               value={novoImovel.rua} 
               maxLength={255}
@@ -530,7 +543,7 @@ export const NovoImovel = () => {
               disabled={loading}   // 👈 trava só enquanto envia
               />
     
-      
+       </FormSection>
 
         </GlobalContainer>
         </ScrollView>

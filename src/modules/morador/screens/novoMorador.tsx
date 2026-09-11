@@ -7,7 +7,6 @@ import { FormErrors } from "../../../shared/components/FormErrors";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 import CheckboxSelector from "../../../shared/components/input/checkBox";
 import Input from "../../../shared/components/input/input";
-import { RenderPicker } from "../../../shared/components/input/renderPicker";
 import Text from "../../../shared/components/text/Text";
 import { theme } from "../../../shared/themes/theme";
 import { BenfeitoriaType } from "../../../shared/types/BenfeitoriaType";
@@ -119,7 +118,20 @@ useEffect(() => {
   ]);
   const molestiasOptions =  Object.values(doencasOptions);
     
-    const handleEnviar = async () => {
+    
+
+   const selecionarOpcaoUnica = (
+     selectedValues: string[],
+     currentValue: string,
+     onSelect: (value: string) => void
+   ) => {
+     const novaOpcao = selectedValues.find(
+       (valor) => valor !== currentValue
+     );
+
+     onSelect(novaOpcao ?? '');
+   };
+const handleEnviar = async () => {
       if (loading) return;
                 
       const result = validateMorador(novoMorador);
@@ -212,16 +224,19 @@ useEffect(() => {
              <EntrevistadoSection entrevistado={params.entrevistado} />
              <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
              <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria}  />
-
-        
-             <RenderPicker
-               label="Selecione o perfil do morador"
-               selectedValue={novoMorador.perfil}
-               onValueChange={(value) => handleEnumChange('perfil', value)}
+             <CheckboxSelector
                options={perfilOptions}
+               selectedValues={novoMorador.perfil ? [novoMorador.perfil] : []}
+               label="Selecione o perfil do morador"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novoMorador.perfil ?? '',
+                   (value) => handleEnumChange('perfil', value)
+                 )
+               }
               />
-
-              {!validator &&(  
+{!validator &&(  
                <Input
                 value={idade?.toString() || ''}
                 maxLength={3}
@@ -235,46 +250,72 @@ useEffect(() => {
                 title="Idade do morador"
               />)}  
 
-             {!validator &&(  
-              <RenderPicker
-               label="Qual o sexo do morador"
-               selectedValue={novoMorador.sexo}
-               onValueChange={(value) => handleEnumChange('sexo', value)}
+             {!validator &&(
+              <CheckboxSelector
                options={sexoOptions}
-              />)}
-           {!validator &&(  
-              <RenderPicker
-               label="Informe o estado civil do morador?"
-               selectedValue={novoMorador.estadoCivil}
-               onValueChange={(value) => handleEnumChange('estadoCivil', value)}
+               selectedValues={novoMorador.sexo ? [novoMorador.sexo] : []}
+               label="Qual o sexo do morador"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novoMorador.sexo ?? '',
+                   (value) => handleEnumChange('sexo', value)
+                 )
+               }
+              />
+)}
+           {!validator &&(
+              <CheckboxSelector
                options={estadoCivilOptions}
-            />)}
-           {!validator &&(  
-              <RenderPicker
-               label="Qual o nível de escolaridade do morador?"
-               selectedValue={novoMorador.escolaridade}
-               onValueChange={(value) => handleEnumChange('escolaridade', value)}
+               selectedValues={novoMorador.estadoCivil ? [novoMorador.estadoCivil] : []}
+               label="Informe o estado civil do morador?"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novoMorador.estadoCivil ?? '',
+                   (value) => handleEnumChange('estadoCivil', value)
+                 )
+               }
+              />
+)}
+           {!validator &&(
+              <CheckboxSelector
                options={escolaridadeOptions}
-              />)}
+               selectedValues={novoMorador.escolaridade ? [novoMorador.escolaridade] : []}
+               label="Qual o nível de escolaridade do morador?"
+               onSave={(values) =>
+                 selecionarOpcaoUnica(
+                   values,
+                   novoMorador.escolaridade ?? '',
+                   (value) => handleEnumChange('escolaridade', value)
+                 )
+               }
+              />
+)}
 
                {estudaVelho && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
                  Informação dada anteiormente:  {estudaVelho}
                </Text>
                 )}
-
-                <RenderPicker
-                  label="O morador estuda?"
-                  selectedValue={estuda}
-                  onValueChange={(value) => {
-                    setEstuda(value ?? ''); 
-                    if (value !== 'Sim') {
-                      SetOndeEstuda('');
-                    }
-                  }}
+                <CheckboxSelector
                   options={['Sim', 'Não']}
+                  selectedValues={estuda ? [estuda] : []}
+                  label="O morador estuda?"
+                  onSave={(values) =>
+                    selecionarOpcaoUnica(
+                      values,
+                      estuda,
+                      (value) => {
+                        setEstuda(value);
+                        if (value !== 'Sim') {
+                          SetOndeEstuda('');
+                        }
+                      }
+                    )
+                  }
                  />
-                    {estuda.includes('Sim') && (
+{estuda.includes('Sim') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
                        maxLength={255}
@@ -292,19 +333,24 @@ useEffect(() => {
                  Informação dada anteiormente:  {trabalhoVelho}
                </Text>
                 )}
-
-               <RenderPicker
-                  label="O morador trabalha?"
-                  selectedValue={trabalha}
-                  onValueChange={(value) => {
-                    setTrabalha(value ?? ''); 
-                    if (value !== 'Sim') {
-                      SetOndeTrabalha('');
-                    }
-                  }}
+               <CheckboxSelector
                   options={['Sim', 'Não']}
+                  selectedValues={trabalha ? [trabalha] : []}
+                  label="O morador trabalha?"
+                  onSave={(values) =>
+                    selecionarOpcaoUnica(
+                      values,
+                      trabalha,
+                      (value) => {
+                        setTrabalha(value);
+                        if (value !== 'Sim') {
+                          SetOndeTrabalha('');
+                        }
+                      }
+                    )
+                  }
                  />
-                    {trabalha.includes('Sim') && (
+{trabalha.includes('Sim') && (
                       <View style={{ marginTop: 10 }}>
                       <Input
                        maxLength={255}
@@ -316,13 +362,20 @@ useEffect(() => {
                        />
                       </View>
                  )}
-               {!validator &&(               
-               <RenderPicker
-                  label="Qual a religião do morador?"
-                  selectedValue={novoMorador.religiao}
-                  onValueChange={(value) => handleEnumChange('religiao', value)}
+               {!validator &&(
+               <CheckboxSelector
                   options={religiaoOptions}
-                 />)}
+                  selectedValues={novoMorador.religiao ? [novoMorador.religiao] : []}
+                  label="Qual a religião do morador?"
+                  onSave={(values) =>
+                    selecionarOpcaoUnica(
+                      values,
+                      novoMorador.religiao ?? '',
+                      (value) => handleEnumChange('religiao', value)
+                    )
+                  }
+                 />
+)}
                   
                 {doencasVelhas && (
                 <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
