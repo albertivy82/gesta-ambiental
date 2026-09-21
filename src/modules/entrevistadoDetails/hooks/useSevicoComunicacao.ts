@@ -64,7 +64,7 @@ export const useServicosComunicacao = (
               }
 
             } catch (error) {
-              // console.error(
+              // console.log(
               //   'Erro na sincronização dos serviços de comunicação:',
               //   error
               // );
@@ -108,7 +108,7 @@ export const useServicosComunicacao = (
         }
 
       } catch (error) {
-        // console.error(
+        // console.log(
         //   'Erro ao recuperar serviços de comunicação da API:',
         //   error
         // );

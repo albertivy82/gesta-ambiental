@@ -49,7 +49,7 @@ export const useMoradores = (foccus: Boolean, benfeitoriaId: number) => {
                       if (upadated){apagarMoradorQueue(morador.idLocal!)};
                 }
               } catch (error) {
-                //console.error('Erro na sincronização de morador:', error);
+                //console.log('Erro na sincronização de morador:', error);
               }
             }
           
@@ -87,7 +87,7 @@ export const useMoradores = (foccus: Boolean, benfeitoriaId: number) => {
             throw new Error('Dados de moradores inválidos');
           }
         } catch (error) {
-          //console.error('Erro ao recuperar moradores da API:', error);
+          //console.log('Erro ao recuperar moradores da API:', error);
         }
       }
   };

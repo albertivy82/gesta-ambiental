@@ -148,7 +148,7 @@ export const setIdEntrevitadoFromApiOnParticipacaoInstituicao = (idEntrevistadoA
     }
     return true;
   } catch (error) {
-    console.error('Erro ao atualizar vegetações:', error);
+    console.log('Erro ao atualizar vegetações:', error);
     return false;
   }
 };
@@ -163,7 +163,7 @@ export const apagarParticipacaoInstituicaoQueue = (idLocal: string) => {
       }
     });
   } catch (error) {
-    console.error('Erro ao excluir vegetação da fila:', error);
+    console.log('Erro ao excluir vegetação da fila:', error);
   }
 };
 
@@ -178,6 +178,6 @@ export const apagarParticipacaoInstituicaoSyncronizada = (participacaoInstituica
       }
     });
   } catch (error) {
-    console.error("Erro ao excluir participacaoInstituicao sincronizado:", error);
+    console.log("Erro ao excluir participacaoInstituicao sincronizado:", error);
   }
 };

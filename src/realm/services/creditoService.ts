@@ -141,7 +141,7 @@ export const setIdBenfeitoriaFromApiCredito = (idBenfeitoriaApi: number, benfeit
     }
     return true;
   } catch (error) {
-    console.error('Erro ao atualizar créditos:', error);
+    console.log('Erro ao atualizar créditos:', error);
     return false;
   }
 };
@@ -156,7 +156,7 @@ export const apagarCreditoQueue = (idLocal: string) => {
       }
     });
   } catch (error) {
-    console.error('Erro ao excluir crédito da fila:', error);
+    console.log('Erro ao excluir crédito da fila:', error);
   }
 };
 
@@ -175,6 +175,6 @@ export const apagarCreditoSyncronizada = (creditoId: number) => {
             } 
         });
     } catch (error) {
-        console.error('Erro ao excluir crédito da fila:', error);
+        console.log('Erro ao excluir crédito da fila:', error);
     }
 };

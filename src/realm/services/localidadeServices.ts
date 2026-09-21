@@ -94,6 +94,6 @@ export const apagarLocalidade = (localidadeId: number) => {
             } 
         });
     } catch (error) {
-        console.error('Erro ao excluir localidade da fila:', error);
+        console.log('Erro ao excluir localidade da fila:', error);
     }
 };

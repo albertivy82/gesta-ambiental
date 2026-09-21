@@ -148,7 +148,7 @@ export const apagarPostoQueue = (postoIdLocal: string) => {
           }
       });
   } catch (error) {
-      console.error(`Erro ao excluir posto da fila com idLocal ${postoIdLocal}:`, error);
+      console.log(`Erro ao excluir posto da fila com idLocal ${postoIdLocal}:`, error);
   }
 };
 
@@ -163,6 +163,6 @@ export const apagarPostoSaudeSyncronizado = (postoId: number) => {
       }
     });
   } catch (error) {
-    console.error("Erro ao excluir posto de saúde sincronizado:", error);
+    console.log("Erro ao excluir posto de saúde sincronizado:", error);
   }
 };

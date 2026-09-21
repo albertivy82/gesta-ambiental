@@ -36,7 +36,7 @@ export const useAguas = (foccus: Boolean, benfeitoriaId: number) => {
             const aguaAPI = response as AguaType;
             if (aguaAPI.id) apagarAguaQueue(agua.idLocal!);
           } catch (error) {
-            //console.error("Erro ao sincronizar água:", error);
+            //console.log("Erro ao sincronizar água:", error);
           }
         }
       }
@@ -73,7 +73,7 @@ export const useAguas = (foccus: Boolean, benfeitoriaId: number) => {
                      await salvarAguas(aguaData);
               }
             } catch (error) {
-              // console.error("Erro ao buscar águas da API:", error);
+              // console.log("Erro ao buscar águas da API:", error);
             }
     };
   

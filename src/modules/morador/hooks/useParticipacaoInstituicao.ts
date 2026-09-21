@@ -41,7 +41,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
                    apagarParticipacaoInstituicaoQueue(participacaoInsituicao.idLocal!);
                 }
               } catch (error) {
-            //    console.error('Erro na sincronização de participacaoInsituicao:', error);
+            //    console.log('Erro na sincronização de participacaoInsituicao:', error);
               }
             }
           
@@ -76,7 +76,7 @@ export const useParticipacaoInstituicoes = (moradorId: number, foccus: boolean) 
                              }
              
             } catch (error) {
-              //console.error('Erro ao recuperar participacaoInsituicaoes da API:', error);
+              //console.log('Erro ao recuperar participacaoInsituicaoes da API:', error);
             }
           };
           };

@@ -219,7 +219,7 @@ export const useNovoCredito = (benfeitoria: BenfeitoriaType, credito?: CreditoTy
                       throw new Error('Dados de credito Inválidos'); 
                   }
           } catch (error) {
-                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                  //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
           }
     };
   

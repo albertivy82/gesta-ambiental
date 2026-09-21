@@ -57,7 +57,7 @@ export const useRequest = () => {
     });
 
     } catch (error) {
-      console.error('Error Handling url redirect:', error);
+      console.log('Error Handling url redirect:', error);
     }
   };
 

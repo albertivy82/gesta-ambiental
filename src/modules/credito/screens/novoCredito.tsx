@@ -72,7 +72,7 @@ export const NovoCredito = () => {
         navigation.goBack();
       }
     } catch (error) {
-      console.error("Erro no envio:", error);
+      console.log("Erro no envio:", error);
       Alert.alert("Erro ao enviar", "Tente novamente mais tarde.");
     } finally {
       setLoading(false);

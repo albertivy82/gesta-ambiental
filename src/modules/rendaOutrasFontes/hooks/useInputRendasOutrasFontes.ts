@@ -238,7 +238,7 @@ export const useNovaRendaOutrasFontes = (benfeitoria: BenfeitoriaType, rendaOutr
                       throw new Error('Dados de rendaOutrasFontes Inválidos'); 
                   }
           } catch (error) {
-                console.error("ERRO AO BUSCAR RENDA APÓS SALVAR:", error);
+                console.log("ERRO AO BUSCAR RENDA APÓS SALVAR:", error);
           }
     };
   

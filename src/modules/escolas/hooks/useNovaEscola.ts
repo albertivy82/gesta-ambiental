@@ -196,7 +196,7 @@ export const useNovaEscola = (localidadeId: number, escola?: EscolaType) => {
                       throw new Error('Dados de escola Inválidos'); 
                   }
           } catch (error) {
-                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                  //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
           }
     };
 

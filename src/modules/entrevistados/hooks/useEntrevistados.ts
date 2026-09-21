@@ -117,7 +117,7 @@ export const useEntrevistados = (localidadeId: number, foccus: boolean) => {
               );
             }
           } catch (error) {
-            console.error(`SYNC|ENTREV|POST_ERR idLocal=${entrevistado?.idLocal ?? "null"}`, error);
+            console.log(`SYNC|ENTREV|POST_ERR idLocal=${entrevistado?.idLocal ?? "null"}`, error);
           }
         } else {
           console.log(`SYNC|ENTREV|SKIP_OFFLINE idLocal=${entrevistado?.idLocal ?? "null"}`);
@@ -174,7 +174,7 @@ export const useEntrevistados = (localidadeId: number, foccus: boolean) => {
           throw new Error("Dados de entrevistados Inválidos");
         }
       } catch (error) {
-        console.error(`SYNC|ENTREV|API_ERR localidadeId=${localidadeId}`, error);
+        console.log(`SYNC|ENTREV|API_ERR localidadeId=${localidadeId}`, error);
       }
     } else {
       console.log(`SYNC|ENTREV|API_SKIP_OFFLINE localidadeId=${localidadeId}`);

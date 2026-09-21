@@ -128,7 +128,7 @@ export const apagarEscolaQueue = (escolaIdLocal: string) => {
             } 
         });
     } catch (error) {
-        console.error(`Erro ao excluir escola da fila com idLocal ${escolaIdLocal}:`, error);
+        console.log(`Erro ao excluir escola da fila com idLocal ${escolaIdLocal}:`, error);
     }
 };
 
@@ -193,7 +193,7 @@ export const salvarEscolaQueue = (
         }
       });
     } catch (error) {
-      console.error("Erro ao excluir escola sincronizado:", error);
+      console.log("Erro ao excluir escola sincronizado:", error);
     }
   };
   

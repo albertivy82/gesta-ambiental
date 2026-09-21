@@ -267,7 +267,7 @@ export const apagarEntrevistadoQueue = (idLocal: string) => {
         });
        
     } catch (error) {
-        console.error('Erro ao excluir entrevistado da fila:', error);
+        console.log('Erro ao excluir entrevistado da fila:', error);
     }
 };
 
@@ -288,7 +288,7 @@ export const apagarEntrevistadoSyncronizado = (entrevistadoId: number) => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir entrevistado da fila:', error);
+        console.log('Erro ao excluir entrevistado da fila:', error);
     }
 };
 
@@ -313,6 +313,6 @@ export const apagarQueueEntrevistados = () => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir entrevistados da fila:', error);
+        console.log('Erro ao excluir entrevistados da fila:', error);
     }
 };
