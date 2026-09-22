@@ -40,7 +40,7 @@ export const NovoEntrevistado = () => {
           handleSetNumber,
           validateEntrevistado,
           disabled} = useNovoEntrevistado(localidadeId!, entrevistado);
-         
+  console.log("novoEntrevistado.tsx. Como estou recebendo esta localidade para edição?", params)       
           //getAllEntrevistados();
           useEffect(() => {
             if (!entrevistado) return;

@@ -16,6 +16,7 @@ const EntrevistadoSection = ({
   entrevistado,
   children,
 }: EntrevistadoSectionProps) => {
+  console.log("EntrevistadoSection", entrevistado)
   return (
     <View style={{ width: '100%' }}>
       <FormSection

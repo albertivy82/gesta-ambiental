@@ -82,6 +82,8 @@ export const useEntrevistados = (localidadeId: number, foccus: boolean) => {
           try {
             console.log(`SYNC|ENTREV|POST_START idLocal=${entrevistado?.idLocal ?? "null"}`);
 
+            console.log("Entrevistado sinronizado payload", novoEntrevistadoIput);
+
             const response = await connectionAPIPost(
               "/api/entrevistado",
               novoEntrevistadoIput

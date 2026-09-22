@@ -33,7 +33,7 @@ const EntrevistadoDetails = () => {
 
   const entrevistado = params.entrevistado;
   const isFocused = useIsFocused();
-
+  console.log("Entrevistado detail que precisa ter localidade", entrevistado)
   const {
     imovelPresente,
     loadingImovel,

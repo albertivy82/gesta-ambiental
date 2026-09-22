@@ -59,6 +59,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
       
 
   useEffect(() => {
+    //console.log("novoEntrevistadoSendoeditado", novoEntrevistado)
     const { isValid } = validateEntrevistado(novoEntrevistado);
     setDisabled(!isValid);
   }, [novoEntrevistado]);
@@ -71,7 +72,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
           sincronizado:false,  
           idLocal: uuidv4(), 
       };
-      
+      console.log("Objeto off-line", entrevistadoData)
       return salvarEntrevistadoQueue(entrevistadoData);
       
     };
@@ -91,14 +92,26 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
     const isConnected = await testConnection();
       if (isConnected) {
           try {
-            const response = await connectionAPIPost('/api/entrevistado', novoEntrevistado) as EntrevistadoType;
-            if (response && response.id) {
-              return fetchEntrevistadoAPI(response.id);
+            console.log("UseInputEntrevistado - novo registro", novoEntrevistado)
+             const response = await connectionAPIPost(
+              "/api/entrevistado",
+              novoEntrevistado
+            );
+            const EntrevistadoAPI = response as EntrevistadoType;
+             console.log("UseInputEntrevistado - novo registro RESPONSE", response)
+            if (EntrevistadoAPI && EntrevistadoAPI.id) {
+              return fetchEntrevistadoAPI(EntrevistadoAPI.id);
              }
       
-          } catch (error) {
-            return await objetoFila();
-          }
+          } catch (error: any) {
+  console.log("ERRO POST ENTREVISTADO:", error);
+  console.log("ERRO MESSAGE:", error?.message);
+  console.log("ERRO STATUS:", error?.response?.status);
+  console.log("ERRO DATA:", error?.response?.data);
+  console.log("ERRO URL:", error?.config?.url);
+
+  return await objetoFila();
+}
       } else {
         //console.log("está neste looping")
         return await objetoFila();
@@ -143,7 +156,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
                }
         } else {
               if (!entrevistado!.sincronizado && entrevistado!.idLocal) {
-                  return await await salvarEntrevistado(builEntrevistadoAtualizada());
+                  return await salvarEntrevistado(builEntrevistadoAtualizada());
               } else {
                   Alert.alert("Sem conexão", "Este registro já foi sincronizado.");
                   return null;

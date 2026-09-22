@@ -21,6 +21,7 @@ const EditEntrevistadoConfirmation: React.FC<EditConfirmationProps> = ({ entrevi
   const handleConfirmEdit = async () => {
     setLoading(true);
     try {
+      console.log("useEditEntrevistado.tsx", entrevistado)
       navigation.navigate(destino, {entrevistado});
       setModalVisible(false);
       onEditSuccess();
