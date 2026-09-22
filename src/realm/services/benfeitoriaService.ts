@@ -217,7 +217,7 @@ export const setIdImovelFromApiOnBenfeitoria = (idImovelApi: number, imovelIdLoc
   
       return true;
     } catch (error) {
-      console.error("Erro ao atualizar benfeitorias:", error);
+      console.log("Erro ao atualizar benfeitorias:", error);
       return false;
     }
   };
@@ -238,7 +238,7 @@ export const apagarBenfeitoriaSyncronizada = (benfeitoriaId: number) => {
             } 
         });
     } catch (error) {
-        console.error('apagarBenfeitoriaSyncronizado/Erro ao excluir benfeitoria da fila:', error);
+        console.log('apagarBenfeitoriaSyncronizado/Erro ao excluir benfeitoria da fila:', error);
     }
 };
 
@@ -257,7 +257,7 @@ export const apagarBenfeitiaQueue = (idLocal: string) => {
         });
         console.log("apagarBenfeitiaQueue")
     } catch (error) {
-        console.error('Erro ao excluir benfeitoria da fila:', error);
+        console.log('Erro ao excluir benfeitoria da fila:', error);
     }
 };
 
@@ -278,7 +278,7 @@ export const apagarQueueBenfeitoria = () => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir benfeitorias da fila:', error);
+        console.log('Erro ao excluir benfeitorias da fila:', error);
     }
 };
 

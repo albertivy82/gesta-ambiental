@@ -135,7 +135,7 @@ export const setIdBenfeitoriaFromApiOnRendasOF = (idBenfeitoriaApi: number, benf
         }
         return true;
     } catch (error) {
-        console.error('Erro ao atualizar registros de renda:', error);
+        console.log('Erro ao atualizar registros de renda:', error);
         return false;
     }
 };
@@ -150,7 +150,7 @@ export const apagarRendaOutrasFontesQueue = (idLocal: string) => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir renda da fila:', error);
+        console.log('Erro ao excluir renda da fila:', error);
     }
 };
 
@@ -169,6 +169,6 @@ export const apagarRendaOutrasFontesSyncronizada = (rendaOutrasFontesId: number)
             } 
         });
     } catch (error) {
-        console.error('Erro ao excluir a fonte de renda selecionada da fila:', error);
+        console.log('Erro ao excluir a fonte de renda selecionada da fila:', error);
     }
 };

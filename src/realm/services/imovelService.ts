@@ -138,7 +138,7 @@ export const setIdEntrevistadoFromApiOnImovel = (
  
       return true;
     } catch (error) {
-      console.error("Erro ao atualizar imóveis:", error);
+      console.log("Erro ao atualizar imóveis:", error);
       return false;
     }
   };
@@ -276,7 +276,7 @@ export const apagarImovelQueue = (idLocal: string) => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir imóvel da fila:', error);
+        console.log('Erro ao excluir imóvel da fila:', error);
     }
 };
 
@@ -296,7 +296,7 @@ export const apagarImovelSyncronizado = (imovelId: number) => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir imóvel da fila:', error);
+        console.log('Erro ao excluir imóvel da fila:', error);
     }
 };
 
@@ -332,7 +332,7 @@ export const apagarQueueImovel = () => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir imóveis da fila:', error);
+        console.log('Erro ao excluir imóveis da fila:', error);
     }
 };
 
@@ -355,7 +355,7 @@ export const getTodosImoveis = (): imovelBody[] => {
 
     return imoveisLimpos as imovelBody[];
   } catch (error) {
-    console.error('Erro ao buscar todos os imóveis:', error);
+    console.log('Erro ao buscar todos os imóveis:', error);
     return [];
   }
 };

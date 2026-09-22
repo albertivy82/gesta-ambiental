@@ -42,7 +42,7 @@ export const usePostos = (localidadeId: number, foccus:boolean) => {
                                apagarPostoQueue(posto.idLocal!);
                             }
                         } catch (error) {
-                            console.error('Erro na sincronização do posto:', error);
+                            console.log('Erro na sincronização do posto:', error);
                         }
                     }
               

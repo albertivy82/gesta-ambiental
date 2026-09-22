@@ -322,7 +322,7 @@ export const useNovoMorador = (benfeitoria:BenfeitoriaType, morador?: MoradorTyp
                       throw new Error('Dados de morador Inválidos'); 
                   }
           } catch (error) {
-                  //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                  //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
           }
     };
   

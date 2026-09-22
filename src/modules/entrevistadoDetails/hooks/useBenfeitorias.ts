@@ -92,7 +92,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                                 }
                                 
                         } catch (error) {
-                            console.error('Erro na sincronização da benfeitoria:', error);
+                            console.log('Erro na sincronização da benfeitoria:', error);
                         }
                     }
                 
@@ -136,7 +136,7 @@ export const convertToBenfeitoriaInput = (benfeitoria: any): BenfeitoriaInput =>
                 await salvarBenfeitorias(bftData);
                }
         } catch (error) {
-                //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
         }
         } else {
             console.log(`SYNC|bnfritoris|API_SKIP_OFFLINE imovel=${imovelId}`);

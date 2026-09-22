@@ -139,7 +139,7 @@ export const setIdBenfeitoriaFromApiOnAguas = (idBenfeitoriaApi: number, benfeit
     }
     return true;
   } catch (error) {
-   // console.error('Erro ao atualizar água:', error);
+   // console.log('Erro ao atualizar água:', error);
     return false;
   }
 };
@@ -154,7 +154,7 @@ export const apagarAguaQueue = (idLocal: string) => {
       }
     });
   } catch (error) {
-    console.error('Erro ao excluir água da fila:', error);
+    console.log('Erro ao excluir água da fila:', error);
   }
 };
 
@@ -172,6 +172,6 @@ export const apagarAguaSyncronizada = (aguaId: number) => {
             } 
         });
     } catch (error) {
-        console.error('apagarBenfeitoriaSyncronizado/Erro ao excluir benfeitoria da fila:', error);
+        console.log('apagarBenfeitoriaSyncronizado/Erro ao excluir benfeitoria da fila:', error);
     }
 };

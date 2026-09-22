@@ -14,7 +14,7 @@ const ImovelService = ()=>{
         return imovel;
       }
     } catch (error) {
-      console.error('Erro ao criar/atualizar imóvel:', error);
+      console.log('Erro ao criar/atualizar imóvel:', error);
       throw error;
     }
   };

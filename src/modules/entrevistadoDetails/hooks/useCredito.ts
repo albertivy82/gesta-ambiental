@@ -38,7 +38,7 @@ export const useCreditos = (foccus: Boolean, benfeitoriaId: number) => {
             const creditoAPI = response as CreditoType;
             if (creditoAPI.id) apagarCreditoQueue(credito.idLocal!);
           } catch (error) {
-           // console.error("Erro ao sincronizar crédito:", error);
+           // console.log("Erro ao sincronizar crédito:", error);
           }
         }
       }
@@ -76,7 +76,7 @@ export const useCreditos = (foccus: Boolean, benfeitoriaId: number) => {
         await salvarCreditos(dados);
       }
     } catch (error) {
-      // console.error("Erro ao buscar créditos da API:", error);
+      // console.log("Erro ao buscar créditos da API:", error);
     }
   };
   

@@ -48,7 +48,7 @@ export const useEditUser = () =>{
             const response = await connectionAPIGet<LocalidadeType>(`/api/localidade/${id}`);
               await salvarLocalidade(response);
           } catch (error) {
-              //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+              //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
               throw error;
           }
         };

@@ -12,7 +12,7 @@ export const syncPendingImoveis = async () => {
       realm.delete(imovel);
       });
     } catch (error) {
-      console.error('Erro ao sincronizar imóvel:', error);
+      console.log('Erro ao sincronizar imóvel:', error);
     }
   }
 };*/

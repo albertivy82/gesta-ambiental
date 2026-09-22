@@ -170,7 +170,7 @@ const enviaBenfeitoriaEdicao= async () =>{
                   return local;
                 }
           } catch (error) {
-            //console.error("Erro ao enviar PUT:", error);
+            //console.log("Erro ao enviar PUT:", error);
             const local = await salvarBenfeitoria(buildBenfeitoriaAtualizada());
             Alert.alert("Erro ao enviar edição", "Tente novamente online.");
             return local;
@@ -214,7 +214,7 @@ const buildBenfeitoriaAtualizada = (): BenfeitoriaType => ({
                     throw new Error('Dados de benfeitoria Inválidos'); 
                 }
         } catch (error) {
-                //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
         }
   };
 

@@ -231,7 +231,7 @@ export const useNovoServicoComunicacao = (benfeitoria: BenfeitoriaType, servicoC
       throw new Error('Dados de servCom inválidos');
     }
   } catch (error) {
-    console.error(
+    console.log(
       'ERRO AO BUSCAR SERVIÇO DE COMUNICAÇÃO:',
       error
     );

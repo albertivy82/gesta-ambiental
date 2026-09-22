@@ -48,7 +48,7 @@ export const useAtividadesProdutivas = (foccus: Boolean, benfeitoriaId: number) 
                   apagarAtividadeProdutivaQueue(atividade.idLocal!);
                 }
               } catch (error) {
-                //console.error("Erro na sincronização da atividade produtiva:", error);
+                //console.log("Erro na sincronização da atividade produtiva:", error);
               }
             }
           

@@ -142,7 +142,7 @@ export const setIdBenfeitoriaFromApiOnCS = (idBenfeitoriaApi: number, benfeitori
     }
     return true;
   } catch (error) {
-    console.error('Erro ao atualizar serviços de comunicação:', error);
+    console.log('Erro ao atualizar serviços de comunicação:', error);
     return false;
   }
 };
@@ -157,7 +157,7 @@ export const apagarServicoComunicacaoQueue = (idLocal: string) => {
       }
     });
   } catch (error) {
-    console.error('Erro ao excluir serviço de comunicação da fila:', error);
+    console.log('Erro ao excluir serviço de comunicação da fila:', error);
   }
 };
 
@@ -175,6 +175,6 @@ export const apagarServicosComunicacaoSyncronizada = (servicosComunicacaoId: num
             } 
         });
     } catch (error) {
-        console.error('Erro ao excluir benfeitoria da fila:', error);
+        console.log('Erro ao excluir benfeitoria da fila:', error);
     }
 };

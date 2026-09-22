@@ -178,7 +178,7 @@ const objetoFila = () => {
                       return local;
                     }
               } catch (error) {
-                //console.error("Erro ao enviar PUT:", error);
+                //console.log("Erro ao enviar PUT:", error);
                 const local = await salvarParticipacaoInstituicao(buildParticipacaoInstituicaoAtualizada());
              //   Alert.alert("Erro ao enviar edição", "Tente novamente online.");
                 return local;
@@ -222,7 +222,7 @@ const objetoFila = () => {
                      //   throw new Error('Dados de participacao instituicao Inválidos'); 
                     }
             } catch (error) {
-                    //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                    //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
             }
       };
 

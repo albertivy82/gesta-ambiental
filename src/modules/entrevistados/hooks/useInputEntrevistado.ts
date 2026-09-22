@@ -191,7 +191,7 @@ export const useNovoEntrevistado = (id:number, entrevistado?: EntrevistadoType) 
                         throw new Error('Dados de benfeitoria Inválidos'); 
                     }
             } catch (error) {
-                    //console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                    //console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
             }
     };
     

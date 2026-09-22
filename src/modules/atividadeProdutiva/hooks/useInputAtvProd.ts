@@ -242,7 +242,7 @@ export const useNovaAtvProd = (benfeitoria:BenfeitoriaType, atividade?: Atividad
                       throw new Error('Dados de atividade Inválidos'); 
                   }
           } catch (error) {
-                  console.error("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
+                  console.log("CONTAGEM DE BENFEITORIAS-ERRO!!!:", error);
           }
     };
   

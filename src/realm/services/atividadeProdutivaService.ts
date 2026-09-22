@@ -141,7 +141,7 @@ export const setIdBenfeitoriaFromApiOnAtvProd = (idBenfeitoriaApi: number, benfe
     }
     return true;
   } catch (error) {
-    //console.error('Erro ao atualizar atividades produtivas:', error);
+    //console.log('Erro ao atualizar atividades produtivas:', error);
     return false;
   }
 };
@@ -156,7 +156,7 @@ export const apagarAtividadeProdutivaQueue = (idLocal: string) => {
       }
     });
   } catch (error) {
-    console.error('Erro ao excluir atividade produtiva da fila:', error);
+    console.log('Erro ao excluir atividade produtiva da fila:', error);
   }
 };
 
@@ -174,6 +174,6 @@ export const apagarAtividadeProdutivaSyncronizada = (atividadeProdutivaId: numbe
             } 
         });
     } catch (error) {
-        console.error('apagarBenfeitoriaSyncronizado/Erro ao excluir AtividadeProdutiva da fila:', error);
+        console.log('apagarBenfeitoriaSyncronizado/Erro ao excluir AtividadeProdutiva da fila:', error);
     }
 };

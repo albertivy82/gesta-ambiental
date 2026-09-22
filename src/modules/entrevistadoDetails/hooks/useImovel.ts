@@ -76,19 +76,19 @@ export const useImovel = (idEntrevistado: number, foccus:boolean) => {
             } catch (error: any) {
               if (error.response) {
                 // Erro HTTP com resposta do servidor
-                //console.error("❌ Erro da API (HTTP 400 ou 500):");
-                //console.error("Status:", error.response.status);
-                //console.error("Headers:", error.response.headers);
-                //console.error("Body:", JSON.stringify(error.response.data, null, 2));
+                //console.log("❌ Erro da API (HTTP 400 ou 500):");
+                //console.log("Status:", error.response.status);
+                //console.log("Headers:", error.response.headers);
+                //console.log("Body:", JSON.stringify(error.response.data, null, 2));
               } else if (error.request) {
                 // Requisição enviada, mas sem resposta
-                //console.error("⚠️ Requisição enviada, mas sem resposta da API:");
-                //console.error(error.request);
+                //console.log("⚠️ Requisição enviada, mas sem resposta da API:");
+                //console.log(error.request);
               } else {
                 // Erro de configuração, timeout, etc.
-               // console.error("❌ Erro inesperado no cliente:");
-               // console.error("Mensagem:", error.message);
-               // console.error("Erro completo:", error);
+               // console.log("❌ Erro inesperado no cliente:");
+               // console.log("Mensagem:", error.message);
+               // console.log("Erro completo:", error);
               }
             }
            

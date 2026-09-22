@@ -79,7 +79,7 @@ export const useEscolas = (
             }
 
           } catch (error) {
-            console.error(
+            console.log(
               "Erro na sincronização da escola:",
               error
             );
@@ -130,7 +130,7 @@ export const useEscolas = (
 
     } catch (error) {
 
-      console.error(
+      console.log(
         "Erro ao recuperar escolas da API:",
         error
       );

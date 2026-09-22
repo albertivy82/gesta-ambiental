@@ -151,7 +151,7 @@ export const setIdBenfeitoriaFromApiOnMorador = (idBenfeitoriaApi: number, benfe
         }
         return true;
     } catch (error) {
-       // console.error('Erro ao atualizar registros de moradores:', error);
+       // console.log('Erro ao atualizar registros de moradores:', error);
         return false;
     }
 };
@@ -164,7 +164,7 @@ export const getMoradorComPaiOffLine = (benfeitoriaIdLocal: string):MoradorType[
         return JSON.parse(JSON.stringify(moradorQueue)) as MoradorType[];
         
     } catch (error) {
-        //console.error('Erro ao atualizar registros de moradores:', error);
+        //console.log('Erro ao atualizar registros de moradores:', error);
     }
 };
 
@@ -178,7 +178,7 @@ export const apagarMoradorQueue = (idLocal: string) => {
             }
         });
     } catch (error) {
-        console.error('Erro ao excluir morador da fila:', error);
+        console.log('Erro ao excluir morador da fila:', error);
     }
 };
 
@@ -197,6 +197,6 @@ export const apagarMoradorSyncronizada = (moradorId: number) => {
             } 
         });
     } catch (error) {
-        console.error('Erro ao excluir morador da fila:', error);
+        console.log('Erro ao excluir morador da fila:', error);
     }
 };
