@@ -66,7 +66,8 @@ export const NovoCredito = () => {
     try {
       const creditoSalva = await enviarRegistro();
       if (creditoSalva) {
-         navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+        // navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+        navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível salvar o crédito. Tente novamente.");
         navigation.goBack();

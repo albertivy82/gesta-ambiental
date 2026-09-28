@@ -79,7 +79,8 @@ export const NovaRendaOutrasFontes = () => {
 
       const rendaSalva = await enviarRegistro();
       if (rendaSalva) {
-        navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+        //navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+        navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

@@ -106,7 +106,8 @@ export const NovaAgua = () => {
       setLoading(true);
       const aguaSalva = await enviarRegistro();
       if (aguaSalva) {
-         navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+         //navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+         navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível salvar a benfeitoria. Tente novamente.");
         navigation.goBack();

@@ -153,7 +153,8 @@ const handleEnviar = async () => {
     setLoading(true);
            const moradorSalvo = await enviarRegistro(); 
                if (moradorSalvo){
-                 navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+                 //navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+                 navigation.goBack();
                } else {
                  Alert.alert("Erro", "Não foi possível salvar a morador. Tente novomente.");
                  navigation.goBack();

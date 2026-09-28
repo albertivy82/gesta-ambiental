@@ -68,7 +68,8 @@ export const NovaAtividade = () => {
       const atividadeSalva = await enviarRegistro();
       console.log("ppp", atividadeSalva);
       if (atividadeSalva) {
-         navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+         //navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+         navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível salvar a atividadeProdutiva. Tente novamente.");
         navigation.goBack();

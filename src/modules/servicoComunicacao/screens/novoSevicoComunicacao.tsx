@@ -101,7 +101,8 @@ export const NovoServicoComunicacao = () => {
       setLoading(true);
       const servicoComunicacaoSalvo = await enviarRegistro();
       if (servicoComunicacaoSalvo) {
-         navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+         //navigation.replace("EntrevistadoDetails", {entrevistado: params.entrevistado});
+         navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível salvar serviço de comunicação. Tente novamente.");
         navigation.goBack();
