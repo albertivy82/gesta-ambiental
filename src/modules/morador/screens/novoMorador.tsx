@@ -224,9 +224,9 @@ const handleEnviar = async () => {
         <GlobalContainer>
 
 
-             <EntrevistadoSection entrevistado={params.entrevistado} />
-             <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
-             <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria}  />
+             <EntrevistadoSection entrevistado={params.entrevistado} actionsEnabled={false}/>
+             <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} actionsEnabled={false}/>
+             <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria}  actionsEnabled={false}/>
              
               <FormSection
                 title="D - Morador da Construção"

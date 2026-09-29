@@ -14,6 +14,7 @@ import EntrevistadoSection from "../../entrevistadoDetails/ui-component/Entrevis
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+import FormSection from "../../../shared/components/FormSection";
 
 
 export interface NovaAtividadeParams {
@@ -92,9 +93,17 @@ export const NovaAtividade = () => {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <GlobalContainer>
-         <EntrevistadoSection entrevistado={params.entrevistado} />
-        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
-        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
+        <EntrevistadoSection entrevistado={params.entrevistado} actionsEnabled={false}/>
+        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} actionsEnabled={false}/>
+        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} actionsEnabled={false}/>
+       
+        <FormSection
+          title="F - Atividades Produtivas dos Moradores"
+          initiallyOpen
+          collapsible={false}
+        >
+       
+       
         <RenderPicker
           label="A qual ramo pertence a atividade realizada?"
           selectedValue={novaAtividade.atividade}
@@ -146,7 +155,7 @@ export const NovaAtividade = () => {
           disabled={loading}   // 👈 trava só enquanto envia
         />
 
-
+        </FormSection>
       </GlobalContainer>
     </ScrollView>
   )

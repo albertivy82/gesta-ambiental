@@ -15,6 +15,7 @@ import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/Benfeitor
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+import FormSection from "../../../shared/components/FormSection";
 
 export interface NovoCreditoParams {
   entrevistado: EntrevistadoType;
@@ -101,9 +102,14 @@ export const NovaRendaOutrasFontes = () => {
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <GlobalContainer>
 
-        <EntrevistadoSection entrevistado={params.entrevistado} />
-        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
-        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
+        <EntrevistadoSection entrevistado={params.entrevistado} actionsEnabled={false}/>
+        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} actionsEnabled={false}/>
+        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} actionsEnabled={false}/>
+
+          <FormSection
+                title="H - Outras Fontes de Renda"
+                initiallyOpen collapsible={false}
+          >
 
         {val1 && (
           <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
@@ -180,6 +186,9 @@ export const NovaRendaOutrasFontes = () => {
           color={"#ff4500"}
           disabled={loading}   // 👈 trava só enquanto envia
         />
+
+
+</FormSection>
 
 
       </GlobalContainer>

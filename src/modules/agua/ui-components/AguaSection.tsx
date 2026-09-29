@@ -38,6 +38,13 @@ const AguaSection = ({
           agua.tipoDeFornecimento
         )}
 
+          {agua.profundidadePoco != null &&
+          agua.profundidadePoco > 0 &&
+          renderField(
+            'Profundidade do poço',
+            `${agua.profundidadePoco} m`
+          )}
+
         {renderField(
           'Qualidade da água',
           agua.qualidadeDaAgua
@@ -62,13 +69,6 @@ const AguaSection = ({
           'Sabor da água',
           agua.saborDagua
         )}
-
-        {agua.profundidadePoco != null &&
-          agua.profundidadePoco > 0 &&
-          renderField(
-            'Profundidade do poço',
-            `${agua.profundidadePoco} m`
-          )}
 
         {renderField(
           'Sincronizado',

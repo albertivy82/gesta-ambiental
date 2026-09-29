@@ -233,8 +233,8 @@ export const NovaBenfeitoria=()=>{
     <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
             <GlobalContainer>
 
-              <EntrevistadoSection entrevistado={params.entrevistado} />
-              <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
+              <EntrevistadoSection entrevistado={params.entrevistado} actionsEnabled={false}/>
+              <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} actionsEnabled={false}/>
 
 
 

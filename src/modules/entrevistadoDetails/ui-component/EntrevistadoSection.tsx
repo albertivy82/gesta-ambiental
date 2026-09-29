@@ -10,11 +10,13 @@ import EditEntrevistadoConfirmation from './UseEditEntrevistado';
 interface EntrevistadoSectionProps {
   entrevistado: EntrevistadoType;
   children?: React.ReactNode;
+  actionsEnabled?: boolean;
 }
 
 const EntrevistadoSection = ({
   entrevistado,
   children,
+  actionsEnabled = true,
 }: EntrevistadoSectionProps) => {
   console.log("EntrevistadoSection", entrevistado)
   return (
@@ -149,7 +151,7 @@ const EntrevistadoSection = ({
         )}
 
        
-
+        {actionsEnabled && (
          <View
             style={{
               flexDirection: 'row',
@@ -186,6 +188,8 @@ const EntrevistadoSection = ({
               }}
             />
           </View>
+
+          )}
 
         {children}
       </FormSection>

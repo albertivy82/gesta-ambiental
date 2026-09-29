@@ -13,6 +13,7 @@ import EntrevistadoSection from "../../entrevistadoDetails/ui-component/Entrevis
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/BenfeitoriaSection";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+import FormSection from "../../../shared/components/FormSection";
 
 
 export interface NovoCreditoParams {
@@ -91,10 +92,16 @@ export const NovoCredito = () => {
     <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA' }}>
       <GlobalContainer>
 
-        <EntrevistadoSection entrevistado={params.entrevistado} />
-        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
-        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
+        <EntrevistadoSection entrevistado={params.entrevistado} actionsEnabled={false}/>
+        <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} actionsEnabled={false}/>
+        <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} actionsEnabled={false}/>
         
+
+         <FormSection
+          title="G - Linhas de Crédito Acessada pelos Moradores"
+          initiallyOpen
+          collapsible={false}
+        >
         
         <Input
           value={novoCredito.nome}
@@ -131,7 +138,7 @@ export const NovoCredito = () => {
           disabled={loading}   // 👈 trava só enquanto envia
         />
 
-
+          </FormSection>
       </GlobalContainer>
     </ScrollView>
   );

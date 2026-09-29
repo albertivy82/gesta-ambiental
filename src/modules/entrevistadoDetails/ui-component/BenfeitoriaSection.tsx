@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, View } from 'react-native';
 
 import FormSection from '../../../shared/components/FormSection';
 import DeleteConfirmation from '../../../shared/components/input/DeleteComponent';
@@ -11,12 +11,14 @@ import { imovelBody } from '../../../shared/types/imovelType';
 import EditBenfeitoriaConfirmation from './UseEditBenfeitoria';
 
 
+
 interface BenfeitoriaSectionProps {
   entrevistado: EntrevistadoType;
   imovel: imovelBody;
   benfeitoria: BenfeitoriaType;
   title?: string;
   children?: React.ReactNode;
+  actionsEnabled?: boolean;
 }
 
 const BenfeitoriaSection = ({
@@ -24,22 +26,77 @@ const BenfeitoriaSection = ({
   imovel,
   benfeitoria,
   children,
+  actionsEnabled = true,
   title = 'C - Construções e estruturas do imóvel',
 }: BenfeitoriaSectionProps) => {
+
+const pulseAnim = useRef(new Animated.Value(1)).current;
+
+useEffect(() => {
+  const animation = Animated.loop(
+    Animated.sequence([
+      Animated.timing(pulseAnim, {
+        toValue: 0.2,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(pulseAnim, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+    ])
+  );
+
+  animation.start();
+
+  return () => animation.stop();
+}, [pulseAnim]);
+
+
   return (
     <View style={{ width: '100%' }}>
       <FormSection
         title={title}
         helperText="Toque para visualizar"
         summary={
-          <>
-            <Text style={{ color: 'gray' }}>
-              {benfeitoria.tipoBenfeitoria || 'Tipo não informado'}
-              {` `}
-              {benfeitoria.funcao || 'Função não informada'}
-            </Text>
-          </>
-        }
+                <View>
+                  <Text style={{ color: 'gray' }}>
+                    {benfeitoria.tipoBenfeitoria || 'Tipo não informado'}
+                    {` `}
+                    {benfeitoria.funcao || 'Função não informada'}
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: 8,
+                    }}
+                  >
+                    <Animated.View
+                      style={{
+                        width: 15,
+                        height: 15,
+                        borderRadius: 5,
+                        backgroundColor: '#0a7e19',
+                        marginRight: 7,
+                        opacity: pulseAnim,
+                      }}
+                    />
+
+                    <Text
+                      style={{
+                        color: '#0a7e19',
+                        fontWeight: 'bold',
+                        flexShrink: 1,
+                      }}
+                    >
+                      ATENÇÃO: Verifique se há levantamentos pendentes sobre esta construção 👇
+                    </Text>
+                  </View>
+                </View>
+          }
       >
 
         <Text
@@ -113,6 +170,8 @@ const BenfeitoriaSection = ({
           benfeitoria.informativoPredominante
         )}
 
+        {actionsEnabled && (
+
         <View
                     style={{
                       flexDirection: 'row',
@@ -151,6 +210,8 @@ const BenfeitoriaSection = ({
                   }} 
                   />
                 </View>
+
+                )}
 
         {children}
       </FormSection>

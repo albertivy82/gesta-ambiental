@@ -690,14 +690,6 @@ export const NovoEntrevistado = () => {
               </Text>
             }
           >
-            {valorSalvoCuidadosSaude && (
-                        <View style={{ marginBottom: 5 }}>
-                          <Text style={{ fontStyle: 'italic', color: 'gray' }}>
-                            Valor salvo sobre o atendimento de saúde: {valorSalvoCuidadosSaude}
-                          </Text>
-                        </View>
-            )}
-
             {valorSalvoInstituicaoConhecida && (
                 <View style={{ marginBottom: 5 }}>
                   <Text style={{ fontStyle: 'italic', color: 'gray' }}>
@@ -728,6 +720,15 @@ export const NovoEntrevistado = () => {
                     />
                 </View>
                )}
+
+
+               {valorSalvoCuidadosSaude && (
+                        <View style={{ marginBottom: 5 }}>
+                          <Text style={{ fontStyle: 'italic', color: 'gray' }}>
+                            Valor salvo sobre o atendimento de saúde: {valorSalvoCuidadosSaude}
+                          </Text>
+                        </View>
+            )}
 
             <CheckboxSelector
                 options={saudeOptions}

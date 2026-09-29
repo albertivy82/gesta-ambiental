@@ -12,12 +12,14 @@ interface ImovelSectionProps {
   entrevistado: EntrevistadoType;
   imovel: imovelBody;
   children?: React.ReactNode;
+  actionsEnabled?: boolean;
 }
 
 const ImovelSection = ({
   entrevistado,
   imovel,
   children,
+  actionsEnabled = true,
 }: ImovelSectionProps) => {
   return (
     <View style={{ width: '100%' }}>
@@ -100,6 +102,10 @@ const ImovelSection = ({
           imovel.programaInfraSaneamento
         )}
 
+
+{actionsEnabled && (
+   
+
         <View
             style={{
               flexDirection: 'row',
@@ -135,7 +141,7 @@ const ImovelSection = ({
              }} 
             />
           </View>
-
+)}
         {children}
       </FormSection>
     </View>

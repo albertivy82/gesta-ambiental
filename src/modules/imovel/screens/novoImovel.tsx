@@ -190,7 +190,7 @@ export const NovoImovel = () => {
       <ScrollView style={{ flex: 1, backgroundColor: '#010203' }}>
         <GlobalContainer>
 
-          <EntrevistadoSection entrevistado={params.entrevistado} />
+          <EntrevistadoSection entrevistado={params.entrevistado} actionsEnabled={false}/>
 
             <FormSection
                 title="B - Caracterização de Imóvel"

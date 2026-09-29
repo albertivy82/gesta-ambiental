@@ -85,7 +85,12 @@ const CheckboxSelector: React.FC<CheckboxSelectorProps> = ({
           // - se alguma não-exclusiva foi marcada → bloqueia as exclusivas
           const disabled =
             (hasExclusiveSelected && !isExclusive) ||
-            (hasNonExclusiveSelected && isExclusive);
+            (hasNonExclusiveSelected && isExclusive) ||
+            (
+              hasExclusiveSelected &&
+              isExclusive &&
+              !selectedOptions.includes(option)
+            );
 
           return (
             <View 
