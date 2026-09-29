@@ -18,6 +18,7 @@ import EntrevistadoSection from "../../entrevistadoDetails/ui-component/Entrevis
 import ImovelSection from "../../imovel/ui-component/imovelSeccion";
 import { useNovoMorador } from "../hooks/useInputMorador";
 import { doencasOptions, estadoCivilOptions } from "../ui-components/opcoesMorador";
+import FormSection from "../../../shared/components/FormSection";
 
 
 export interface NovoMoradorParams {
@@ -221,9 +222,15 @@ const handleEnviar = async () => {
       <ScrollView style={{ flex: 1, backgroundColor: '#E6E8FA'  }}>
         <GlobalContainer>
 
+
              <EntrevistadoSection entrevistado={params.entrevistado} />
              <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
              <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria}  />
+             
+              <FormSection
+                title="D - Morador da Construção"
+                initiallyOpen collapsible={false}
+          >
              <CheckboxSelector
                options={perfilOptions}
                selectedValues={novoMorador.perfil ? [novoMorador.perfil] : []}
@@ -406,6 +413,7 @@ const handleEnviar = async () => {
               disabled={loading}   // 👈 trava só enquanto envia
               />
       
+           </FormSection>
 
         </GlobalContainer>
         </ScrollView>

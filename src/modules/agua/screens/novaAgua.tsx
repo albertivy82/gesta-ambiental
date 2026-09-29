@@ -18,6 +18,7 @@ import BenfeitoriaSection from "../../entrevistadoDetails/ui-component/Benfeitor
 import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
+import FormSection from "../../../shared/components/FormSection";
 
 
 export interface NovaAguaParams {
@@ -137,8 +138,11 @@ export const NovaAgua = () => {
         <EntrevistadoSection entrevistado={params.entrevistado} />
         <ImovelSection entrevistado={params.entrevistado} imovel={params.imovel} />
         <BenfeitoriaSection entrevistado={params.entrevistado} imovel={params.imovel} benfeitoria={params.benfeitoria} />
-
-        {tipoFornecimento && (
+      
+       <FormSection title="E - Informações sobre a qualidade da Água da construção"
+       initiallyOpen collapsible={false}>
+       
+       {tipoFornecimento && (
           <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
             Informação dada anteriormente: {tipoFornecimento}
           </Text>
@@ -165,6 +169,27 @@ export const NovaAgua = () => {
             />
           </View>
         )}
+
+         {profundidade && (
+          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+            área informada anteriormente: {profundidade}
+          </Text>
+        )}
+        {fornecimentoAgua.includes('POÇO') && (
+          <View style={{ marginTop: 10 }}>
+            <Input
+              value={novaAgua.profundidadePoco?.toString() || ''}
+              maxLength={5}
+              onChange={handleOnChangeProfundidade}
+              keyboardType='decimal-pad'
+              placeholder="Ex: 10.5"
+              placeholderTextColor={theme.colors.grayTheme.gray80}
+              margin="15px 10px 30px 5px"
+              title="Profundidade do Poço"
+            />
+          </View>
+        )}
+
 
         <RenderPicker
           label="Qualidade da água"
@@ -224,26 +249,7 @@ export const NovaAgua = () => {
           options={saborOptions}
         />
 
-        {profundidade && (
-          <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
-            área informada anteriormente: {profundidade}
-          </Text>
-        )}
-        {fornecimentoAgua.includes('POÇO') && (
-          <View style={{ marginTop: 10 }}>
-            <Input
-              value={novaAgua.profundidadePoco?.toString() || ''}
-              maxLength={5}
-              onChange={handleOnChangeProfundidade}
-              keyboardType='decimal-pad'
-              placeholder="Ex: 10.5"
-              placeholderTextColor={theme.colors.grayTheme.gray80}
-              margin="15px 10px 30px 5px"
-              title="Profundidade do Poço"
-            />
-          </View>
-        )}
-
+       
 
         <FormErrors
           visible={showErrors && disabled}
@@ -256,7 +262,7 @@ export const NovaAgua = () => {
           color={"#ff4500"}
           disabled={loading}   // 👈 trava só enquanto envia
         />
-
+        </FormSection>
       </GlobalContainer>
     </ScrollView>
   );
