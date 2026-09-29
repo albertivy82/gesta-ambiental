@@ -64,7 +64,7 @@ export const optionsTipoBenfeitoria = [
   export const optionsOrigemMaterial = [
     'Loja da cidade',
     'Extração em local distante (acima de 5 km)',
-    'Estação próxima',
+    'Extração próxima',
     'Extração em área objeto de UC',
     'Não se aplica',
     'Não declarado',
