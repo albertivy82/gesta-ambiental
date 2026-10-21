@@ -18,7 +18,6 @@ export const tempomoradiaOptions = [
       
  export const saudeOptions =[
         'Consulta com médico no posto de saúde da comunidade',
-        'Atendimento no Posto de Saúde com Médico',
         'Atendimento no Programa Saúde da Família',
         'Atendimento por Agentes Comunitários de Saúde',
         'Trata com curandeiro',
