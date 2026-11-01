@@ -118,7 +118,7 @@ useEffect(() => {
         {renderField(
           'Área aproximada',
           benfeitoria.areaBenfeitoria != null
-            ? `${benfeitoria.areaBenfeitoria} km²`
+            ? `${benfeitoria.areaBenfeitoria} m²`
             : undefined
         )}
         {renderField(

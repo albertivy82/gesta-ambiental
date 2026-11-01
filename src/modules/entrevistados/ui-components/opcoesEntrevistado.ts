@@ -28,7 +28,7 @@ export const tempomoradiaOptions = [
         'Outros'
       ];
   export const Escolaridade = [
-        "Analfabeto",
+        "Não alfabetizado",
         "Fundamental completo",
         "Fundamental incompleto",
         "Ensino médio completo",
@@ -40,7 +40,6 @@ export const tempomoradiaOptions = [
 
   export const Naturalidade = [
   'Em outro estado',
-  'Em outro país',
   'Abaetetuba',
   'Abel Figueiredo',
   'Acará',

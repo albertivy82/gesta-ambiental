@@ -5,5 +5,6 @@ export enum MetodoTratamentoAgua {
     OSMOSE_REVERSA = "OSMOSE_REVERSA",
     DESTILACAO = "DESTILACAO",
     ULTRAVIOLETA = "ULTRAVIOLETA",
+    NENHUM = "NENHUM",
     OUTROS = "OUTROS"
 }

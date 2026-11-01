@@ -53,6 +53,5 @@ export  const pavimentacaoOptions=[
         'Asfalto',
         'Bloket',
         'Picarra',
-        'Nenhum',
         'Outro'
 ];

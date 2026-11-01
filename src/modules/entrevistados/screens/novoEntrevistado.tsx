@@ -842,7 +842,7 @@ export const NovoEntrevistado = () => {
                 placeholder="Quantas vezes?"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
-                title="Já sofreu Assaltos nesse local? Quantas vezes?"
+                title="Sofreu Assaltos nesse local nos últimos 2 anos? Quantas vezes?"
                 ref={sofreuAssaltosInput}
                 onSubmitEditing={() => presenciouAssaltosInput.current?.focus()}
               />
@@ -855,7 +855,7 @@ export const NovoEntrevistado = () => {
                 placeholder="Quantas vezes?"
                 placeholderTextColor={theme.colors.grayTheme.gray80}
                 margin="15px 10px 30px 5px"
-                title="Já presenciou Assaltos nesse local? Quantas vezes?"
+                title="Presenciou Assaltos nesse local nos últimos 2 anos? Quantas vezes?"
                 ref={presenciouAssaltosInput}
                 onSubmitEditing={() => violenciaLocalInput.current?.focus()}
               />
