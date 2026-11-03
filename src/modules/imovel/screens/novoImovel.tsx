@@ -12,7 +12,7 @@ import { EntrevistadoType } from "../../../shared/types/EntrevistadoType";
 import { imovelBody } from "../../../shared/types/imovelType";
 import EntrevistadoSection from "../../entrevistadoDetails/ui-component/EntrevistadoSection";
 import { useNovoImovel } from "../hooks/useInputImovel";
-import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
+import { documentacaoOptions, fundiarioOptions, lazerOptions, limitesOptions, pavimentacaoOptions, saneamentoOptions, soloOptions, vizinhoOptions } from "../ui-component/opcoesImovel";
 import { GlobalContainer } from "../../../shared/components/globalStyles/GlobalContainer";
 import FormSection from "../../../shared/components/FormSection";
 
@@ -50,6 +50,7 @@ export const NovoImovel = () => {
   const [equipamentosUrbanosInformados, setEquipamentosUrbanosInformados] = useState<string>(''); 
   const [outrosEquipamentosUrbanos, setOutrosEquipamentosUrbanos] = useState<string>('');
   const [espacosLazer, setEspacosLazer]  = useState<string[]>([]);
+  const [infraSaneamento, setInfraSaneamento]  = useState<string[]>([]);
   const [outrosEspacosLazer, setOutrosEspacosLazer] = useState<string>('');
   const simNaoOptions =  Object.values(SimNao);
 
@@ -99,15 +100,16 @@ export const NovoImovel = () => {
 
  
   useEffect(() => {
-    const consolidaEspacosLaze = [
+    const consolidaEspacosLazer = [
         ...espacosLazer.filter((item) => item !== 'Outros'),
         ...(outrosEspacosLazer ? [outrosEspacosLazer] : []),
     ];
 
-    handleArrayFieldChange('espacosEsporteLazer', consolidaEspacosLaze);
+    handleArrayFieldChange('espacosEsporteLazer', consolidaEspacosLazer);
   }, [espacosLazer, outrosEspacosLazer]);
 
-     
+  
+   
     
     const ruaInput = useRef<TextInput>(null);
     const numeroInput = useRef<TextInput>(null);
@@ -137,7 +139,7 @@ export const NovoImovel = () => {
     
       // Campos de texto
       handleOnChangeInput(imovel.linhasDeBarco ?? '', 'linhasDeBarco');
-      handleOnChangeInput(imovel.programaInfraSaneamento ?? '', 'programaInfraSaneamento');
+      //handleOnChangeInput(imovel.programaInfraSaneamento ?? '', 'programaInfraSaneamento');
     }, [imovel]);
     
 
@@ -149,6 +151,7 @@ export const NovoImovel = () => {
     const valorSalvoLongitude = imovel?.longitude ?? '';
     const linhasOnibusVelha = imovel?.linhasOnibus ?? '';
     const valorSalvoEsporteLazer = imovel?.espacosEsporteLazer ?? '';
+    const valorSalvoInfraSneamento = imovel?.programaInfraSaneamento ?? '';
     
      const handleEnviar = async () => {
           if (loading) return;
@@ -519,15 +522,23 @@ export const NovoImovel = () => {
             )}
 
               
-             <Input 
-              value={novoImovel.programaInfraSaneamento} 
-              maxLength={450}
-              onChange={(event)=> handleOnChangeInput(event, 'programaInfraSaneamento')}
-              placeholder="Conhece algum programa destinado para a área?"
-              placeholderTextColor={theme.colors.grayTheme.gray80}
-              margin="15px 10px 30px 5px"
-              title="Programas de Infraestrutura e Saneamento:"
-              />
+              {valorSalvoInfraSneamento    && (
+                <Text style={{ fontStyle: 'italic', color: 'gray', marginBottom: 5 }}>
+                  Informada dada anteriormente: {valorSalvoInfraSneamento   }
+                </Text>
+                 )}
+                <CheckboxSelector
+                options={saneamentoOptions}
+                selectedValues={infraSaneamento}
+                label="Existem programas de infraestrutura e saneamento básico para a área?"
+                exclusiveOptions={['Não existem ações previstas ou em execução','Não sabe informar']}
+                onSave={(selectedValues) => {
+                  setInfraSaneamento(selectedValues);
+                  handleArrayFieldChange('programaInfraSaneamento', selectedValues);
+                }}
+                />
+
+              
 
 
           

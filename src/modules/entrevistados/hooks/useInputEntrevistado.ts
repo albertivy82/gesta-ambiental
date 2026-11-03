@@ -34,7 +34,7 @@ export const DEFAULT_ENTREVISTADO_INPUT: EntrevistadoInput = {
   problemasDeViolenciaLocal: '',
   instituicaoConhecida:'',
   importanciaDeProtegerAmbiente: '',
-  importanciaDeProtegerFauna: '',
+  importanciaDeProtegerFauna: 'Propriedade desativada',
   qualEspacoPrecisaSerPreservado: '',
   problemasRelacionadosAoAmbiente: '',
   conheceUcs: null,

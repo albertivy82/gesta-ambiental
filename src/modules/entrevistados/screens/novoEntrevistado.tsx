@@ -100,7 +100,8 @@ export const NovoEntrevistado = () => {
             handleOnChangeInput(entrevistado.indicadoConsultaPublica ?? '', 'indicadoConsultaPublica');
             handleOnChangeInput(entrevistado.contatoIndicadoConsultaPublica ?? '', 'contatoIndicadoConsultaPublica');
             handleOnChangeInput(entrevistado.importanciaDeProtegerAmbiente ?? '', 'importanciaDeProtegerAmbiente');
-            handleOnChangeInput(entrevistado.importanciaDeProtegerFauna ?? '', 'importanciaDeProtegerFauna');
+            //handleOnChangeInput(entrevistado.importanciaDeProtegerFauna ?? '', 'importanciaDeProtegerFauna');
+            handleOnChangeInput(  entrevistado.importanciaDeProtegerFauna?.trim() || 'Propriedade desativada', 'importanciaDeProtegerFauna');
             handleOnChangeInput(entrevistado.qualEspacoPrecisaSerPreservado ?? '', 'qualEspacoPrecisaSerPreservado');
             handleOnChangeInput(entrevistado.problemasRelacionadosAoAmbiente ?? '', 'problemasRelacionadosAoAmbiente');
             
@@ -155,7 +156,7 @@ export const NovoEntrevistado = () => {
     const presenciouAssaltosInput = useRef<TextInput>(null);
     const violenciaLocalInput = useRef<TextInput>(null);
     const protegerAmbienteInput = useRef<TextInput>(null);
-    const protegerFaunaInput = useRef<TextInput>(null);
+    //const protegerFaunaInput = useRef<TextInput>(null);
     const espacoPreservadoInput = useRef<TextInput>(null);
     const problemasAmbienteInput = useRef<TextInput>(null);
     const contatoConsultaInput = useRef<TextInput>(null);
@@ -892,9 +893,9 @@ export const NovoEntrevistado = () => {
                 margin="15px 10px 30px 5px"
                 title="Para você, qual a importância de proteger o meio ambiente?"
                 ref={protegerAmbienteInput}
-                onSubmitEditing={() => protegerFaunaInput.current?.focus()}
+                onSubmitEditing={() => espacoPreservadoInput.current?.focus()}
               />
-
+               {/*
               <Input 
                 value={novoEntrevistado.importanciaDeProtegerFauna} 
                 onChange={(event) => handleOnChangeInput(event, 'importanciaDeProtegerFauna')}
@@ -905,6 +906,7 @@ export const NovoEntrevistado = () => {
                 ref={protegerFaunaInput}
                 onSubmitEditing={() => espacoPreservadoInput.current?.focus()}
               />
+              */}
 
               <Input 
                 value={novoEntrevistado.qualEspacoPrecisaSerPreservado} 
